@@ -25,6 +25,7 @@ package com.merlinds.miracle {
 		private var _stage3D:Stage3D;
 		private var _nativeStage:Stage;
 		private var _context:Context3D;
+		private var _renderer:MiracleRenderer;
 		//
 		private var _lastFrameTimestamp:Number;
 		private var _enableErrorChecking:Boolean;
@@ -43,6 +44,7 @@ package com.merlinds.miracle {
 		public function start(enableErrorChecking:Boolean = true):void {
 			_agal = new AGALMiniAssembler();
 			_enableErrorChecking = enableErrorChecking;
+			_renderer = new MiracleRenderer();
 			_stage3D = _nativeStage.stage3Ds[0];
 			_stage3D.addEventListener(Event.CONTEXT3D_CREATE, this.contextCreateHandler);
 			_stage3D.requestContext3D(Context3DRenderMode.AUTO, Context3DProfile.BASELINE);
@@ -92,6 +94,7 @@ package com.merlinds.miracle {
 			_stage3D.removeEventListener(event.type, arguments.callee);
 			_context = _stage3D.context3D;
 			trace("Miracle: context3D was obtained", "3D driver:", _context.driverInfo);
+			_renderer.updateContext(_context);
 			this.setupContext();
 			//start looping
 			_lastFrameTimestamp = getTimer() / 1000.0;
@@ -103,6 +106,16 @@ package com.merlinds.miracle {
 			var now:Number = getTimer() / 1000.0;
 			var passedTime:Number = now - _lastFrameTimestamp;
 			_lastFrameTimestamp = now;
+
+			this.executeFrame(passedTime);
+		}
+
+		private function executeFrame(time:Number):void{
+			//draw frame
+			if(_context != null){
+				_renderer.start();
+				_renderer.end();
+			}
 		}
 		//} endregion EVENTS HANDLERS ==================================================
 
