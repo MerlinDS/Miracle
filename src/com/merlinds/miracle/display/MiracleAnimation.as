@@ -4,8 +4,8 @@
  * Time: 18:30
  */
 package com.merlinds.miracle.display {
-	public class MiracleSprite {
-		public function MiracleSprite() {
+	public class MiracleAnimation {
+		public function MiracleAnimation() {
 		}
 
 		//==============================================================================

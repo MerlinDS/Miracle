@@ -1,52 +1,45 @@
 /**
  * User: MerlinDS
  * Date: 01.04.2014
- * Time: 19:36
+ * Time: 19:39
+ * Coied form com.salazkin.framework.Shape
  */
 package com.merlinds.miracle {
-	import flash.display3D.Context3D;
+	public class Mesh {
 
-	public class MiracleRenderer {
+		public var buffer:Vector.<Number>;
+		public var indexes:Vector.<Number>;
+		public var name:String;
+		public var numVertexes:Number;
 
-		private var _context:Context3D;
+		public function Mesh(data:Object) {
+			this.name = data.name;
+			this.numVertexes = data.vertexes.length >> 1;
+			this.indexes = new Vector.<Number>( data.indexes.length );
+			this.buffer = new Vector.<Number>( this.numVertexes * 4 );
 
-		public function MiracleRenderer() {
+			var i:uint;
+			var dataIndex:int = 0;
+			var n:int = data.vertexes.length >> 1;
+			for(i = 0; i < n; i++){
+				this.buffer[dataIndex++] = data.vertexes[ i * 2 ];
+				this.buffer[dataIndex++] = data.vertexes[ i * 2 + 1 ];
+				this.buffer[dataIndex++] = data.uv[ i * 2 ];
+				this.buffer[dataIndex++] = data.uv[ i * 2 + 1 ];
+			}
+
+			n = data.indexes.length;
+			for(i = 0; i < n; i++){
+				indexes[i] = data.indexes[i];
+			}
 		}
 
-		internal function updateContext(context:Context3D):void{
-				_context = context;
-		}
 		//==============================================================================
 		//{region							PUBLIC METHODS
-		public function start():void {
-			_context.clear(0.8, 0.8, 0.8, 1);
-		}
-
-		public function end():void{
-			this.drawTriangles();
-			_context.present();
-		}
-
-		public function kill():void {
-			_context = null;
-		}
-
-		public function setTexture(texture:MiracleTexture):void{
-
-		}
-
-		public function draw(shape:MiracleShape, tx:Number, ty:Number,
-		                     scaleX:Number, scaleY:Number, skewX:Number, skewY:Number):void{
-
-		}
 		//} endregion PUBLIC METHODS ===================================================
 
 		//==============================================================================
 		//{region						PRIVATE\PROTECTED METHODS
-		[Inline]
-		private function drawTriangles():void {
-
-		}
 		//} endregion PRIVATE\PROTECTED METHODS ========================================
 
 		//==============================================================================
