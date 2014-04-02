@@ -15,10 +15,10 @@ package com.merlinds.miracle {
 
 		private var _context:Context3D;
 		//maps
-		private var _texturesList:Vector.<TextureVO>;
+		private var _meshCollection:Vector.<MeshCollection>;
 
 		public function Scene() {
-			_texturesList = new <TextureVO>[];
+			_meshCollection = new <MeshCollection>[];
 		}
 
 		//==============================================================================
@@ -30,7 +30,7 @@ package com.merlinds.miracle {
 			var asset:Asset;
 			while(assets.length > 0){
 				asset = assets.pop();
-				_texturesList[ _texturesList.length ] = new TextureVO(
+				_meshCollection[ _meshCollection.length ] = new MeshCollection(
 						asset.name, asset.bytes, asset.data);
 				asset.destroy();
 			}
@@ -38,14 +38,14 @@ package com.merlinds.miracle {
 		}
 
 		public function createImage(name:String, position:Vector3D = null, serializer:Class = null):MiracleImage {
-			var texture:TextureVO = this.getTexture(name);
+			var texture:MeshCollection = this.getTexture(name);
 			//TODO add validation
 			trace("Miracle: Image was created. Name:", name);
 			return null;
 		}
 
 		public function createAnimation(name:String, position:Vector3D = null, serializer:Class = null):MiracleAnimation {
-			var texture:TextureVO = this.getTexture(name);
+			var texture:MeshCollection = this.getTexture(name);
 			//TODO add validation
 			trace("Miracle: Animation was created. Name:", name);
 			return null;
@@ -65,7 +65,7 @@ package com.merlinds.miracle {
 			_context = null;
 		}
 
-		public function setTexture(texture:TextureVO):void{
+		public function setTexture(texture:MeshCollection):void{
 
 		}
 
@@ -82,11 +82,11 @@ package com.merlinds.miracle {
 
 		}
 		[Inline]
-		private function getTexture(name:String):TextureVO{
-			var texture:TextureVO;
-			var n:int = _texturesList.length;
+		private function getTexture(name:String):MeshCollection{
+			var texture:MeshCollection;
+			var n:int = _meshCollection.length;
 			for(var i:int = 0; i < n; i++){
-				texture = _texturesList[i];
+				texture = _meshCollection[i];
 				if(texture.name == name){
 					//texture was found
 					break;

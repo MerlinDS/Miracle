@@ -7,7 +7,7 @@ package com.merlinds.miracle {
 	import flash.utils.ByteArray;
 	import flash.utils.ByteArray;
 
-	public class TextureVO{
+	public class MeshCollection{
 		public var name:String;
 		public var meshList:Vector.<Mesh>;
 		public var bytes:ByteArray;
@@ -16,7 +16,7 @@ package com.merlinds.miracle {
 		//can be not used
 		public var index:int = -1;
 
-		public function TextureVO(name:String, bytes:ByteArray, data:Array) {
+		public function MeshCollection(name:String, bytes:ByteArray, data:Array) {
 			this.meshList = new <Mesh>[];
 			this.bytes = bytes;
 			this.name = name;

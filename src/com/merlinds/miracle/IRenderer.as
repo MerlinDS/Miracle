@@ -13,7 +13,7 @@ package com.merlinds.miracle {
 		function end():void;
 		function kill():void;
 
-		function setTexture(texture:TextureVO):void;
+		function setTexture(texture:MeshCollection):void;
 
 		function draw(shape:Mesh, tx:Number, ty:Number,
 		              scaleX:Number, scaleY:Number, skewX:Number, skewY:Number):void;
