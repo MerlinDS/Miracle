@@ -15,10 +15,10 @@ package com.merlinds.miracle {
 
 		private var _context:Context3D;
 		//maps
-		private var _meshCollection:Vector.<MeshCollection>;
+		private var _meshCollection:Vector.<Mesh2DCollection>;
 
 		public function Scene() {
-			_meshCollection = new <MeshCollection>[];
+			_meshCollection = new <Mesh2DCollection>[];
 		}
 
 		//==============================================================================
@@ -30,7 +30,7 @@ package com.merlinds.miracle {
 			var asset:Asset;
 			while(assets.length > 0){
 				asset = assets.pop();
-				_meshCollection[ _meshCollection.length ] = new MeshCollection(
+				_meshCollection[ _meshCollection.length ] = new Mesh2DCollection(
 						asset.name, asset.bytes, asset.data);
 				asset.destroy();
 			}
@@ -38,14 +38,14 @@ package com.merlinds.miracle {
 		}
 
 		public function createImage(name:String, position:Vector3D = null, serializer:Class = null):MiracleImage {
-			var texture:MeshCollection = this.getTexture(name);
+			var texture:Mesh2DCollection = this.getTexture(name);
 			//TODO add validation
 			trace("Miracle: Image was created. Name:", name);
 			return null;
 		}
 
 		public function createAnimation(name:String, position:Vector3D = null, serializer:Class = null):MiracleAnimation {
-			var texture:MeshCollection = this.getTexture(name);
+			var texture:Mesh2DCollection = this.getTexture(name);
 			//TODO add validation
 			trace("Miracle: Animation was created. Name:", name);
 			return null;
@@ -65,11 +65,11 @@ package com.merlinds.miracle {
 			_context = null;
 		}
 
-		public function setTexture(texture:MeshCollection):void{
+		public function setTexture(texture:Mesh2DCollection):void{
 
 		}
 
-		public function draw(shape:Mesh, tx:Number, ty:Number,
+		public function draw(shape:Mesh2D, tx:Number, ty:Number,
 		                     scaleX:Number, scaleY:Number, skewX:Number, skewY:Number):void{
 
 		}
@@ -82,8 +82,8 @@ package com.merlinds.miracle {
 
 		}
 		[Inline]
-		private function getTexture(name:String):MeshCollection{
-			var texture:MeshCollection;
+		private function getTexture(name:String):Mesh2DCollection{
+			var texture:Mesh2DCollection;
 			var n:int = _meshCollection.length;
 			for(var i:int = 0; i < n; i++){
 				texture = _meshCollection[i];

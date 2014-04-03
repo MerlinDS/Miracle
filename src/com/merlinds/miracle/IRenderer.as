@@ -13,9 +13,9 @@ package com.merlinds.miracle {
 		function end():void;
 		function kill():void;
 
-		function setTexture(texture:MeshCollection):void;
+		function setTexture(texture:Mesh2DCollection):void;
 
-		function draw(shape:Mesh, tx:Number, ty:Number,
+		function draw(shape:Mesh2D, tx:Number, ty:Number,
 		              scaleX:Number, scaleY:Number, skewX:Number, skewY:Number):void;
 		//} endregion PUBLIC METHODS ===================================================
 

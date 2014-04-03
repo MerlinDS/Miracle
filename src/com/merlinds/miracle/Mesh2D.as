@@ -1,31 +1,39 @@
 /**
  * User: MerlinDS
- * Date: 02.04.2014
- * Time: 21:16
+ * Date: 01.04.2014
+ * Time: 19:39
+ * Coied form com.salazkin.framework.Shape
  */
 package com.merlinds.miracle {
-	import flash.utils.ByteArray;
-	import flash.utils.ByteArray;
+	public class Mesh2D {
 
-	public class MeshCollection{
+		public var buffer:Vector.<Number>;
+		public var indexes:Vector.<Number>;
 		public var name:String;
-		public var meshList:Vector.<Mesh>;
-		public var bytes:ByteArray;
+		public var numVertexes:Number;
 
-		private var _size:int;
-		//can be not used
-		public var index:int = -1;
+		public function Mesh2D(data:Object) {
+			this.name = data.name;
+			this.numVertexes = data.vertexes.length >> 1;
+			this.indexes = new Vector.<Number>( data.indexes.length );
+			this.buffer = new Vector.<Number>( this.numVertexes * 4 );
 
-		public function MeshCollection(name:String, bytes:ByteArray, data:Array) {
-			this.meshList = new <Mesh>[];
-			this.bytes = bytes;
-			this.name = name;
-			//parse data
-			var n:int = data.length;
-			for(var i:int = 0; i < n; i++){
-				this.meshList[i] = new Mesh(data[i]);
+			var i:uint;
+			var dataIndex:int = 0;
+			var n:int = data.vertexes.length >> 1;
+			for(i = 0; i < n; i++){
+				this.buffer[dataIndex++] = data.vertexes[ i * 2 ];
+				this.buffer[dataIndex++] = data.vertexes[ i * 2 + 1 ];
+				this.buffer[dataIndex++] = data.uv[ i * 2 ];
+				this.buffer[dataIndex++] = data.uv[ i * 2 + 1 ];
+			}
+
+			n = data.indexes.length;
+			for(i = 0; i < n; i++){
+				indexes[i] = data.indexes[i];
 			}
 		}
+
 		//==============================================================================
 		//{region							PUBLIC METHODS
 		//} endregion PUBLIC METHODS ===================================================
@@ -40,13 +48,6 @@ package com.merlinds.miracle {
 
 		//==============================================================================
 		//{region							GETTERS/SETTERS
-		public function get size():int {
-			if(_size == 0){
-				this.bytes.position = 14;//TODO Ask salazkin about this numer
-				_size = Math.pow( 2, bytes.readUnsignedByte() );
-			}
-			return _size;
-		}
 		//} endregion GETTERS/SETTERS ==================================================
 	}
 }
