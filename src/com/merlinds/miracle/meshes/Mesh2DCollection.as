@@ -3,7 +3,7 @@
  * Date: 02.04.2014
  * Time: 21:16
  */
-package com.merlinds.miracle {
+package com.merlinds.miracle.meshes {
 	import com.merlinds.miracle.utils.AtfData;
 
 	import flash.utils.ByteArray;

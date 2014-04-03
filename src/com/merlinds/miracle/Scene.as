@@ -6,6 +6,8 @@
 package com.merlinds.miracle {
 	import com.merlinds.miracle.display.MiracleAnimation;
 	import com.merlinds.miracle.display.MiracleImage;
+	import com.merlinds.miracle.meshes.Mesh2D;
+	import com.merlinds.miracle.meshes.Mesh2DCollection;
 	import com.merlinds.miracle.utils.Asset;
 
 	import flash.display3D.Context3D;
@@ -40,6 +42,9 @@ package com.merlinds.miracle {
 		public function createImage(name:String, position:Vector3D = null, serializer:Class = null):MiracleImage {
 			var texture:Mesh2DCollection = this.getTexture(name);
 			//TODO add validation
+			if(texture == null){
+				throw ArgumentError("Cannot find image with this name");
+			}
 			trace("Miracle: Image was created. Name:", name);
 			return null;
 		}
@@ -47,6 +52,10 @@ package com.merlinds.miracle {
 		public function createAnimation(name:String, position:Vector3D = null, serializer:Class = null):MiracleAnimation {
 			var texture:Mesh2DCollection = this.getTexture(name);
 			//TODO add validation
+			if(texture == null){
+				throw ArgumentError("Cannot find animation with this name");
+			}
+			var instance:MiracleAnimation;
 			trace("Miracle: Animation was created. Name:", name);
 			return null;
 		}
