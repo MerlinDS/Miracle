@@ -1,27 +1,33 @@
 /**
  * User: MerlinDS
- * Date: 01.04.2014
- * Time: 18:31
+ * Date: 03.04.2014
+ * Time: 20:56
  */
 package com.merlinds.miracle.display {
+	import com.merlinds.miracle.meshes.Mesh2D;
 	import com.merlinds.miracle.meshes.Mesh2DCollection;
 	import com.merlinds.miracle.miracle_internal;
+	import com.merlinds.miracle.utils.DrawingMatrix;
 
+	public class MiracleDisplayObject {
 
-	public class MiracleImage extends MiracleDisplayObject{
+		miracle_internal var drawMatrix:DrawingMatrix;
+		miracle_internal var currentMesh:Mesh2D;
 
-		use namespace miracle_internal;
+		protected var meshCollection:Mesh2DCollection;
 
-		public function MiracleImage(meshCollection:Mesh2DCollection) {
-			super(meshCollection);
-			//initialize first frame as image
-			this.currentMesh = this.meshCollection.meshList[0];
+		public function MiracleDisplayObject(meshCollection:Mesh2DCollection,
+		                                     drawMatrix:DrawingMatrix = null) {
+			this.meshCollection = meshCollection;
+			if(drawMatrix == null){
+				this.miracle_internal::drawMatrix = new DrawingMatrix();
+			}
 		}
 
 		//==============================================================================
 		//{region							PUBLIC METHODS
-		override public function draw():void{
-			//nothing to do for image
+		public function draw():void{
+
 		}
 		//} endregion PUBLIC METHODS ===================================================
 
@@ -35,6 +41,9 @@ package com.merlinds.miracle.display {
 
 		//==============================================================================
 		//{region							GETTERS/SETTERS
+		public function get name():String{
+			return this.meshCollection.name;
+		}
 		//} endregion GETTERS/SETTERS ==================================================
 	}
 }
