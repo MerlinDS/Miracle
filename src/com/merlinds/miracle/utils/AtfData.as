@@ -27,9 +27,9 @@ package com.merlinds.miracle.utils {
 			//create result format
 			if(result == null){
 				result = {
-					texutreFormat:"",
+					textureFormat:"",
 					textureWidth:0,
-					texutreWidth:0,
+					textureHeight:0,
 					textureNum:0
 				};
 			}
@@ -43,10 +43,10 @@ package com.merlinds.miracle.utils {
 
 			switch (data.readUnsignedByte())
 			{
-				case 0: case 1: result.texutreFormat = Context3DTextureFormat.BGRA; break;
-				case 2: case 3: result.texutreFormat = Context3DTextureFormat.COMPRESSED; break;
+				case 0: case 1: result.textureFormat = Context3DTextureFormat.BGRA; break;
+				case 2: case 3: result.textureFormat = Context3DTextureFormat.COMPRESSED; break;
 				// explicit string to stay compatible
-				case 4: case 5: result.texutreFormat = "compressedAlpha"; break;
+				case 4: case 5: result.textureFormat = "compressedAlpha"; break;
 				// with older versions
 				default: throw new Error("Invalid ATF format");
 			}
