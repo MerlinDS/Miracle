@@ -4,7 +4,6 @@
  * Time: 20:26
  */
 package com.merlinds.miracle {
-	import com.merlinds.miracle.meshes.Mesh2D;
 	import com.merlinds.miracle.meshes.Mesh2DCollection;
 
 	import flash.display3D.Context3D;
@@ -18,8 +17,7 @@ package com.merlinds.miracle {
 
 		function setTexture(texture:Mesh2DCollection):void;
 
-		function draw(shape:Mesh2D, tx:Number, ty:Number,
-		              scaleX:Number, scaleY:Number, skewX:Number, skewY:Number):void;
+		function drawFrame():void;
 		//} endregion PUBLIC METHODS ===================================================
 
 		//==============================================================================

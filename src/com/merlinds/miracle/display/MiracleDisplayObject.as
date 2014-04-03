@@ -9,12 +9,14 @@ package com.merlinds.miracle.display {
 	import com.merlinds.miracle.miracle_internal;
 	import com.merlinds.miracle.utils.DrawingMatrix;
 
+	import flash.errors.IllegalOperationError;
+
 	public class MiracleDisplayObject {
 
 		miracle_internal var drawMatrix:DrawingMatrix;
 		miracle_internal var currentMesh:Mesh2D;
 
-		protected var meshCollection:Mesh2DCollection;
+		public var meshCollection:Mesh2DCollection;
 
 		public function MiracleDisplayObject(meshCollection:Mesh2DCollection,
 		                                     drawMatrix:DrawingMatrix = null) {
@@ -26,8 +28,11 @@ package com.merlinds.miracle.display {
 
 		//==============================================================================
 		//{region							PUBLIC METHODS
+		/**
+		 * must be overridden
+		 */
 		public function draw():void{
-
+			throw new IllegalOperationError("This method must be overridden!");
 		}
 		//} endregion PUBLIC METHODS ===================================================
 

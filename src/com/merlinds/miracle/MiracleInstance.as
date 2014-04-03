@@ -112,6 +112,7 @@ package com.merlinds.miracle {
 			//draw frame
 			if(_scene != null && _context != null){
 				_scene.start();
+				_scene.drawFrame();
 				_scene.end();
 			}
 		}

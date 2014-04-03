@@ -57,6 +57,7 @@ package com.merlinds.miracle {;
 			}
 		}
 
+		//TODO create scene with initial assets
 		public static function createScene():IScene {
 			if(_instance == null){
 				throw new IllegalOperationError("Miracle was not started. Use start() ");
