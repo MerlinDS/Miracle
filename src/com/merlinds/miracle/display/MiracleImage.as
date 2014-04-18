@@ -4,18 +4,11 @@
  * Time: 18:31
  */
 package com.merlinds.miracle.display {
-	import com.merlinds.miracle.meshes.Mesh2DCollection;
-	import com.merlinds.miracle.miracle_internal;
-
 
 	public class MiracleImage extends MiracleDisplayObject{
 
-		use namespace miracle_internal;
-
-		public function MiracleImage(meshCollection:Mesh2DCollection) {
-			super(meshCollection);
-			//initialize first frame as image
-			this.currentMesh = this.meshCollection.meshList[0];
+		public function MiracleImage(materialName:String) {
+			super(materialName);
 		}
 
 		//==============================================================================

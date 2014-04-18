@@ -3,7 +3,8 @@
  * Date: 01.04.2014
  * Time: 17:59
  */
-package com.merlinds.miracle {;
+package com.merlinds.miracle {
+	import com.merlinds.miracle.materials.Material;
 
 	import flash.display.Stage;
 	import flash.display.StageAlign;
@@ -60,7 +61,7 @@ package com.merlinds.miracle {;
 		//TODO create scene with initial assets
 		public static function createScene():IScene {
 			if(_instance == null){
-				throw new IllegalOperationError("Miracle was not started. Use start() ");
+				throw new IllegalOperationError("Miracle was not started. Use start() before creating scene ");
 			}
 			var index:int = _scenesList.length;
 			_scenesList[index] = new Scene();

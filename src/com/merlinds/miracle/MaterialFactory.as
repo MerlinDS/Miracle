@@ -1,43 +1,37 @@
 /**
  * User: MerlinDS
- * Date: 02.04.2014
- * Time: 21:50
+ * Date: 04.04.2014
+ * Time: 20:06
  */
-package com.merlinds.miracle.utils {
+package com.merlinds.miracle {
+	import com.merlinds.miracle.materials.Material;
+	import com.merlinds.miracle.meshes.Mesh2D;
+	import com.merlinds.miracle.utils.AtfData;
+
 	import flash.utils.ByteArray;
 
-	/**
-	 * Asset helper ro Miracle framework
-	 */
-	public class Asset {
-		/**
-		 * Name of the asset that will be used as id in Miracle
-		 */
-		public var name:String;
-		/**
-		 * ATF bytes
-		 */
-		public var bytes:ByteArray;
+	internal class MaterialFactory {
 
-		/** Type of the asset **/
-		public var type:String;
+		public function MaterialFactory() {
+		}
 
 		//==============================================================================
 		//{region							PUBLIC METHODS
-		/**
-		 * Create Asset
-		 * @param name Name of the asset that will be used as id in Miracle
-		 * @param bytes ATF bytes
-		 */
-		public function Asset(name:String, bytes:ByteArray) {
-			this.name = name;
-			this.bytes = bytes;
-		}
-
-		/** Prepare instance for GC **/
-		public function destroy():void {
-			this.name = null;
-			this.bytes = null;
+		public function createMaterial(textureData:ByteArray, meshData:Array):Material{
+			var atfFormat:Object = AtfData.getAtfParameters(textureData);
+			var meshList:Vector.<Mesh2D> = new <Mesh2D>[];
+			if(meshData == null){
+				//TODO create empty mesh by atf size
+			}else{
+				var n:int = meshData.length;
+				for(var i:int = 0; i < n; i++){
+					meshList[i] = new Mesh2D(meshData[i]);
+				}
+			}
+			var material:Material = new Material(meshList, textureData,
+					atfFormat.textureFormat, atfFormat.textureWidth,
+					atfFormat.textureHeight, atfFormat.textureNum);
+			return material;
 		}
 		//} endregion PUBLIC METHODS ===================================================
 

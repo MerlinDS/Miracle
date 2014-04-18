@@ -15,8 +15,6 @@ package com.merlinds.miracle {
 		function end():void;
 		function kill():void;
 
-		function setTexture(texture:Mesh2DCollection):void;
-
 		function drawFrame():void;
 		//} endregion PUBLIC METHODS ===================================================
 

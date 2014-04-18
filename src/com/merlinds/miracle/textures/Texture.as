@@ -1,35 +1,33 @@
 /**
  * User: MerlinDS
- * Date: 03.04.2014
- * Time: 20:56
+ * Date: 18.04.2014
+ * Time: 18:33
  */
-package com.merlinds.miracle.display {
-	import com.merlinds.miracle.miracle_internal;
-	import com.merlinds.miracle.utils.DrawingMatrix;
+package com.merlinds.miracle.textures {
+	import flash.utils.ByteArray;
 
-	import flash.errors.IllegalOperationError;
+	public class Texture {
 
-	public class MiracleDisplayObject {
+		/**
+		 *  Format of the texture linked to current mesh collection.
+		 *  @default flash.display3D.Context3DTextureFormat.BGRA
+		 **/
+		public var format:String;
+		/** Width of the texture linked to current mesh collection.**/
+		public var width:int;
+		/** Height of the texture linked to current mesh collection.**/
+		public var height:int;
+		/** Num  of the texture in ATF linked to current mesh collection.**/
+		public var num:int;
 
-		miracle_internal var drawMatrix:DrawingMatrix;
+		private var _bytes:ByteArray;
 
-		public var materialName:String;
-
-		public function MiracleDisplayObject(materialName:String, drawMatrix:DrawingMatrix = null) {
-			this.materialName = materialName;
-			if(drawMatrix == null){
-				this.miracle_internal::drawMatrix = new DrawingMatrix();
-			}
+		public function Texture(bytes:ByteArray) {
+			_bytes = bytes;
 		}
 
 		//==============================================================================
 		//{region							PUBLIC METHODS
-		/**
-		 * must be overridden
-		 */
-		public function draw():void{
-			throw new IllegalOperationError("This method must be overridden!");
-		}
 		//} endregion PUBLIC METHODS ===================================================
 
 		//==============================================================================

@@ -4,11 +4,12 @@
  * Time: 19:36
  */
 package com.merlinds.miracle {
+	import com.merlinds.miracle.AbstractScene;
 	import com.merlinds.miracle.display.MiracleAnimation;
 	import com.merlinds.miracle.display.MiracleDisplayObject;
 	import com.merlinds.miracle.display.MiracleImage;
+	import com.merlinds.miracle.materials.Material;
 	import com.merlinds.miracle.meshes.Mesh2D;
-	import com.merlinds.miracle.meshes.Mesh2DCollection;
 	import com.merlinds.miracle.utils.Asset;
 	import com.merlinds.miracle.utils.DrawingMatrix;
 
@@ -17,111 +18,98 @@ package com.merlinds.miracle {
 	import flash.display3D.VertexBuffer3D;
 	import flash.display3D.textures.Texture;
 	import flash.geom.Vector3D;
+	import flash.utils.ByteArray;
 
-	internal class Scene implements IScene, IRenderer{
+	internal class Scene extends AbstractScene implements IScene{
 		/**
 		 * [x,y] + [u,v] + [tx, ty] + [scaleX, scaleY, skewX, skewY] + [r,g,b,a]
 		 */
 		private const VERTEX_PARAMS_LENGTH:int = 2 + 2 + 2 + 4;
-
-		private var _context:Context3D;
 		//GPU
 		private var _vertexBuffer:VertexBuffer3D;
 		private var _indexBuffer:IndexBuffer3D;
 		private var _vertexData:Vector.<Number>;
 		private var _indexData:Vector.<uint>;
-		//maps
-		private var _textures:Object;
-		private var _meshCollection:Vector.<Mesh2DCollection>;
-		private var _displayObjects:Vector.<MiracleDisplayObject>;
 
-
+		//
 		use namespace miracle_internal;
 
-		public function Scene() {
-			_textures = {};
-			_meshCollection = new <Mesh2DCollection>[];
-			_displayObjects = new <MiracleDisplayObject>[];
-			//
+		public function Scene(assets:Vector.<Asset>) {
 			_vertexData = new <Number>[];
 			_indexData = new <uint>[];
+			super(assets);
 		}
 
 		//==============================================================================
 		//{region							PUBLIC METHODS
 		//IScene
-		public function initAssets(assets:Vector.<Asset>):void {
-			assets = assets.concat();//copy vector
-			//parse texture data layout
-			var asset:Asset;
-			while(assets.length > 0){
-				asset = assets.pop();
-				_meshCollection[ _meshCollection.length ] = new Mesh2DCollection(
-						asset.name, asset.bytes, asset.data);
-				asset.destroy();
+		public function createMaterial(name:String, textureData:ByteArray, meshData:Array = null):Material {
+			var materialBuilder:MaterialFactory = new MaterialFactory();
+			if(_materials.hasOwnProperty(name)){
+				//For now: just rewrite exist material
+				trace("Miracle: rewrite", name);
 			}
-			trace("Miracle: Assets was initialize");
+			_materials[name] = materialBuilder.createMaterial(textureData, meshData);
+			return _materials[name];
 		}
+
 
 		public function createImage(name:String, position:Vector3D = null, serializer:Class = null):MiracleImage {
 			//TODO get mesh name from name
-			var meshCollection:Mesh2DCollection = this.getMeshCollection(name);
+			var material:Material = _materials[name];
 			//TODO add validation
-			if(meshCollection == null){
+			if(material == null){
 				throw ArgumentError("Cannot find image with this name");
 			}
-			var instance:MiracleDisplayObject = new MiracleImage(meshCollection);
+			var instance:MiracleDisplayObject = new MiracleImage(name);
 			_displayObjects[_displayObjects.length++] = instance;
 			if(position != null){
 				instance.drawMatrix.tx = position.x;
 				instance.drawMatrix.ty = position.y;
 			}
-			//TODO remove texture from mesh collection
 			//add texture to gpu
-			var texture:Texture = _context.createTexture(meshCollection.textureWidth,
-					meshCollection.textureHeight, meshCollection.textureFormat, true);
-			texture.uploadCompressedTextureFromByteArray(meshCollection.bytes, 0);
-			_textures[ name ] = texture;
-			trace("Miracle: Image was created. Name:", name);
+			//TODO add sharing one texture between few materials
+			var texture:Texture = _context.createTexture(material.textureWidth,
+					material.textureHeight, material.textureFormat, true);
+			texture.uploadCompressedTextureFromByteArray(material.textureBytes, 0);
+			material.texture = texture;
+			trace("Miracle: Image was created. Material name:", name);
 			return instance as MiracleImage;
 		}
 
-		public function createAnimation(name:String, position:Vector3D = null, serializer:Class = null):MiracleAnimation {
-			var meshCollection:Mesh2DCollection = this.getMeshCollection(name);
-			//TODO add validation
-			if(meshCollection == null){
-				throw ArgumentError("Cannot find animation with this name");
-			}
+		public function createAnimation(name:String, position:Vector3D = null, serializer:Class = null):MiracleAnimation
+		{
 			var instance:MiracleAnimation;
 			trace("Miracle: Animation was created. Name:", name);
-			return null;
+			return instance;
 		}
 
 //IRenderer
-		public function start():void {
+		override public function start():void {
 			_context.clear(0.8, 0.8, 0.8, 1);
 		}
 
-		public function end():void{
+		override public function end():void{
 			this.drawTriangles();
 			_context.present();
 		}
 
-		public function kill():void {
+		override public function kill():void {
 			_context = null;
 		}
 
-		public function setTexture(texture:Mesh2DCollection):void{
-
-		}
-
-		public function drawFrame():void{
+		override public function drawFrame():void{
+			var mesh:Mesh2D;
+			var material:Material;
 			var instance:MiracleDisplayObject;
 			var n:int = _displayObjects.length;
 			for(var i:int = 0; i < n; i++){
 				instance = _displayObjects[i];
-				_context.setTextureAt(0, _textures[ instance.name ]);
-				this.draw(instance.currentMesh, instance.drawMatrix);
+				material = _materials[ instance.materialName ];
+				instance.drawMatrix.tx++;
+				mesh = material.meshList[0];//TODO add mesh index to instance
+				_context.setTextureAt(0, material.texture);
+				this.draw(mesh, instance.drawMatrix);
 			}
 
 		}
@@ -152,21 +140,6 @@ package com.merlinds.miracle {
 			//
 			_vertexData.length = 0;
 			_indexData.length = 0;
-		}
-
-		[Inline]
-		private function getMeshCollection(name:String):Mesh2DCollection{
-			var mesh2DCollection:Mesh2DCollection;
-			var n:int = _meshCollection.length;
-			for(var i:int = 0; i < n; i++){
-				mesh2DCollection = _meshCollection[i];
-				if(mesh2DCollection.name == name){
-					//texture was found
-					break;
-				}
-				mesh2DCollection = null;
-			}
-			return mesh2DCollection;
 		}
 
 		//TODO: refactor this
@@ -216,9 +189,6 @@ package com.merlinds.miracle {
 
 		//==============================================================================
 		//{region							GETTERS/SETTERS
-		public function set context(value:Context3D):void{
-			_context = value;
-		}
 		//} endregion GETTERS/SETTERS ==================================================
 	}
 }

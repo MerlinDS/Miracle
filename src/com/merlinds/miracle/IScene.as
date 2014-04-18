@@ -4,23 +4,24 @@
  * Time: 20:09
  */
 package com.merlinds.miracle {
-	import com.merlinds.miracle.display.MiracleImage;
 	import com.merlinds.miracle.display.MiracleAnimation;
+	import com.merlinds.miracle.display.MiracleImage;
+	import com.merlinds.miracle.materials.Material;
 	import com.merlinds.miracle.utils.Asset;
 
 	import flash.geom.Vector3D;
+	import flash.utils.ByteArray;
 
 	public interface IScene {
 		//==============================================================================
 		//{region							METHODS
 		/**
-		 * Add assets to scene
-		 * @param assets List of Assets
-		 *
-		 * @see com.merlinds.miracle.utils.Asset
+		 * Create Material for this scene
+		 * @param name Material name. This name will be used as link inside the Miracle
+		 * @param textureData ATF or Bitmap bytes that will be used as texture of this material
+		 * @param meshData Special formatted object that describes meshes structure
 		 */
-		function initAssets(assets:Vector.<Asset>):void;
-
+		function createMaterial(name:String, textureData:ByteArray, meshData:Array = null):Material;
 		/**
 		 * Create instance of the image on current scene
 		 * @param name Name of the asset that will be used to create
