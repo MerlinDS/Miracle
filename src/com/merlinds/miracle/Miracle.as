@@ -5,6 +5,7 @@
  */
 package com.merlinds.miracle {
 	import com.merlinds.miracle.materials.Material;
+	import com.merlinds.miracle.utils.Asset;
 
 	import flash.display.Stage;
 	import flash.display.StageAlign;
@@ -59,12 +60,12 @@ package com.merlinds.miracle {
 		}
 
 		//TODO create scene with initial assets
-		public static function createScene():IScene {
+		public static function createScene(assets:Vector.<Asset>):IScene {
 			if(_instance == null){
 				throw new IllegalOperationError("Miracle was not started. Use start() before creating scene ");
 			}
 			var index:int = _scenesList.length;
-			_scenesList[index] = new Scene();
+			_scenesList[index] = new Scene(assets);
 			//if scenes is empty, add scene to instance
 			if(_currenScene < 0){
 				_currenScene = 0;
@@ -81,7 +82,7 @@ package com.merlinds.miracle {
 			var result:Boolean = true;
 			if(_currenScene < 0){
 				//create new scene
-				createScene();
+				createScene(new <Asset>[]);
 			}else
 			{
 				if(index >= _scenesList.length){
