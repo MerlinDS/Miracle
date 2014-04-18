@@ -27,10 +27,10 @@ package com.merlinds.miracle.utils {
 			//create result format
 			if(result == null){
 				result = {
-					textureFormat:"",
-					textureWidth:0,
-					textureHeight:0,
-					textureNum:0
+					format:"",
+					width:0,
+					height:0,
+					num:0
 				};
 			}
 
@@ -43,17 +43,17 @@ package com.merlinds.miracle.utils {
 
 			switch (data.readUnsignedByte())
 			{
-				case 0: case 1: result.textureFormat = Context3DTextureFormat.BGRA; break;
-				case 2: case 3: result.textureFormat = Context3DTextureFormat.COMPRESSED; break;
+				case 0: case 1: result.format = Context3DTextureFormat.BGRA; break;
+				case 2: case 3: result.format = Context3DTextureFormat.COMPRESSED; break;
 				// explicit string to stay compatible
-				case 4: case 5: result.textureFormat = "compressedAlpha"; break;
+				case 4: case 5: result.format = "compressedAlpha"; break;
 				// with older versions
 				default: throw new Error("Invalid ATF format");
 			}
 
-			result.textureWidth = Math.pow(2, data.readUnsignedByte());
-			result.textureHeight = Math.pow(2, data.readUnsignedByte());
-			result.textureNum = data.readUnsignedByte();
+			result.width = Math.pow(2, data.readUnsignedByte());
+			result.height = Math.pow(2, data.readUnsignedByte());
+			result.num = data.readUnsignedByte();
 
 			// version 2 of the new file format contains information about
 			// the "-e" and "-n" parameters of png2atf
@@ -62,7 +62,7 @@ package com.merlinds.miracle.utils {
 			{
 				var emptyMipmaps:Boolean = (data[5] & 0x01) == 1;
 				var numTextures:int  = data[5] >> 1 & 0x7f;
-				result.textureNum = emptyMipmaps ? 1 : numTextures;
+				result.num = emptyMipmaps ? 1 : numTextures;
 			}
 
 			return result;

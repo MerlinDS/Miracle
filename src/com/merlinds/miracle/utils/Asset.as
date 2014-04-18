@@ -66,7 +66,7 @@ package com.merlinds.miracle.utils {
 			return _type;
 		}
 
-		public function output():Object {
+		public function get output():* {
 			var output:Object = _bytes;
 			if(this.type != TEXTURE_TYPE){
 				output = _bytes.readUTFBytes( _bytes.length );

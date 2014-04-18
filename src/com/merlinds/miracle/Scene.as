@@ -9,7 +9,7 @@ package com.merlinds.miracle {
 	import com.merlinds.miracle.display.MiracleDisplayObject;
 	import com.merlinds.miracle.display.MiracleImage;
 	import com.merlinds.miracle.materials.Material;
-	import com.merlinds.miracle.meshes.Mesh2D;
+	import com.merlinds.miracle.meshes.Polygon2D;
 	import com.merlinds.miracle.utils.Asset;
 	import com.merlinds.miracle.utils.DrawingMatrix;
 
@@ -85,21 +85,13 @@ package com.merlinds.miracle {
 		}
 
 //IRenderer
-		override public function start():void {
-			_context.clear(0.8, 0.8, 0.8, 1);
-		}
-
 		override public function end():void{
 			this.drawTriangles();
 			_context.present();
 		}
 
-		override public function kill():void {
-			_context = null;
-		}
-
 		override public function drawFrame():void{
-			var mesh:Mesh2D;
+			var mesh:Polygon2D;
 			var material:Material;
 			var instance:MiracleDisplayObject;
 			var n:int = _displayObjects.length;
@@ -117,6 +109,7 @@ package com.merlinds.miracle {
 
 		//==============================================================================
 		//{region						PRIVATE\PROTECTED METHODS
+
 		[Inline]
 		private function drawTriangles():void {
 			var n:int;
@@ -148,7 +141,7 @@ package com.merlinds.miracle {
 		private var _indexStep:Number = 0;
 
 		[Inline]
-		private function draw(mesh:Mesh2D, dm:DrawingMatrix):void {
+		private function draw(mesh:Polygon2D, dm:DrawingMatrix):void {
 			var i:int;
 			var dataIndex:int = 0;
 			var n:int = mesh.numVertexes;

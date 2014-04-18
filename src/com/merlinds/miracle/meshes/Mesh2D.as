@@ -1,39 +1,13 @@
 /**
  * User: MerlinDS
- * Date: 01.04.2014
- * Time: 19:39
- * Coied form com.salazkin.framework.Shape
+ * Date: 18.04.2014
+ * Time: 19:24
  */
 package com.merlinds.miracle.meshes {
-	public class Mesh2D {
+	public dynamic class Mesh2D extends Array{
 
-		public var buffer:Vector.<Number>;
-		public var indexes:Vector.<Number>;
-		public var name:String;
-		public var numVertexes:Number;
-
-		public function Mesh2D(data:Object) {
-			this.name = data.name;
-			this.numVertexes = data.vertexes.length >> 1;
-			this.indexes = new Vector.<Number>( data.indexes.length );
-			this.buffer = new Vector.<Number>( this.numVertexes * 4 );
-
-			var i:uint;
-			var dataIndex:int = 0;
-			var n:int = data.vertexes.length >> 1;
-			for(i = 0; i < n; i++){
-				this.buffer[dataIndex++] = data.vertexes[ i * 2 ];
-				this.buffer[dataIndex++] = data.vertexes[ i * 2 + 1 ];
-				this.buffer[dataIndex++] = data.uv[ i * 2 ];
-				this.buffer[dataIndex++] = data.uv[ i * 2 + 1 ];
-			}
-
-			n = data.indexes.length;
-			for(i = 0; i < n; i++){
-				indexes[i] = data.indexes[i];
-			}
+		public function Mesh2D() {
 		}
-
 		//==============================================================================
 		//{region							PUBLIC METHODS
 		//} endregion PUBLIC METHODS ===================================================

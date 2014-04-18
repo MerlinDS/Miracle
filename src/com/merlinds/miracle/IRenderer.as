@@ -4,7 +4,6 @@
  * Time: 20:26
  */
 package com.merlinds.miracle {
-	import com.merlinds.miracle.meshes.Mesh2DCollection;
 
 	import flash.display3D.Context3D;
 

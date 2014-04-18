@@ -4,7 +4,7 @@
  * Time: 18:23
  */
 package com.merlinds.miracle.materials {
-	import com.merlinds.miracle.meshes.Mesh2D;
+	import com.merlinds.miracle.meshes.Polygon2D;
 	import com.merlinds.miracle.miracle_internal;
 
 	import flash.display3D.textures.Texture;
@@ -12,7 +12,7 @@ package com.merlinds.miracle.materials {
 
 	public final class Material {
 
-		private var _meshList:Vector.<Mesh2D>;
+		private var _meshList:Vector.<Polygon2D>;
 
 		private var _textureBytes:ByteArray;
 		private var _texture:Texture;
@@ -33,7 +33,7 @@ package com.merlinds.miracle.materials {
 
 
 
-		public function Material(meshCollection:Vector.<Mesh2D>, textureBytes:ByteArray,
+		public function Material(meshCollection:Vector.<Polygon2D>, textureBytes:ByteArray,
 		                         textureFormat:String, textureWidth:int, textureHeight:int, textureNum:int) {
 			_meshList = meshCollection;
 			_textureBytes = textureBytes;
@@ -59,7 +59,7 @@ package com.merlinds.miracle.materials {
 		//==============================================================================
 		//{region							GETTERS/SETTERS
 
-		public function get meshList():Vector.<Mesh2D> {
+		public function get meshList():Vector.<Polygon2D> {
 			return _meshList;
 		}
 

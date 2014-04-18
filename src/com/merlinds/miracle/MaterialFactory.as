@@ -5,7 +5,7 @@
  */
 package com.merlinds.miracle {
 	import com.merlinds.miracle.materials.Material;
-	import com.merlinds.miracle.meshes.Mesh2D;
+	import com.merlinds.miracle.meshes.Polygon2D;
 	import com.merlinds.miracle.utils.AtfData;
 
 	import flash.utils.ByteArray;
@@ -19,13 +19,13 @@ package com.merlinds.miracle {
 		//{region							PUBLIC METHODS
 		public function createMaterial(textureData:ByteArray, meshData:Array):Material{
 			var atfFormat:Object = AtfData.getAtfParameters(textureData);
-			var meshList:Vector.<Mesh2D> = new <Mesh2D>[];
+			var meshList:Vector.<Polygon2D> = new <Polygon2D>[];
 			if(meshData == null){
 				//TODO create empty mesh by atf size
 			}else{
 				var n:int = meshData.length;
 				for(var i:int = 0; i < n; i++){
-					meshList[i] = new Mesh2D(meshData[i]);
+					meshList[i] = new Polygon2D(meshData[i]);
 				}
 			}
 			var material:Material = new Material(meshList, textureData,
