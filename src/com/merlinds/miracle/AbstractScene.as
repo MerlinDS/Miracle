@@ -7,18 +7,16 @@ package com.merlinds.miracle {
 	import com.merlinds.miracle.display.MiracleDisplayObject;
 	import com.merlinds.miracle.meshes.Mesh2D;
 	import com.merlinds.miracle.meshes.Polygon2D;
-	import com.merlinds.miracle.textures.MiracleTexture;
+	import com.merlinds.miracle.textures.TextureHelper;
 	import com.merlinds.miracle.utils.Asset;
 	import com.merlinds.miracle.utils.AtfData;
 
 	import flash.display3D.Context3D;
-	import flash.utils.ByteArray;
 
 	internal class AbstractScene implements IRenderer{
 
 		protected var _context:Context3D;
 		//maps
-		protected var _materials:Object;/**Materials**/
 		protected var _displayObjects:Vector.<MiracleDisplayObject>;
 
 		protected var _meshes:Object;/**Mesh2D**/
@@ -27,7 +25,6 @@ package com.merlinds.miracle {
 		public function AbstractScene(assets:Vector.<Asset>) {
 			_meshes = {};
 			_textures = {};
-			_materials = {};
 			_displayObjects = new <MiracleDisplayObject>[];
 			this.initialize(assets);
 		}
@@ -68,7 +65,7 @@ package com.merlinds.miracle {
 					_meshes[ asset.name ] = mesh;
 				}else if(asset.type == Asset.TEXTURE_TYPE){
 					//parse textures
-					_meshes[ asset.name ] = new MiracleTexture( asset.output );
+					_meshes[ asset.name ] = new TextureHelper( asset.output );
 					AtfData.getAtfParameters(_meshes[ asset.name ]);
 				}
 				//Other types will be ignored for now!

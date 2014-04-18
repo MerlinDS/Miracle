@@ -4,21 +4,19 @@
  * Time: 19:36
  */
 package com.merlinds.miracle {
-	import com.merlinds.miracle.AbstractScene;
 	import com.merlinds.miracle.display.MiracleAnimation;
 	import com.merlinds.miracle.display.MiracleDisplayObject;
 	import com.merlinds.miracle.display.MiracleImage;
-	import com.merlinds.miracle.materials.Material;
+	import com.merlinds.miracle.meshes.Mesh2D;
 	import com.merlinds.miracle.meshes.Polygon2D;
+	import com.merlinds.miracle.textures.TextureHelper;
 	import com.merlinds.miracle.utils.Asset;
 	import com.merlinds.miracle.utils.DrawingMatrix;
 
-	import flash.display3D.Context3D;
 	import flash.display3D.IndexBuffer3D;
 	import flash.display3D.VertexBuffer3D;
 	import flash.display3D.textures.Texture;
 	import flash.geom.Vector3D;
-	import flash.utils.ByteArray;
 
 	internal class Scene extends AbstractScene implements IScene{
 		/**
@@ -43,25 +41,20 @@ package com.merlinds.miracle {
 		//==============================================================================
 		//{region							PUBLIC METHODS
 		//IScene
-		public function createMaterial(name:String, textureData:ByteArray, meshData:Array = null):Material {
-			var materialBuilder:MaterialFactory = new MaterialFactory();
-			if(_materials.hasOwnProperty(name)){
-				//For now: just rewrite exist material
-				trace("Miracle: rewrite", name);
-			}
-			_materials[name] = materialBuilder.createMaterial(textureData, meshData);
-			return _materials[name];
-		}
+		public function createImage(meshName:String, textureName:String, position:Vector3D = null, serializer:Class = null):MiracleImage {
+			var mesh:Mesh2D = _meshes[meshName];
+			var textureHelper:TextureHelper = _textures[textureName];
 
-
-		public function createImage(name:String, position:Vector3D = null, serializer:Class = null):MiracleImage {
-			//TODO get mesh name from name
-			var material:Material = _materials[name];
 			//TODO add validation
-			if(material == null){
-				throw ArgumentError("Cannot find image with this name");
+			if(mesh == null){
+				throw ArgumentError("Cannot find mesh with name " + meshName);
 			}
-			var instance:MiracleDisplayObject = new MiracleImage(name);
+
+			if(textureHelper == null){
+				throw ArgumentError("Cannot find texture with name " + textureName);
+			}
+
+			var instance:MiracleDisplayObject = new MiracleImage(textureName);
 			_displayObjects[_displayObjects.length++] = instance;
 			if(position != null){
 				instance.drawMatrix.tx = position.x;
@@ -69,11 +62,11 @@ package com.merlinds.miracle {
 			}
 			//add texture to gpu
 			//TODO add sharing one texture between few materials
-			var texture:Texture = _context.createTexture(material.textureWidth,
-					material.textureHeight, material.textureFormat, true);
-			texture.uploadCompressedTextureFromByteArray(material.textureBytes, 0);
-			material.texture = texture;
-			trace("Miracle: Image was created. Material name:", name);
+			var texture:Texture = _context.createTexture(textureHelper.width,
+					textureHelper.height, textureHelper.format, true);
+			texture.uploadCompressedTextureFromByteArray(textureHelper.bytes, 0);
+			textureHelper.texture = texture;
+			trace("Miracle: Image was created. Material name:", texture);
 			return instance as MiracleImage;
 		}
 
@@ -91,7 +84,7 @@ package com.merlinds.miracle {
 		}
 
 		override public function drawFrame():void{
-			var mesh:Polygon2D;
+			/*var mesh:Polygon2D;
 			var material:Material;
 			var instance:MiracleDisplayObject;
 			var n:int = _displayObjects.length;
@@ -102,7 +95,7 @@ package com.merlinds.miracle {
 				mesh = material.meshList[0];//TODO add mesh index to instance
 				_context.setTextureAt(0, material.texture);
 				this.draw(mesh, instance.drawMatrix);
-			}
+			}*/
 
 		}
 		//} endregion PUBLIC METHODS ===================================================

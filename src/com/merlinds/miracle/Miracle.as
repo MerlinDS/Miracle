@@ -4,7 +4,6 @@
  * Time: 17:59
  */
 package com.merlinds.miracle {
-	import com.merlinds.miracle.materials.Material;
 	import com.merlinds.miracle.utils.Asset;
 
 	import flash.display.Stage;

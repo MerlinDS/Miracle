@@ -1,37 +1,46 @@
 /**
  * User: MerlinDS
- * Date: 04.04.2014
- * Time: 20:06
+ * Date: 18.04.2014
+ * Time: 18:33
  */
-package com.merlinds.miracle {
-	import com.merlinds.miracle.materials.Material;
-	import com.merlinds.miracle.meshes.Polygon2D;
-	import com.merlinds.miracle.utils.AtfData;
-
+package com.merlinds.miracle.textures {
+	import flash.display3D.textures.Texture;
 	import flash.utils.ByteArray;
 
-	internal class MaterialFactory {
+	public class TextureHelper {
 
-		public function MaterialFactory() {
+		public var bytes:ByteArray;
+		/**
+		 *  Format of the texture.
+		 *  @default flash.display3D.Context3DTextureFormat.BGRA
+		 **/
+		public var format:String;
+		/** Width of the texture.**/
+		public var width:int;
+		/** Height of the texture.**/
+		public var height:int;
+		/** Num  of the texture in ATF.**/
+		public var num:int;
+		public var inUse:Boolean;
+
+		public var texture:Texture;
+
+		public function TextureHelper(bytes:ByteArray) {
+			this.bytes = bytes;
 		}
 
 		//==============================================================================
 		//{region							PUBLIC METHODS
-		public function createMaterial(textureData:ByteArray, meshData:Array):Material{
-			var atfFormat:Object = AtfData.getAtfParameters(textureData);
-			var meshList:Vector.<Polygon2D> = new <Polygon2D>[];
-			if(meshData == null){
-				//TODO create empty mesh by atf size
-			}else{
-				var n:int = meshData.length;
-				for(var i:int = 0; i < n; i++){
-					meshList[i] = new Polygon2D(meshData[i]);
-				}
-			}
-			var material:Material = new Material(meshList, textureData,
-					atfFormat.textureFormat, atfFormat.textureWidth,
-					atfFormat.textureHeight, atfFormat.textureNum);
-			return material;
+		public function destroy():void{
+			this.texture.dispose();
+			this.texture = null;
+			this.bytes.clear();
+			this.bytes = null;
+			this.format = null;
+			this.width = 0;
+			this.height = 0;
+			this.num = 0;
+			this.inUse = false;
 		}
 		//} endregion PUBLIC METHODS ===================================================
 

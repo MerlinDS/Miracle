@@ -6,25 +6,16 @@
 package com.merlinds.miracle {
 	import com.merlinds.miracle.display.MiracleAnimation;
 	import com.merlinds.miracle.display.MiracleImage;
-	import com.merlinds.miracle.materials.Material;
-	import com.merlinds.miracle.utils.Asset;
 
 	import flash.geom.Vector3D;
-	import flash.utils.ByteArray;
 
 	public interface IScene {
 		//==============================================================================
 		//{region							METHODS
 		/**
-		 * Create Material for this scene
-		 * @param name Material name. This name will be used as link inside the Miracle
-		 * @param textureData ATF or Bitmap bytes that will be used as texture of this material
-		 * @param meshData Special formatted object that describes meshes structure
-		 */
-		function createMaterial(name:String, textureData:ByteArray, meshData:Array = null):Material;
-		/**
 		 * Create instance of the image on current scene
-		 * @param name Name of the asset that will be used to create
+		 * @param meshName Name of the mesh that will be used to create
+		 * @param textureName Name of the texture that will be used to create
 		 * instance of the display object
 		 * @param position Position of the display object on scene.
 		 * <ul>
@@ -35,7 +26,7 @@ package com.merlinds.miracle {
 		 * @param serializer Prototype of the instance
 		 * @return Instance of the display object
 		 */
-		function createImage(name:String, position:Vector3D = null, serializer:Class = null):MiracleImage;
+		function createImage(meshName:String, textureName:String, position:Vector3D = null, serializer:Class = null):MiracleImage;
 		/**
 		 * Create instance of the animation on current scene
 		 * @param name Name of the asset that will be used to create
