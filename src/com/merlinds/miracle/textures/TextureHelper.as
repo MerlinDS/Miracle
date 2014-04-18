@@ -5,11 +5,11 @@
  */
 package com.merlinds.miracle.textures {
 	import flash.display3D.textures.Texture;
+	import flash.events.Event;
 	import flash.utils.ByteArray;
 
 	public class TextureHelper {
 
-		public var bytes:ByteArray;
 		/**
 		 *  Format of the texture.
 		 *  @default flash.display3D.Context3DTextureFormat.BGRA
@@ -23,19 +23,21 @@ package com.merlinds.miracle.textures {
 		public var num:int;
 		public var inUse:Boolean;
 
-		public var texture:Texture;
+		private var _texture:Texture;
+		private var _bytes:ByteArray;
+		private var _uploading:Boolean;
 
 		public function TextureHelper(bytes:ByteArray) {
-			this.bytes = bytes;
+			_bytes = bytes;
 		}
 
 		//==============================================================================
 		//{region							PUBLIC METHODS
 		public function destroy():void{
-			this.texture.dispose();
-			this.texture = null;
-			this.bytes.clear();
-			this.bytes = null;
+			_texture.dispose();
+			_texture = null;
+			_bytes.clear();
+			_bytes = null;
 			this.format = null;
 			this.width = 0;
 			this.height = 0;
@@ -50,10 +52,29 @@ package com.merlinds.miracle.textures {
 
 		//==============================================================================
 		//{region							EVENTS HANDLERS
+		private function textureReadyHandler(event:Event):void {
+			_texture.removeEventListener(event.type, this.textureReadyHandler);
+			_uploading = false;
+			inUse = true;
+		}
 		//} endregion EVENTS HANDLERS ==================================================
 
 		//==============================================================================
 		//{region							GETTERS/SETTERS
+		public function get texture():Texture {
+			return _texture;
+		}
+
+		public function set texture(value:Texture):void {
+			_texture = value;
+			_uploading = true;
+			_texture.addEventListener(Event.TEXTURE_READY, textureReadyHandler);
+			_texture.uploadCompressedTextureFromByteArray(_bytes, 0, true);
+		}
+
+		public function get uploading():Boolean {
+			return _uploading;
+		}
 		//} endregion GETTERS/SETTERS ==================================================
 	}
 }

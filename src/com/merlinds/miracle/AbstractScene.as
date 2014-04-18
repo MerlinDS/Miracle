@@ -65,8 +65,8 @@ package com.merlinds.miracle {
 					_meshes[ asset.name ] = mesh;
 				}else if(asset.type == Asset.TEXTURE_TYPE){
 					//parse textures
-					_meshes[ asset.name ] = new TextureHelper( asset.output );
-					AtfData.getAtfParameters(_meshes[ asset.name ]);
+					_textures[ asset.name ] = new TextureHelper( asset.output );
+					AtfData.getAtfParameters( asset.output, _textures[ asset.name ] );
 				}
 				//Other types will be ignored for now!
 				asset.destroy();

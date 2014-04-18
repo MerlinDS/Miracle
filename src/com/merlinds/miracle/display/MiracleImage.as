@@ -7,8 +7,8 @@ package com.merlinds.miracle.display {
 
 	public class MiracleImage extends MiracleDisplayObject{
 
-		public function MiracleImage(materialName:String) {
-			super(materialName);
+		public function MiracleImage() {
+			super();
 		}
 
 		//==============================================================================

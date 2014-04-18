@@ -33,7 +33,7 @@ package com.merlinds.miracle.utils {
 		 * @param bytes Asset bytes
 		 */
 		public function Asset(name:String, bytes:ByteArray) {
-			this.name = name;
+			this.name = name.substr( 0, name.lastIndexOf(".") );
 			_bytes = bytes;
 		}
 
@@ -73,6 +73,7 @@ package com.merlinds.miracle.utils {
 			}
 			if(this.type == MESH_TYPE){
 				output = JSON.parse( output as String );
+				output = output.data;
 			}else if(this.type == XML_TYPE){
 				output = new XML( output as String );
 			}

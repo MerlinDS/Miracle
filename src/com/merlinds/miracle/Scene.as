@@ -16,7 +16,7 @@ package com.merlinds.miracle {
 	import flash.display3D.IndexBuffer3D;
 	import flash.display3D.VertexBuffer3D;
 	import flash.display3D.textures.Texture;
-	import flash.geom.Vector3D;
+	import flash.events.Event;
 
 	internal class Scene extends AbstractScene implements IScene{
 		/**
@@ -41,39 +41,19 @@ package com.merlinds.miracle {
 		//==============================================================================
 		//{region							PUBLIC METHODS
 		//IScene
-		public function createImage(meshName:String, textureName:String, position:Vector3D = null, serializer:Class = null):MiracleImage {
-			var mesh:Mesh2D = _meshes[meshName];
-			var textureHelper:TextureHelper = _textures[textureName];
-
+		public function createImage(serializer:Class = null):MiracleImage {
 			//TODO add validation
-			if(mesh == null){
-				throw ArgumentError("Cannot find mesh with name " + meshName);
-			}
-
-			if(textureHelper == null){
-				throw ArgumentError("Cannot find texture with name " + textureName);
-			}
-
-			var instance:MiracleDisplayObject = new MiracleImage(textureName);
+			var instance:MiracleDisplayObject = new MiracleImage();
 			_displayObjects[_displayObjects.length++] = instance;
-			if(position != null){
-				instance.drawMatrix.tx = position.x;
-				instance.drawMatrix.ty = position.y;
-			}
 			//add texture to gpu
-			//TODO add sharing one texture between few materials
-			var texture:Texture = _context.createTexture(textureHelper.width,
-					textureHelper.height, textureHelper.format, true);
-			texture.uploadCompressedTextureFromByteArray(textureHelper.bytes, 0);
-			textureHelper.texture = texture;
-			trace("Miracle: Image was created. Material name:", texture);
+			trace("Miracle: Image was created.");
 			return instance as MiracleImage;
 		}
 
-		public function createAnimation(name:String, position:Vector3D = null, serializer:Class = null):MiracleAnimation
+		public function createAnimation(serializer:Class = null):MiracleAnimation
 		{
 			var instance:MiracleAnimation;
-			trace("Miracle: Animation was created. Name:", name);
+			trace("Miracle: Animation was created.");
 			return instance;
 		}
 
@@ -84,24 +64,54 @@ package com.merlinds.miracle {
 		}
 
 		override public function drawFrame():void{
-			/*var mesh:Polygon2D;
-			var material:Material;
+			var mesh:Mesh2D;
+			var polygon:Polygon2D;
+			var textureHelper:TextureHelper;
 			var instance:MiracleDisplayObject;
 			var n:int = _displayObjects.length;
 			for(var i:int = 0; i < n; i++){
 				instance = _displayObjects[i];
-				material = _materials[ instance.materialName ];
-				instance.drawMatrix.tx++;
-				mesh = material.meshList[0];//TODO add mesh index to instance
-				_context.setTextureAt(0, material.texture);
-				this.draw(mesh, instance.drawMatrix);
-			}*/
+				//instance is not ready to use
+				if(instance.mesh && instance.texture){
+
+					mesh = _meshes[ instance.mesh ];
+					textureHelper = _textures[ instance.texture ];
+
+					if(!textureHelper.inUse){
+						if(!textureHelper.uploading){
+							this.initializeInstance(instance);
+						}
+					}else{
+						polygon = mesh[0];
+						_context.setTextureAt(0, textureHelper.texture);
+						this.draw(polygon, instance.drawMatrix);
+						instance.drawMatrix.tx += 1;
+					}
+
+				}
+			}
 
 		}
 		//} endregion PUBLIC METHODS ===================================================
 
 		//==============================================================================
 		//{region						PRIVATE\PROTECTED METHODS
+
+		private function initializeInstance( instance:MiracleDisplayObject ):void {
+			var mesh:Mesh2D = _meshes[instance.mesh];
+			var textureHelper:TextureHelper = _textures[instance.texture];
+
+			if(mesh == null){
+				throw ArgumentError("Cannot find mesh with name " + instance.mesh);
+			}
+
+			if(textureHelper == null){
+				throw ArgumentError("Cannot find texture with name " + instance.texture);
+			}
+
+			textureHelper.texture = _context.createTexture(textureHelper.width,
+					textureHelper.height, textureHelper.format, true);
+		}
 
 		[Inline]
 		private function drawTriangles():void {
@@ -134,17 +144,17 @@ package com.merlinds.miracle {
 		private var _indexStep:Number = 0;
 
 		[Inline]
-		private function draw(mesh:Polygon2D, dm:DrawingMatrix):void {
+		private function draw(polygon:Polygon2D, dm:DrawingMatrix):void {
 			var i:int;
 			var dataIndex:int = 0;
-			var n:int = mesh.numVertexes;
+			var n:int = polygon.numVertexes;
 			for(i = 0; i < n; i++){
 				/**** ADD VERTEX DATA *****/
-				_vertexData[_vertexOffset++] = mesh.buffer[ dataIndex++ ] + dm.offsetX;
-				_vertexData[_vertexOffset++] = mesh.buffer[ dataIndex++ ] + dm.offsetY;
+				_vertexData[_vertexOffset++] = polygon.buffer[ dataIndex++ ] + dm.offsetX;
+				_vertexData[_vertexOffset++] = polygon.buffer[ dataIndex++ ] + dm.offsetY;
 				/**** ADD UV DATA *****/
-				_vertexData[_vertexOffset++] = mesh.buffer[ dataIndex++ ];
-				_vertexData[_vertexOffset++] = mesh.buffer[ dataIndex++ ];
+				_vertexData[_vertexOffset++] = polygon.buffer[ dataIndex++ ];
+				_vertexData[_vertexOffset++] = polygon.buffer[ dataIndex++ ];
 				/**** ADD TRANSFORM INDEXES DATA *****/
 				_vertexData[_vertexOffset++] = dm.tx;
 				_vertexData[_vertexOffset++] = dm.ty;
@@ -161,11 +171,11 @@ package com.merlinds.miracle {
 				*/
 			}
 			/**** FILL INDEXES BUFFER *****/
-			n = mesh.indexes.length;
+			n = polygon.indexes.length;
 			for(i = 0; i < n; i++){
-				_indexData[_indexOffset++] = _indexStep + mesh.indexes[i];
+				_indexData[_indexOffset++] = _indexStep + polygon.indexes[i];
 			}
-			_indexStep += mesh.numVertexes;
+			_indexStep += polygon.numVertexes;
 		}
 		//} endregion PRIVATE\PROTECTED METHODS ========================================
 
