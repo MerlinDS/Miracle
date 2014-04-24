@@ -69,8 +69,8 @@ package com.merlinds.miracle.display {
 		}
 
 		public function set position(value:Vector3D):void {
-			drawMatrix.tx = value.x * 1000;
-			drawMatrix.ty = value.y * 1000;
+			drawMatrix.tx = value.x;
+			drawMatrix.ty = value.y;
 		}
 
 //} endregion GETTERS/SETTERS ==================================================

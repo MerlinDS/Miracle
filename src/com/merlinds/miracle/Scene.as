@@ -15,8 +15,6 @@ package com.merlinds.miracle {
 
 	import flash.display3D.IndexBuffer3D;
 	import flash.display3D.VertexBuffer3D;
-	import flash.display3D.textures.Texture;
-	import flash.events.Event;
 
 	internal class Scene extends AbstractScene implements IScene{
 		/**
@@ -28,7 +26,10 @@ package com.merlinds.miracle {
 		private var _indexBuffer:IndexBuffer3D;
 		private var _vertexData:Vector.<Number>;
 		private var _indexData:Vector.<uint>;
-
+		//
+		private var _vertexOffset:Number = 0;
+		private var _indexOffset:Number = 0;
+		private var _indexStep:Number = 0;
 		//
 		use namespace miracle_internal;
 
@@ -42,7 +43,6 @@ package com.merlinds.miracle {
 		//{region							PUBLIC METHODS
 		//IScene
 		public function createImage(serializer:Class = null):MiracleImage {
-			//TODO add validation
 			var instance:MiracleDisplayObject = new MiracleImage();
 			_displayObjects[_displayObjects.length++] = instance;
 			//add texture to gpu
@@ -50,11 +50,11 @@ package com.merlinds.miracle {
 			return instance as MiracleImage;
 		}
 
-		public function createAnimation(serializer:Class = null):MiracleAnimation
-		{
-			var instance:MiracleAnimation;
+		public function createAnimation(serializer:Class = null):MiracleAnimation{
+			var instance:MiracleDisplayObject = new MiracleAnimation();
+			_displayObjects[_displayObjects.length++] = instance;
 			trace("Miracle: Animation was created.");
-			return instance;
+			return instance as MiracleAnimation;
 		}
 
 //IRenderer
@@ -82,10 +82,12 @@ package com.merlinds.miracle {
 							this.initializeInstance(instance);
 						}
 					}else{
-						polygon = mesh[0];
-						_context.setTextureAt(0, textureHelper.texture);
-						this.draw(polygon, instance.drawMatrix);
-						instance.drawMatrix.tx += 1;
+						var m:int = mesh.length;
+						for(var j:int = 0; j < m; j++){
+							polygon = mesh[j];
+							_context.setTextureAt(0, textureHelper.texture);
+							this.draw(polygon, instance.drawMatrix);
+						}
 					}
 
 				}
@@ -137,11 +139,6 @@ package com.merlinds.miracle {
 			_vertexData.length = 0;
 			_indexData.length = 0;
 		}
-
-		//TODO: refactor this
-		private var _vertexOffset:Number = 0;
-		private var _indexOffset:Number = 0;
-		private var _indexStep:Number = 0;
 
 		[Inline]
 		private function draw(polygon:Polygon2D, dm:DrawingMatrix):void {

@@ -4,12 +4,13 @@
  * Time: 18:30
  */
 package com.merlinds.miracle.display {
-	public class MiracleAnimation {
-		public function MiracleAnimation() {
-		}
+	public class MiracleAnimation extends MiracleDisplayObject{
 
 		//==============================================================================
 		//{region							PUBLIC METHODS
+		public function MiracleAnimation() {
+			super();
+		}
 		//} endregion PUBLIC METHODS ===================================================
 
 		//==============================================================================

@@ -20,7 +20,7 @@ package com.merlinds.miracle.meshes {
 
 			var i:uint;
 			var dataIndex:int = 0;
-			var n:int = data.vertexes.length >> 1;
+			var n:int = this.numVertexes;
 			for(i = 0; i < n; i++){
 				this.buffer[dataIndex++] = data.vertexes[ i * 2 ];
 				this.buffer[dataIndex++] = data.vertexes[ i * 2 + 1 ];
