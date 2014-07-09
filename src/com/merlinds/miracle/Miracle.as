@@ -16,7 +16,7 @@ package com.merlinds.miracle {
 
 		private static var _instance:MiracleInstance;
 		private static var _scenesList:Vector.<IScene>;
-		private static var _currenScene:int;
+		private static var _currentScene:int;
 		//==============================================================================
 		//{region							PUBLIC METHODS
 		public function Miracle() {
@@ -46,7 +46,7 @@ package com.merlinds.miracle {
 					trace("Miracle: Start completed");
 					_instance = localInstance;
 					_scenesList = new <IScene>[];
-					_currenScene = -1;
+					_currentScene = -1;
 					if(callback is Function){
 						callback.apply(null);
 					}
@@ -59,16 +59,16 @@ package com.merlinds.miracle {
 		}
 
 		//TODO create scene with initial assets
-		public static function createScene(assets:Vector.<Asset>):IScene {
+		public static function createScene(assets:Vector.<Asset>, scale:Number = 1):IScene {
 			if(_instance == null){
 				throw new IllegalOperationError("Miracle was not started. Use start() before creating scene ");
 			}
 			var index:int = _scenesList.length;
-			_scenesList[index] = new Scene(assets);
+			_scenesList[index] = new Scene(assets, scale);
 			//if scenes is empty, add scene to instance
-			if(_currenScene < 0){
-				_currenScene = 0;
-				_instance.scene = _scenesList[ _currenScene ] as IRenderer;
+			if(_currentScene < 0){
+				_currentScene = 0;
+				_instance.scene = _scenesList[ _currentScene ] as IRenderer;
 			}
 			trace("Miracle: new scene was added. Index:", index);
 			return _scenesList[index];
@@ -79,7 +79,7 @@ package com.merlinds.miracle {
 				throw new IllegalOperationError("Miracle was not started. Use start() ");
 			}
 			var result:Boolean = true;
-			if(_currenScene < 0){
+			if(_currentScene < 0){
 				//create new scene
 				createScene(new <Asset>[]);
 			}else
@@ -88,7 +88,7 @@ package com.merlinds.miracle {
 					result = false;
 					trace("Miracle: Cannot switch scene to index", index);
 				}else{
-					_instance.scene = _scenesList[ _currenScene ] as IRenderer;
+					_instance.scene = _scenesList[ _currentScene ] as IRenderer;
 					trace("Miracle: Switch scene to index ", index);
 				}
 			}
@@ -113,7 +113,12 @@ package com.merlinds.miracle {
 		public static function get isStarted():Boolean{
 			return _instance != null;
 		}
-		//} endregion GETTERS/SETTERS ==================================================
+
+		public static function get currentScene():IScene {
+			return _scenesList[ _currentScene ];
+		}
+
+//} endregion GETTERS/SETTERS ==================================================
 	}
 }
 

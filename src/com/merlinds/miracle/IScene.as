@@ -5,6 +5,7 @@
  */
 package com.merlinds.miracle {
 	import com.merlinds.miracle.display.MiracleAnimation;
+	import com.merlinds.miracle.display.MiracleDisplayObject;
 	import com.merlinds.miracle.display.MiracleImage;
 
 	public interface IScene {
@@ -15,13 +16,15 @@ package com.merlinds.miracle {
 		 * @param serializer Prototype of the instance
 		 * @return Instance of the display object
 		 */
-		function createImage(serializer:Class = null):MiracleImage;
+		function createImage(texture:String = null, mesh:String = null, anim:String = null):MiracleImage;
 		/**
 		 * Create instance of the animation on current scene
 		 * @param serializer Prototype of the instance
 		 * @return Instance of the display object
 		 */
-		function createAnimation(serializer:Class = null):MiracleAnimation;
+		function createAnimation():MiracleAnimation;
+
+		function createInstance(serializer:Class):MiracleDisplayObject;
 		//} endregion PUBLIC METHODS ===================================================
 
 		//==============================================================================

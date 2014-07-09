@@ -12,7 +12,7 @@ package com.merlinds.miracle.meshes {
 		public var name:String;
 		public var numVertexes:Number;
 
-		public function Polygon2D(data:Object) {
+		public function Polygon2D(data:Object, scale:Number = 1) {
 			this.name = data.name;
 			this.numVertexes = data.vertexes.length >> 1;
 			this.indexes = new Vector.<Number>( data.indexes.length );
@@ -22,8 +22,8 @@ package com.merlinds.miracle.meshes {
 			var dataIndex:int = 0;
 			var n:int = this.numVertexes;
 			for(i = 0; i < n; i++){
-				this.buffer[dataIndex++] = data.vertexes[ i * 2 ];
-				this.buffer[dataIndex++] = data.vertexes[ i * 2 + 1 ];
+				this.buffer[dataIndex++] = data.vertexes[ i * 2 ] * scale;
+				this.buffer[dataIndex++] = data.vertexes[ i * 2 + 1 ] * scale;
 				this.buffer[dataIndex++] = data.uv[ i * 2 ];
 				this.buffer[dataIndex++] = data.uv[ i * 2 + 1 ];
 			}

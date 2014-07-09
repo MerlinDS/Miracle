@@ -7,6 +7,7 @@ package com.merlinds.miracle {
 	import com.merlinds.miracle.display.MiracleDisplayObject;
 	import com.merlinds.miracle.meshes.Mesh2D;
 	import com.merlinds.miracle.meshes.Polygon2D;
+	import com.merlinds.miracle.meshes.Polygon2D;
 	import com.merlinds.miracle.textures.TextureHelper;
 	import com.merlinds.miracle.utils.Asset;
 	import com.merlinds.miracle.utils.AtfData;
@@ -15,6 +16,7 @@ package com.merlinds.miracle {
 
 	internal class AbstractScene implements IRenderer{
 
+		protected var _scale:Number;
 		protected var _context:Context3D;
 		//maps
 		protected var _displayObjects:Vector.<MiracleDisplayObject>;
@@ -22,9 +24,10 @@ package com.merlinds.miracle {
 		protected var _meshes:Object;/**Mesh2D**/
 		protected var _textures:Object;/**Texture**/
 
-		public function AbstractScene(assets:Vector.<Asset>) {
+		public function AbstractScene(assets:Vector.<Asset>, scale:Number = 1) {
 			_meshes = {};
 			_textures = {};
+			_scale = scale;
 			_displayObjects = new <MiracleDisplayObject>[];
 			this.initialize(assets);
 		}
@@ -60,7 +63,7 @@ package com.merlinds.miracle {
 					var meshData:Array = asset.output;
 					var n:int = meshData.length;
 					for(var i:int = 0; i < n; i++){
-						mesh[i] = new Polygon2D(meshData[i]);
+						mesh[i] = new Polygon2D(meshData[i], _scale);
 					}
 					_meshes[ asset.name ] = mesh;
 				}else if(asset.type == Asset.TEXTURE_TYPE){
@@ -83,6 +86,7 @@ package com.merlinds.miracle {
 		public function set context(value:Context3D):void {
 			_context = value;
 		}
-		//} endregion GETTERS/SETTERS ==================================================
+
+//} endregion GETTERS/SETTERS ==================================================
 	}
 }

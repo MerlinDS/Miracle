@@ -33,28 +33,32 @@ package com.merlinds.miracle {
 		//
 		use namespace miracle_internal;
 
-		public function Scene(assets:Vector.<Asset>) {
+		public function Scene(assets:Vector.<Asset>, scale:Number = 1) {
 			_vertexData = new <Number>[];
 			_indexData = new <uint>[];
-			super(assets);
+			super(assets, scale);
 		}
 
 		//==============================================================================
 		//{region							PUBLIC METHODS
 		//IScene
-		public function createImage(serializer:Class = null):MiracleImage {
-			var instance:MiracleDisplayObject = new MiracleImage();
-			_displayObjects[_displayObjects.length++] = instance;
-			//add texture to gpu
-			trace("Miracle: Image was created.");
+		public function createImage(texture:String = null, mesh:String = null, anim:String = null):MiracleImage {
+			var instance:MiracleDisplayObject = this.createInstance(MiracleImage);
+			instance.texture = texture;
+			instance.mesh = mesh;
+//			instance.anim = anim;
 			return instance as MiracleImage;
 		}
 
-		public function createAnimation(serializer:Class = null):MiracleAnimation{
-			var instance:MiracleDisplayObject = new MiracleAnimation();
+		public function createAnimation():MiracleAnimation{
+			return this.createInstance(MiracleAnimation) as MiracleAnimation;
+		}
+
+		public function createInstance(serializer:Class):MiracleDisplayObject {
+			var instance:MiracleDisplayObject = new serializer();
 			_displayObjects[_displayObjects.length++] = instance;
-			trace("Miracle: Animation was created.");
-			return instance as MiracleAnimation;
+			trace("Miracle: Instance was created.");
+			return instance;
 		}
 
 //IRenderer
