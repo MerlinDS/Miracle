@@ -2,8 +2,8 @@
 <module type="Flex" version="4">
   <component name="FlexBuildConfigurationManager" active="miracle">
     <configurations>
-      <configuration name="miracle" pure-as="true" output-type="Library" output-file="miracle.swc" output-folder="$MODULE_DIR$/../loonyquack/bin-debug/production/miracle">
-        <dependencies target-player="12.0">
+      <configuration name="miracle" target-platform="Desktop" pure-as="true" output-type="Library" output-file="miracle.swc" output-folder="$MODULE_DIR$/bin">
+        <dependencies>
           <sdk name="AIR 4.0" />
         </dependencies>
         <compiler-options />

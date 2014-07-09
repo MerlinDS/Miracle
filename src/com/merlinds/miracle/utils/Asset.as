@@ -11,7 +11,8 @@ package com.merlinds.miracle.utils {
 	 */
 	public class Asset {
 		public static const XML_TYPE:String = "xml";
-		public static const MESH_TYPE:String = "json";
+		public static const ANIM_TYPE:String = "anim";
+		public static const MESH_TYPE:String = "msh";
 		public static const TEXTURE_TYPE:String = "atf";
 		/**
 		 * Name of the asset that will be used as id in Miracle
@@ -62,6 +63,7 @@ package com.merlinds.miracle.utils {
 				if(String.fromCharCode(_bytes[0]) == "<"){
 					_type = XML_TYPE;
 				}
+				//TODO: Add animation type recognizing
 			}
 			return _type;
 		}
