@@ -10,6 +10,7 @@ package com.merlinds.miracle {
 	import com.merlinds.miracle.meshes.Mesh2D;
 	import com.merlinds.miracle.meshes.Polygon2D;
 	import com.merlinds.miracle.textures.TextureHelper;
+	import com.merlinds.miracle.textures.TextureHelper;
 	import com.merlinds.miracle.utils.Asset;
 	import com.merlinds.miracle.utils.DrawingMatrix;
 
@@ -61,7 +62,12 @@ package com.merlinds.miracle {
 			return instance;
 		}
 
-//IRenderer
+		public function textureInUse(texture:String):Boolean{
+			var textureHelper:TextureHelper = _textures[texture];
+			return textureHelper.inUse;
+		}
+
+		//IRenderer
 		override public function end():void{
 			this.drawTriangles();
 			_context.present();

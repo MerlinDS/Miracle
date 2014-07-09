@@ -53,6 +53,7 @@ package com.merlinds.miracle.textures {
 		//==============================================================================
 		//{region							EVENTS HANDLERS
 		private function textureReadyHandler(event:Event):void {
+			trace("textureReadyHandler");
 			_texture.removeEventListener(event.type, this.textureReadyHandler);
 			_uploading = false;
 			inUse = true;

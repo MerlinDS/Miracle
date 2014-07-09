@@ -24,6 +24,8 @@ package com.merlinds.miracle {
 		 */
 		function createAnimation():MiracleAnimation;
 
+		function textureInUse(texture:String):Boolean;
+
 		function createInstance(serializer:Class):MiracleDisplayObject;
 		//} endregion PUBLIC METHODS ===================================================
 

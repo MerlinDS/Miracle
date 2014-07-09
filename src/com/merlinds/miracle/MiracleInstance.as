@@ -19,6 +19,7 @@ package com.merlinds.miracle {
 	import flash.events.EventDispatcher;
 	import flash.geom.Rectangle;
 	import flash.utils.getTimer;
+	import flash.utils.setTimeout;
 
 	internal class MiracleInstance extends EventDispatcher{
 		private var _agal:AGALMiniAssembler;
@@ -26,6 +27,8 @@ package com.merlinds.miracle {
 		private var _nativeStage:Stage;
 		private var _context:Context3D;
 		private var _scene:IRenderer;
+		//
+		private var _executeQueue:Vector.<Function>;
 		//
 		private var _lastFrameTimestamp:Number;
 		private var _enableErrorChecking:Boolean;
@@ -43,6 +46,7 @@ package com.merlinds.miracle {
 
 		public function start(enableErrorChecking:Boolean = true):void {
 			_agal = new AGALMiniAssembler();
+			_executeQueue = new <Function>[this.setupContext, this.updateShader, this.executeTimer];
 			_enableErrorChecking = enableErrorChecking;
 			_stage3D = _nativeStage.stage3Ds[0];
 			_stage3D.addEventListener(Event.CONTEXT3D_CREATE, this.contextCreateHandler);
@@ -63,7 +67,7 @@ package com.merlinds.miracle {
 			_context.setProgramConstantsFromVector("vertex", 125, Vector.<Number>([1, -1, 0, 0]));
 			_context.setProgramConstantsFromVector("vertex", 126, Vector.<Number>([0, 0, 1, 0]));
 			_context.setProgramConstantsFromVector("vertex", 127, Vector.<Number>([0, 0, 0, 1]));
-			this.updateShader(ShaderLib.VERTEX_SHADER, ShaderLib.FRAGMENT_SHADER);
+			setTimeout(_executeQueue.shift(), 0, ShaderLib.VERTEX_SHADER, ShaderLib.FRAGMENT_SHADER);
 		}
 
 		private function updateViewport():void {
@@ -84,6 +88,14 @@ package com.merlinds.miracle {
 					_agal.assemble(Context3DProgramType.FRAGMENT, fs)
 			);
 			_context.setProgram(program);
+			setTimeout(_executeQueue.shift(), 0);
+		}
+
+		private function executeTimer():void {
+			//start looping
+			_lastFrameTimestamp = getTimer() / 1000.0;
+			_nativeStage.addEventListener(Event.ENTER_FRAME, this.enterFrameHandler);
+			setTimeout(this.dispatchEvent, 0, new Event(Event.COMPLETE) );
 		}
 		//} endregion PRIVATE\PROTECTED METHODS ========================================
 
@@ -93,11 +105,7 @@ package com.merlinds.miracle {
 			_stage3D.removeEventListener(event.type, arguments.callee);
 			_context = _stage3D.context3D;
 			trace("Miracle: context3D was obtained", "3D driver:", _context.driverInfo);
-			this.setupContext();
-			//start looping
-			_lastFrameTimestamp = getTimer() / 1000.0;
-			_nativeStage.addEventListener(Event.ENTER_FRAME, this.enterFrameHandler);
-			this.dispatchEvent( new Event(Event.COMPLETE) );
+			setTimeout(_executeQueue.shift(), 0);
 		}
 
 		private function enterFrameHandler(event:Event):void {
