@@ -86,6 +86,9 @@ package com.merlinds.miracle {
 
 					mesh = _meshes[ instance.mesh ];
 					textureHelper = _textures[ instance.texture ];
+					if(mesh == null || textureHelper == null){
+						throw new ArgumentError("Can not draw display object without mesh or texture");
+					}
 
 					if(!textureHelper.inUse){
 						if(!textureHelper.uploading){
