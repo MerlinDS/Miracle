@@ -7,6 +7,8 @@ package com.merlinds.miracle {
 
 	import com.adobe.utils.AGALMiniAssembler;
 
+	import flash.display.BitmapData;
+
 	import flash.display.Stage;
 	import flash.display.Stage3D;
 	import flash.display3D.Context3D;
@@ -140,6 +142,16 @@ package com.merlinds.miracle {
 
 		public function get scene():IRenderer{
 			return _scene;
+		}
+
+		public function get snapshot():BitmapData {
+			var snapshot:BitmapData = new BitmapData(_viewport.width, _viewport.height);
+			_scene.start();
+			_scene.drawFrame();
+			_scene.end(false);
+			_context.drawToBitmapData(snapshot);
+			_context.present();
+			return snapshot;
 		}
 		//} endregion GETTERS/SETTERS ==================================================
 	}

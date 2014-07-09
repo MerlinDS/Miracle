@@ -7,7 +7,6 @@ package com.merlinds.miracle {
 	import com.merlinds.miracle.display.MiracleDisplayObject;
 	import com.merlinds.miracle.meshes.Mesh2D;
 	import com.merlinds.miracle.meshes.Polygon2D;
-	import com.merlinds.miracle.meshes.Polygon2D;
 	import com.merlinds.miracle.textures.TextureHelper;
 	import com.merlinds.miracle.utils.Asset;
 	import com.merlinds.miracle.utils.AtfData;
@@ -38,7 +37,7 @@ package com.merlinds.miracle {
 			_context.clear(0.8, 0.8, 0.8, 1);
 		}
 
-		public function end():void {
+		public function end(present:Boolean = true):void {
 		}
 
 		public function kill():void {

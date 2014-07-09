@@ -6,6 +6,8 @@
 package com.merlinds.miracle {
 	import com.merlinds.miracle.utils.Asset;
 
+	import flash.display.BitmapData;
+
 	import flash.display.Stage;
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
@@ -118,6 +120,9 @@ package com.merlinds.miracle {
 			return _scenesList[ _currentScene ];
 		}
 
+		public static function get snapshot():BitmapData{
+			return _instance.snapshot;
+		}
 //} endregion GETTERS/SETTERS ==================================================
 	}
 }

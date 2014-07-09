@@ -11,7 +11,7 @@ package com.merlinds.miracle {
 		//==============================================================================
 		//{region							METHODS
 		function start():void;
-		function end():void;
+		function end(present:Boolean = true):void;
 		function kill():void;
 
 		function drawFrame():void;

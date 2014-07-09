@@ -10,7 +10,6 @@ package com.merlinds.miracle {
 	import com.merlinds.miracle.meshes.Mesh2D;
 	import com.merlinds.miracle.meshes.Polygon2D;
 	import com.merlinds.miracle.textures.TextureHelper;
-	import com.merlinds.miracle.textures.TextureHelper;
 	import com.merlinds.miracle.utils.Asset;
 	import com.merlinds.miracle.utils.DrawingMatrix;
 
@@ -68,9 +67,11 @@ package com.merlinds.miracle {
 		}
 
 		//IRenderer
-		override public function end():void{
+		override public function end(present:Boolean = true):void {
 			this.drawTriangles();
-			_context.present();
+			if(present) {
+				_context.present();
+			}
 		}
 
 		override public function drawFrame():void{
