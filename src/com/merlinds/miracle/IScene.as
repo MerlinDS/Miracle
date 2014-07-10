@@ -31,6 +31,7 @@ package com.merlinds.miracle {
 
 		//==============================================================================
 		//{region							GETTERS/SETTERS
+		function get scale():Number;
 		//} endregion GETTERS/SETTERS ==================================================
 	}
 }

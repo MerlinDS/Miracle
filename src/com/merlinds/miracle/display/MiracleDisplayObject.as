@@ -4,13 +4,16 @@
  * Time: 20:56
  */
 package com.merlinds.miracle.display {
+	import com.merlinds.miracle.events.MiracleEvent;
 	import com.merlinds.miracle.miracle_internal;
 	import com.merlinds.miracle.utils.DrawingMatrix;
 
 	import flash.errors.IllegalOperationError;
+	import flash.events.EventDispatcher;
 	import flash.geom.Vector3D;
 
-	public class MiracleDisplayObject {
+	[Event(type="com.merlinds.miracle.events.MiracleEvent", name="addedToStage")]
+	public class MiracleDisplayObject extends EventDispatcher{
 
 		use namespace miracle_internal;
 
@@ -34,6 +37,11 @@ package com.merlinds.miracle.display {
 		 */
 		private var _position:Vector3D;
 
+		private var _width:int;
+		private var _height:int;
+
+		private var _onStage:Boolean;
+
 		public function MiracleDisplayObject(mesh:String = null, texture:String = null,
 		                                     drawMatrix:DrawingMatrix = null) {
 			this.mesh = mesh;
@@ -51,6 +59,16 @@ package com.merlinds.miracle.display {
 		public function draw():void{
 			throw new IllegalOperationError("This method must be overridden!");
 		}
+
+		miracle_internal function drawn():void{
+			if(!_onStage){
+				//After first draw dispatch event that display object was added to stage
+				if(this.hasEventListener(MiracleEvent.ADDED_TO_STAGE)){
+					this.dispatchEvent(new MiracleEvent(MiracleEvent.ADDED_TO_STAGE));
+				}
+				_onStage = true;
+			}
+		}
 		//} endregion PUBLIC METHODS ===================================================
 
 		//==============================================================================
@@ -64,13 +82,30 @@ package com.merlinds.miracle.display {
 		//==============================================================================
 		//{region							GETTERS/SETTERS
 
-		public function get position():flash.geom.Vector3D {
+		public function get position():Vector3D {
 			return _position;
 		}
 
 		public function set position(value:Vector3D):void {
 			drawMatrix.tx = value.x;
 			drawMatrix.ty = value.y;
+			_position = value;
+		}
+
+		public function get width():int {
+			return _width;
+		}
+
+		public function set width(value:int):void {
+			_width = value;
+		}
+
+		public function get height():int {
+			return _height;
+		}
+
+		public function set height(value:int):void {
+			_height = value;
 		}
 
 //} endregion GETTERS/SETTERS ==================================================

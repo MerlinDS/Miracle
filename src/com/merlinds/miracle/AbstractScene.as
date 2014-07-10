@@ -86,6 +86,9 @@ package com.merlinds.miracle {
 			_context = value;
 		}
 
+		public function get scale():Number{
+			return _scale;
+		}
 //} endregion GETTERS/SETTERS ==================================================
 	}
 }

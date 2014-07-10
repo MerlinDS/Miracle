@@ -7,6 +7,7 @@ package com.merlinds.miracle {
 	import com.merlinds.miracle.display.MiracleAnimation;
 	import com.merlinds.miracle.display.MiracleDisplayObject;
 	import com.merlinds.miracle.display.MiracleImage;
+	import com.merlinds.miracle.events.MiracleEvent;
 	import com.merlinds.miracle.meshes.Mesh2D;
 	import com.merlinds.miracle.meshes.Polygon2D;
 	import com.merlinds.miracle.textures.TextureHelper;
@@ -93,15 +94,24 @@ package com.merlinds.miracle {
 
 					if(!textureHelper.inUse){
 						if(!textureHelper.uploading){
+							//upload texture to GPU
 							this.initializeInstance(instance);
 						}
 					}else{
+						//reset old sizes
+						instance.width = instance.height = 0;
 						var m:int = mesh.length;
 						for(var j:int = 0; j < m; j++){
 							polygon = mesh[j];
+							//set sizes to instance
+							instance.width += polygon.buffer[8];
+							instance.height += polygon.buffer[9] * -1;
+							//draw on GPU
 							_context.setTextureAt(0, textureHelper.texture);
 							this.draw(polygon, instance.drawMatrix);
 						}
+						//tell instance that it was drawn on GPU
+						instance.miracle_internal::drawn();
 					}
 
 				}
