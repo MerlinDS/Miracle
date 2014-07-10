@@ -100,6 +100,14 @@ package com.merlinds.miracle {
 			}
 			return result;
 		}
+
+		public static function pause():void {
+			_instance.pause();
+		}
+
+		public static function resume():void {
+			_instance.resume();
+		}
 		//} endregion PUBLIC METHODS ===================================================
 
 		//==============================================================================

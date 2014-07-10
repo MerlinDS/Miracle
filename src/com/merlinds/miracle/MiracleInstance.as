@@ -37,6 +37,7 @@ package com.merlinds.miracle {
 		private var _viewport:Rectangle;
 		private var _ratioX:Number;
 		private var _ratioY:Number;
+		private var _onPause:Boolean;
 		//
 		//==============================================================================
 		//{region							PUBLIC METHODS
@@ -53,6 +54,19 @@ package com.merlinds.miracle {
 			_stage3D = _nativeStage.stage3Ds[0];
 			_stage3D.addEventListener(Event.CONTEXT3D_CREATE, this.contextCreateHandler);
 			_stage3D.requestContext3D(Context3DRenderMode.AUTO, Context3DProfile.BASELINE);
+		}
+
+		public function pause():void {
+			_onPause = true;
+			if(_scene != null && _context != null){
+				//clear GPU from graphics till miracle on pause
+				/*_scene.start();
+				_scene.end();*/
+			}
+		}
+
+		public function resume():void {
+			_onPause = false;
 		}
 		//} endregion PUBLIC METHODS ===================================================
 
@@ -114,13 +128,12 @@ package com.merlinds.miracle {
 			var now:Number = getTimer() / 1000.0;
 			var passedTime:Number = now - _lastFrameTimestamp;
 			_lastFrameTimestamp = now;
-
 			this.executeFrame(passedTime);
 		}
 
 		private function executeFrame(time:Number):void{
 			//draw frame
-			if(_scene != null && _context != null){
+			if(_scene != null && _context != null && !_onPause){
 				_scene.start();
 				_scene.drawFrame();
 				_scene.end();
@@ -145,14 +158,16 @@ package com.merlinds.miracle {
 		}
 
 		public function get snapshot():BitmapData {
-			var snapshot:BitmapData = new BitmapData(_viewport.width, _viewport.height);
+			var snapshot:BitmapData = new BitmapData(_viewport.width, _viewport.height, true, 0x00000000);
 			_scene.start();
 			_scene.drawFrame();
 			_scene.end(false);
 			_context.drawToBitmapData(snapshot);
 			_context.present();
+//			snapshot.lock();
 			return snapshot;
 		}
-		//} endregion GETTERS/SETTERS ==================================================
+
+//} endregion GETTERS/SETTERS ==================================================
 	}
 }
