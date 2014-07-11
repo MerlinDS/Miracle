@@ -31,6 +31,7 @@ package com.merlinds.miracle {
 		private var _vertexOffset:Number = 0;
 		private var _indexOffset:Number = 0;
 		private var _indexStep:Number = 0;
+		private var _currentTexture:String;
 		//
 		use namespace miracle_internal;
 
@@ -81,6 +82,7 @@ package com.merlinds.miracle {
 			var textureHelper:TextureHelper;
 			var instance:MiracleDisplayObject;
 			var n:int = _displayObjects.length;
+			var f:Boolean = false;
 			for(var i:int = 0; i < n; i++){
 				instance = _displayObjects[i];
 				//instance is not ready to use
@@ -98,6 +100,12 @@ package com.merlinds.miracle {
 							this.initializeInstance(instance);
 						}
 					}else{
+						//update texture
+						if(_currentTexture != instance.texture){
+							if(_currentTexture != null)this.drawTriangles();
+							_context.setTextureAt(0, textureHelper.texture);
+							_currentTexture = instance.texture;
+						}
 						//reset old sizes
 						instance.width = instance.height = 0;
 						var m:int = mesh.length;
@@ -107,7 +115,6 @@ package com.merlinds.miracle {
 							instance.width += polygon.buffer[8];
 							instance.height += polygon.buffer[9] * -1;
 							//draw on GPU
-							_context.setTextureAt(0, textureHelper.texture);
 							this.draw(polygon, instance.drawMatrix);
 						}
 						//tell instance that it was drawn on GPU
