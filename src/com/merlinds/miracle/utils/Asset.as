@@ -11,7 +11,8 @@ package com.merlinds.miracle.utils {
 	 */
 	public class Asset {
 		public static const XML_TYPE:String = "xml";
-		public static const ANIM_TYPE:String = "anim";
+		/** TimeLine Animation **/
+		public static const TIMELINET_TYPE:String = "tla";
 		public static const MESH_TYPE:String = "msh";
 		public static const TEXTURE_TYPE:String = "atf";
 		/**
@@ -48,6 +49,9 @@ package com.merlinds.miracle.utils {
 
 		//==============================================================================
 		//{region						PRIVATE\PROTECTED METHODS
+		private function getSignature():String {
+			return _bytes.length < 3 ? null : String.fromCharCode(_bytes[0], _bytes[1], _bytes[2]);
+		}
 		//} endregion PRIVATE\PROTECTED METHODS ========================================
 
 		//==============================================================================
@@ -58,12 +62,18 @@ package com.merlinds.miracle.utils {
 		//{region							GETTERS/SETTERS
 		public function get type():String {
 			if(_type == null){
-				_type = AtfData.isAtfData(_bytes) ? TEXTURE_TYPE : MESH_TYPE;
-				//check for xml
-				if(String.fromCharCode(_bytes[0]) == "<"){
-					_type = XML_TYPE;
+				var signature:String = this.getSignature();
+				switch (signature){
+					case "ATF" : _type = TEXTURE_TYPE; break;
+					case "MSH" : _type = MESH_TYPE; break;
+					default :{
+						if(String.fromCharCode(_bytes[0]) == "<"){
+							_type = XML_TYPE;
+						}else{
+							_type = TIMELINET_TYPE;
+						}
+					}
 				}
-				//TODO: Add animation type recognizing
 			}
 			return _type;
 		}
@@ -73,7 +83,7 @@ package com.merlinds.miracle.utils {
 			if(this.type != TEXTURE_TYPE){
 				output = _bytes.readUTFBytes( _bytes.length );
 			}
-			if(this.type == MESH_TYPE){
+			if(this.type == MESH_TYPE || this.type == TIMELINET_TYPE){
 				output = JSON.parse( output as String );
 				output = output.data;
 			}else if(this.type == XML_TYPE){
