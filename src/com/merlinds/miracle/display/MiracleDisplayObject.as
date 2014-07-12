@@ -53,6 +53,14 @@ package com.merlinds.miracle.display {
 
 		//==============================================================================
 		//{region							PUBLIC METHODS
+		public function moveTO(x:Number = 0, y:Number = 0, z:Number = 0):MiracleDisplayObject {
+			if(_position == null){
+				_position = new Vector3D(x, y, z);
+			}
+			_position.x = drawMatrix.tx = x;
+			_position.y = drawMatrix.ty = y;
+			return this;
+		}
 		/**
 		 * must be overridden
 		 */
