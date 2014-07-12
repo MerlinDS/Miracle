@@ -10,11 +10,11 @@ package com.merlinds.miracle.utils {
 	 * Asset helper ro Miracle framework
 	 */
 	public class Asset {
-		public static const XML_TYPE:String = "xml";
+		public static const XML_TYPE:String = "XML";
 		/** TimeLine Animation **/
-		public static const TIMELINET_TYPE:String = "tla";
-		public static const MESH_TYPE:String = "msh";
-		public static const TEXTURE_TYPE:String = "atf";
+		public static const TIMELINE_TYPE:String = "TLA";
+		public static const MESH_TYPE:String = "MSH";
+		public static const TEXTURE_TYPE:String = "ATF";
 		/**
 		 * Name of the asset that will be used as id in Miracle
 		 */
@@ -64,13 +64,22 @@ package com.merlinds.miracle.utils {
 			if(_type == null){
 				var signature:String = this.getSignature();
 				switch (signature){
-					case "ATF" : _type = TEXTURE_TYPE; break;
-					case "MSH" : _type = MESH_TYPE; break;
+					case TEXTURE_TYPE : _type = TEXTURE_TYPE; break;
+					case "MSH" :{
+						_type = MESH_TYPE;
+						//cut signature from mesh
+						var bytes:ByteArray = new ByteArray();
+						_bytes.position = 3;
+						_bytes.readBytes(bytes, 0, _bytes.length - 3);
+						_bytes.clear();
+						_bytes = bytes;
+						break;
+					}
 					default :{
 						if(String.fromCharCode(_bytes[0]) == "<"){
 							_type = XML_TYPE;
 						}else{
-							_type = TIMELINET_TYPE;
+							_type = TIMELINE_TYPE;
 						}
 					}
 				}
@@ -83,7 +92,7 @@ package com.merlinds.miracle.utils {
 			if(this.type != TEXTURE_TYPE){
 				output = _bytes.readUTFBytes( _bytes.length );
 			}
-			if(this.type == MESH_TYPE || this.type == TIMELINET_TYPE){
+			if(this.type == MESH_TYPE || this.type == TIMELINE_TYPE){
 				output = JSON.parse( output as String );
 				output = output.data;
 			}else if(this.type == XML_TYPE){
