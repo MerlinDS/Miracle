@@ -16,7 +16,7 @@ package com.merlinds.miracle {
 		 * @param serializer Prototype of the instance
 		 * @return Instance of the display object
 		 */
-		function createImage(texture:String = null, mesh:String = null, anim:String = null):MiracleImage;
+		function createImage(texture:String = null, anim:String = null):MiracleImage;
 		/**
 		 * Create instance of the animation on current scene
 		 * @param serializer Prototype of the instance

@@ -10,11 +10,9 @@ package com.merlinds.miracle.utils {
 	 * Asset helper ro Miracle framework
 	 */
 	public class Asset {
-		public static const XML_TYPE:String = "XML";
 		/** TimeLine Animation **/
-		public static const TIMELINE_TYPE:String = "TLA";
-		public static const MESH_TYPE:String = "MSH";
-		public static const TEXTURE_TYPE:String = "ATF";
+		public static const TIMELINE_TYPE:String = "MAF";/** Miracle animation format **/
+		public static const TEXTURE_TYPE:String = "MTF";/** Miracle texture format **/
 		/**
 		 * Name of the asset that will be used as id in Miracle
 		 */
@@ -39,11 +37,15 @@ package com.merlinds.miracle.utils {
 			_bytes = bytes;
 		}
 
+		public function toString():String {
+			return "[Asset(name = " + this.name + ", type = " + this.type + ")]";
+		}
+
 		/** Prepare instance for GC **/
 		public function destroy():void {
 			_bytes = null;
 			_type = null;
-			name = null;
+			this.name = null;
 		}
 		//} endregion PUBLIC METHODS ===================================================
 
@@ -65,40 +67,18 @@ package com.merlinds.miracle.utils {
 				var signature:String = this.getSignature();
 				switch (signature){
 					case TEXTURE_TYPE : _type = TEXTURE_TYPE; break;
-					case "MSH" :{
-						_type = MESH_TYPE;
-						//cut signature from mesh
-						var bytes:ByteArray = new ByteArray();
-						_bytes.position = 3;
-						_bytes.readBytes(bytes, 0, _bytes.length - 3);
-						_bytes.clear();
-						_bytes = bytes;
-						break;
-					}
-					default :{
-						if(String.fromCharCode(_bytes[0]) == "<"){
-							_type = XML_TYPE;
-						}else{
-							_type = TIMELINE_TYPE;
-						}
-					}
+					case TIMELINE_TYPE : _type = TIMELINE_TYPE; break;
+					default :{}
 				}
 			}
 			return _type;
 		}
 
 		public function get output():* {
-			var output:Object = _bytes;
-			if(this.type != TEXTURE_TYPE){
-				output = _bytes.readUTFBytes( _bytes.length );
+			if(this.type != TEXTURE_TYPE && this.type != TIMELINE_TYPE){
+				throw new ArgumentError("Unknown asset format. Need to use " + TEXTURE_TYPE + " or " + TIMELINE_TYPE +" formats");
 			}
-			if(this.type == MESH_TYPE || this.type == TIMELINE_TYPE){
-				output = JSON.parse( output as String );
-				output = output.data;
-			}else if(this.type == XML_TYPE){
-				output = new XML( output as String );
-			}
-			return output;
+			return _bytes;
 		}
 		//} endregion GETTERS/SETTERS ==================================================
 	}
