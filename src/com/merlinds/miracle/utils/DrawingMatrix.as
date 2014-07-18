@@ -26,6 +26,8 @@ package com.merlinds.miracle.utils {
 		/** offset by Y **/
 		public var offsetY:Number;
 
+		public var color:Array;
+
 		/**
 		 *
 		 * @param scaleX Scale by X

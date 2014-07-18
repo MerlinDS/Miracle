@@ -7,7 +7,6 @@ package com.merlinds.miracle {
 	import com.merlinds.miracle.display.MiracleAnimation;
 	import com.merlinds.miracle.display.MiracleDisplayObject;
 	import com.merlinds.miracle.display.MiracleImage;
-	import com.merlinds.miracle.events.MiracleEvent;
 	import com.merlinds.miracle.meshes.Mesh2D;
 	import com.merlinds.miracle.meshes.Polygon2D;
 	import com.merlinds.miracle.textures.TextureHelper;
@@ -44,11 +43,11 @@ package com.merlinds.miracle {
 		//==============================================================================
 		//{region							PUBLIC METHODS
 		//IScene
-		public function createImage(texture:String = null, mesh:String = null, anim:String = null):MiracleImage {
+		public function createImage(texture:String = null, anim:String = null):MiracleImage {
 			var instance:MiracleDisplayObject = this.createInstance(MiracleImage);
 			instance.texture = texture;
-			instance.mesh = mesh;
-//			instance.anim = anim;
+			instance.mesh = texture;
+			instance.timeline = anim;
 			return instance as MiracleImage;
 		}
 
@@ -115,6 +114,12 @@ package com.merlinds.miracle {
 							instance.width += polygon.buffer[8];
 							instance.height += polygon.buffer[9] * -1;
 							//draw on GPU
+							if(instance.mesh == "output_m"){
+								instance.drawMatrix.scaleX = 1.5;
+								instance.drawMatrix.scaleY = 1.5;
+								instance.drawMatrix.skewX = 0.5;
+								instance.drawMatrix.color = [225,125,225,225];
+							}
 							this.draw(polygon, instance.drawMatrix);
 						}
 						//tell instance that it was drawn on GPU

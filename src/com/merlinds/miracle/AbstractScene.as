@@ -10,6 +10,8 @@ package com.merlinds.miracle {
 	import com.merlinds.miracle.textures.TextureHelper;
 	import com.merlinds.miracle.utils.Asset;
 	import com.merlinds.miracle.utils.AtfData;
+	import com.merlinds.miracle.utils.MafReader;
+	import com.merlinds.miracle.utils.MtfReader;
 
 	import flash.display3D.Context3D;
 
@@ -22,12 +24,19 @@ package com.merlinds.miracle {
 
 		protected var _meshes:Object;/**Mesh2D**/
 		protected var _textures:Object;/**Texture**/
+		protected var _timelines:Object;/**Timeline**/
+
+		private var _mtfReader:MtfReader;
+		private var _mafReader:MafReader;
 
 		public function AbstractScene(assets:Vector.<Asset>, scale:Number = 1) {
 			_meshes = {};
 			_textures = {};
 			_scale = scale;
 			_displayObjects = new <MiracleDisplayObject>[];
+			//TODO add formats versions
+			_mafReader = new MafReader();
+			_mtfReader = new MtfReader();
 			this.initialize(assets);
 		}
 
@@ -56,19 +65,12 @@ package com.merlinds.miracle {
 			//Initialization complete
 			while(assets.length > 0){
 				var asset:Asset = assets.pop();
-				if(asset.type == Asset.MESH_TYPE){
-					//parse meshes
-					var mesh:Mesh2D = new Mesh2D();
-					var meshData:Array = asset.output;
-					var n:int = meshData.length;
-					for(var i:int = 0; i < n; i++){
-						mesh[i] = new Polygon2D(meshData[i], _scale);
-					}
-					_meshes[ asset.name ] = mesh;
-				}else if(asset.type == Asset.TEXTURE_TYPE){
-					//parse textures
-					_textures[ asset.name ] = new TextureHelper( asset.output );
-					AtfData.getAtfParameters( asset.output, _textures[ asset.name ] );
+				if(asset.type == Asset.TEXTURE_TYPE){
+					_mtfReader.execute(asset.output, _scale);
+					_meshes[ asset.name ] = _mtfReader.mesh;
+					_textures[ asset.name ] = _mtfReader.texture;
+				}else{
+
 				}
 				//Other types will be ignored for now!
 				asset.destroy();
