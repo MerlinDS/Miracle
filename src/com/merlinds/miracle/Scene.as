@@ -81,7 +81,6 @@ package com.merlinds.miracle {
 			var textureHelper:TextureHelper;
 			var instance:MiracleDisplayObject;
 			var n:int = _displayObjects.length;
-			var f:Boolean = false;
 			for(var i:int = 0; i < n; i++){
 				instance = _displayObjects[i];
 				//instance is not ready to use
@@ -114,12 +113,6 @@ package com.merlinds.miracle {
 							instance.width += polygon.buffer[8];
 							instance.height += polygon.buffer[9] * -1;
 							//draw on GPU
-							if(instance.mesh == "output_m"){
-								instance.drawMatrix.scaleX = 1.5;
-								instance.drawMatrix.scaleY = 1.5;
-								instance.drawMatrix.skewX = 0.5;
-								instance.drawMatrix.color = [225,125,225,225];
-							}
 							this.draw(polygon, instance.drawMatrix);
 						}
 						//tell instance that it was drawn on GPU
