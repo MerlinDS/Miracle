@@ -6,7 +6,7 @@
 package com.merlinds.miracle.display {
 	import com.merlinds.miracle.events.MiracleEvent;
 	import com.merlinds.miracle.miracle_internal;
-	import com.merlinds.miracle.utils.DrawingMatrix;
+	import com.merlinds.miracle.meshes.MeshMatrix;
 
 	import flash.errors.IllegalOperationError;
 	import flash.events.EventDispatcher;
@@ -17,7 +17,7 @@ package com.merlinds.miracle.display {
 
 		use namespace miracle_internal;
 
-		miracle_internal var drawMatrix:DrawingMatrix;
+		miracle_internal var drawMatrix:MeshMatrix;
 
 		/**
 		 * Name of the mesh that will be used
@@ -47,11 +47,11 @@ package com.merlinds.miracle.display {
 		private var _onStage:Boolean;
 
 		public function MiracleDisplayObject(mesh:String = null, texture:String = null,
-		                                     drawMatrix:DrawingMatrix = null) {
+		                                     drawMatrix:MeshMatrix = null) {
 			this.mesh = mesh;
 			this.texture = texture;
 			if(drawMatrix == null){
-				this.miracle_internal::drawMatrix = new DrawingMatrix();
+				this.miracle_internal::drawMatrix = new MeshMatrix();
 			}
 		}
 

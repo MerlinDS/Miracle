@@ -1,30 +1,25 @@
 /**
  * User: MerlinDS
- * Date: 18.07.2014
- * Time: 18:24
+ * Date: 26.08.2014
+ * Time: 16:50
  */
-package com.merlinds.miracle.utils {
-	import com.merlinds.miracle.meshes.Animation;
+package com.merlinds.miracle.meshes {
+	/**
+	 * Layers of animation.
+	 * Contains transformation parameters for the meshes and frames description.
+	 */
+	public class Layer {
 
-	import flash.utils.ByteArray;
-
-	public class MafReader {
-
-		private var _animations:Vector.<Animation>;
+		/** List of the transformations **/
+		public var transformations:Vector.<MeshMatrix>;
+		/** List of the frames description **/
+		public var frames:Vector.<Frame>;
 		//==============================================================================
 		//{region							PUBLIC METHODS
-		public function MafReader() {
-		}
-
-		public function execute(bytes:ByteArray):void {
-			_animations = new <Animation>[];
-			//ignore signature
-			bytes.position = 4;
-			var animationList:Array = bytes.readObject();
-			var n:int = animationList.length;
-			for(var i:int = 0; i < n; i++){
-
-			}
+		/**
+		 * Constructor
+		 */
+		public function Layer() {
 		}
 		//} endregion PUBLIC METHODS ===================================================
 
@@ -38,9 +33,6 @@ package com.merlinds.miracle.utils {
 
 		//==============================================================================
 		//{region							GETTERS/SETTERS
-		public function get animations():Vector.<Animation> {
-			return _animations;
-		}
 		//} endregion GETTERS/SETTERS ==================================================
 	}
 }

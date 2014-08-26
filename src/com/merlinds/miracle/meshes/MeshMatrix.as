@@ -3,12 +3,31 @@
  * Date: 03.04.2014
  * Time: 21:07
  */
-package com.merlinds.miracle.utils {
+package com.merlinds.miracle.meshes {
 	/**
-	 * Helper for drawing
+	 * Helper for drawing and animation calculation
 	**/
-	public class DrawingMatrix {
+	public class MeshMatrix {
 
+		//only for animation
+		/** Name of the polygon in mesh.
+		 *  <b>Used by animation calculation only.</b>
+		**/
+		public var polygonName:String;
+		/** Animation type binary mask.
+		 * <b>Used by animation calculation only.</b>
+		 * Values:
+		 * <ul>
+		 *     <li>0 - static type animation. Nothing happens with animation matrix</li>
+		 *     <li>1 - tween type animation. Calculate new mesh matrix by formula: (1 - t) * M0 - t * M1.
+		 *     Where M0 and M1 are transformation matrix from the transformation list in Layer Object.
+		 *     </li>
+		 * </ul>
+		 *
+		 * @see com.merlinds.miracle.meshes.Layer@transformations
+		 **/
+		 public var animationType:uint;
+		//general
 		/** scale by X **/
 		public var scaleX:Number;
 		/** scale by Y **/
@@ -39,7 +58,7 @@ package com.merlinds.miracle.utils {
 		 * @param offsetX Offset by X
 		 * @param offsetY Offset by Y
 		 */
-		public function DrawingMatrix(offsetX:Number = 0, offsetY:Number = 0, tx:Number = 0, ty:Number = 0,
+		public function MeshMatrix(offsetX:Number = 0, offsetY:Number = 0, tx:Number = 0, ty:Number = 0,
 		                              scaleX:Number = 1, scaleY:Number = 1, skewX:Number = 0, skewY:Number = 0
 		                              ) {
 			this.offsetX = offsetX;

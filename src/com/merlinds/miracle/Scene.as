@@ -11,7 +11,7 @@ package com.merlinds.miracle {
 	import com.merlinds.miracle.meshes.Polygon2D;
 	import com.merlinds.miracle.textures.TextureHelper;
 	import com.merlinds.miracle.utils.Asset;
-	import com.merlinds.miracle.utils.DrawingMatrix;
+	import com.merlinds.miracle.meshes.MeshMatrix;
 
 	import flash.display3D.IndexBuffer3D;
 	import flash.display3D.VertexBuffer3D;
@@ -170,7 +170,7 @@ package com.merlinds.miracle {
 		}
 
 		[Inline]
-		private function draw(polygon:Polygon2D, dm:DrawingMatrix):void {
+		private function draw(polygon:Polygon2D, dm:MeshMatrix):void {
 			var i:int;
 			var dataIndex:int = 0;
 			var n:int = polygon.numVertexes;
