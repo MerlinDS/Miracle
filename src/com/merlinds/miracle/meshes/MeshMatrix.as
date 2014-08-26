@@ -9,24 +9,6 @@ package com.merlinds.miracle.meshes {
 	**/
 	public class MeshMatrix {
 
-		//only for animation
-		/** Name of the polygon in mesh.
-		 *  <b>Used by animation calculation only.</b>
-		**/
-		public var polygonName:String;
-		/** Animation type binary mask.
-		 * <b>Used by animation calculation only.</b>
-		 * Values:
-		 * <ul>
-		 *     <li>0 - static type animation. Nothing happens with animation matrix</li>
-		 *     <li>1 - tween type animation. Calculate new mesh matrix by formula: (1 - t) * M0 - t * M1.
-		 *     Where M0 and M1 are transformation matrix from the transformation list in Layer Object.
-		 *     </li>
-		 * </ul>
-		 *
-		 * @see com.merlinds.miracle.meshes.Layer@transformations
-		 **/
-		 public var animationType:uint;
 		//general
 		/** scale by X **/
 		public var scaleX:Number;
