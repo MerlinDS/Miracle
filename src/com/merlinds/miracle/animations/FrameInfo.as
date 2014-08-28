@@ -48,7 +48,11 @@ package com.merlinds.miracle.animations {
 			}
 		}
 
-//} endregion PUBLIC METHODS ===================================================
+		public function toString():String {
+			return "[FrameInfo (polygonName = " + this. polygonName + ", m0 = " + this.m0 + ", " +
+					"m1 = " + this.m1 + ", t = " + this.t + ")]";
+		}
+		//} endregion PUBLIC METHODS ===================================================
 
 		//==============================================================================
 		//{region						PRIVATE\PROTECTED METHODS

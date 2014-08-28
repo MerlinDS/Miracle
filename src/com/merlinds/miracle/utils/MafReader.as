@@ -11,6 +11,7 @@ package com.merlinds.miracle.utils {
 	import flash.utils.ByteArray;
 
 	public class MafReader {
+		private static const MATRIX:MeshMatrix = new MeshMatrix();
 
 		private var _animations:Vector.<AnimationHelper>;
 		//==============================================================================
@@ -28,7 +29,7 @@ package com.merlinds.miracle.utils {
 				var data:Object = animationList[i];
 				//create animation holder
 				var animation:AnimationHelper = new AnimationHelper( data.name, data.totalFrames,
-						this.parseLayers( data.layers, data.totalFrames )
+						data.layers.length, this.parseLayers( data.layers, data.totalFrames )
 				);
 				_animations.push( animation );
 			}
@@ -55,7 +56,7 @@ package com.merlinds.miracle.utils {
 				//prepare list of matrix
 				m = layer.matrixList.length;
 				for(j = 0; j < m; j++){
-					layer.matrixList[j] = MeshMatrix.fromObject(layer.framesList[j]);
+					layer.matrixList[j] = MeshMatrix.fromObject(layer.matrixList[j]);
 				}
 				//fill frames list
 				m = layer.framesList.length;
@@ -64,6 +65,7 @@ package com.merlinds.miracle.utils {
 					if(frameData != null){
 						var m0:MeshMatrix, m1:MeshMatrix;
 						m0 = layer.matrixList[ frameData.index ];//target polygon matrix
+						m1 = MATRIX;
 						if(frameData.motion){
 							m1 = layer.matrixList[ frameData.index + 1 ];//next polygon matrix
 						}

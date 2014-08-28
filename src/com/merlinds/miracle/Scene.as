@@ -5,6 +5,7 @@
  */
 package com.merlinds.miracle {
 	import com.merlinds.miracle.animations.AnimationHelper;
+	import com.merlinds.miracle.animations.FrameInfo;
 	import com.merlinds.miracle.display.MiracleAnimation;
 	import com.merlinds.miracle.display.MiracleDisplayObject;
 	import com.merlinds.miracle.display.MiracleImage;
@@ -84,7 +85,7 @@ package com.merlinds.miracle {
 		override public function drawFrame():void{
 			var mesh:Mesh2D;
 			var polygon:Polygon2D;
-			var animation:AnimationHelper;
+			var animationHelper:AnimationHelper;
 			var textureHelper:TextureHelper;
 			var instance:MiracleDisplayObject;
 			var n:int = _displayObjects.length;
@@ -95,6 +96,7 @@ package com.merlinds.miracle {
 
 					mesh = _meshes[ instance.mesh ];
 					textureHelper = _textures[ instance.texture ];
+					animationHelper = _animations[ instance.animation ];
 					if(mesh == null || textureHelper == null){
 						throw new ArgumentError("Can not draw display object without mesh or texture");
 					}
@@ -113,6 +115,7 @@ package com.merlinds.miracle {
 						}
 						//reset old sizes
 						instance.width = instance.height = 0;
+						/* old variant of drawing
 						var m:int = mesh.length;
 						for(var j:int = 0; j < m; j++){
 							polygon = mesh[j];
@@ -121,6 +124,23 @@ package com.merlinds.miracle {
 							instance.height += polygon.buffer[9] * -1;
 							//draw on GPU
 							this.draw(polygon, instance.drawMatrix);
+						}*/
+						var m:int = animationHelper.numLayers;
+						var k:int = animationHelper.totalFrames;
+						for(var j:int = 0; j < m; j++){
+							var index:int = k * j + instance.currentFrame;
+							var frame:FrameInfo = animationHelper.frames[ index ];
+							if(frame != null){
+								polygon = mesh[ frame.polygonName ];
+								instance.width += polygon.buffer[8];
+								instance.height += polygon.buffer[9] * -1;
+								//draw on GPU
+								this.draw(polygon, instance.drawMatrix, frame.m0, frame.m1, frame.t);
+							}
+						}
+						//increase frame counter for current instance
+						if(++instance.currentFrame >= animationHelper.totalFrames){
+							instance.currentFrame = 0;
 						}
 						//tell instance that it was drawn on GPU
 						instance.miracle_internal::drawn();
@@ -177,7 +197,7 @@ package com.merlinds.miracle {
 		}
 
 		[Inline]
-		private function draw(polygon:Polygon2D, dm:MeshMatrix):void {
+		private function draw(polygon:Polygon2D, dm:MeshMatrix, m0:MeshMatrix, m1:MeshMatrix, t:Number):void {
 			var i:int;
 			var dataIndex:int = 0;
 			var n:int = polygon.numVertexes;
@@ -189,8 +209,11 @@ package com.merlinds.miracle {
 				_vertexData[_vertexOffset++] = polygon.buffer[ dataIndex++ ];
 				_vertexData[_vertexOffset++] = polygon.buffer[ dataIndex++ ];
 				/**** ADD TRANSFORM INDEXES DATA *****/
-				_vertexData[_vertexOffset++] = dm.tx;
-				_vertexData[_vertexOffset++] = dm.ty;
+				var t0:Number = 1 - t;
+				trace(dm.tx, t0 * m0.tx + t + m1.tx);
+				trace(dm.ty, t0 * m0.ty + t + m1.ty);
+				_vertexData[_vertexOffset++] = dm.tx + ( t0 * m0.tx + t + m1.tx );
+				_vertexData[_vertexOffset++] = dm.ty + ( t0 * m0.ty + t + m1.ty );
 				_vertexData[_vertexOffset++] = dm.scaleX;
 				_vertexData[_vertexOffset++] = dm.scaleY;
 				_vertexData[_vertexOffset++] = dm.skewX;
