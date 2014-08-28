@@ -32,6 +32,7 @@ package com.merlinds.miracle.utils {
 				);
 				_animations.push( animation );
 			}
+			bytes.clear();
 		}
 		//} endregion PUBLIC METHODS ===================================================
 
@@ -74,7 +75,7 @@ package com.merlinds.miracle.utils {
 					}
 				}
 			}
-			layer.length = null;
+			layer.length = null;//delete layer list
 			return frames;
 		}
 		//} endregion PRIVATE\PROTECTED METHODS ========================================
