@@ -8,7 +8,7 @@ package com.merlinds.miracle.animations {
 	 * Object for animation format.
 	 * Contains animation parameters, all transformations for meshes.
 	 */
-	public class Animation {
+	public class AnimationHelper {
 		/**
 		 * Name of the animation.
 		 * WARNING: Can be removed
@@ -30,7 +30,7 @@ package com.merlinds.miracle.animations {
 		 * @throws ArgumentError if Total count of frames will be less than one
 		 * @throws ArgumentError if Total count of frames will be bigger than frames list length
 		 */
-		public function Animation(name:String, totalFrames:int, frames:Vector.<FrameInfo> = null) {
+		public function AnimationHelper(name:String, totalFrames:int, frames:Vector.<FrameInfo> = null) {
 			if(frames.length < totalFrames){
 				throw new ArgumentError("Length of frames can not be less than totalFrames count!");
 			}

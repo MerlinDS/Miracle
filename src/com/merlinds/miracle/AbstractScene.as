@@ -4,6 +4,7 @@
  * Time: 18:42
  */
 package com.merlinds.miracle {
+	import com.merlinds.miracle.animations.AnimationHelper;
 	import com.merlinds.miracle.display.MiracleDisplayObject;
 	import com.merlinds.miracle.meshes.Mesh2D;
 	import com.merlinds.miracle.meshes.Polygon2D;
@@ -12,6 +13,8 @@ package com.merlinds.miracle {
 	import com.merlinds.miracle.utils.AtfData;
 	import com.merlinds.miracle.utils.MafReader;
 	import com.merlinds.miracle.utils.MtfReader;
+
+	import flash.debugger.enterDebugger;
 
 	import flash.display3D.Context3D;
 
@@ -23,16 +26,17 @@ package com.merlinds.miracle {
 		protected var _displayObjects:Vector.<MiracleDisplayObject>;
 
 		protected var _meshes:Object;/**Mesh2D**/
-		protected var _textures:Object;/**Texture**/
-		protected var _timelines:Object;/**Timeline**/
+		protected var _textures:Object;/**TextureHelper**/
+		protected var _animations:Object;/**AnimationHelper**/
 
 		private var _mtfReader:MtfReader;
 		private var _mafReader:MafReader;
 
 		public function AbstractScene(assets:Vector.<Asset>, scale:Number = 1) {
+			_scale = scale;
 			_meshes = {};
 			_textures = {};
-			_scale = scale;
+			_animations = {};
 			_displayObjects = new <MiracleDisplayObject>[];
 			//TODO add formats versions
 			_mafReader = new MafReader();
@@ -70,9 +74,13 @@ package com.merlinds.miracle {
 					_meshes[ asset.name ] = _mtfReader.mesh;
 					_textures[ asset.name ] = _mtfReader.texture;
 				}else{
-
+					_mafReader.execute(asset.output);
+					for each(var animation:AnimationHelper in _mafReader.animations){
+						_animations[ asset.name + "." + animation.name ] = animation;
+					}
 				}
 				//Other types will be ignored for now!
+				//TODO: clear readers
 				asset.destroy();
 			}
 		}

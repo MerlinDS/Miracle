@@ -26,7 +26,7 @@ package com.merlinds.miracle.display {
 		/**
 		 * Name of the timeline that will be used
 		 */
-		public var timeline:String;
+		public var animation:String;
 		/**
 		 * Name of the texture that will be used
 		 */

@@ -4,7 +4,7 @@
  * Time: 18:24
  */
 package com.merlinds.miracle.utils {
-	import com.merlinds.miracle.animations.Animation;
+	import com.merlinds.miracle.animations.AnimationHelper;
 	import com.merlinds.miracle.animations.FrameInfo;
 	import com.merlinds.miracle.meshes.MeshMatrix;
 
@@ -12,14 +12,14 @@ package com.merlinds.miracle.utils {
 
 	public class MafReader {
 
-		private var _animations:Vector.<Animation>;
+		private var _animations:Vector.<AnimationHelper>;
 		//==============================================================================
 		//{region							PUBLIC METHODS
 		public function MafReader() {
 		}
 
 		public function execute(bytes:ByteArray):void {
-			_animations = new <Animation>[];
+			_animations = new <AnimationHelper>[];
 			//ignore signature
 			bytes.position = 4;
 			var animationList:Array = bytes.readObject();
@@ -27,12 +27,11 @@ package com.merlinds.miracle.utils {
 			for(var i:int = 0; i < n; i++){
 				var data:Object = animationList[i];
 				//create animation holder
-				var animation:Animation = new Animation( data.name, data.totalFrames,
+				var animation:AnimationHelper = new AnimationHelper( data.name, data.totalFrames,
 						this.parseLayers( data.layers, data.totalFrames )
 				);
 				_animations.push( animation );
 			}
-			bytes.clear();
 		}
 		//} endregion PUBLIC METHODS ===================================================
 
@@ -86,7 +85,7 @@ package com.merlinds.miracle.utils {
 
 		//==============================================================================
 		//{region							GETTERS/SETTERS
-		public function get animations():Vector.<Animation> {
+		public function get animations():Vector.<AnimationHelper> {
 			return _animations;
 		}
 		//} endregion GETTERS/SETTERS ==================================================

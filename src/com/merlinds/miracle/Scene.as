@@ -4,6 +4,7 @@
  * Time: 19:36
  */
 package com.merlinds.miracle {
+	import com.merlinds.miracle.animations.AnimationHelper;
 	import com.merlinds.miracle.display.MiracleAnimation;
 	import com.merlinds.miracle.display.MiracleDisplayObject;
 	import com.merlinds.miracle.display.MiracleImage;
@@ -47,7 +48,7 @@ package com.merlinds.miracle {
 			var instance:MiracleDisplayObject = this.createInstance(MiracleImage);
 			instance.texture = texture;
 			instance.mesh = texture;
-			instance.timeline = anim;
+			instance.animation = anim;
 			return instance as MiracleImage;
 		}
 
@@ -55,7 +56,7 @@ package com.merlinds.miracle {
 			var instance:MiracleDisplayObject = this.createInstance(MiracleAnimation);
 			instance.texture = texture;
 			instance.mesh = texture;
-			instance.timeline = animation;
+			instance.animation = animation;
 			instance.currentFrame = 0;
 			return instance as MiracleAnimation;
 		}
@@ -83,13 +84,14 @@ package com.merlinds.miracle {
 		override public function drawFrame():void{
 			var mesh:Mesh2D;
 			var polygon:Polygon2D;
+			var animation:AnimationHelper;
 			var textureHelper:TextureHelper;
 			var instance:MiracleDisplayObject;
 			var n:int = _displayObjects.length;
 			for(var i:int = 0; i < n; i++){
 				instance = _displayObjects[i];
 				//instance is not ready to use
-				if(instance.mesh && instance.texture){
+				if(instance.texture && instance.animation){
 
 					mesh = _meshes[ instance.mesh ];
 					textureHelper = _textures[ instance.texture ];
