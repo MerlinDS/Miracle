@@ -1,25 +1,38 @@
 /**
  * User: MerlinDS
- * Date: 26.08.2014
- * Time: 16:50
+ * Date: 27.08.2014
+ * Time: 13:48
  */
-package com.merlinds.miracle.meshes {
+package com.merlinds.miracle.animations {
 	/**
-	 * Layers of animation.
-	 * Contains transformation parameters for the meshes and frames description.
+	 * Object for animation format.
+	 * Contains animation parameters, all transformations for meshes.
 	 */
-	public class Layer {
-
-		/** List of the transformations **/
-		public var transformations:Vector.<MeshMatrix>;
-		/** List of the frames description **/
-		public var frames:Vector.<Frame>;
+	public class Animation {
+		/**
+		 * Name of the animation.
+		 * WARNING: Can be removed
+		 */
+		public var name:String;
+		/** Total count of frames in animation **/
+		public var totalFrames:int;
+		/** Frames on the animation. Rectangular array**/
+		public var frames:Vector.<FrameInfo>;
 		//==============================================================================
 		//{region							PUBLIC METHODS
 		/**
 		 * Constructor
+		 * @param name Animation name
+		 * @param totalFrames Total count of frames. At least 1
+		 *
+		 * @throws ArgumentError if Total count of frames will be less than one
 		 */
-		public function Layer() {
+		public function Animation(name:String, totalFrames:int) {
+			this.name = name;
+			this.totalFrames = totalFrames;
+			if(this.totalFrames < 1){
+				throw new ArgumentError("Must be at least one frame for animation!");
+			}
 		}
 		//} endregion PUBLIC METHODS ===================================================
 

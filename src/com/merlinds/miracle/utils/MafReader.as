@@ -4,7 +4,7 @@
  * Time: 18:24
  */
 package com.merlinds.miracle.utils {
-	import com.merlinds.miracle.meshes.Animation;
+	import com.merlinds.miracle.animations.Animation;
 
 	import flash.utils.ByteArray;
 
