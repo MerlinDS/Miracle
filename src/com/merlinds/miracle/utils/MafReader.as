@@ -65,7 +65,7 @@ package com.merlinds.miracle.utils {
 						var m0:MeshMatrix, m1:MeshMatrix;
 						m0 = layer.matrixList[ frameData.index ];//target polygon matrix
 						if(frameData.motion){
-							m1 = layer.meshes[ frameData.index + 1 ];//next polygon matrix
+							m1 = layer.matrixList[ frameData.index + 1 ];//next polygon matrix
 						}
 						frames[totalFrames * i + j] = new FrameInfo( frameData.polygonName, m0, m1, frameData.t );
 
