@@ -9,7 +9,6 @@ package com.merlinds.miracle.meshes {
 
 		public var buffer:Vector.<Number>;
 		public var indexes:Vector.<Number>;
-		public var name:String;
 		public var numVertexes:Number;
 
 		public function Polygon2D(data:Object, scale:Number = 1) {

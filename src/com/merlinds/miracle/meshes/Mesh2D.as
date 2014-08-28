@@ -4,7 +4,7 @@
  * Time: 19:24
  */
 package com.merlinds.miracle.meshes {
-	public dynamic class Mesh2D extends Array{
+	public dynamic class Mesh2D extends Object{
 
 		public function Mesh2D() {
 		}
