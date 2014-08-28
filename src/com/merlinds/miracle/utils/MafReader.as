@@ -23,7 +23,13 @@ package com.merlinds.miracle.utils {
 			var animationList:Array = bytes.readObject();
 			var n:int = animationList.length;
 			for(var i:int = 0; i < n; i++){
-
+				var data:Object = animationList[i];
+				//create animation holder
+				var animation:Animation = new Animation(
+					data.name, data.totalFrames
+				);
+				//parse animation file format and create frames for animation
+				_animations.push( animation );
 			}
 		}
 		//} endregion PUBLIC METHODS ===================================================
