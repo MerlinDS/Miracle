@@ -8,10 +8,10 @@ package com.merlinds.miracle {
 	import com.merlinds.miracle.display.MiracleDisplayObject;
 	import com.merlinds.miracle.display.MiracleImage;
 	import com.merlinds.miracle.meshes.Mesh2D;
+	import com.merlinds.miracle.meshes.MeshMatrix;
 	import com.merlinds.miracle.meshes.Polygon2D;
 	import com.merlinds.miracle.textures.TextureHelper;
 	import com.merlinds.miracle.utils.Asset;
-	import com.merlinds.miracle.meshes.MeshMatrix;
 
 	import flash.display3D.IndexBuffer3D;
 	import flash.display3D.VertexBuffer3D;
@@ -51,8 +51,13 @@ package com.merlinds.miracle {
 			return instance as MiracleImage;
 		}
 
-		public function createAnimation():MiracleAnimation{
-			return this.createInstance(MiracleAnimation) as MiracleAnimation;
+		public function createAnimation(texture:String, animation:String):MiracleAnimation{
+			var instance:MiracleDisplayObject = this.createInstance(MiracleAnimation);
+			instance.texture = texture;
+			instance.mesh = texture;
+			instance.timeline = animation;
+			instance.currentFrame = 0;
+			return instance as MiracleAnimation;
 		}
 
 		public function createInstance(serializer:Class):MiracleDisplayObject {

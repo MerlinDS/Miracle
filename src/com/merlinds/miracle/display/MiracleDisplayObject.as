@@ -40,6 +40,7 @@ package com.merlinds.miracle.display {
 		 * </ul>
 		 */
 		private var _position:Vector3D;
+		private var _currentFrame:int;
 
 		private var _width:int;
 		private var _height:int;
@@ -118,6 +119,14 @@ package com.merlinds.miracle.display {
 
 		public function set height(value:int):void {
 			_height = value;
+		}
+
+		public function get currentFrame():int {
+			return _currentFrame;
+		}
+
+		public function set currentFrame(value:int):void {
+			_currentFrame = value;
 		}
 
 //} endregion GETTERS/SETTERS ==================================================
