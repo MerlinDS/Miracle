@@ -54,8 +54,11 @@ package com.merlinds.miracle.meshes {
 			this.tx = tx;
 			this.ty = ty;
 		}
-		public static function fromObject(mesh:Object):MeshMatrix {
-			var meshMatrix:MeshMatrix = new MeshMatrix();
+		public static function fromObject(object:Object):MeshMatrix {
+			var meshMatrix:MeshMatrix = new MeshMatrix(
+				object.offsetX, object.offsetY, object.tx, object.ty,
+				object.scaleX, object.scaleY, object.skewX, object.scaleY
+			);
 			return meshMatrix;
 		}
 		//} endregion PUBLIC METHODS ===================================================

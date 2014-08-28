@@ -55,17 +55,17 @@ package com.merlinds.miracle.utils {
 				//prepare list of matrix
 				m = layer.meshes.length;
 				for(j = 0; j < m; j++){
-					layer.meshes[j] = MeshMatrix.fromObject(layer.meshes[j]);
+					layer.matrixList[j] = MeshMatrix.fromObject(layer.framesList[j]);
 				}
 				//fill frames list
 				m = layer.frames.length;
 				for(j = 0; j < m; j++){
-					var frameData:Object = layer.frames[j];
+					var frameData:Object = layer.framesList[j];
 					if(frameData != null){
 						var m0:MeshMatrix, m1:MeshMatrix;
-						m0 = layer.meshes[ frameData.meshIndex ];//target polygon matrix
+						m0 = layer.matrixList[ frameData.index ];//target polygon matrix
 						if(frameData.motion){
-							m1 = layer.meshes[ frameData.meshIndex + 1 ];//next polygon matrix
+							m1 = layer.meshes[ frameData.index + 1 ];//next polygon matrix
 						}
 						frames[totalFrames * i + j] = new FrameInfo( frameData.polygonName, m0, m1, frameData.t );
 
@@ -75,7 +75,6 @@ package com.merlinds.miracle.utils {
 				}
 			}
 			layer.length = null;
-			trace(frames);
 			return frames;
 		}
 		//} endregion PRIVATE\PROTECTED METHODS ========================================
