@@ -38,6 +38,7 @@ package com.merlinds.miracle.utils {
 			var mesh:Mesh2D = new Mesh2D();
 			var n:int = meshData.length;
 			for(var i:int = 0; i < n; i++){
+				//name = data.name;
 				mesh[i] = new Polygon2D(meshData[i], scale);
 			}
 			_mesh = mesh;

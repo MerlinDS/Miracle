@@ -13,7 +13,6 @@ package com.merlinds.miracle.meshes {
 		public var numVertexes:Number;
 
 		public function Polygon2D(data:Object, scale:Number = 1) {
-			this.name = data.name;
 			this.numVertexes = data.vertexes.length >> 1;
 			this.indexes = new Vector.<Number>( data.indexes.length );
 			this.buffer = new Vector.<Number>( this.numVertexes * 4 );
