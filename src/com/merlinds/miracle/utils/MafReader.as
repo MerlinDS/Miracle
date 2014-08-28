@@ -47,18 +47,18 @@ package com.merlinds.miracle.utils {
 		private function parseLayers(layers:Array, totalFrames:int):Vector.<FrameInfo> {
 			var n:int = layers.length;
 			var frames:Vector.<FrameInfo> = new <FrameInfo>[];
-			frames.length = totalFrames * n + 1;//For deploying list from rectangular to liner
+			frames.length = totalFrames * n;//For deploying list from rectangular to liner
 			frames.fixed = true;// Can not be more than total frames count
 			for(var i:int = 0; i < n; i++){
 				var j:int, m:int;
 				var layer:Object = layers[i];
 				//prepare list of matrix
-				m = layer.meshes.length;
+				m = layer.matrixList.length;
 				for(j = 0; j < m; j++){
 					layer.matrixList[j] = MeshMatrix.fromObject(layer.framesList[j]);
 				}
 				//fill frames list
-				m = layer.frames.length;
+				m = layer.framesList.length;
 				for(j = 0; j < m; j++){
 					var frameData:Object = layer.framesList[j];
 					if(frameData != null){
