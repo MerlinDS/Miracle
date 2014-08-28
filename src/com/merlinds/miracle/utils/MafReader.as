@@ -5,6 +5,8 @@
  */
 package com.merlinds.miracle.utils {
 	import com.merlinds.miracle.animations.Animation;
+	import com.merlinds.miracle.animations.FrameInfo;
+	import com.merlinds.miracle.meshes.MeshMatrix;
 
 	import flash.utils.ByteArray;
 
@@ -25,10 +27,9 @@ package com.merlinds.miracle.utils {
 			for(var i:int = 0; i < n; i++){
 				var data:Object = animationList[i];
 				//create animation holder
-				var animation:Animation = new Animation(
-					data.name, data.totalFrames
+				var animation:Animation = new Animation( data.name, data.totalFrames,
+						this.parseLayers( data.layers, data.totalFrames )
 				);
-				//parse animation file format and create frames for animation
 				_animations.push( animation );
 			}
 		}
@@ -36,6 +37,47 @@ package com.merlinds.miracle.utils {
 
 		//==============================================================================
 		//{region						PRIVATE\PROTECTED METHODS
+		/**
+		 * Parse animation file format and create frames for miracle animation animation
+		 * @param layers List of layers in file
+		 * @param totalFrames Count of total frames for animation.
+		 * @return List of frames of animation. Rectangular list that deployed in a linear one.
+		 */
+		[Inline]
+		private function parseLayers(layers:Array, totalFrames:int):Vector.<FrameInfo> {
+			var n:int = layers.length;
+			var frames:Vector.<FrameInfo> = new <FrameInfo>[];
+			frames.length = totalFrames * n + 1;//For deploying list from rectangular to liner
+			frames.fixed = true;// Can not be more than total frames count
+			for(var i:int = 0; i < n; i++){
+				var j:int, m:int;
+				var layer:Object = layers[i];
+				//prepare list of matrix
+				m = layer.meshes.length;
+				for(j = 0; j < m; j++){
+					layer.meshes[j] = MeshMatrix.fromObject(layer.meshes[j]);
+				}
+				//fill frames list
+				m = layer.frames.length;
+				for(j = 0; j < m; j++){
+					var frameData:Object = layer.frames[j];
+					if(frameData != null){
+						var m0:MeshMatrix, m1:MeshMatrix;
+						m0 = layer.meshes[ frameData.meshIndex ];//target polygon matrix
+						if(frameData.motion){
+							m1 = layer.meshes[ frameData.meshIndex + 1 ];//next polygon matrix
+						}
+						frames[totalFrames * i + j] = new FrameInfo( frameData.polygonName, m0, m1, frameData.t );
+
+					}else{
+						frames[totalFrames * i + j] = null;//Frame is empty
+					}
+				}
+			}
+			layer.length = null;
+			trace(frames);
+			return frames;
+		}
 		//} endregion PRIVATE\PROTECTED METHODS ========================================
 
 		//==============================================================================

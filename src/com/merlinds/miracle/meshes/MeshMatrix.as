@@ -29,6 +29,8 @@ package com.merlinds.miracle.meshes {
 
 		public var color:Array;
 
+		//==============================================================================
+		//{region							PUBLIC METHODS
 		/**
 		 *
 		 * @param scaleX Scale by X
@@ -52,9 +54,10 @@ package com.merlinds.miracle.meshes {
 			this.tx = tx;
 			this.ty = ty;
 		}
-
-		//==============================================================================
-		//{region							PUBLIC METHODS
+		public static function fromObject(mesh:Object):MeshMatrix {
+			var meshMatrix:MeshMatrix = new MeshMatrix();
+			return meshMatrix;
+		}
 		//} endregion PUBLIC METHODS ===================================================
 
 		//==============================================================================

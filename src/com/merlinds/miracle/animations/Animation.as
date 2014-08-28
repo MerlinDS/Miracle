@@ -24,15 +24,22 @@ package com.merlinds.miracle.animations {
 		 * Constructor
 		 * @param name Animation name
 		 * @param totalFrames Total count of frames. At least 1
+		 * @param frames List of the frames description
 		 *
+		 * @see com.merlinds.miracle.animations.FrameInfo
 		 * @throws ArgumentError if Total count of frames will be less than one
+		 * @throws ArgumentError if Total count of frames will be bigger than frames list length
 		 */
-		public function Animation(name:String, totalFrames:int) {
-			this.name = name;
-			this.totalFrames = totalFrames;
+		public function Animation(name:String, totalFrames:int, frames:Vector.<FrameInfo> = null) {
+			if(frames.length < totalFrames){
+				throw new ArgumentError("Length of frames can not be less than totalFrames count!");
+			}
 			if(this.totalFrames < 1){
 				throw new ArgumentError("Must be at least one frame for animation!");
 			}
+			this.name = name;
+			this.frames = frames;
+			this.totalFrames = totalFrames;
 		}
 		//} endregion PUBLIC METHODS ===================================================
 
