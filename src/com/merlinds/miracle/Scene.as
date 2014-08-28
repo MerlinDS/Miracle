@@ -210,10 +210,8 @@ package com.merlinds.miracle {
 				_vertexData[_vertexOffset++] = polygon.buffer[ dataIndex++ ];
 				/**** ADD TRANSFORM INDEXES DATA *****/
 				var t0:Number = 1 - t;
-				trace(dm.tx, t0 * m0.tx + t + m1.tx);
-				trace(dm.ty, t0 * m0.ty + t + m1.ty);
-				_vertexData[_vertexOffset++] = dm.tx + ( t0 * m0.tx + t + m1.tx );
-				_vertexData[_vertexOffset++] = dm.ty + ( t0 * m0.ty + t + m1.ty );
+				_vertexData[_vertexOffset++] = dm.tx + (t0 * m0.tx + t * m1.tx );
+				_vertexData[_vertexOffset++] = dm.ty + ( t0 * m0.ty + t * m1.ty );
 				_vertexData[_vertexOffset++] = dm.scaleX;
 				_vertexData[_vertexOffset++] = dm.scaleY;
 				_vertexData[_vertexOffset++] = dm.skewX;
