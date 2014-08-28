@@ -34,7 +34,7 @@ package com.merlinds.miracle.animations {
 			if(frames.length < totalFrames){
 				throw new ArgumentError("Length of frames can not be less than totalFrames count!");
 			}
-			if(this.totalFrames < 1){
+			if(totalFrames < 1){
 				throw new ArgumentError("Must be at least one frame for animation!");
 			}
 			this.name = name;
