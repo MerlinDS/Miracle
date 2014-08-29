@@ -50,15 +50,18 @@ package com.merlinds.miracle {
 			instance.texture = texture;
 			instance.mesh = texture;
 			instance.animation = anim;
+			instance.currentFrame = 0;
+			instance.fps = 0;
 			return instance as MiracleImage;
 		}
 
-		public function createAnimation(texture:String, animation:String):MiracleAnimation{
+		public function createAnimation(texture:String, animation:String, fps:int = 60):MiracleAnimation{
 			var instance:MiracleDisplayObject = this.createInstance(MiracleAnimation);
 			instance.texture = texture;
 			instance.mesh = texture;
 			instance.animation = animation;
 			instance.currentFrame = 0;
+			instance.fps = fps;
 			return instance as MiracleAnimation;
 		}
 
@@ -82,7 +85,7 @@ package com.merlinds.miracle {
 			}
 		}
 
-		override public function drawFrame():void{
+		override public function drawFrame(time:Number):void {
 			var mesh:Mesh2D;
 			var polygon:Polygon2D;
 			var animationHelper:AnimationHelper;
@@ -115,16 +118,6 @@ package com.merlinds.miracle {
 						}
 						//reset old sizes
 						instance.width = instance.height = 0;
-						/* old variant of drawing
-						var m:int = mesh.length;
-						for(var j:int = 0; j < m; j++){
-							polygon = mesh[j];
-							//set sizes to instance
-							instance.width += polygon.buffer[8];
-							instance.height += polygon.buffer[9] * -1;
-							//draw on GPU
-							this.draw(polygon, instance.drawMatrix);
-						}*/
 						var m:int = animationHelper.numLayers;
 						var k:int = animationHelper.totalFrames;
 						for(var j:int = 0; j < m; j++){
@@ -138,10 +131,16 @@ package com.merlinds.miracle {
 								this.draw(polygon, instance.drawMatrix, frame.m0, frame.m1, frame.t);
 							}
 						}
-						//increase frame counter for current instance
-						if(++instance.currentFrame >= animationHelper.totalFrames){
-							instance.currentFrame = 0;
+
+						instance.timePassed += time;
+						if(instance.timePassed >= instance.frameDelta){
+							instance.timePassed = 0;
+							//increase frame counter for current instance
+							if(++instance.currentFrame >= animationHelper.totalFrames){
+								instance.currentFrame = 0;
+							}
 						}
+
 						//tell instance that it was drawn on GPU
 						instance.miracle_internal::drawn();
 					}
@@ -203,8 +202,8 @@ package com.merlinds.miracle {
 			var n:int = polygon.numVertexes;
 			for(i = 0; i < n; i++){
 				/**** ADD VERTEX DATA *****/
-				_vertexData[_vertexOffset++] = polygon.buffer[ dataIndex++ ] + dm.offsetX;
-				_vertexData[_vertexOffset++] = polygon.buffer[ dataIndex++ ] + dm.offsetY;
+				_vertexData[_vertexOffset++] = polygon.buffer[ dataIndex++ ];// + dm.offsetX;
+				_vertexData[_vertexOffset++] = polygon.buffer[ dataIndex++ ];// + dm.offsetY;
 				/**** ADD UV DATA *****/
 				_vertexData[_vertexOffset++] = polygon.buffer[ dataIndex++ ];
 				_vertexData[_vertexOffset++] = polygon.buffer[ dataIndex++ ];

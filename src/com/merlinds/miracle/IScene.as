@@ -24,7 +24,7 @@ package com.merlinds.miracle {
 		 * @param animation Name of the animation
 		 * @return Instance of the display object
 		 */
-		function createAnimation(texture:String, animation:String):MiracleAnimation;
+		function createAnimation(texture:String, animation:String, fps:int = 60):MiracleAnimation;
 
 		function textureInUse(texture:String):Boolean;
 

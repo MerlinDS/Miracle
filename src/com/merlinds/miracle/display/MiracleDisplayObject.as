@@ -5,8 +5,8 @@
  */
 package com.merlinds.miracle.display {
 	import com.merlinds.miracle.events.MiracleEvent;
-	import com.merlinds.miracle.miracle_internal;
 	import com.merlinds.miracle.meshes.MeshMatrix;
+	import com.merlinds.miracle.miracle_internal;
 
 	import flash.errors.IllegalOperationError;
 	import flash.events.EventDispatcher;
@@ -17,7 +17,10 @@ package com.merlinds.miracle.display {
 
 		use namespace miracle_internal;
 
+
 		miracle_internal var drawMatrix:MeshMatrix;
+		miracle_internal var frameDelta:Number;
+		miracle_internal var timePassed:Number;
 
 		/**
 		 * Name of the mesh that will be used
@@ -45,7 +48,10 @@ package com.merlinds.miracle.display {
 		private var _width:int;
 		private var _height:int;
 
+		private var _fps:int;
+
 		private var _onStage:Boolean;
+		private var _onPause:Boolean;
 
 		public function MiracleDisplayObject(mesh:String = null, texture:String = null,
 		                                     drawMatrix:MeshMatrix = null) {
@@ -54,10 +60,19 @@ package com.merlinds.miracle.display {
 			if(drawMatrix == null){
 				this.miracle_internal::drawMatrix = new MeshMatrix();
 			}
+			this.fps = 60;//Default frame rate
 		}
 
 		//==============================================================================
 		//{region							PUBLIC METHODS
+		public function stop():void {
+			_onPause = true;
+		}
+
+		public function play():void {
+			_onPause = false;
+		}
+
 		public function moveTO(x:Number = 0, y:Number = 0, z:Number = 0):MiracleDisplayObject {
 			if(_position == null){
 				_position = new Vector3D(x, y, z);
@@ -126,7 +141,17 @@ package com.merlinds.miracle.display {
 		}
 
 		public function set currentFrame(value:int):void {
-			_currentFrame = value;
+			if(!_onPause)_currentFrame = value;
+		}
+
+		public function get fps():int {
+			return _fps;
+		}
+
+		public function set fps(value:int):void {
+			_fps = value;
+			miracle_internal::frameDelta = 1000 / value;
+			miracle_internal::timePassed = 0;
 		}
 
 //} endregion GETTERS/SETTERS ==================================================

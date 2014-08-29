@@ -14,7 +14,7 @@ package com.merlinds.miracle {
 		function end(present:Boolean = true):void;
 		function kill():void;
 
-		function drawFrame():void;
+		function drawFrame(time:Number):void;
 		//} endregion PUBLIC METHODS ===================================================
 
 		//==============================================================================

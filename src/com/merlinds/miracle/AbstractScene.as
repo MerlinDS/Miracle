@@ -6,15 +6,9 @@
 package com.merlinds.miracle {
 	import com.merlinds.miracle.animations.AnimationHelper;
 	import com.merlinds.miracle.display.MiracleDisplayObject;
-	import com.merlinds.miracle.meshes.Mesh2D;
-	import com.merlinds.miracle.meshes.Polygon2D;
-	import com.merlinds.miracle.textures.TextureHelper;
 	import com.merlinds.miracle.utils.Asset;
-	import com.merlinds.miracle.utils.AtfData;
 	import com.merlinds.miracle.utils.MafReader;
 	import com.merlinds.miracle.utils.MtfReader;
-
-	import flash.debugger.enterDebugger;
 
 	import flash.display3D.Context3D;
 
@@ -57,7 +51,7 @@ package com.merlinds.miracle {
 			_context = null;
 		}
 
-		public function drawFrame():void {
+		public function drawFrame(time:Number):void {
 		}
 
 		//} endregion PUBLIC METHODS ===================================================

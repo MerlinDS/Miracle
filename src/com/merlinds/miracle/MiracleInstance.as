@@ -125,7 +125,7 @@ package com.merlinds.miracle {
 		}
 
 		private function enterFrameHandler(event:Event):void {
-			var now:Number = getTimer() / 1000.0;
+			var now:Number = getTimer();
 			var passedTime:Number = now - _lastFrameTimestamp;
 			_lastFrameTimestamp = now;
 			this.executeFrame(passedTime);
@@ -135,7 +135,7 @@ package com.merlinds.miracle {
 			//draw frame
 			if(_scene != null && _context != null && !_onPause){
 				_scene.start();
-				_scene.drawFrame();
+				_scene.drawFrame(time);
 				_scene.end();
 			}
 		}
@@ -160,7 +160,7 @@ package com.merlinds.miracle {
 		public function get snapshot():BitmapData {
 			var snapshot:BitmapData = new BitmapData(_viewport.width, _viewport.height, true, 0x00000000);
 			_scene.start();
-			_scene.drawFrame();
+			_scene.drawFrame(0);
 			_scene.end(false);
 			_context.drawToBitmapData(snapshot);
 			_context.present();
