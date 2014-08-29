@@ -4,6 +4,8 @@
  * Time: 21:07
  */
 package com.merlinds.miracle.meshes {
+	import flash.geom.Matrix;
+
 	/**
 	 * Helper for drawing and animation calculation
 	**/
@@ -59,6 +61,20 @@ package com.merlinds.miracle.meshes {
 				object.offsetX, object.offsetY, object.tx, object.ty,
 				object.scaleX, object.scaleY, object.skewX, object.skewY
 			);
+			return meshMatrix;
+		}
+
+		public static function fromMatrix(matrix:Matrix, offsetX:Number = 0, offsetY:Number = 0):MeshMatrix {
+			var meshMatrix:MeshMatrix;
+			if(matrix != null) {
+				meshMatrix = new MeshMatrix(
+						offsetX, offsetY, matrix.tx, matrix.ty,
+						Math.sqrt(matrix.a * matrix.a + matrix.b * matrix.b),
+						Math.sqrt(matrix.c * matrix.c + matrix.d * matrix.d),
+						Math.atan2(-matrix.c, matrix.d),
+						Math.atan2(matrix.b, matrix.a)
+				);
+			}
 			return meshMatrix;
 		}
 		//} endregion PUBLIC METHODS ===================================================
