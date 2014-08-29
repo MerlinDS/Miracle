@@ -57,7 +57,7 @@ package com.merlinds.miracle.meshes {
 		public static function fromObject(object:Object):MeshMatrix {
 			var meshMatrix:MeshMatrix = new MeshMatrix(
 				object.offsetX, object.offsetY, object.tx, object.ty,
-				object.scaleX, object.scaleY, object.skewX, object.scaleY
+				object.scaleX, object.scaleY, object.skewX, object.skewY
 			);
 			return meshMatrix;
 		}

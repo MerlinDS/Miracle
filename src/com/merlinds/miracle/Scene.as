@@ -212,10 +212,10 @@ package com.merlinds.miracle {
 				var t0:Number = 1 - t;
 				_vertexData[_vertexOffset++] = dm.tx + (t0 * m0.tx + t * m1.tx );
 				_vertexData[_vertexOffset++] = dm.ty + ( t0 * m0.ty + t * m1.ty );
-				_vertexData[_vertexOffset++] = dm.scaleX;
-				_vertexData[_vertexOffset++] = dm.scaleY;
-				_vertexData[_vertexOffset++] = dm.skewX;
-				_vertexData[_vertexOffset++] = dm.skewY;
+				_vertexData[_vertexOffset++] = /*dm.scaleX + */(t0 * m0.scaleX + t * m1.scaleX );
+				_vertexData[_vertexOffset++] = /*dm.scaleY + */(t0 * m0.scaleY + t * m1.scaleY );
+				_vertexData[_vertexOffset++] = /*dm.skewX + */(t0 * m0.skewX + t * m1.skewX );
+				_vertexData[_vertexOffset++] = /*dm.skewY + */(t0 * m0.skewY + t * m1.skewY );
 				/**** ADD COLOR DATA *****/
 				/*
 				_vertexData[_vertexOffset++] = dm.color[0];
