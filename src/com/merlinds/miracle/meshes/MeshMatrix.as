@@ -56,6 +56,7 @@ package com.merlinds.miracle.meshes {
 			this.tx = tx;
 			this.ty = ty;
 		}
+
 		public static function fromObject(object:Object):MeshMatrix {
 			var meshMatrix:MeshMatrix = new MeshMatrix(
 				object.offsetX, object.offsetY, object.tx, object.ty,
@@ -76,6 +77,13 @@ package com.merlinds.miracle.meshes {
 				);
 			}
 			return meshMatrix;
+		}
+
+		public function toString():String {
+			return "[MeshMatrix( offsetX = " + this.offsetX + ", offsetY = " + this.offsetY +
+					", tx = " + this.tx + ", ty = , " + this.ty  +
+					", scaleX = " + this.scaleX + ", scaleY = " + this.scaleY  +
+					", skewX = " + this.skewX + ", skewY  = " + this.skewY + ")]";
 		}
 		//} endregion PUBLIC METHODS ===================================================
 
