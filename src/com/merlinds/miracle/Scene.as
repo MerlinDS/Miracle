@@ -14,7 +14,6 @@ package com.merlinds.miracle {
 	import com.merlinds.miracle.meshes.Polygon2D;
 	import com.merlinds.miracle.textures.TextureHelper;
 	import com.merlinds.miracle.utils.Asset;
-	import com.merlinds.miracle.utils.UMath;
 
 	import flash.display3D.IndexBuffer3D;
 	import flash.display3D.VertexBuffer3D;
@@ -34,6 +33,9 @@ package com.merlinds.miracle {
 		private var _indexOffset:Number = 0;
 		private var _indexStep:Number = 0;
 		private var _currentTexture:String;
+		//drawing
+		private var _currentMatrix:MeshMatrix = new MeshMatrix();
+		private var _polygon:Polygon2D;
 		//
 		use namespace miracle_internal;
 
@@ -88,7 +90,6 @@ package com.merlinds.miracle {
 
 		override public function drawFrame(time:Number):void {
 			var mesh:Mesh2D;
-			var polygon:Polygon2D;
 			var animationHelper:AnimationHelper;
 			var textureHelper:TextureHelper;
 			var instance:MiracleDisplayObject;
@@ -125,11 +126,12 @@ package com.merlinds.miracle {
 							var index:int = k * j + instance.currentFrame;
 							var frame:FrameInfo = animationHelper.frames[ index ];
 							if(frame != null){
-								polygon = mesh[ frame.polygonName ];
-								instance.width += polygon.buffer[8];
-								instance.height += polygon.buffer[9] * -1;
+								_polygon = mesh[ frame.polygonName ];
+								instance.width += _polygon.buffer[8];
+								instance.height += _polygon.buffer[9] * -1;
 								//draw on GPU
-								this.draw(polygon, instance.drawMatrix, frame.m0, frame.m1, frame.t);
+								this.calculateMatrix(instance.drawMatrix, frame.m0, frame.m1, frame.t);
+								this.draw();
 							}
 						}
 
@@ -197,25 +199,25 @@ package com.merlinds.miracle {
 		}
 
 		[Inline]
-		private function draw(polygon:Polygon2D, dm:MeshMatrix, m0:MeshMatrix, m1:MeshMatrix, t:Number):void {
+		private function draw():void {
 			var i:int;
 			var dataIndex:int = 0;
-			var n:int = polygon.numVertexes;
+			var n:int = _polygon.numVertexes;
+			//set vertexes
 			for(i = 0; i < n; i++){
 				/**** ADD VERTEX DATA *****/
-				_vertexData[_vertexOffset++] = polygon.buffer[ dataIndex++ ];// + dm.offsetX;
-				_vertexData[_vertexOffset++] = polygon.buffer[ dataIndex++ ];// + dm.offsetY;
+				_vertexData[_vertexOffset++] = _polygon.buffer[ dataIndex++ ];// + _currentMatrix.offsetX;
+				_vertexData[_vertexOffset++] = _polygon.buffer[ dataIndex++ ];// + _currentMatrix.offsetY;
 				/**** ADD UV DATA *****/
-				_vertexData[_vertexOffset++] = polygon.buffer[ dataIndex++ ];
-				_vertexData[_vertexOffset++] = polygon.buffer[ dataIndex++ ];
+				_vertexData[_vertexOffset++] = _polygon.buffer[ dataIndex++ ];
+				_vertexData[_vertexOffset++] = _polygon.buffer[ dataIndex++ ];
 				/**** ADD TRANSFORM INDEXES DATA *****/
-				var t0:Number = 1 - t;
-				_vertexData[_vertexOffset++] = dm.tx + (t0 * m0.tx + t * m1.tx );
-				_vertexData[_vertexOffset++] = dm.ty + ( t0 * m0.ty + t * m1.ty );
-				_vertexData[_vertexOffset++] = /*dm.scaleX + */(t0 * m0.scaleX + t * m1.scaleX );
-				_vertexData[_vertexOffset++] = /*dm.scaleY + */(t0 * m0.scaleY + t * m1.scaleY );
-				_vertexData[_vertexOffset++] = /*dm.skewX + */(t0 * m0.skewX + t * m1.skewX );
-				_vertexData[_vertexOffset++] = /*dm.skewY + */(t0 * m0.skewY + t * m1.skewY );
+				_vertexData[_vertexOffset++] = _currentMatrix.tx;
+				_vertexData[_vertexOffset++] = _currentMatrix.ty;
+				_vertexData[_vertexOffset++] = _currentMatrix.scaleX;
+				_vertexData[_vertexOffset++] = _currentMatrix.scaleY;
+				_vertexData[_vertexOffset++] = _currentMatrix.skewX;
+				_vertexData[_vertexOffset++] = _currentMatrix.skewY;
 				/**** ADD COLOR DATA *****/
 				/*
 				_vertexData[_vertexOffset++] = dm.color[0];
@@ -225,11 +227,24 @@ package com.merlinds.miracle {
 				*/
 			}
 			/**** FILL INDEXES BUFFER *****/
-			n = polygon.indexes.length;
+			n = _polygon.indexes.length;
 			for(i = 0; i < n; i++){
-				_indexData[_indexOffset++] = _indexStep + polygon.indexes[i];
+				_indexData[_indexOffset++] = _indexStep + _polygon.indexes[i];
 			}
-			_indexStep += polygon.numVertexes;
+			_indexStep += _polygon.numVertexes;
+		}
+
+		[Inline]
+		private function calculateMatrix(dm:MeshMatrix, m0:MeshMatrix, m1:MeshMatrix, t:Number):void {
+			var t0:Number = 1 - t;
+			_currentMatrix.offsetX = dm.offsetX + (t0 * m0.offsetX + t * m1.offsetX );
+			_currentMatrix.offsetY = dm.offsetY + (t0 * m0.offsetY + t * m1.offsetY );
+			_currentMatrix.tx = dm.tx + (t0 * m0.tx + t * m1.tx );
+			_currentMatrix.ty = dm.ty + ( t0 * m0.ty + t * m1.ty );
+			_currentMatrix.scaleX = /*dm.scaleX + */(t0 * m0.scaleX + t * m1.scaleX );
+			_currentMatrix.scaleY = /*dm.scaleY + */(t0 * m0.scaleY + t * m1.scaleY );
+			_currentMatrix.skewX = dm.skewX + (t0 * m0.skewX + t * m1.skewX );
+			_currentMatrix.skewY = dm.skewY + (t0 * m0.skewY + t * m1.skewY );
 		}
 		//} endregion PRIVATE\PROTECTED METHODS ========================================
 
