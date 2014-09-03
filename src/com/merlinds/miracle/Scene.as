@@ -206,8 +206,8 @@ package com.merlinds.miracle {
 			//set vertexes
 			for(i = 0; i < n; i++){
 				/**** ADD VERTEX DATA *****/
-				_vertexData[_vertexOffset++] = _polygon.buffer[ dataIndex++ ];// + _currentMatrix.offsetX;
-				_vertexData[_vertexOffset++] = _polygon.buffer[ dataIndex++ ];// + _currentMatrix.offsetY;
+				_vertexData[_vertexOffset++] = _polygon.buffer[ dataIndex++ ] + _currentMatrix.offsetX;
+				_vertexData[_vertexOffset++] = _polygon.buffer[ dataIndex++ ] + _currentMatrix.offsetY;
 				/**** ADD UV DATA *****/
 				_vertexData[_vertexOffset++] = _polygon.buffer[ dataIndex++ ];
 				_vertexData[_vertexOffset++] = _polygon.buffer[ dataIndex++ ];
@@ -236,9 +236,9 @@ package com.merlinds.miracle {
 
 		[Inline]
 		private function calculateMatrix(dm:MeshMatrix, m0:MeshMatrix, m1:MeshMatrix, t:Number):void {
-			var t0:Number = 1 - t;
-			_currentMatrix.offsetX = dm.offsetX + (t0 * m0.offsetX + t * m1.offsetX );
-			_currentMatrix.offsetY = dm.offsetY + (t0 * m0.offsetY + t * m1.offsetY );
+			var t0:Number = 1 - t;//dm.offsetX
+			_currentMatrix.offsetX = (t0 * m0.offsetX + t * m1.offsetX );
+			_currentMatrix.offsetY = (t0 * m0.offsetY + t * m1.offsetY );
 			_currentMatrix.tx = dm.tx + (t0 * m0.tx + t * m1.tx ) * dm.scaleX;
 			_currentMatrix.ty = dm.ty + ( t0 * m0.ty + t * m1.ty ) * dm.scaleY;
 			_currentMatrix.scaleX = dm.scaleX * (t0 * m0.scaleX + t * m1.scaleX );

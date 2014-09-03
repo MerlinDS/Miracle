@@ -5,6 +5,7 @@
  */
 package com.merlinds.miracle.meshes {
 	import flash.geom.Matrix;
+	import flash.geom.Point;
 
 	/**
 	 * Helper for drawing and animation calculation
@@ -67,9 +68,11 @@ package com.merlinds.miracle.meshes {
 
 		public static function fromMatrix(matrix:Matrix, offsetX:Number = 0, offsetY:Number = 0):MeshMatrix {
 			var meshMatrix:MeshMatrix;
+			var transformPoint:Point = matrix.transformPoint(new Point(offsetX, offsetY));
 			if(matrix != null) {
 				meshMatrix = new MeshMatrix(
-						offsetX, offsetY, matrix.tx, matrix.ty,
+						offsetX * -1, offsetY,
+						transformPoint.x, transformPoint.y,
 						Math.sqrt(matrix.a * matrix.a + matrix.b * matrix.b),
 						Math.sqrt(matrix.c * matrix.c + matrix.d * matrix.d),
 						Math.atan2(-matrix.c, matrix.d),
