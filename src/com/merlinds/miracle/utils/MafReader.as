@@ -76,7 +76,7 @@ package com.merlinds.miracle.utils {
 					}
 				}
 			}
-			layer.length = null;//delete layer list
+			layers.length = 0;//delete layer list
 			return frames;
 		}
 		//} endregion PRIVATE\PROTECTED METHODS ========================================
