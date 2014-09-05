@@ -127,8 +127,8 @@ package com.merlinds.miracle {
 							var frame:FrameInfo = animationHelper.frames[ index ];
 							if(frame != null){
 								_polygon = mesh[ frame.polygonName ];
-//								instance.width += _polygon.buffer[8];
-//								instance.height += _polygon.buffer[9] * -1;
+								instance.width += _polygon.buffer[8];
+								instance.height += _polygon.buffer[9] * -1;
 								//draw on GPU
 								this.calculateMatrix(instance.drawMatrix, frame.m0, frame.m1, frame.t);
 								this.draw();
