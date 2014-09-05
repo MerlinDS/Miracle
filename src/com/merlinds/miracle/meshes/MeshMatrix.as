@@ -68,7 +68,8 @@ package com.merlinds.miracle.meshes {
 
 		public static function fromMatrix(matrix:Matrix, offsetX:Number = 0, offsetY:Number = 0):MeshMatrix {
 			var meshMatrix:MeshMatrix;
-			var transformPoint:Point = matrix.transformPoint(new Point(offsetX, offsetY));
+			var transformPoint:Point = matrix != null ?
+					matrix.transformPoint(new Point(offsetX, offsetY)) : new Point();
 			if(matrix != null) {
 				meshMatrix = new MeshMatrix(
 						offsetX * -1, offsetY,

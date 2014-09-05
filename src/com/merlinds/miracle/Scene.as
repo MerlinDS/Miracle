@@ -236,13 +236,13 @@ package com.merlinds.miracle {
 
 		[Inline]
 		private function calculateMatrix(dm:MeshMatrix, m0:MeshMatrix, m1:MeshMatrix, t:Number):void {
-			var t0:Number = 1 - t;//dm.offsetX
+			var t0:Number = 1 - t;
 			_currentMatrix.offsetX = (t0 * m0.offsetX + t * m1.offsetX );
 			_currentMatrix.offsetY = (t0 * m0.offsetY + t * m1.offsetY );
 			_currentMatrix.tx = dm.tx + (t0 * m0.tx + t * m1.tx ) * dm.scaleX;
 			_currentMatrix.ty = dm.ty + ( t0 * m0.ty + t * m1.ty ) * dm.scaleY;
-			_currentMatrix.scaleX = dm.scaleX * (t0 * m0.scaleX + t * m1.scaleX );
-			_currentMatrix.scaleY = dm.scaleY * (t0 * m0.scaleY + t * m1.scaleY );
+			_currentMatrix.scaleX = dm.scaleX * (t0 * m0.scaleX + t * m1.scaleX);
+			_currentMatrix.scaleY = dm.scaleY * (t0 * m0.scaleY + t * m1.scaleY);
 			_currentMatrix.skewX = dm.skewX + (t0 * m0.skewX + t * m1.skewX );
 			_currentMatrix.skewY = dm.skewY + (t0 * m0.skewY + t * m1.skewY );
 		}
