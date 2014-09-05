@@ -20,6 +20,10 @@ package com.merlinds.miracle.animations {
 		public var numLayers:int;
 		/** Frames on the animation. Rectangular array**/
 		public var frames:Vector.<FrameInfo>;
+		/** Total width of the animation on first frame**/
+		public var width:int;
+		/** Total height of the animation on first frame**/
+		public var height:int;
 		//==============================================================================
 		//{region							PUBLIC METHODS
 		/**

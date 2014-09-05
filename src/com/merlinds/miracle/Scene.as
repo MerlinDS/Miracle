@@ -127,8 +127,6 @@ package com.merlinds.miracle {
 							var frame:FrameInfo = animationHelper.frames[ index ];
 							if(frame != null){
 								_polygon = mesh[ frame.polygonName ];
-								/*instance.width += _polygon.buffer[8];
-								instance.height += _polygon.buffer[9] * -1;*/
 								//draw on GPU
 								this.calculateMatrix(instance.drawMatrix, frame.m0, frame.m1, frame.t);
 								this.draw();
@@ -143,6 +141,9 @@ package com.merlinds.miracle {
 							}
 						}
 
+						//set size //TODO: change size only if animation for this instance was changed
+						instance.width = animationHelper.width;
+						instance.height = animationHelper.height;
 						//tell instance that it was drawn on GPU
 						instance.miracle_internal::drawn();
 					}

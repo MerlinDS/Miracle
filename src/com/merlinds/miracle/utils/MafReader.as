@@ -31,6 +31,8 @@ package com.merlinds.miracle.utils {
 				var animation:AnimationHelper = new AnimationHelper( data.name, data.totalFrames,
 						data.layers.length, this.parseLayers( data.layers, data.totalFrames )
 				);
+				animation.width = Math.ceil(data.width);
+				animation.height = Math.ceil(data.height);
 				_animations.push( animation );
 			}
 		}
