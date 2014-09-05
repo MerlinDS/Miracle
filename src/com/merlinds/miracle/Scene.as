@@ -134,7 +134,6 @@ package com.merlinds.miracle {
 								this.draw();
 							}
 						}
-
 						instance.timePassed += time;
 						if(instance.timePassed >= instance.frameDelta){
 							instance.timePassed = 0;
