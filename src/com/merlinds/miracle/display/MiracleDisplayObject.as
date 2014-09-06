@@ -29,7 +29,7 @@ package com.merlinds.miracle.display {
 		/**
 		 * Name of the timeline that will be used
 		 */
-		public var animation:String;
+		private var _animation:String;
 		/**
 		 * Name of the texture that will be used
 		 */
@@ -152,6 +152,15 @@ package com.merlinds.miracle.display {
 			_fps = value;
 			miracle_internal::frameDelta = 1000 / value;
 			miracle_internal::timePassed = 0;
+		}
+
+		public function get animation():String {
+			return _animation;
+		}
+
+		public function set animation(value:String):void {
+			_animation = value;
+			_currentFrame = 0;
 		}
 
 //} endregion GETTERS/SETTERS ==================================================
