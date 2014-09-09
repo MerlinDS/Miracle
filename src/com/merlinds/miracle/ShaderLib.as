@@ -8,10 +8,11 @@ package com.merlinds.miracle {
 
 		public static const VERTEX_SHADER:String = [
 			/*
-			 * va[0] = [x, y]
+			 * va[0] = [x, y] Need z
 			 * va[1] = [u, v]
 			 * va[2] = [tx,ty]
 			 * va[3] = [scaleX, scaleY, skewX, skewY]
+			 * Need argb buffer for color changing
 
 			 * vc[125] = [1,-1,0,0]
 			 * vc[126] = [0,0,1,0]
