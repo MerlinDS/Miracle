@@ -56,6 +56,7 @@ package com.merlinds.miracle.meshes {
 			this.skewY = skewY;
 			this.tx = tx;
 			this.ty = ty;
+			this.color = [0, 0, 0, 1];
 		}
 
 		public static function fromObject(object:Object):MeshMatrix {
@@ -63,6 +64,8 @@ package com.merlinds.miracle.meshes {
 				object.offsetX, object.offsetY, object.tx, object.ty,
 				object.scaleX, object.scaleY, object.skewX, object.skewY
 			);
+				meshMatrix.color = object.hasOwnProperty("color") && object.color is Array ?
+						object.color.concat() : meshMatrix.color ;
 			return meshMatrix;
 		}
 

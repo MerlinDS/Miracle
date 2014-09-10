@@ -129,7 +129,6 @@ package com.merlinds.miracle {
 								_polygon = mesh[ frame.polygonName ];
 								//draw on GPU
 								this.calculateMatrix(instance.drawMatrix, frame.m0, frame.m1, frame.t);
-								_currentMatrix.color = [0, 0, 0, 0.1];
 								this.draw();
 							}
 						}
@@ -245,6 +244,10 @@ package com.merlinds.miracle {
 			_currentMatrix.scaleY = dm.scaleY * (t0 * m0.scaleY + t * m1.scaleY);
 			_currentMatrix.skewX = dm.skewX + (t0 * m0.skewX + t * m1.skewX );
 			_currentMatrix.skewY = dm.skewY + (t0 * m0.skewY + t * m1.skewY );
+			//work with colors
+			for(var i:int = 0; i < 4; i++){//RGBA
+				_currentMatrix.color[i] = dm.color[i] + (t0 * m0.color[i] + t * m1.color[i] );
+			}
 		}
 		//} endregion PRIVATE\PROTECTED METHODS ========================================
 
