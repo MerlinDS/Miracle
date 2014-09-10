@@ -12,7 +12,7 @@ package com.merlinds.miracle {
 			 * va[1] = [u, v]
 			 * va[2] = [tx,ty]
 			 * va[3] = [scaleX, scaleY, skewX, skewY]
-			 * Need argb buffer for color changing
+			 * va[4] = [A, R, G, B]
 
 			 * vc[125] = [1,-1,0,0]
 			 * vc[126] = [0,0,1,0]
@@ -49,25 +49,22 @@ package com.merlinds.miracle {
 			"dp4 op.y, va0, vt2",
 			"dp4 op.z, va0, vc126",
 			"dp4 op.w, va0, vc127",
-			"mov v1, va1.xy"
+			"mov v1, va1.xy",
+			"mov v0, va4"
 		].join("\n");
 
 
 		public static const FRAGMENT_SHADER:String = [
-			"tex oc, v1, fs0 <2d,linear,nomip>"
+			"tex ft0, v1, fs0 <2d,linear,nomip>",
+			"add ft0.xyz, ft0.xyz, v0.xyz",
+			"mul ft0.w ft0.w, v0.w",
+			"mov oc, ft0"
 		].join("\n");
-
-		/*public static const FRAGMENT_SHADER:String = [
-		 "tex ft0, v1, fs0 <2d,linear,nomip>",
-		 "mul oc, ft0, v0"
-		 ].join("\n")*/
-
-
-		public function ShaderLib() {
-		}
 
 		//==============================================================================
 		//{region							PUBLIC METHODS
+		public function ShaderLib() {
+		}
 		//} endregion PUBLIC METHODS ===================================================
 
 		//==============================================================================

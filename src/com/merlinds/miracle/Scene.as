@@ -22,7 +22,7 @@ package com.merlinds.miracle {
 		/**
 		 * [x,y] + [u,v] + [tx, ty] + [scaleX, scaleY, skewX, skewY] + [r,g,b,a]
 		 */
-		private const VERTEX_PARAMS_LENGTH:int = 2 + 2 + 2 + 4;
+		private const VERTEX_PARAMS_LENGTH:int = 2 + 2 + 2 + 4 + 4;
 		//GPU
 		private var _vertexBuffer:VertexBuffer3D;
 		private var _indexBuffer:IndexBuffer3D;
@@ -129,6 +129,7 @@ package com.merlinds.miracle {
 								_polygon = mesh[ frame.polygonName ];
 								//draw on GPU
 								this.calculateMatrix(instance.drawMatrix, frame.m0, frame.m1, frame.t);
+								_currentMatrix.color = [0, 0, 0, 0.1];
 								this.draw();
 							}
 						}
@@ -188,6 +189,7 @@ package com.merlinds.miracle {
 				_context.setVertexBufferAt(1, _vertexBuffer, 2, "float2"); //u, v
 				_context.setVertexBufferAt(2, _vertexBuffer, 4, "float2"); //tx, ty
 				_context.setVertexBufferAt(3, _vertexBuffer, 6, "float4"); //scaleX, scaleY, skewX, skewY
+				_context.setVertexBufferAt(4, _vertexBuffer, 10, "float4"); //R, G, B, A
 				_context.drawTriangles( _indexBuffer );
 			}
 			_vertexOffset = 0;
@@ -219,12 +221,10 @@ package com.merlinds.miracle {
 				_vertexData[_vertexOffset++] = _currentMatrix.skewX;
 				_vertexData[_vertexOffset++] = _currentMatrix.skewY;
 				/**** ADD COLOR DATA *****/
-				/*
-				_vertexData[_vertexOffset++] = dm.color[0];
-				_vertexData[_vertexOffset++] = dm.color[1];
-				_vertexData[_vertexOffset++] = dm.color[2];
-				_vertexData[_vertexOffset++] = dm.color[3];
-				*/
+				_vertexData[_vertexOffset++] = _currentMatrix.color[0];
+				_vertexData[_vertexOffset++] = _currentMatrix.color[1];
+				_vertexData[_vertexOffset++] = _currentMatrix.color[2];
+				_vertexData[_vertexOffset++] = _currentMatrix.color[3];
 			}
 			/**** FILL INDEXES BUFFER *****/
 			n = _polygon.indexes.length;
@@ -237,7 +237,6 @@ package com.merlinds.miracle {
 		[Inline]
 		private function calculateMatrix(dm:MeshMatrix, m0:MeshMatrix, m1:MeshMatrix, t:Number):void {
 			var t0:Number = 1 - t;
-			dm.scaleX = dm.scaleY = 1.5;
 			_currentMatrix.offsetX = (t0 * m0.offsetX + t * m1.offsetX );
 			_currentMatrix.offsetY = (t0 * m0.offsetY + t * m1.offsetY );
 			_currentMatrix.tx = dm.tx + (t0 * m0.tx + t * m1.tx ) * dm.scaleX;
