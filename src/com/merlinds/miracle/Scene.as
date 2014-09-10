@@ -245,9 +245,11 @@ package com.merlinds.miracle {
 			_currentMatrix.skewX = dm.skewX + (t0 * m0.skewX + t * m1.skewX );
 			_currentMatrix.skewY = dm.skewY + (t0 * m0.skewY + t * m1.skewY );
 			//work with colors
-			for(var i:int = 0; i < 4; i++){//RGBA
+			for(var i:int = 0; i < 3; i++){//RGB
 				_currentMatrix.color[i] = dm.color[i] + (t0 * m0.color[i] + t * m1.color[i] );
 			}
+			//alpha
+			_currentMatrix.color[i] = dm.color[i] * (t0 * m0.color[i] + t * m1.color[i] );
 		}
 		//} endregion PRIVATE\PROTECTED METHODS ========================================
 
