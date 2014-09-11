@@ -130,7 +130,7 @@ package com.merlinds.miracle.meshes {
 		public static function fromObject(object:Object):Color {
 			var color:Color = new Color(
 					object.redMultiplier, object.greenMultiplier, object.blueMultiplier, object.alphaMultiplier,
-					object.redOffset, object.greenOffset, object.blueOffset, object.alphaMultiplier
+					object.redOffset, object.greenOffset, object.blueOffset, object.alphaOffset
 			);
 			color.type = object.type;
 			return color;
