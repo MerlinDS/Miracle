@@ -33,7 +33,7 @@ package com.merlinds.miracle.meshes {
 		public var offsetX:Number;
 		/** offset by Y **/
 		public var offsetY:Number;
-
+		/** Color transformation object**/
 		public var color:Color;
 
 		//==============================================================================
