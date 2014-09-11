@@ -4,13 +4,12 @@
  * Time: 21:07
  */
 package com.merlinds.miracle.meshes {
-	import com.merlinds.miracle.meshes.Color;
-	import com.merlinds.miracle.meshes.Color;
 
 	import flash.geom.Matrix;
 	import flash.geom.Point;
 
-	//TODO rename to PolygonInfo
+	//TODO  MF-32 Rename MeshMatrix
+	//TODO MF-34 Add commentaries to meshes folder
 	/**
 	 * Helper for drawing and animation calculation
 	**/
@@ -35,7 +34,7 @@ package com.merlinds.miracle.meshes {
 		public var offsetY:Number;
 		/** Color transformation object**/
 		public var color:Color;
-
+		//TODO: MF-36 Add type bynary mask to MeshMatrix
 		//==============================================================================
 		//{region							PUBLIC METHODS
 		/**
@@ -72,7 +71,7 @@ package com.merlinds.miracle.meshes {
 						Color.fromObject(object.color) : meshMatrix.color ;
 			return meshMatrix;
 		}
-
+		//TODO: MF-35 Move unnecessary methods from MeshMatrix to subclass
 		public static function fromMatrix(matrix:Matrix, offsetX:Number = 0, offsetY:Number = 0):MeshMatrix {
 			var meshMatrix:MeshMatrix;
 			var transformPoint:Point = matrix != null ?
