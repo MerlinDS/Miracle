@@ -12,6 +12,11 @@ package com.merlinds.miracle.meshes {
 	 * <code> resultColor = (colorMultiplier * colorOffset - colorMultiplier * sourceColor) + sourceColor </code>
 	 */
 	public class Color{
+		//constants Types of the Color transformations
+		public static const NONE:int = -1;
+		public static const TINT:int = 0;
+		public static const ALPHA:int = 1;
+		public static const BRIGHTNESS:int = 2;
 		//offsets
 		/**
 		 * A number from -1 to 1 that is added to the red channel value
@@ -58,6 +63,21 @@ package com.merlinds.miracle.meshes {
 		 * @default 0
 		 */
 		public var alphaMultiplier:Number;
+		/**
+		 * Color transformation type. Has 4 available values:
+		 * <ul>
+		 *     <li>NONE(-1) - no color transformations. Color object will be ignored by Miracle engine</li>
+		 *     <li>TINT(0) - color transformation will be calculated for all channels</li>
+		 *     <li>ALPHA(1) - only alpha transformation chanel will be calculated</li>
+		 *     <li>BRIGHTNESS(2) - alpha chanel will be ignored by Miracle engine</li>
+	     * </ul>
+		 * <br />
+		 * Type doesn't clear parameters, but ignore them on calculation phase.
+		 * @default NONE
+		 *
+		 * @see com.merlinds.miracle.Scene.#calculateMatrix() calculateMatrix method
+		 */
+		public var type:int;
 		//==============================================================================
 		//{region							PUBLIC METHODS
 
@@ -86,6 +106,7 @@ package com.merlinds.miracle.meshes {
 			this.greenOffset = greenOffset;
 			this.blueOffset = blueOffset;
 			this.alphaOffset = alphaOffset;
+			this.type = NONE;
 		}
 
 		/**
@@ -99,6 +120,21 @@ package com.merlinds.miracle.meshes {
 					"redOffset = " + this.redOffset + ", greenOffset = " + this.greenOffset + "" +
 					"blueOffset = " + this.blueOffset + ", alphaOffset = " + this.alphaOffset + "" +
 					")]"
+		}
+
+		/**
+		 * Create Color from not serialized object
+		 * @param object Object that contains data about color
+		 * @return Color object serialized instance
+		 */
+		public static function fromObject(object:Object):Color {
+			var color:Color = new Color(
+					object.redMultiplier, object.greenMultiplier, object.blueMultiplier, object.alphaMultiplier,
+					object.redOffset, object.greenOffset, object.blueOffset, object.alphaMultiplier
+			);
+			color.type = object.type;
+			return color;
+
 		}
 		//} endregion PUBLIC METHODS ===================================================
 

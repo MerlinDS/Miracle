@@ -9,6 +9,7 @@ package com.merlinds.miracle {
 	import com.merlinds.miracle.display.MiracleAnimation;
 	import com.merlinds.miracle.display.MiracleDisplayObject;
 	import com.merlinds.miracle.display.MiracleImage;
+	import com.merlinds.miracle.meshes.Color;
 	import com.merlinds.miracle.meshes.Mesh2D;
 	import com.merlinds.miracle.meshes.MeshMatrix;
 	import com.merlinds.miracle.meshes.Polygon2D;
@@ -220,10 +221,16 @@ package com.merlinds.miracle {
 				_vertexData[_vertexOffset++] = _currentMatrix.scaleY;
 				_vertexData[_vertexOffset++] = _currentMatrix.skewX;
 				_vertexData[_vertexOffset++] = _currentMatrix.skewY;
-				/**** ADD COLOR DATA *****/
-				for(var j:int = 0; j < 8; j++){//RGB
-					_vertexData[_vertexOffset++] = _currentMatrix.color[j];
-				}
+				/**** ADD COLOR OFFSET DATA *****/
+				_vertexData[_vertexOffset++] = _currentMatrix.color.redOffset;
+				_vertexData[_vertexOffset++] = _currentMatrix.color.greenOffset;
+				_vertexData[_vertexOffset++] = _currentMatrix.color.blueOffset;
+				_vertexData[_vertexOffset++] = _currentMatrix.color.alphaOffset;
+				/**** ADD COLOR MULTIPLIER DATA *****/
+				_vertexData[_vertexOffset++] = _currentMatrix.color.redMultiplier;
+				_vertexData[_vertexOffset++] = _currentMatrix.color.greenMultiplier;
+				_vertexData[_vertexOffset++] = _currentMatrix.color.blueMultiplier;
+				_vertexData[_vertexOffset++] = _currentMatrix.color.alphaMultiplier;
 			}
 			/**** FILL INDEXES BUFFER *****/
 			n = _polygon.indexes.length;
@@ -236,6 +243,7 @@ package com.merlinds.miracle {
 		[Inline]
 		private function calculateMatrix(dm:MeshMatrix, m0:MeshMatrix, m1:MeshMatrix, t:Number):void {
 			var t0:Number = 1 - t;
+			/**** CALCULATE FORM TRANSFORMATIONS *****/
 			_currentMatrix.offsetX = (t0 * m0.offsetX + t * m1.offsetX );
 			_currentMatrix.offsetY = (t0 * m0.offsetY + t * m1.offsetY );
 			_currentMatrix.tx = dm.tx + (t0 * m0.tx + t * m1.tx ) * dm.scaleX;
@@ -244,12 +252,30 @@ package com.merlinds.miracle {
 			_currentMatrix.scaleY = dm.scaleY * (t0 * m0.scaleY + t * m1.scaleY);
 			_currentMatrix.skewX = dm.skewX + (t0 * m0.skewX + t * m1.skewX );
 			_currentMatrix.skewY = dm.skewY + (t0 * m0.skewY + t * m1.skewY );
-			//work with colors
-			for(var i:int = 0; i < 8; i++){//RGB
-				_currentMatrix.color[i] = dm.color[i] + (t0 * m0.color[i] + t * m1.color[i] );
+			/**** CALCULATE COLOR TRANSFORMATIONS *****/
+			if(dm.color.type != Color.NONE || m0.color.type != Color.NONE || m1.color.type != Color.NONE){
+				//If one of the colors has some transformation that need to calculate new color instance
+				//calculate offsets
+				_currentMatrix.color.redOffset = dm.color.redOffset +
+						(t0 * m0.color.redOffset + t * m1.color.redOffset);//RED
+				_currentMatrix.color.greenOffset = dm.color.greenOffset +
+						(t0 * m0.color.greenOffset + t * m1.color.greenOffset);//GREEN
+				_currentMatrix.color.blueOffset = dm.color.blueOffset +
+						(t0 * m0.color.blueOffset + t * m1.color.blueOffset);//BLUE
+				_currentMatrix.color.alphaOffset = dm.color.alphaOffset +
+						(t0 * m0.color.alphaOffset + t * m1.color.alphaOffset);//ALPHA
+				//calculate multipliers
+				_currentMatrix.color.redMultiplier = dm.color.redMultiplier +
+						(t0 * m0.color.redMultiplier + t * m1.color.redMultiplier);//RED
+				_currentMatrix.color.greenMultiplier = dm.color.greenMultiplier +
+						(t0 * m0.color.greenMultiplier + t * m1.color.greenMultiplier);//GREEN
+				_currentMatrix.color.blueMultiplier = dm.color.blueMultiplier +
+						(t0 * m0.color.blueMultiplier + t * m1.color.blueMultiplier);//BLUE
+				_currentMatrix.color.alphaMultiplier = dm.color.alphaMultiplier +
+						(t0 * m0.color.alphaMultiplier + t * m1.color.alphaMultiplier);//ALPHA
+				//change type
+				_currentMatrix.color.type = Color.TINT;
 			}
-			//alpha
-//			_currentMatrix.color[i] = dm.color[i] * (t0 * m0.color[i] + t * m1.color[i] );
 		}
 		//} endregion PRIVATE\PROTECTED METHODS ========================================
 

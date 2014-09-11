@@ -4,6 +4,9 @@
  * Time: 21:07
  */
 package com.merlinds.miracle.meshes {
+	import com.merlinds.miracle.meshes.Color;
+	import com.merlinds.miracle.meshes.Color;
+
 	import flash.geom.Matrix;
 	import flash.geom.Point;
 
@@ -31,7 +34,7 @@ package com.merlinds.miracle.meshes {
 		/** offset by Y **/
 		public var offsetY:Number;
 
-		public var color:Array;
+		public var color:Color;
 
 		//==============================================================================
 		//{region							PUBLIC METHODS
@@ -49,6 +52,7 @@ package com.merlinds.miracle.meshes {
 		public function MeshMatrix(offsetX:Number = 0, offsetY:Number = 0, tx:Number = 0, ty:Number = 0,
 		                              scaleX:Number = 1, scaleY:Number = 1, skewX:Number = 0, skewY:Number = 0
 		                              ) {
+			this.color = new Color();
 			this.offsetX = offsetX;
 			this.offsetY = offsetY;
 			this.scaleX = scaleX;
@@ -57,7 +61,6 @@ package com.merlinds.miracle.meshes {
 			this.skewY = skewY;
 			this.tx = tx;
 			this.ty = ty;
-			this.color = [0, 0, 0, 0, 0, 0, 0, 0];
 		}
 
 		public static function fromObject(object:Object):MeshMatrix {
@@ -65,8 +68,8 @@ package com.merlinds.miracle.meshes {
 				object.offsetX, object.offsetY, object.tx, object.ty,
 				object.scaleX, object.scaleY, object.skewX, object.skewY
 			);
-				meshMatrix.color = object.hasOwnProperty("color") && object.color is Array ?
-						object.color.concat() : meshMatrix.color ;
+				meshMatrix.color = object.hasOwnProperty("color")?
+						Color.fromObject(object.color) : meshMatrix.color ;
 			return meshMatrix;
 		}
 
