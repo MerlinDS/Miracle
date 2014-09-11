@@ -62,7 +62,6 @@ package com.merlinds.miracle {
 			"mul ft2 ft0 v2",//tint color * multiplier
 			"sub ft1 ft1 ft2",
 			"add ft0 ft0 ft1",//tint add to color
-			//"mul ft0.w ft0.w, v1.w",//alpha
 			"mov oc, ft0"
 		].join("\n");
 
