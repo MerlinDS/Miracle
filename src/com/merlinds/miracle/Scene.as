@@ -253,26 +253,39 @@ package com.merlinds.miracle {
 			_currentMatrix.skewX = dm.skewX + (t0 * m0.skewX + t * m1.skewX );
 			_currentMatrix.skewY = dm.skewY + (t0 * m0.skewY + t * m1.skewY );
 			/**** CALCULATE COLOR TRANSFORMATIONS *****/
+			//TODO: use binary mask instead this comparison
 			if(dm.color.type != Color.NONE || m0.color.type != Color.NONE || m1.color.type != Color.NONE){
 				//If one of the colors has some transformation that need to calculate new color instance
-				//calculate offsets
-				_currentMatrix.color.redOffset = dm.color.redOffset +
-						(t0 * m0.color.redOffset + t * m1.color.redOffset);//RED
-				_currentMatrix.color.greenOffset = dm.color.greenOffset +
-						(t0 * m0.color.greenOffset + t * m1.color.greenOffset);//GREEN
-				_currentMatrix.color.blueOffset = dm.color.blueOffset +
-						(t0 * m0.color.blueOffset + t * m1.color.blueOffset);//BLUE
-				_currentMatrix.color.alphaOffset = dm.color.alphaOffset +
-						(t0 * m0.color.alphaOffset + t * m1.color.alphaOffset);//ALPHA
-				//calculate multipliers
-				_currentMatrix.color.redMultiplier = dm.color.redMultiplier +
-						(t0 * m0.color.redMultiplier + t * m1.color.redMultiplier);//RED
-				_currentMatrix.color.greenMultiplier = dm.color.greenMultiplier +
-						(t0 * m0.color.greenMultiplier + t * m1.color.greenMultiplier);//GREEN
-				_currentMatrix.color.blueMultiplier = dm.color.blueMultiplier +
-						(t0 * m0.color.blueMultiplier + t * m1.color.blueMultiplier);//BLUE
-				_currentMatrix.color.alphaMultiplier = dm.color.alphaMultiplier +
-						(t0 * m0.color.alphaMultiplier + t * m1.color.alphaMultiplier);//ALPHA
+				if(dm.color.type == Color.BRIGHTNESS || dm.color.type == Color.TINT ||
+						m0.color.type == Color.BRIGHTNESS || m0.color.type == Color.TINT ||
+						m1.color.type == Color.BRIGHTNESS || m1.color.type == Color.TINT){
+					//calculate offsets
+					_currentMatrix.color.redOffset = dm.color.redOffset +
+							(t0 * m0.color.redOffset + t * m1.color.redOffset);//RED
+					_currentMatrix.color.greenOffset = dm.color.greenOffset +
+							(t0 * m0.color.greenOffset + t * m1.color.greenOffset);//GREEN
+					_currentMatrix.color.blueOffset = dm.color.blueOffset +
+							(t0 * m0.color.blueOffset + t * m1.color.blueOffset);//BLUE
+					//calculate multipliers
+					_currentMatrix.color.redMultiplier = dm.color.redMultiplier +
+							(t0 * m0.color.redMultiplier + t * m1.color.redMultiplier);//RED
+					_currentMatrix.color.greenMultiplier = dm.color.greenMultiplier +
+							(t0 * m0.color.greenMultiplier + t * m1.color.greenMultiplier);//GREEN
+					_currentMatrix.color.blueMultiplier = dm.color.blueMultiplier +
+							(t0 * m0.color.blueMultiplier + t * m1.color.blueMultiplier);//BLUE
+
+				}
+				if(dm.color.type == Color.ALPHA || dm.color.type == Color.TINT ||
+						m0.color.type == Color.ALPHA || m0.color.type == Color.TINT ||
+						m1.color.type == Color.ALPHA || m1.color.type == Color.TINT){
+					//calculate offsets
+					_currentMatrix.color.alphaOffset = dm.color.alphaOffset +
+							(t0 * m0.color.alphaOffset + t * m1.color.alphaOffset);//ALPHA
+					//calculate multipliers
+					_currentMatrix.color.alphaMultiplier = dm.color.alphaMultiplier +
+							(t0 * m0.color.alphaMultiplier + t * m1.color.alphaMultiplier);//ALPHA
+
+				}
 				//change type
 				_currentMatrix.color.type = Color.TINT;
 			}
