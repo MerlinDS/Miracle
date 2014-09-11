@@ -13,10 +13,9 @@ package com.merlinds.miracle.meshes {
 	 */
 	public class Color{
 		//constants Types of the Color transformations
-		public static const NONE:int = -1;
-		public static const TINT:int = 0;
-		public static const ALPHA:int = 1;
-		public static const BRIGHTNESS:int = 2;
+		public static const NONE:uint = 0;
+		public static const COLOR:int = 1;
+		public static const ALPHA:int = 1 << 1;
 		//offsets
 		/**
 		 * A number from -1 to 1 that is added to the red channel value
@@ -66,10 +65,10 @@ package com.merlinds.miracle.meshes {
 		/**
 		 * Color transformation type. Has 4 available values:
 		 * <ul>
-		 *     <li>NONE(-1) - no color transformations. Color object will be ignored by Miracle engine</li>
-		 *     <li>TINT(0) - color transformation will be calculated for all channels</li>
-		 *     <li>ALPHA(1) - only alpha transformation chanel will be calculated</li>
-		 *     <li>BRIGHTNESS(2) - alpha chanel will be ignored by Miracle engine</li>
+		 *     <li>NONE(0) - no color transformations. Color object will be ignored by Miracle engine</li>
+		 *     <li>COLOR(1) - only color transformation channels will be calculated</li>
+		 *     <li>ALPHA(1 << 1) - only alpha transformation channel will be calculated</li>
+		 *     <li>COLOR + ALPHA - all channels will be calculated</li>
 	     * </ul>
 		 * <br />
 		 * Type doesn't clear parameters, but ignore them on calculation phase.
