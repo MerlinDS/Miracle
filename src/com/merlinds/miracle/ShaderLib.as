@@ -12,8 +12,9 @@ package com.merlinds.miracle {
 			 * va[1] = [u, v]
 			 * va[2] = [tx,ty]
 			 * va[3] = [scaleX, scaleY, skewX, skewY]
-			 * va[4] = [A, R, G, B]
-
+			 * va[4] = [R, G, B, A]
+			 * va[5] = [multiplierR, multiplierG, multiplierB, multiplierA]
+			 *
 			 * vc[125] = [1,-1,0,0]
 			 * vc[126] = [0,0,1,0]
 			 * vc[127] = [0,0,0,1]
@@ -49,15 +50,19 @@ package com.merlinds.miracle {
 			"dp4 op.y, va0, vt2",
 			"dp4 op.z, va0, vc126",
 			"dp4 op.w, va0, vc127",
-			"mov v1, va1.xy",
-			"mov v0, va4"
+			"mov v0, va1.xy",
+			"mov v1, va4",
+			"mov v2, va5"
 		].join("\n");
 
 
 		public static const FRAGMENT_SHADER:String = [
-			"tex ft0, v1, fs0 <2d,linear,nomip>",
-			"add ft0.xyz, ft0.xyz, v0.xyz",
-			"mul ft0.w ft0.w, v0.w",
+			"tex ft0, v0, fs0 <2d,linear,nomip>",
+			"mul ft1 v1 v2",//tint offset * multiplier (offset * multiplier - color * multiplier) + color
+			"mul ft2 ft0 v2",//tint color * multiplier
+			"sub ft1 ft1 ft2",
+			"add ft0 ft0 ft1",//tint add to color
+			//"mul ft0.w ft0.w, v1.w",//alpha
 			"mov oc, ft0"
 		].join("\n");
 

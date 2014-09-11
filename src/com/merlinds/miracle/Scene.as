@@ -20,9 +20,9 @@ package com.merlinds.miracle {
 
 	internal class Scene extends AbstractScene implements IScene{
 		/**
-		 * [x,y] + [u,v] + [tx, ty] + [scaleX, scaleY, skewX, skewY] + [r,g,b,a]
+		 * [x,y] + [u,v] + [tx, ty] + [scaleX, scaleY, skewX, skewY] + [r,g,b,a] + [multiplierR, multiplierG, multiplierB, multiplierA]
 		 */
-		private const VERTEX_PARAMS_LENGTH:int = 2 + 2 + 2 + 4 + 4;
+		private const VERTEX_PARAMS_LENGTH:int = 2 + 2 + 2 + 4 + 4 + 4;
 		//GPU
 		private var _vertexBuffer:VertexBuffer3D;
 		private var _indexBuffer:IndexBuffer3D;
@@ -189,6 +189,7 @@ package com.merlinds.miracle {
 				_context.setVertexBufferAt(2, _vertexBuffer, 4, "float2"); //tx, ty
 				_context.setVertexBufferAt(3, _vertexBuffer, 6, "float4"); //scaleX, scaleY, skewX, skewY
 				_context.setVertexBufferAt(4, _vertexBuffer, 10, "float4"); //R, G, B, A
+				_context.setVertexBufferAt(5, _vertexBuffer, 14, "float4"); //multiplierR, multiplierG, multiplierB, multiplierA
 				_context.drawTriangles( _indexBuffer );
 			}
 			_vertexOffset = 0;
@@ -220,10 +221,9 @@ package com.merlinds.miracle {
 				_vertexData[_vertexOffset++] = _currentMatrix.skewX;
 				_vertexData[_vertexOffset++] = _currentMatrix.skewY;
 				/**** ADD COLOR DATA *****/
-				_vertexData[_vertexOffset++] = _currentMatrix.color[0];
-				_vertexData[_vertexOffset++] = _currentMatrix.color[1];
-				_vertexData[_vertexOffset++] = _currentMatrix.color[2];
-				_vertexData[_vertexOffset++] = _currentMatrix.color[3];
+				for(var j:int = 0; j < 8; j++){//RGB
+					_vertexData[_vertexOffset++] = _currentMatrix.color[j];
+				}
 			}
 			/**** FILL INDEXES BUFFER *****/
 			n = _polygon.indexes.length;
@@ -245,11 +245,11 @@ package com.merlinds.miracle {
 			_currentMatrix.skewX = dm.skewX + (t0 * m0.skewX + t * m1.skewX );
 			_currentMatrix.skewY = dm.skewY + (t0 * m0.skewY + t * m1.skewY );
 			//work with colors
-			for(var i:int = 0; i < 3; i++){//RGB
+			for(var i:int = 0; i < 8; i++){//RGB
 				_currentMatrix.color[i] = dm.color[i] + (t0 * m0.color[i] + t * m1.color[i] );
 			}
 			//alpha
-			_currentMatrix.color[i] = dm.color[i] * (t0 * m0.color[i] + t * m1.color[i] );
+//			_currentMatrix.color[i] = dm.color[i] * (t0 * m0.color[i] + t * m1.color[i] );
 		}
 		//} endregion PRIVATE\PROTECTED METHODS ========================================
 

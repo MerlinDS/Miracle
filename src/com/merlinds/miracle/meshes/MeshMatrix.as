@@ -7,6 +7,7 @@ package com.merlinds.miracle.meshes {
 	import flash.geom.Matrix;
 	import flash.geom.Point;
 
+	//TODO rename to PolygonInfo
 	/**
 	 * Helper for drawing and animation calculation
 	**/
@@ -56,7 +57,7 @@ package com.merlinds.miracle.meshes {
 			this.skewY = skewY;
 			this.tx = tx;
 			this.ty = ty;
-			this.color = [0, 0, 0, 1];
+			this.color = [0, 0, 0, 0, 0, 0, 0, 0];
 		}
 
 		public static function fromObject(object:Object):MeshMatrix {
