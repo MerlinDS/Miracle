@@ -4,7 +4,7 @@
  * Time: 13:41
  */
 package com.merlinds.miracle.animations {
-	import com.merlinds.miracle.meshes.MeshMatrix;
+	import com.merlinds.miracle.meshes.Transformation;
 
 	/**
 	 * Information that contains animation parameter for the frame
@@ -13,13 +13,13 @@ package com.merlinds.miracle.animations {
 		/** Name of the polygon in mesh for this frame.**/
 		public var polygonName:String;
 		/**
-		 * Start mesh matrix. Can not be null.
+		 * Initial transformation. Can not be null.
 		 */
-		public var m0:MeshMatrix;
+		public var m0:Transformation;
 		/**
-		 * Finish mesh matrix. Can be null. Used for tween animation.
+		 * Terminal transformation. Can be null. Used for tween animation.
 		 */
-		public var m1:MeshMatrix;
+		public var m1:Transformation;
 		/**
 		 * Time factor for formula (1 - t)M0 - M1 * t < br/>
 		 * Where M0 and M1 is Mesh matrix. Used only for tween animation.
@@ -35,7 +35,7 @@ package com.merlinds.miracle.animations {
 		 * @param m1 Finish mesh matrix. Can be null. Used for tween animation.
 		 * @param t Time factor for formula (1 - t)M0 - M1 * t < br/>
 		 */
-		public function FrameInfo(polygonName:String, m0:MeshMatrix, m1:MeshMatrix = null, t:Number = 0) {
+		public function FrameInfo(polygonName:String, m0:Transformation, m1:Transformation = null, t:Number = 0) {
 			this.polygonName = polygonName;
 			this.m0 = m0;
 			this.m1 = m1;

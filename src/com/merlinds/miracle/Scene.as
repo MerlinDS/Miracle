@@ -11,13 +11,15 @@ package com.merlinds.miracle {
 	import com.merlinds.miracle.display.MiracleImage;
 	import com.merlinds.miracle.meshes.Color;
 	import com.merlinds.miracle.meshes.Mesh2D;
-	import com.merlinds.miracle.meshes.MeshMatrix;
+	import com.merlinds.miracle.meshes.TransformMatrix;
 	import com.merlinds.miracle.meshes.Polygon2D;
+	import com.merlinds.miracle.meshes.Transformation;
 	import com.merlinds.miracle.textures.TextureHelper;
 	import com.merlinds.miracle.utils.Asset;
 
 	import flash.display3D.IndexBuffer3D;
 	import flash.display3D.VertexBuffer3D;
+	import flash.geom.Transform;
 
 	internal class Scene extends AbstractScene implements IScene{
 		/**
@@ -35,8 +37,9 @@ package com.merlinds.miracle {
 		private var _indexStep:Number = 0;
 		private var _currentTexture:String;
 		//drawing
-		private var _currentMatrix:MeshMatrix = new MeshMatrix();
 		private var _polygon:Polygon2D;
+		private var _currentMatrix:TransformMatrix = new TransformMatrix();
+		private var _currentColor:Color = new Color();
 		//
 		use namespace miracle_internal;
 
@@ -129,7 +132,9 @@ package com.merlinds.miracle {
 							if(frame != null){
 								_polygon = mesh[ frame.polygonName ];
 								//draw on GPU
-								this.calculateMatrix(instance.drawMatrix, frame.m0, frame.m1, frame.t);
+								var transform:Transformation = instance.transformation;
+								this.calculateMatrix(transform.matrix, frame.m0.matrix, frame.m1.matrix, frame.t);
+								this.calculateColor(transform.color, frame.m0.color, frame.m1.color, frame.t);
 								this.draw();
 							}
 						}
@@ -222,15 +227,15 @@ package com.merlinds.miracle {
 				_vertexData[_vertexOffset++] = _currentMatrix.skewX;
 				_vertexData[_vertexOffset++] = _currentMatrix.skewY;
 				/**** ADD COLOR OFFSET DATA *****/
-				_vertexData[_vertexOffset++] = _currentMatrix.color.redOffset;
-				_vertexData[_vertexOffset++] = _currentMatrix.color.greenOffset;
-				_vertexData[_vertexOffset++] = _currentMatrix.color.blueOffset;
-				_vertexData[_vertexOffset++] = _currentMatrix.color.alphaOffset;
+				_vertexData[_vertexOffset++] = _currentColor.redOffset;
+				_vertexData[_vertexOffset++] = _currentColor.greenOffset;
+				_vertexData[_vertexOffset++] = _currentColor.blueOffset;
+				_vertexData[_vertexOffset++] = _currentColor.alphaOffset;
 				/**** ADD COLOR MULTIPLIER DATA *****/
-				_vertexData[_vertexOffset++] = _currentMatrix.color.redMultiplier;
-				_vertexData[_vertexOffset++] = _currentMatrix.color.greenMultiplier;
-				_vertexData[_vertexOffset++] = _currentMatrix.color.blueMultiplier;
-				_vertexData[_vertexOffset++] = _currentMatrix.color.alphaMultiplier;
+				_vertexData[_vertexOffset++] = _currentColor.redMultiplier;
+				_vertexData[_vertexOffset++] = _currentColor.greenMultiplier;
+				_vertexData[_vertexOffset++] = _currentColor.blueMultiplier;
+				_vertexData[_vertexOffset++] = _currentColor.alphaMultiplier;
 			}
 			/**** FILL INDEXES BUFFER *****/
 			n = _polygon.indexes.length;
@@ -240,51 +245,70 @@ package com.merlinds.miracle {
 			_indexStep += _polygon.numVertexes;
 		}
 
+		/**
+		 * Calculate new matrix transformation for processed polygon
+		 * @param m0 instance matrix transformation
+		 * @param m1 initial matrix transformation
+		 * @param m2 terminal matrix transformation
+		 * @param t Time delta for formula: matrix = m0 + ( ( 1 - t ) * m1 + t * m2 )
+		 */
 		[Inline]
-		private function calculateMatrix(dm:MeshMatrix, m0:MeshMatrix, m1:MeshMatrix, t:Number):void {
+		private function calculateMatrix(m0:TransformMatrix, m1:TransformMatrix, m2:TransformMatrix, t:Number):void {
 			var t0:Number = 1 - t;
 			/**** CALCULATE FORM TRANSFORMATIONS *****/
-			_currentMatrix.offsetX = (t0 * m0.offsetX + t * m1.offsetX );
-			_currentMatrix.offsetY = (t0 * m0.offsetY + t * m1.offsetY );
-			_currentMatrix.tx = dm.tx + (t0 * m0.tx + t * m1.tx ) * dm.scaleX;
-			_currentMatrix.ty = dm.ty + ( t0 * m0.ty + t * m1.ty ) * dm.scaleY;
-			_currentMatrix.scaleX = dm.scaleX * (t0 * m0.scaleX + t * m1.scaleX);
-			_currentMatrix.scaleY = dm.scaleY * (t0 * m0.scaleY + t * m1.scaleY);
-			_currentMatrix.skewX = dm.skewX + (t0 * m0.skewX + t * m1.skewX );
-			_currentMatrix.skewY = dm.skewY + (t0 * m0.skewY + t * m1.skewY );
+			_currentMatrix.offsetX = (t0 * m1.offsetX + t * m2.offsetX );
+			_currentMatrix.offsetY = (t0 * m1.offsetY + t * m2.offsetY );
+			_currentMatrix.tx = m0.tx + (t0 * m1.tx + t * m2.tx ) * m0.scaleX;
+			_currentMatrix.ty = m0.ty + ( t0 * m1.ty + t * m2.ty ) * m0.scaleY;
+			_currentMatrix.scaleX = m0.scaleX * (t0 * m1.scaleX + t * m2.scaleX);
+			_currentMatrix.scaleY = m0.scaleY * (t0 * m1.scaleY + t * m2.scaleY);
+			_currentMatrix.skewX = m0.skewX + (t0 * m1.skewX + t * m2.skewX );
+			_currentMatrix.skewY = m0.skewY + (t0 * m1.skewY + t * m2.skewY );
+		}
+
+		/**
+		 * Calculate new color transformation for processed polygon
+		 * @param c0 instance color transformation
+		 * @param c1 initial color transformation
+		 * @param c2 terminal color transformation
+		 * @param t Time delta for formula: color = c0 + ( ( 1 - t ) * c1 + t * c2 )
+		 */
+		[Inline]
+		private function calculateColor(c0:Color, c1:Color, c2:Color, t:Number):void {
 			/**** CALCULATE COLOR TRANSFORMATIONS *****/
-			_currentMatrix.color.clear();
-			var different:uint = dm.color.type | m0.color.type | m1.color.type;
+			_currentColor.clear();//clear previous color transformation
+			var t0:Number = 1 - t;
+			var different:uint = c0.type | c0.type | c1.type;
 			var mask:uint = different & Color.COLOR;
-			//If one of the colors has some transformation that need to calculate new color instance
+			//If one of the colors has some transformation that need to calculate new c0 c0
 			if(mask == Color.COLOR){
 				//calculate offsets
-				_currentMatrix.color.redOffset = dm.color.redOffset +
-						(t0 * m0.color.redOffset + t * m1.color.redOffset);//RED
-				_currentMatrix.color.greenOffset = dm.color.greenOffset +
-						(t0 * m0.color.greenOffset + t * m1.color.greenOffset);//GREEN
-				_currentMatrix.color.blueOffset = dm.color.blueOffset +
-						(t0 * m0.color.blueOffset + t * m1.color.blueOffset);//BLUE
+				_currentColor.redOffset = c0.redOffset +
+						(t0 * c1.redOffset + t * c2.redOffset);//RED
+				_currentColor.greenOffset = c0.greenOffset +
+						(t0 * c1.greenOffset + t * c2.greenOffset);//GREEN
+				_currentColor.blueOffset = c0.blueOffset +
+						(t0 * c1.blueOffset + t * c2.blueOffset);//BLUE
 				//calculate multipliers
-				_currentMatrix.color.redMultiplier = dm.color.redMultiplier +
-						(t0 * m0.color.redMultiplier + t * m1.color.redMultiplier);//RED
-				_currentMatrix.color.greenMultiplier = dm.color.greenMultiplier +
-						(t0 * m0.color.greenMultiplier + t * m1.color.greenMultiplier);//GREEN
-				_currentMatrix.color.blueMultiplier = dm.color.blueMultiplier +
-						(t0 * m0.color.blueMultiplier + t * m1.color.blueMultiplier);//BLUE
+				_currentColor.redMultiplier = c0.redMultiplier +
+						(t0 * c1.redMultiplier + t * c2.redMultiplier);//RED
+				_currentColor.greenMultiplier = c0.greenMultiplier +
+						(t0 * c1.greenMultiplier + t * c2.greenMultiplier);//GREEN
+				_currentColor.blueMultiplier = c0.blueMultiplier +
+						(t0 * c1.blueMultiplier + t * c2.blueMultiplier);//BLUE
 			}
 			mask = different & Color.ALPHA;
 			if(mask == Color.ALPHA){
 				//calculate offsets
-				_currentMatrix.color.alphaOffset = dm.color.alphaOffset +
-						(t0 * m0.color.alphaOffset + t * m1.color.alphaOffset);//ALPHA
+				_currentColor.alphaOffset = c0.alphaOffset +
+						(t0 * c1.alphaOffset + t * c2.alphaOffset);//ALPHA
 				//calculate multipliers
-				_currentMatrix.color.alphaMultiplier = dm.color.alphaMultiplier +
-						(t0 * m0.color.alphaMultiplier + t * m1.color.alphaMultiplier);//ALPHA
+				_currentColor.alphaMultiplier = c0.alphaMultiplier +
+						(t0 * c1.alphaMultiplier + t * c2.alphaMultiplier);//ALPHA
 
 			}
 			//change type
-			_currentMatrix.color.type = Color.COLOR + Color.ALPHA;
+			_currentColor.type = Color.COLOR + Color.ALPHA;
 		}
 		//} endregion PRIVATE\PROTECTED METHODS ========================================
 

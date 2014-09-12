@@ -121,20 +121,6 @@ package com.merlinds.miracle.meshes {
 					")]"
 		}
 
-		/**
-		 * Create Color from not serialized object
-		 * @param object Object that contains data about color
-		 * @return Color object serialized instance
-		 */
-		public static function fromObject(object:Object):Color {
-			var color:Color = new Color(
-					object.redMultiplier, object.greenMultiplier, object.blueMultiplier, object.alphaMultiplier,
-					object.redOffset, object.greenOffset, object.blueOffset, object.alphaOffset
-			);
-			color.type = object.type;
-			return color;
-		}
-
 		public function clear():void {
 			this.alphaMultiplier = this.alphaOffset = this.redMultiplier = this.redOffset =
 			this.greenMultiplier = this.greenOffset = this.blueMultiplier = this.blueOffset = 0;

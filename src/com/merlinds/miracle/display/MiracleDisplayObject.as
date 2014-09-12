@@ -5,11 +5,14 @@
  */
 package com.merlinds.miracle.display {
 	import com.merlinds.miracle.events.MiracleEvent;
-	import com.merlinds.miracle.meshes.MeshMatrix;
+	import com.merlinds.miracle.meshes.Color;
+	import com.merlinds.miracle.meshes.TransformMatrix;
+	import com.merlinds.miracle.meshes.Transformation;
 	import com.merlinds.miracle.miracle_internal;
 
 	import flash.errors.IllegalOperationError;
 	import flash.events.EventDispatcher;
+	import flash.geom.Rectangle;
 	import flash.geom.Vector3D;
 
 	[Event(type="com.merlinds.miracle.events.MiracleEvent", name="addedToStage")]
@@ -17,8 +20,6 @@ package com.merlinds.miracle.display {
 
 		use namespace miracle_internal;
 
-
-		miracle_internal var drawMatrix:MeshMatrix;
 		miracle_internal var frameDelta:Number;
 		miracle_internal var timePassed:Number;
 
@@ -45,6 +46,8 @@ package com.merlinds.miracle.display {
 		private var _position:Vector3D;
 		private var _currentFrame:int;
 
+		public var transformation:Transformation;
+
 		private var _width:int;
 		private var _height:int;
 
@@ -53,13 +56,10 @@ package com.merlinds.miracle.display {
 		private var _onStage:Boolean;
 		private var _onPause:Boolean;
 
-		public function MiracleDisplayObject(mesh:String = null, texture:String = null,
-		                                     drawMatrix:MeshMatrix = null) {
+		public function MiracleDisplayObject(mesh:String = null, texture:String = null) {
+			this.transformation = new Transformation( new TransformMatrix(), new Color(), new Rectangle());
 			this.mesh = mesh;
 			this.texture = texture;
-			if(drawMatrix == null){
-				this.miracle_internal::drawMatrix = new MeshMatrix();
-			}
 			this.fps = 60;//Default frame rate
 		}
 
@@ -77,8 +77,8 @@ package com.merlinds.miracle.display {
 			if(_position == null){
 				_position = new Vector3D(x, y, z);
 			}
-			_position.x = drawMatrix.tx = x;
-			_position.y = drawMatrix.ty = y;
+			_position.x = this.transformation.matrix.tx = x;
+			_position.y = this.transformation.matrix.ty = y;
 			return this;
 		}
 		/**
@@ -115,8 +115,8 @@ package com.merlinds.miracle.display {
 		}
 
 		public function set position(value:Vector3D):void {
-			drawMatrix.tx = value.x;
-			drawMatrix.ty = value.y;
+			this.transformation.matrix.tx = value.x;
+			this.transformation.matrix.ty = value.y;
 			_position = value;
 		}
 

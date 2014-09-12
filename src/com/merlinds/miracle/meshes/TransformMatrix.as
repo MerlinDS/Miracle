@@ -13,7 +13,7 @@ package com.merlinds.miracle.meshes {
 	/**
 	 * Helper for drawing and animation calculation
 	**/
-	public class MeshMatrix {
+	public class TransformMatrix {
 
 		//general
 		/** scale by X **/
@@ -33,7 +33,6 @@ package com.merlinds.miracle.meshes {
 		/** offset by Y **/
 		public var offsetY:Number;
 		/** Color transformation object**/
-		public var color:Color;
 		//TODO: MF-36 Add type bynary mask to MeshMatrix
 		//==============================================================================
 		//{region							PUBLIC METHODS
@@ -48,10 +47,9 @@ package com.merlinds.miracle.meshes {
 		 * @param offsetX Offset by X
 		 * @param offsetY Offset by Y
 		 */
-		public function MeshMatrix(offsetX:Number = 0, offsetY:Number = 0, tx:Number = 0, ty:Number = 0,
+		public function TransformMatrix(offsetX:Number = 0, offsetY:Number = 0, tx:Number = 0, ty:Number = 0,
 		                              scaleX:Number = 1, scaleY:Number = 1, skewX:Number = 0, skewY:Number = 0
 		                              ) {
-			this.color = new Color();
 			this.offsetX = offsetX;
 			this.offsetY = offsetY;
 			this.scaleX = scaleX;
@@ -62,22 +60,20 @@ package com.merlinds.miracle.meshes {
 			this.ty = ty;
 		}
 
-		public static function fromObject(object:Object):MeshMatrix {
-			var meshMatrix:MeshMatrix = new MeshMatrix(
+		public static function fromObject(object:Object):TransformMatrix {
+			var meshMatrix:TransformMatrix = new TransformMatrix(
 				object.offsetX, object.offsetY, object.tx, object.ty,
 				object.scaleX, object.scaleY, object.skewX, object.skewY
 			);
-				meshMatrix.color = object.hasOwnProperty("color")?
-						Color.fromObject(object.color) : meshMatrix.color ;
 			return meshMatrix;
 		}
 		//TODO: MF-35 Move unnecessary methods from MeshMatrix to subclass
-		public static function fromMatrix(matrix:Matrix, offsetX:Number = 0, offsetY:Number = 0):MeshMatrix {
-			var meshMatrix:MeshMatrix;
+		public static function fromMatrix(matrix:Matrix, offsetX:Number = 0, offsetY:Number = 0):TransformMatrix {
+			var meshMatrix:TransformMatrix;
 			var transformPoint:Point = matrix != null ?
 					matrix.transformPoint(new Point(offsetX, offsetY)) : new Point();
 			if(matrix != null) {
-				meshMatrix = new MeshMatrix(
+				meshMatrix = new TransformMatrix(
 						offsetX * -1, offsetY,
 						transformPoint.x, transformPoint.y,
 						Math.sqrt(matrix.a * matrix.a + matrix.b * matrix.b),
