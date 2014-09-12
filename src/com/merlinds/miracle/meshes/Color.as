@@ -114,10 +114,10 @@ package com.merlinds.miracle.meshes {
 		 */
 		public function toString():String{
 			return "[object Color(" +
-					"redMultiplier = " + this.redMultiplier + ", greenMultiplier = " + this.greenMultiplier + "" +
-					"blueMultiplier = " + this.blueMultiplier + ", alphaMultiplier = " + this.alphaMultiplier + "" +
-					"redOffset = " + this.redOffset + ", greenOffset = " + this.greenOffset + "" +
-					"blueOffset = " + this.blueOffset + ", alphaOffset = " + this.alphaOffset + "" +
+					"redMultiplier = " + this.redMultiplier + ", greenMultiplier = " + this.greenMultiplier + ", " +
+					"blueMultiplier = " + this.blueMultiplier + ", alphaMultiplier = " + this.alphaMultiplier + ", " +
+					"redOffset = " + this.redOffset * 255 + ", greenOffset = " + this.greenOffset * 255 + ", " +
+					"blueOffset = " + this.blueOffset * 255 + ", alphaOffset = " + this.alphaOffset * 255 + "" +
 					")]"
 		}
 
