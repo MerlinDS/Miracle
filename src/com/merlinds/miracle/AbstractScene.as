@@ -32,7 +32,6 @@ package com.merlinds.miracle {
 			_textures = {};
 			_animations = {};
 			_displayObjects = new <MiracleDisplayObject>[];
-			//TODO add formats versions
 			_mafReader = new MafReader();
 			_mtfReader = new MtfReader();
 			this.initialize(assets);

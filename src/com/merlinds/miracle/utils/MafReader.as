@@ -126,6 +126,7 @@ package com.merlinds.miracle.utils {
 
 		[Inline]
 		private function parseBounds(data:Object):Rectangle {
+			//TODO MF-28 Bound calculation for every polygon in texture
 			return new Rectangle(data.x, data.y, data.width, data.height);
 		}
 		//} endregion PRIVATE\PROTECTED METHODS ========================================

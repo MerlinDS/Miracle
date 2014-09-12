@@ -8,7 +8,6 @@ package com.merlinds.miracle.meshes {
 	import flash.geom.Matrix;
 	import flash.geom.Point;
 
-	//TODO  MF-32 Rename MeshMatrix
 	//TODO MF-34 Add commentaries to meshes folder
 	/**
 	 * Helper for drawing and animation calculation
@@ -58,31 +57,6 @@ package com.merlinds.miracle.meshes {
 			this.skewY = skewY;
 			this.tx = tx;
 			this.ty = ty;
-		}
-
-		public static function fromObject(object:Object):TransformMatrix {
-			var meshMatrix:TransformMatrix = new TransformMatrix(
-				object.offsetX, object.offsetY, object.tx, object.ty,
-				object.scaleX, object.scaleY, object.skewX, object.skewY
-			);
-			return meshMatrix;
-		}
-		//TODO: MF-35 Move unnecessary methods from MeshMatrix to subclass
-		public static function fromMatrix(matrix:Matrix, offsetX:Number = 0, offsetY:Number = 0):TransformMatrix {
-			var meshMatrix:TransformMatrix;
-			var transformPoint:Point = matrix != null ?
-					matrix.transformPoint(new Point(offsetX, offsetY)) : new Point();
-			if(matrix != null) {
-				meshMatrix = new TransformMatrix(
-						offsetX * -1, offsetY,
-						transformPoint.x, transformPoint.y,
-						Math.sqrt(matrix.a * matrix.a + matrix.b * matrix.b),
-						Math.sqrt(matrix.c * matrix.c + matrix.d * matrix.d),
-						Math.atan2(-matrix.c, matrix.d),
-						Math.atan2(matrix.b, matrix.a)
-				);
-			}
-			return meshMatrix;
 		}
 
 		public function toString():String {

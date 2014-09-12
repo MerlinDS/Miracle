@@ -10,6 +10,7 @@ package com.merlinds.miracle.meshes {
 
 		public var matrix:TransformMatrix;
 		public var color:Color;
+		//TODO MF-28 Bound calculation for every polygon in texture
 		public var bounds:Rectangle;
 		//==============================================================================
 		//{region							PUBLIC METHODS
