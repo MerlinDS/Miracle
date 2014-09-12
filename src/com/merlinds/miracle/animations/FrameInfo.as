@@ -4,7 +4,7 @@
  * Time: 13:41
  */
 package com.merlinds.miracle.animations {
-	import com.merlinds.miracle.meshes.Transformation;
+	import com.merlinds.miracle.geom.Transformation;
 
 	/**
 	 * Information that contains animation parameter for the frame

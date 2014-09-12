@@ -9,17 +9,16 @@ package com.merlinds.miracle {
 	import com.merlinds.miracle.display.MiracleAnimation;
 	import com.merlinds.miracle.display.MiracleDisplayObject;
 	import com.merlinds.miracle.display.MiracleImage;
-	import com.merlinds.miracle.meshes.Color;
-	import com.merlinds.miracle.meshes.Mesh2D;
-	import com.merlinds.miracle.meshes.TransformMatrix;
-	import com.merlinds.miracle.meshes.Polygon2D;
-	import com.merlinds.miracle.meshes.Transformation;
+	import com.merlinds.miracle.geom.Color;
+	import com.merlinds.miracle.geom.Mesh2D;
+	import com.merlinds.miracle.geom.Polygon2D;
+	import com.merlinds.miracle.geom.TransformMatrix;
+	import com.merlinds.miracle.geom.Transformation;
 	import com.merlinds.miracle.textures.TextureHelper;
 	import com.merlinds.miracle.utils.Asset;
 
 	import flash.display3D.IndexBuffer3D;
 	import flash.display3D.VertexBuffer3D;
-	import flash.geom.Transform;
 
 	internal class Scene extends AbstractScene implements IScene{
 		/**

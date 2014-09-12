@@ -4,8 +4,8 @@
  * Time: 18:22
  */
 package com.merlinds.miracle.utils {
-	import com.merlinds.miracle.meshes.Mesh2D;
-	import com.merlinds.miracle.meshes.Polygon2D;
+	import com.merlinds.miracle.geom.Mesh2D;
+	import com.merlinds.miracle.geom.Polygon2D;
 	import com.merlinds.miracle.textures.TextureHelper;
 
 	import flash.utils.ByteArray;
@@ -34,7 +34,7 @@ package com.merlinds.miracle.utils {
 			var textureBytes:ByteArray = new ByteArray();
 			bytes.readBytes(textureBytes, 0, bytes.length - bytes.position);
 			bytes.clear();
-			//parse meshes
+			//parse meshes2D
 			var mesh:Mesh2D = new Mesh2D();
 			var n:int = meshData.length;
 			for(var i:int = 0; i < n; i++){

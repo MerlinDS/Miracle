@@ -5,9 +5,9 @@
  */
 package com.merlinds.miracle.display {
 	import com.merlinds.miracle.events.MiracleEvent;
-	import com.merlinds.miracle.meshes.Color;
-	import com.merlinds.miracle.meshes.TransformMatrix;
-	import com.merlinds.miracle.meshes.Transformation;
+	import com.merlinds.miracle.geom.Color;
+	import com.merlinds.miracle.geom.TransformMatrix;
+	import com.merlinds.miracle.geom.Transformation;
 	import com.merlinds.miracle.miracle_internal;
 
 	import flash.errors.IllegalOperationError;

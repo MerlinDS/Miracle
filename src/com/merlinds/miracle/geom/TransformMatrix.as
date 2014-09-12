@@ -3,12 +3,8 @@
  * Date: 03.04.2014
  * Time: 21:07
  */
-package com.merlinds.miracle.meshes {
-
-	import flash.geom.Matrix;
-	import flash.geom.Point;
-
-	//TODO MF-34 Add commentaries to meshes folder
+package com.merlinds.miracle.geom {
+	//TODO MF-34 Add commentaries to geom folder
 	/**
 	 * Helper for drawing and animation calculation
 	**/

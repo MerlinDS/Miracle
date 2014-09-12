@@ -6,7 +6,7 @@
 package com.merlinds.miracle.animations {
 	/**
 	 * Object for animation format.
-	 * Contains animation parameters, all transformations for meshes.
+	 * Contains animation parameters, all transformations for polygon.
 	 */
 	public class AnimationHelper {
 		/**

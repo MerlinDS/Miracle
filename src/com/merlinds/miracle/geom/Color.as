@@ -3,7 +3,7 @@
  * Date: 11.09.2014
  * Time: 18:10
  */
-package com.merlinds.miracle.meshes {
+package com.merlinds.miracle.geom {
 	/**
 	 * The Color class contains information about color transformations, as brightness, alpha and tint.
 	 * Information will be used by shader to calculate new color.< br/>

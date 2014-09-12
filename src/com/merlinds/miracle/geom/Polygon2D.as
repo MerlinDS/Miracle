@@ -4,7 +4,7 @@
  * Time: 19:39
  * Coied form com.salazkin.framework.Shape
  */
-package com.merlinds.miracle.meshes {
+package com.merlinds.miracle.geom {
 	public class Polygon2D {
 
 		public var buffer:Vector.<Number>;

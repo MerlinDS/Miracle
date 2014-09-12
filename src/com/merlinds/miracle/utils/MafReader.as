@@ -6,9 +6,9 @@
 package com.merlinds.miracle.utils {
 	import com.merlinds.miracle.animations.AnimationHelper;
 	import com.merlinds.miracle.animations.FrameInfo;
-	import com.merlinds.miracle.meshes.Color;
-	import com.merlinds.miracle.meshes.TransformMatrix;
-	import com.merlinds.miracle.meshes.Transformation;
+	import com.merlinds.miracle.geom.Color;
+	import com.merlinds.miracle.geom.TransformMatrix;
+	import com.merlinds.miracle.geom.Transformation;
 
 	import flash.geom.Rectangle;
 	import flash.utils.ByteArray;
