@@ -253,6 +253,7 @@ package com.merlinds.miracle {
 			_currentMatrix.skewX = dm.skewX + (t0 * m0.skewX + t * m1.skewX );
 			_currentMatrix.skewY = dm.skewY + (t0 * m0.skewY + t * m1.skewY );
 			/**** CALCULATE COLOR TRANSFORMATIONS *****/
+			_currentMatrix.color.clear();
 			var different:uint = dm.color.type | m0.color.type | m1.color.type;
 			var mask:uint = different & Color.COLOR;
 			//If one of the colors has some transformation that need to calculate new color instance

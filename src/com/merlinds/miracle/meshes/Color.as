@@ -133,7 +133,12 @@ package com.merlinds.miracle.meshes {
 			);
 			color.type = object.type;
 			return color;
+		}
 
+		public function clear():void {
+			this.alphaMultiplier = this.alphaOffset = this.redMultiplier = this.redOffset =
+			this.greenMultiplier = this.greenOffset = this.blueMultiplier = this.blueOffset = 0;
+			this.type = NONE;
 		}
 		//} endregion PUBLIC METHODS ===================================================
 
