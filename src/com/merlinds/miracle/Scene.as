@@ -132,6 +132,7 @@ package com.merlinds.miracle {
 								_polygon = mesh[ frame.polygonName ];
 								//draw on GPU
 								var transform:Transformation = instance.transformation;
+								//TODO: MF-40 Calculate size of the instance by it's bounds
 								this.calculateMatrix(transform.matrix, frame.m0.matrix, frame.m1.matrix, frame.t);
 								this.calculateColor(transform.color, frame.m0.color, frame.m1.color, frame.t);
 								this.draw();
