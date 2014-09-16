@@ -278,7 +278,7 @@ package com.merlinds.miracle {
 			/**** CALCULATE COLOR TRANSFORMATIONS *****/
 			_currentColor.clear();//clear previous color transformation
 			var t0:Number = 1 - t;
-			var different:uint = c0.type | c0.type | c1.type;
+			var different:uint = c0.type | c1.type | c2.type;
 			var mask:uint = different & Color.COLOR;
 			//If one of the colors has some transformation that need to calculate new c0 c0
 			if(mask == Color.COLOR){
