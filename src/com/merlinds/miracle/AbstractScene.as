@@ -6,6 +6,7 @@
 package com.merlinds.miracle {
 	import com.merlinds.miracle.animations.AnimationHelper;
 	import com.merlinds.miracle.display.MiracleDisplayObject;
+	import com.merlinds.miracle.geom.Mesh2D;
 	import com.merlinds.miracle.utils.Asset;
 	import com.merlinds.miracle.utils.MafReader;
 	import com.merlinds.miracle.utils.MtfReader;
@@ -64,12 +65,17 @@ package com.merlinds.miracle {
 				var asset:Asset = assets.pop();
 				if(asset.type == Asset.TEXTURE_TYPE){
 					_mtfReader.execute(asset.output, _scale);
-					_meshes[ asset.name ] = _mtfReader.mesh;
+					for( var meshName:String in _mtfReader.meshes){
+						var mesh2D:Mesh2D = _mtfReader.meshes[ meshName ];
+						mesh2D.textureLink = asset.name;
+						_meshes[ meshName ] = mesh2D;
+
+					}
 					_textures[ asset.name ] = _mtfReader.texture;
 				}else{
 					_mafReader.execute(asset.output);
 					for each(var animation:AnimationHelper in _mafReader.animations){
-						_animations[ asset.name + "." + animation.name ] = animation;
+						_animations[ animation.name ] = animation;
 					}
 				}
 				//Other types will be ignored for now!

@@ -32,10 +32,6 @@ package com.merlinds.miracle.display {
 		 */
 		private var _animation:String;
 		/**
-		 * Name of the texture that will be used
-		 */
-		public var texture:String;
-		/**
 		 * Position of the display object on scene.
 		 * <ul>
 		 *    <li> x - x position on scene, range from -1 to 1 </li>
@@ -56,10 +52,8 @@ package com.merlinds.miracle.display {
 		private var _onStage:Boolean;
 		private var _onPause:Boolean;
 
-		public function MiracleDisplayObject(mesh:String = null, texture:String = null) {
+		public function MiracleDisplayObject() {
 			this.transformation = new Transformation( new TransformMatrix(), new Color(), new Rectangle());
-			this.mesh = mesh;
-			this.texture = texture;
 			this.fps = 60;//Default frame rate
 		}
 

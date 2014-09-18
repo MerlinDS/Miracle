@@ -13,18 +13,18 @@ package com.merlinds.miracle {
 		//{region							METHODS
 		/**
 		 * Create instance of the image on current scene
-		 * @param texture Name of the texture
+		 * @param mesh Name of the mesh
 		 * @param animation Name of the animation
 		 * @return Instance of the display object
 		 */
-		function createImage(texture:String = null, animation:String = null):MiracleImage;
+		function createImage(mesh:String = null, animation:String = null):MiracleImage;
 		/**
 		 * Create instance of the animation on current scene
-		 * @param texture Name of the texture
+		 * @param mesh Name of the mesh
 		 * @param animation Name of the animation
 		 * @return Instance of the display object
 		 */
-		function createAnimation(texture:String, animation:String, fps:int = 60):MiracleAnimation;
+		function createAnimation(mesh:String, animation:String, fps:int = 60):MiracleAnimation;
 
 		function textureInUse(texture:String):Boolean;
 

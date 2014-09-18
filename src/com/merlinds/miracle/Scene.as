@@ -31,40 +31,43 @@ package com.merlinds.miracle {
 		private var _vertexData:Vector.<Number>;
 		private var _indexData:Vector.<uint>;
 		//
-		private var _vertexOffset:Number = 0;
-		private var _indexOffset:Number = 0;
-		private var _indexStep:Number = 0;
-		private var _currentTexture:String;
+		private var _vertexOffset:Number;
+		private var _indexOffset:Number;
+		private var _indexStep:Number;
 		//drawing
 		private var _polygon:Polygon2D;
-		private var _currentMatrix:TransformMatrix = new TransformMatrix();
-		private var _currentColor:Color = new Color();
+		private var _currentMatrix:TransformMatrix;
+		private var _currentColor:Color;
+		private var _currentTexture:String;
 		//
 		use namespace miracle_internal;
 
 		public function Scene(assets:Vector.<Asset>, scale:Number = 1) {
+			_currentMatrix = new TransformMatrix();
+			_currentColor = new Color();
 			_vertexData = new <Number>[];
 			_indexData = new <uint>[];
+			_vertexOffset = 0;
+			_indexOffset = 0;
+			_indexStep = 0;
 			super(assets, scale);
 		}
 
 		//==============================================================================
 		//{region							PUBLIC METHODS
 		//IScene
-		public function createImage(texture:String = null, anim:String = null):MiracleImage {
+		public function createImage(mesh:String = null, animation:String = null):MiracleImage {
 			var instance:MiracleDisplayObject = this.createInstance(MiracleImage);
-			instance.texture = texture;
-			instance.mesh = texture;
-			instance.animation = anim;
+			instance.mesh = mesh;
+			instance.animation = animation;
 			instance.currentFrame = 0;
 			instance.fps = 0;
 			return instance as MiracleImage;
 		}
 
-		public function createAnimation(texture:String, animation:String, fps:int = 60):MiracleAnimation{
+		public function createAnimation(mesh:String, animation:String, fps:int = 60):MiracleAnimation{
 			var instance:MiracleDisplayObject = this.createInstance(MiracleAnimation);
-			instance.texture = texture;
-			instance.mesh = texture;
+			instance.mesh = mesh;
 			instance.animation = animation;
 			instance.currentFrame = 0;
 			instance.fps = fps;
@@ -100,11 +103,11 @@ package com.merlinds.miracle {
 			for(var i:int = 0; i < n; i++){
 				instance = _displayObjects[i];
 				//instance is not ready to use
-				if(instance.texture && instance.animation){
+				if(instance.mesh != null && instance.animation != null){
 
 					mesh = _meshes[ instance.mesh ];
-					textureHelper = _textures[ instance.texture ];
-					animationHelper = _animations[ instance.animation ];
+					textureHelper = _textures[ mesh.textureLink ];
+					animationHelper = _animations[ instance.mesh + "." + instance.animation ];
 					if(mesh == null || textureHelper == null){
 						throw new ArgumentError("Can not draw display object without mesh or texture");
 					}
@@ -116,10 +119,10 @@ package com.merlinds.miracle {
 						}
 					}else{
 						//update texture
-						if(_currentTexture != instance.texture){
+						if(_currentTexture != mesh.textureLink){
 							if(_currentTexture != null)this.drawTriangles();
 							_context.setTextureAt(0, textureHelper.texture);
-							_currentTexture = instance.texture;
+							_currentTexture = mesh.textureLink;
 						}
 						//reset old sizes
 						instance.width = instance.height = 0;
@@ -165,14 +168,14 @@ package com.merlinds.miracle {
 
 		private function initializeInstance( instance:MiracleDisplayObject ):void {
 			var mesh:Mesh2D = _meshes[instance.mesh];
-			var textureHelper:TextureHelper = _textures[instance.texture];
+			var textureHelper:TextureHelper = _textures[mesh.textureLink];
 
 			if(mesh == null){
 				throw ArgumentError("Cannot find mesh with name " + instance.mesh);
 			}
 
 			if(textureHelper == null){
-				throw ArgumentError("Cannot find texture with name " + instance.texture);
+				throw ArgumentError("Cannot find texture with name " + mesh.textureLink);
 			}
 
 			textureHelper.texture = _context.createTexture(textureHelper.width,
@@ -180,7 +183,7 @@ package com.merlinds.miracle {
 		}
 
 		[Inline]
-		private function drawTriangles():void {
+		private final function drawTriangles():void {
 			var n:int;
 			if(_vertexData.length > 0){
 				n = _vertexData.length / VERTEX_PARAMS_LENGTH;
@@ -207,7 +210,7 @@ package com.merlinds.miracle {
 		}
 
 		[Inline]
-		private function draw():void {
+		private final function draw():void {
 			var i:int;
 			var dataIndex:int = 0;
 			var n:int = _polygon.numVertexes;
@@ -253,7 +256,7 @@ package com.merlinds.miracle {
 		 * @param t Time delta for formula: matrix = m0 + ( ( 1 - t ) * m1 + t * m2 )
 		 */
 		[Inline]
-		private function calculateMatrix(m0:TransformMatrix, m1:TransformMatrix, m2:TransformMatrix, t:Number):void {
+		private final function calculateMatrix(m0:TransformMatrix, m1:TransformMatrix, m2:TransformMatrix, t:Number):void {
 			var t0:Number = 1 - t;
 			/**** CALCULATE FORM TRANSFORMATIONS *****/
 			_currentMatrix.offsetX = (t0 * m1.offsetX + t * m2.offsetX );
@@ -274,7 +277,7 @@ package com.merlinds.miracle {
 		 * @param t Time delta for formula: color = c0 + ( ( 1 - t ) * c1 + t * c2 )
 		 */
 		[Inline]
-		private function calculateColor(c0:Color, c1:Color, c2:Color, t:Number):void {
+		private final function calculateColor(c0:Color, c1:Color, c2:Color, t:Number):void {
 			/**** CALCULATE COLOR TRANSFORMATIONS *****/
 			_currentColor.clear();//clear previous color transformation
 			var t0:Number = 1 - t;

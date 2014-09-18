@@ -14,7 +14,7 @@ package com.merlinds.miracle.utils {
 
 		public static const MESH_BLOCK_SIZE:int = 512;
 
-		private var _mesh:Mesh2D;
+		private var _meshes:Object;
 		private var _texture:TextureHelper;
 		//==============================================================================
 		//{region							PUBLIC METHODS
@@ -28,20 +28,26 @@ package com.merlinds.miracle.utils {
 			var meshSize:int = bytes.readUnsignedInt() * MESH_BLOCK_SIZE;
 			//read mesh data
 			bytes.position = 8;
-			var meshData:Array = bytes.readObject();
+			var meshesData:Array = bytes.readObject();
 			//read texture bytes
 			bytes.position = 8 + meshSize;
 			var textureBytes:ByteArray = new ByteArray();
 			bytes.readBytes(textureBytes, 0, bytes.length - bytes.position);
 			bytes.clear();
 			//parse meshes2D
-			var mesh:Mesh2D = new Mesh2D();
-			var n:int = meshData.length;
+			_meshes = {};
+			var n:int = meshesData.length;
 			for(var i:int = 0; i < n; i++){
-				var name:String = meshData[i].name;
-				mesh[name] = new Polygon2D(meshData[i], scale);
+				var meshData:Object = meshesData[i];
+				var m:int = meshData.mesh.length;
+				var mesh:Mesh2D = new Mesh2D();
+				//read polygons
+				for(var j:int = 0; j < m; j++){
+					var name:String = meshData.mesh[j].name;
+					mesh[name] = new Polygon2D(meshData.mesh[j], scale);
+				}
+				meshes[meshData.name] = mesh;
 			}
-			_mesh = mesh;
 			//parse textures
 			_texture = new TextureHelper( textureBytes );
 			AtfData.getAtfParameters( textureBytes, _texture );
@@ -59,8 +65,8 @@ package com.merlinds.miracle.utils {
 		//==============================================================================
 		//{region							GETTERS/SETTERS
 
-		public function get mesh():Mesh2D {
-			return _mesh;
+		public function get meshes():Object {
+			return _meshes;
 		}
 
 		public function get texture():TextureHelper {
