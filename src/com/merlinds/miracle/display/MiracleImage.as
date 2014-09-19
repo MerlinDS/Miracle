@@ -13,9 +13,6 @@ package com.merlinds.miracle.display {
 
 		//==============================================================================
 		//{region							PUBLIC METHODS
-		override public function draw():void{
-			//nothing to do for image
-		}
 		//} endregion PUBLIC METHODS ===================================================
 
 		//==============================================================================

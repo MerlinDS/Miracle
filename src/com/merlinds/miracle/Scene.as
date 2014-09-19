@@ -130,7 +130,6 @@ package com.merlinds.miracle {
 							_currentTexture = mesh.textureLink;
 						}
 						//reset old sizes
-						instance.width = instance.height = 0;
 						var m:int = animationHelper.numLayers;
 						var k:int = animationHelper.totalFrames;
 						for(var j:int = 0; j < m; j++){

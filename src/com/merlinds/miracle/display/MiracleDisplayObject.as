@@ -10,7 +10,6 @@ package com.merlinds.miracle.display {
 	import com.merlinds.miracle.geom.Transformation;
 	import com.merlinds.miracle.miracle_internal;
 
-	import flash.errors.IllegalOperationError;
 	import flash.events.EventDispatcher;
 	import flash.geom.Rectangle;
 	import flash.geom.Vector3D;
@@ -31,26 +30,15 @@ package com.merlinds.miracle.display {
 		 * Name of the timeline that will be used
 		 */
 		private var _animation:String;
-		/**
-		 * Position of the display object on scene.
-		 * <ul>
-		 *    <li> x - x position on scene, range from -1 to 1 </li>
-		 *    <li> y - y position on scene, range from -1 to 1 </li>
-		 *    <li> z - depth on the scene, range from -1 to 1 </li>
-		 * </ul>
-		 */
-		private var _position:Vector3D;
-		private var _currentFrame:int;
-
-		public var transformation:Transformation;
-
-		private var _width:int;
-		private var _height:int;
 
 		private var _fps:int;
-
+		private var _currentFrame:int;
+		//Transformations
+		public var transformation:Transformation;
+		//Playback
 		private var _onStage:Boolean;
 		private var _onPause:Boolean;
+		private var _loop:Boolean;
 
 		public function MiracleDisplayObject() {
 			this.transformation = new Transformation( new TransformMatrix(), new Color(), new Rectangle());
@@ -59,27 +47,33 @@ package com.merlinds.miracle.display {
 
 		//==============================================================================
 		//{region							PUBLIC METHODS
+		/** Stop animation immediately **/
 		public function stop():void {
 			_onPause = true;
 		}
 
+		/** Start play animation **/
 		public function play():void {
 			_onPause = false;
 		}
 
-		public function moveTO(x:Number = 0, y:Number = 0, z:Number = 0):MiracleDisplayObject {
-			if(_position == null){
-				_position = new Vector3D(x, y, z);
-			}
-			_position.x = this.transformation.matrix.tx = x;
-			_position.y = this.transformation.matrix.ty = y;
-			return this;
+		/** Revert animation playing **/
+		public function revert():void {
+
 		}
+
 		/**
-		 * must be overridden
+		 * move instance to new coordinates
+		 * @param x
+		 * @param y
+		 * @param z
+		 * @return Current instance
 		 */
-		public function draw():void{
-			throw new IllegalOperationError("This method must be overridden!");
+		public function moveTO(x:Number = 0, y:Number = 0, z:Number = 0):MiracleDisplayObject {
+			this.transformation.matrix.tx = x;
+			this.transformation.matrix.ty = y;
+			//TODO MF-41 Add z-index sorting
+			return this;
 		}
 
 		miracle_internal function drawn():void{
@@ -103,33 +97,110 @@ package com.merlinds.miracle.display {
 
 		//==============================================================================
 		//{region							GETTERS/SETTERS
+		[Inline]
+		public final function get animation():String {
+			return _animation;
+		}
 
-		public function get position():Vector3D {
-			return _position;
+		[Inline]
+		public final function set animation(value:String):void {
+			_animation = value;
+			_currentFrame = 0;
+		}
+		//Transformations
+		public function get width():int {
+			return this.transformation.bounds.width;
+		}
+
+		public function get height():int {
+			return this.transformation.bounds.height;
+		}
+
+		public function get x():Number {
+			return this.transformation.matrix.tx;
+		}
+
+		public function set x(value:Number):void {
+			this.transformation.matrix.tx = value;
+		}
+
+		public function get y():Number {
+			return this.transformation.matrix.ty;
+		}
+
+		public function set y(value:Number):void {
+			this.transformation.matrix.ty = value;
+		}
+
+		public function get z():Number {
+			//TODO MF-41 Add z-index sorting
+			return 0;
+		}
+
+		public function set z(value:Number):void {
+			//TODO MF-41 Add z-index sorting
+		}
+
+		public function get scaleX():Number {
+			return this.transformation.matrix.scaleX;
+		}
+
+		public function set scaleX(value:Number):void {
+			//TODO MF-47 Change DisplayObject instance bounds by new transformation
+			this.transformation.matrix.scaleX = value;
+		}
+
+		public function get scaleY():Number {
+			return this.transformation.matrix.scaleY;
+		}
+
+		public function set scaleY(value:Number):void {
+			//TODO MF-47 Change DisplayObject instance bounds by new transformation
+			this.transformation.matrix.scaleY = value;
+		}
+
+		public function get skewX():Number {
+			return this.transformation.matrix.skewX;
+		}
+
+		public function set skewX(value:Number):void {
+			//TODO MF-47 Change DisplayObject instance bounds by new transformation
+			this.transformation.matrix.skewX = value;
+		}
+
+		public function get skewY():Number {
+			return this.transformation.matrix.skewY;
+		}
+
+		public function set skewY(value:Number):void {
+			//TODO MF-47 Change DisplayObject instance bounds by new transformation
+			this.transformation.matrix.skewY = value;
+		}
+
+		public function get alpha():Number {
+			//revert alphaMultiplier to alpha value
+			return 1 - this.transformation.color.alphaMultiplier;
+		}
+
+		public function set alpha(value:Number):void {
+			//fix value if it not in 0 1 diapason
+			value = value > 1 ? 1: value < 0 ? 0 : value;
+			value = 1 - value;//revert value for right alpha transformation
+			this.transformation.color.alphaMultiplier = value;
+			if(value > 0){
+				this.transformation.color.type += Color.ALPHA;
+			}else if((this.transformation.color.type & Color.ALPHA) != 0){
+				this.transformation.color.type -= Color.ALPHA;
+			}
 		}
 
 		public function set position(value:Vector3D):void {
 			this.transformation.matrix.tx = value.x;
 			this.transformation.matrix.ty = value.y;
-			_position = value;
 		}
 
-		public function get width():int {
-			return _width;
-		}
-
-		public function set width(value:int):void {
-			_width = value;
-		}
-
-		public function get height():int {
-			return _height;
-		}
-
-		public function set height(value:int):void {
-			_height = value;
-		}
-
+		//end of transformations
+		//playback
 		public function get currentFrame():int {
 			return _currentFrame;
 		}
@@ -148,15 +219,13 @@ package com.merlinds.miracle.display {
 			miracle_internal::timePassed = 0;
 		}
 
-		public function get animation():String {
-			return _animation;
+		public function get loop():Boolean {
+			return _loop;
 		}
 
-		public function set animation(value:String):void {
-			_animation = value;
-			_currentFrame = 0;
+		public function set loop(value:Boolean):void {
+			_loop = value;
 		}
-
 //} endregion GETTERS/SETTERS ==================================================
 	}
 }
