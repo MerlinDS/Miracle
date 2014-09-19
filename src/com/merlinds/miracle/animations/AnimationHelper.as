@@ -4,6 +4,8 @@
  * Time: 13:48
  */
 package com.merlinds.miracle.animations {
+	import flash.geom.Rectangle;
+
 	/**
 	 * Object for animation format.
 	 * Contains animation parameters, all transformations for polygon.
@@ -20,10 +22,7 @@ package com.merlinds.miracle.animations {
 		public var numLayers:int;
 		/** Frames on the animation. Rectangular array**/
 		public var frames:Vector.<FrameInfo>;
-		/** Total width of the animation on first frame**/
-		public var width:int;
-		/** Total height of the animation on first frame**/
-		public var height:int;
+		public var bounds:Rectangle;
 		//==============================================================================
 		//{region							PUBLIC METHODS
 		/**

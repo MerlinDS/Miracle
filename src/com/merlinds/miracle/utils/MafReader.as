@@ -37,8 +37,7 @@ package com.merlinds.miracle.utils {
 				var animation:AnimationHelper = new AnimationHelper( data.name, data.totalFrames,
 						data.layers.length, this.parseLayers( data.layers, data.totalFrames )
 				);
-				animation.width = Math.ceil(data.width);
-				animation.height = Math.ceil(data.height);
+				animation.bounds = this.parseBounds(data.bounds);
 				_animations.push( animation );
 			}
 		}
@@ -95,7 +94,6 @@ package com.merlinds.miracle.utils {
 				transform = new Transformation();
 				transform.matrix = this.parseMatrix(data.matrix);
 				transform.color = this.parseColor(data.color);
-				transform.bounds = this.parseBounds(data.bounds);
 			 }
 			return transform;
 		}
@@ -126,7 +124,6 @@ package com.merlinds.miracle.utils {
 
 		[Inline]
 		private function parseBounds(data:Object):Rectangle {
-			//TODO MF-28 Bound calculation for every polygon in texture
 			return new Rectangle(data.x, data.y, data.width, data.height);
 		}
 		//} endregion PRIVATE\PROTECTED METHODS ========================================

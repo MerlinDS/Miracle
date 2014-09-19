@@ -108,6 +108,11 @@ package com.merlinds.miracle {
 					mesh = _meshes[ instance.mesh ];
 					textureHelper = _textures[ mesh.textureLink ];
 					animationHelper = _animations[ instance.mesh + "." + instance.animation ];
+					//set new bounds
+					if(!instance.transformation.bounds.equals(animationHelper.bounds)){
+						instance.transformation.bounds = animationHelper.bounds.clone();
+					}
+
 					if(mesh == null || textureHelper == null){
 						throw new ArgumentError("Can not draw display object without mesh or texture");
 					}
@@ -135,7 +140,6 @@ package com.merlinds.miracle {
 								_polygon = mesh[ frame.polygonName ];
 								//draw on GPU
 								var transform:Transformation = instance.transformation;
-								//TODO: MF-40 Calculate size of the instance by it's bounds
 								this.calculateMatrix(transform.matrix, frame.m0.matrix, frame.m1.matrix, frame.t);
 								this.calculateColor(transform.color, frame.m0.color, frame.m1.color, frame.t);
 								this.draw();
@@ -150,9 +154,6 @@ package com.merlinds.miracle {
 							}
 						}
 
-						//set size //TODO: change size only if animation for this instance was changed
-						instance.width = animationHelper.width;
-						instance.height = animationHelper.height;
 						//tell instance that it was drawn on GPU
 						instance.miracle_internal::drawn();
 					}
