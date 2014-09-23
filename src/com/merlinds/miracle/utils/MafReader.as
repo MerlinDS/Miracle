@@ -20,13 +20,15 @@ package com.merlinds.miracle.utils {
 		);
 
 		private var _animations:Vector.<AnimationHelper>;
+		private var _scale:Number;
 		//==============================================================================
 		//{region							PUBLIC METHODS
 		public function MafReader() {
 		}
 
-		public function execute(bytes:ByteArray):void {
+		public function execute(bytes:ByteArray, scale:Number):void {
 			_animations = new <AnimationHelper>[];
+			_scale = scale;
 			//ignore signature
 			bytes.position = 4;
 			var animationList:Array = bytes.readObject();
@@ -101,7 +103,7 @@ package com.merlinds.miracle.utils {
 		[Inline]
 		private function parseMatrix(data:Object):TransformMatrix {
 			var meshMatrix:TransformMatrix = new TransformMatrix(
-					data.offsetX, data.offsetY, data.tx, data.ty,
+					data.offsetX * _scale, data.offsetY * _scale, data.tx * _scale, data.ty * _scale,
 					data.scaleX, data.scaleY, data.skewX, data.skewY
 			);
 			return meshMatrix;
@@ -124,7 +126,7 @@ package com.merlinds.miracle.utils {
 
 		[Inline]
 		private function parseBounds(data:Object):Rectangle {
-			return new Rectangle(data.x, data.y, data.width, data.height);
+			return new Rectangle(data.x * _scale, data.y * _scale, data.width * _scale, data.height * _scale);
 		}
 		//} endregion PRIVATE\PROTECTED METHODS ========================================
 

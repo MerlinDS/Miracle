@@ -73,7 +73,7 @@ package com.merlinds.miracle {
 					}
 					_textures[ asset.name ] = _mtfReader.texture;
 				}else{
-					_mafReader.execute(asset.output);
+					_mafReader.execute(asset.output, _scale);
 					for each(var animation:AnimationHelper in _mafReader.animations){
 						_animations[ animation.name ] = animation;
 					}
