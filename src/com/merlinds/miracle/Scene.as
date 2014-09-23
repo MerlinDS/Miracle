@@ -8,6 +8,7 @@ package com.merlinds.miracle {
 	import com.merlinds.miracle.animations.FrameInfo;
 	import com.merlinds.miracle.display.MiracleAnimation;
 	import com.merlinds.miracle.display.MiracleDisplayObject;
+	import com.merlinds.miracle.display.MiracleDisplayObject;
 	import com.merlinds.miracle.display.MiracleImage;
 	import com.merlinds.miracle.geom.Color;
 	import com.merlinds.miracle.geom.Mesh2D;
@@ -19,6 +20,8 @@ package com.merlinds.miracle {
 
 	import flash.display3D.IndexBuffer3D;
 	import flash.display3D.VertexBuffer3D;
+	import flash.geom.Point;
+	import flash.geom.Rectangle;
 
 	internal class Scene extends AbstractScene implements IScene{
 		/**
@@ -84,6 +87,21 @@ package com.merlinds.miracle {
 		public function textureInUse(texture:String):Boolean{
 			var textureHelper:TextureHelper = _textures[texture];
 			return textureHelper.inUse;
+		}
+
+		public function hitTest(point:Point):Object {
+			// if nothing else is hit, the stage returns itself as target
+			var target:MiracleDisplayObject;
+			var n:int = _displayObjects.length;
+			for(var i:int = 0; i < n; i++){
+				target = _displayObjects[i];
+				if(target.hitTest(point)){
+					break;
+				}
+				target = null;
+			}
+//			= super.hitTest(localPoint, forTouch);
+			return target == null ? this : target;
 		}
 
 		//IRenderer
@@ -321,6 +339,10 @@ package com.merlinds.miracle {
 
 		//==============================================================================
 		//{region							GETTERS/SETTERS
-		//} endregion GETTERS/SETTERS ==================================================
+		public function get displayObjects():Vector.<MiracleDisplayObject> {
+			return _displayObjects;
+		}
+
+//} endregion GETTERS/SETTERS ==================================================
 	}
 }

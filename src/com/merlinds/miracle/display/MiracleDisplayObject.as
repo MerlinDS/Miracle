@@ -11,6 +11,7 @@ package com.merlinds.miracle.display {
 	import com.merlinds.miracle.miracle_internal;
 
 	import flash.events.EventDispatcher;
+	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.geom.Vector3D;
 
@@ -62,6 +63,12 @@ package com.merlinds.miracle.display {
 
 		}
 
+		public function hitTest(point:Point):Boolean {
+			//temp
+			var rect:Rectangle = this.transformation.bounds.clone();
+			rect.offset(this.transformation.matrix.tx, this.transformation.matrix.ty);
+			return rect.containsPoint(point);
+		}
 		/**
 		 * move instance to new coordinates
 		 * @param x
@@ -85,6 +92,7 @@ package com.merlinds.miracle.display {
 				_onStage = true;
 			}
 		}
+
 		//} endregion PUBLIC METHODS ===================================================
 
 		//==============================================================================
@@ -226,6 +234,11 @@ package com.merlinds.miracle.display {
 		public function set loop(value:Boolean):void {
 			_loop = value;
 		}
+
+		public function get onPause():Boolean {
+			return _onPause;
+		}
+
 //} endregion GETTERS/SETTERS ==================================================
 	}
 }

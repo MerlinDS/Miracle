@@ -8,6 +8,8 @@ package com.merlinds.miracle {
 	import com.merlinds.miracle.display.MiracleDisplayObject;
 	import com.merlinds.miracle.display.MiracleImage;
 
+	import flash.geom.Point;
+
 	public interface IScene {
 		//==============================================================================
 		//{region							METHODS
@@ -29,11 +31,15 @@ package com.merlinds.miracle {
 		function textureInUse(texture:String):Boolean;
 
 		function createInstance(serializer:Class):MiracleDisplayObject;
+
+		function hitTest(point:Point):Object;
 		//} endregion PUBLIC METHODS ===================================================
 
 		//==============================================================================
 		//{region							GETTERS/SETTERS
 		function get scale():Number;
+
+		function get displayObjects():Vector.<MiracleDisplayObject>;
 		//} endregion GETTERS/SETTERS ==================================================
 	}
 }
