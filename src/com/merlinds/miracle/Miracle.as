@@ -46,7 +46,6 @@ package com.merlinds.miracle {
 					localInstance.removeEventListener(event.type, arguments.callee);
 					trace("Miracle: Start completed");
 					_instance = localInstance;
-					_currentScene = -1;
 					if(callback is Function){
 						callback.apply(null);
 					}
