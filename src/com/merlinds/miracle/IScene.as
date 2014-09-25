@@ -32,6 +32,8 @@ package com.merlinds.miracle {
 
 		function createInstance(serializer:Class):MiracleDisplayObject;
 
+		function removeInstance(instance:MiracleDisplayObject):void;
+
 		function hitTest(point:Point):Object;
 		//} endregion PUBLIC METHODS ===================================================
 

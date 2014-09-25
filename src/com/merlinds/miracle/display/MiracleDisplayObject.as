@@ -10,8 +10,6 @@ package com.merlinds.miracle.display {
 	import com.merlinds.miracle.geom.Transformation;
 	import com.merlinds.miracle.miracle_internal;
 
-	import flash.debugger.enterDebugger;
-
 	import flash.events.EventDispatcher;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
@@ -50,12 +48,14 @@ package com.merlinds.miracle.display {
 		public var transformation:Transformation;
 		//Playback
 		private var _onStage:Boolean;
+		private var _visible:Boolean;
 
 		public function MiracleDisplayObject() {
 			this.transformation = new Transformation( new TransformMatrix(), new Color(), new Rectangle());
 			_prevPlaybackDirection = playbackDirection = 1;
 			_currentFrame = 0;
 			_loop = true;
+			_visible = true;
 			this.fps = 60;//Default frame rate
 		}
 
@@ -270,6 +270,14 @@ package com.merlinds.miracle.display {
 			}else if((this.transformation.color.type & Color.ALPHA) != 0){
 				this.transformation.color.type -= Color.ALPHA;
 			}
+		}
+
+		public function get visible():Boolean {
+			return _visible;
+		}
+
+		public function set visible(value:Boolean):void {
+			_visible = value;
 		}
 
 		public function set position(value:Vector3D):void {

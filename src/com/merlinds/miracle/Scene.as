@@ -21,6 +21,7 @@ package com.merlinds.miracle {
 	import flash.display3D.IndexBuffer3D;
 	import flash.display3D.VertexBuffer3D;
 	import flash.geom.Point;
+	import flash.utils.setTimeout;
 
 	internal class Scene extends AbstractScene implements IScene{
 		/**
@@ -83,6 +84,14 @@ package com.merlinds.miracle {
 			return instance;
 		}
 
+		public function removeInstance(instance:MiracleDisplayObject):void {
+			var index:int = _displayObjects.indexOf(instance);
+			if(index > - 1){
+				//delete instance only on next frame
+				setTimeout(_displayObjects.splice, 0, index, 1);
+			}
+		}
+
 		public function textureInUse(texture:String):Boolean{
 			var textureHelper:TextureHelper = _textures[texture];
 			return textureHelper.inUse;
@@ -120,7 +129,7 @@ package com.merlinds.miracle {
 			for(var i:int = 0; i < n; i++){
 				instance = _displayObjects[i];
 				//instance is not ready to use
-				if(instance.mesh != null && instance.animation != null){
+				if(instance.mesh != null && instance.animation != null && instance.visible){
 
 					mesh = _meshes[ instance.mesh ];
 					textureHelper = _textures[ mesh.textureLink ];
