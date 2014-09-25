@@ -19,7 +19,7 @@ package org.gestouch.extensions.miracle {
 		override public function contains(object:Object):Boolean {
 			const targetAsDOC:IScene = this.target as IScene;
 			const objectAsDO:MiracleDisplayObject = object as MiracleDisplayObject;
-			return (targetAsDOC && objectAsDO/* && targetAsDOC.contains(objectAsDO)*/);
+			return targetAsDOC && objectAsDO && targetAsDOC.displayObjects.indexOf(objectAsDO) > -1;
 		}
 
 		override public function getHierarchy(target:Object):Vector.<Object> {

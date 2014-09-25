@@ -8,8 +8,8 @@ package com.merlinds.miracle {
 	import com.merlinds.miracle.animations.FrameInfo;
 	import com.merlinds.miracle.display.MiracleAnimation;
 	import com.merlinds.miracle.display.MiracleDisplayObject;
-	import com.merlinds.miracle.display.MiracleDisplayObject;
 	import com.merlinds.miracle.display.MiracleImage;
+	import com.merlinds.miracle.events.MiracleEvent;
 	import com.merlinds.miracle.geom.Color;
 	import com.merlinds.miracle.geom.Mesh2D;
 	import com.merlinds.miracle.geom.Polygon2D;
@@ -21,7 +21,6 @@ package com.merlinds.miracle {
 	import flash.display3D.IndexBuffer3D;
 	import flash.display3D.VertexBuffer3D;
 	import flash.geom.Point;
-	import flash.geom.Rectangle;
 
 	internal class Scene extends AbstractScene implements IScene{
 		/**
@@ -162,27 +161,40 @@ package com.merlinds.miracle {
 								this.draw();
 							}
 						}
-						instance.timePassed += time;
-						if(instance.timePassed >= instance.frameDelta){
-							instance.timePassed = 0;
-							//increase frame counter for current instance
-							if(++instance.currentFrame >= animationHelper.totalFrames){
-								instance.currentFrame = 0;
-							}
-						}
 
+						this.changeInstanceFrame(instance, k, time);
 						//tell instance that it was drawn on GPU
 						instance.miracle_internal::drawn();
 					}
 
 				}
 			}
-
 		}
 		//} endregion PUBLIC METHODS ===================================================
 
 		//==============================================================================
 		//{region						PRIVATE\PROTECTED METHODS
+		[Inline]
+		private function changeInstanceFrame(instance:MiracleDisplayObject, totalFrames:Number, time:Number):void {
+			//calculate possibility of frame changing
+			instance.timePassed += time;
+			if(instance.timePassed >= instance.frameDelta){
+				instance.timePassed = 0;
+				//need to change frame
+				if(instance.playbackDirection != 0){//stop frame changing if playback direction equals 0
+					instance.currentFrame += instance.playbackDirection;
+					if(instance.currentFrame == totalFrames || instance.currentFrame < 0){
+						if(instance.loop){
+							//switch current frame to start or end
+							instance.currentFrame = instance.playbackDirection > 0 ? 0 : totalFrames - 1;
+						}else{
+							instance.currentFrame -= instance.playbackDirection;//return to previous frame
+							instance.miracle_internal::stopPlayback();
+						}
+					}
+				}
+			}
+		}
 
 		private function initializeInstance( instance:MiracleDisplayObject ):void {
 			var mesh:Mesh2D = _meshes[instance.mesh];
