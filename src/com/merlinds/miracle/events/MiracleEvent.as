@@ -9,6 +9,7 @@ package com.merlinds.miracle.events {
 	public class MiracleEvent extends Event {
 
 		public static const ADDED_TO_STAGE:String = "addedToStage";
+		public static const REMOVED_FROM_STAGE:String = "removedFromStage";
 		public static const PLAYBACK_COMPLETE:String = "playbackComplete";
 		//==============================================================================
 		//{region							PUBLIC METHODS

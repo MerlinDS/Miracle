@@ -10,6 +10,8 @@ package com.merlinds.miracle.display {
 	import com.merlinds.miracle.geom.Transformation;
 	import com.merlinds.miracle.miracle_internal;
 
+	import flash.debugger.enterDebugger;
+
 	import flash.events.EventDispatcher;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
@@ -20,9 +22,15 @@ package com.merlinds.miracle.display {
 	 */
 	[Event(type="com.merlinds.miracle.events.MiracleEvent", name="playbackComplete")]
 	/**
-	 * Will be dispatched when instance was added to stage. If mesh or animation was changed will be dispatched again
+	 * Will be dispatched when instance was added to stage.
+	 * If mesh or animation was changed will be dispatched again after drawing on stage with new parameters
 	 */
 	[Event(type="com.merlinds.miracle.events.MiracleEvent", name="addedToStage")]
+	/**
+	 * Will be dispatched when instance was removed from stage.
+	 * If mesh or animation was changed will be dispatched to
+	 */
+	[Event(type="com.merlinds.miracle.events.MiracleEvent", name="removedFromStage")]
 	public class MiracleDisplayObject extends EventDispatcher{
 
 		use namespace miracle_internal;
@@ -46,6 +54,7 @@ package com.merlinds.miracle.display {
 		public function MiracleDisplayObject() {
 			this.transformation = new Transformation( new TransformMatrix(), new Color(), new Rectangle());
 			_prevPlaybackDirection = playbackDirection = 1;
+			_currentFrame = 0;
 			_loop = true;
 			this.fps = 60;//Default frame rate
 		}
@@ -105,8 +114,22 @@ package com.merlinds.miracle.display {
 			}
 		}
 
+		miracle_internal function remove():void{
+			trace("Try to remove");
+			if(_onStage){
+				trace("remove");
+				if(this.hasEventListener(MiracleEvent.REMOVED_FROM_STAGE)){
+					this.dispatchEvent(new MiracleEvent(MiracleEvent.REMOVED_FROM_STAGE));
+				}
+				playbackDirection = 0;
+				_prevPlaybackDirection = 1;
+				_currentFrame = 0;
+				_onStage = false;
+			}
+		}
+
 		miracle_internal function stopPlayback():void{
-			if(!_onStage){
+			if(_onStage){
 				this.stop();
 				if(this.hasEventListener(MiracleEvent.PLAYBACK_COMPLETE)){
 					this.dispatchEvent(new MiracleEvent(MiracleEvent.PLAYBACK_COMPLETE));
@@ -141,7 +164,7 @@ package com.merlinds.miracle.display {
 			if(value != _animation){
 				_animation = value;
 				_currentFrame = 0;
-				_onStage = false;
+				this.miracle_internal::remove();
 			}
 		}
 
@@ -160,7 +183,7 @@ package com.merlinds.miracle.display {
 		public final function set mesh(value:String):void {
 			if(value != _mesh){
 				_mesh = value;
-				_onStage = false;
+				this.miracle_internal::remove();
 			}
 		}
 
