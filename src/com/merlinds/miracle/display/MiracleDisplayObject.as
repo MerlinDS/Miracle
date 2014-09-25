@@ -115,9 +115,7 @@ package com.merlinds.miracle.display {
 		}
 
 		miracle_internal function remove():void{
-			trace("Try to remove");
 			if(_onStage){
-				trace("remove");
 				if(this.hasEventListener(MiracleEvent.REMOVED_FROM_STAGE)){
 					this.dispatchEvent(new MiracleEvent(MiracleEvent.REMOVED_FROM_STAGE));
 				}
