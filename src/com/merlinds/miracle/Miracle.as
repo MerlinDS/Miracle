@@ -17,8 +17,7 @@ package com.merlinds.miracle {
 	public final class Miracle {
 
 		private static var _instance:MiracleInstance;
-		private static var _scenesList:Vector.<IScene>;
-		private static var _currentScene:int;
+		private static var _currentScene:IScene;
 		//==============================================================================
 		//{region							PUBLIC METHODS
 		public function Miracle() {
@@ -47,7 +46,6 @@ package com.merlinds.miracle {
 					localInstance.removeEventListener(event.type, arguments.callee);
 					trace("Miracle: Start completed");
 					_instance = localInstance;
-					_scenesList = new <IScene>[];
 					_currentScene = -1;
 					if(callback is Function){
 						callback.apply(null);
@@ -60,45 +58,15 @@ package com.merlinds.miracle {
 			}
 		}
 
-		//TODO create scene with initial assets
 		public static function createScene(assets:Vector.<Asset>, scale:Number = 1):IScene {
 			if(_instance == null){
 				throw new IllegalOperationError("Miracle was not started. Use start() before creating scene ");
 			}
-			var index:int = _scenesList.length;
-			_scenesList[index] = new Scene(assets, scale);
-			//if scenes is empty, add scene to instance
-			if(_currentScene < 0){
-				_currentScene = 0;
-				_instance.scene = _scenesList[ _currentScene ] as IRenderer;
-			}
-			trace("Miracle: new scene was added. Index:", index);
-			return _scenesList[index];
-		}
-
-		public static function switchScene(index:int, callback:Function = null):Boolean {
-			if(_instance == null){
-				throw new IllegalOperationError("Miracle was not started. Use start() ");
-			}
-			var result:Boolean = true;
-			if(_currentScene < 0){
-				//create new scene
-				createScene(new <Asset>[]);
-			}else
-			{
-				if(index >= _scenesList.length){
-					result = false;
-					trace("Miracle: Cannot switch scene to index", index);
-				}else{
-					_instance.scene = _scenesList[ _currentScene ] as IRenderer;
-					trace("Miracle: Switch scene to index ", index);
-				}
-			}
-			//TODO: Execute callback by screen, when it will be switched
-			if(result && callback is Function){
-				callback.apply(null);
-			}
-			return result;
+			//TODO delete old scene
+			_currentScene = new Scene(assets, scale);
+			_instance.scene = _currentScene as IRenderer;
+			trace("Miracle: new scene was added. ");
+			return _currentScene;
 		}
 
 		public static function pause():void {
@@ -125,7 +93,7 @@ package com.merlinds.miracle {
 		}
 
 		public static function get currentScene():IScene {
-			return _scenesList[ _currentScene ];
+			return  _currentScene;
 		}
 
 		public static function get snapshot():BitmapData{
