@@ -69,15 +69,14 @@ package com.merlinds.miracle {
 		public function hitTest(point:Point):Object {
 			// if nothing else is hit, the stage returns itself as target
 			var target:MiracleDisplayObject;
-			var n:int = _displayObjects.length;
+			var n:int = _drawableObjects.length;
 			for(var i:int = 0; i < n; i++){
-				target = _displayObjects[i];
+				target = _drawableObjects[i];
 				if(target.hitTest(point)){
 					break;
 				}
 				target = null;
 			}
-//			= super.hitTest(localPoint, forTouch);
 			return target == null ? this : target;
 		}
 		//} endregion PUBLIC METHODS ===================================================
@@ -95,6 +94,7 @@ package com.merlinds.miracle {
 			for(var i:int = 0; i < n; i++){
 				instance = _displayObjects[i];
 				if( this.readyToDraw(instance) ){
+					//add to draw list
 					_drawableObjects.push(instance);
 				}
 			}

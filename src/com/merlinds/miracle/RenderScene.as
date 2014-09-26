@@ -73,6 +73,10 @@ package com.merlinds.miracle {
 				mesh = _meshes[instance.mesh];
 				textureHelper = _textures[ mesh.textureLink ];
 				animationHelper = _animations[ instance.mesh + "." + instance.animation ];
+				//set new bounds
+				if(!instance.transformation.bounds.equals(animationHelper.bounds)){
+					instance.transformation.bounds = animationHelper.bounds.clone();
+				}
 				//draw instance
 				if(_currentTexture != mesh.textureLink){
 					if(_currentTexture != null)this.drawTriangles();
