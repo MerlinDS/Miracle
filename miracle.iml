@@ -11,7 +11,9 @@
           </entries>
           <sdk name="AIR.15.0.0.249" />
         </dependencies>
-        <compiler-options />
+        <compiler-options>
+          <option name="additionalOptions" value="-inline" />
+        </compiler-options>
         <packaging-air-desktop />
         <packaging-android />
         <packaging-ios />

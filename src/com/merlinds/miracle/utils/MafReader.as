@@ -5,6 +5,7 @@
  */
 package com.merlinds.miracle.utils {
 	import com.merlinds.miracle.animations.AnimationHelper;
+	import com.merlinds.miracle.animations.EmptyFrameInfo;
 	import com.merlinds.miracle.animations.FrameInfo;
 	import com.merlinds.miracle.geom.Color;
 	import com.merlinds.miracle.geom.TransformMatrix;
@@ -18,6 +19,8 @@ package com.merlinds.miracle.utils {
 				new TransformMatrix(),
 				new Color()
 		);
+
+		private static const EMPTY_FRAME:EmptyFrameInfo = new EmptyFrameInfo();
 
 		private var _animations:Vector.<AnimationHelper>;
 		private var _scale:Number;
@@ -54,12 +57,18 @@ package com.merlinds.miracle.utils {
 		 * @return List of frames of animation. Rectangular list that deployed in a linear one.
 		 */
 		[Inline]
-		private function parseLayers(layers:Array, totalFrames:int):Vector.<FrameInfo> {
+		private final function parseLayers(layers:Array, totalFrames:int):Vector.<FrameInfo> {
 			var n:int = layers.length;
 			var frames:Vector.<FrameInfo> = new <FrameInfo>[];
 			frames.length = totalFrames * n;//For deploying list from rectangular to liner
 			frames.fixed = true;// Can not be more than total frames count
-			for(var i:int = 0; i < n; i++){
+			//Fill frames list by emptyFrames
+			var i:int = -1;
+			while(++i < frames.length){
+				frames[i] = EMPTY_FRAME;
+			}
+
+			for(i = 0; i < n; i++){
 				var j:int, m:int;
 				var layer:Object = layers[i];
 				//prepare list of matrix
@@ -80,8 +89,6 @@ package com.merlinds.miracle.utils {
 						}
 						frames[totalFrames * i + j] = new FrameInfo( frameData.polygonName, m0, m1, frameData.t );
 
-					}else{
-						frames[totalFrames * i + j] = null;//Frame is empty
 					}
 				}
 			}
@@ -90,7 +97,7 @@ package com.merlinds.miracle.utils {
 		}
 
 		//TODO generate format as byte array, not a simple object
-		private function parseTransformation(data:Object):Transformation{
+		private final function parseTransformation(data:Object):Transformation{
 			var transform:Transformation;
 			 if(data != null){
 				transform = new Transformation();
@@ -101,7 +108,7 @@ package com.merlinds.miracle.utils {
 		}
 
 		[Inline]
-		private function parseMatrix(data:Object):TransformMatrix {
+		private final function parseMatrix(data:Object):TransformMatrix {
 			var meshMatrix:TransformMatrix = new TransformMatrix(
 					data.offsetX * _scale, data.offsetY * _scale, data.tx * _scale, data.ty * _scale,
 					data.scaleX, data.scaleY, data.skewX, data.skewY
@@ -115,7 +122,7 @@ package com.merlinds.miracle.utils {
 		 * @return Color object serialized instance
 		 */
 		[Inline]
-		private function parseColor(data:Object):Color {
+		private final function parseColor(data:Object):Color {
 			var color:Color = new Color(
 					data.redMultiplier, data.greenMultiplier, data.blueMultiplier, data.alphaMultiplier,
 					data.redOffset, data.greenOffset, data.blueOffset, data.alphaOffset
@@ -125,7 +132,7 @@ package com.merlinds.miracle.utils {
 		}
 
 		[Inline]
-		private function parseBounds(data:Object):Rectangle {
+		private final function parseBounds(data:Object):Rectangle {
 			return new Rectangle(data.x * _scale, data.y * _scale, data.width * _scale, data.height * _scale);
 		}
 		//} endregion PRIVATE\PROTECTED METHODS ========================================

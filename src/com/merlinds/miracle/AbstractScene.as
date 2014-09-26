@@ -59,7 +59,7 @@ package com.merlinds.miracle {
 		//==============================================================================
 		//{region						PRIVATE\PROTECTED METHODS
 		[Inline]
-		protected function initialize(assets:Vector.<Asset>):void{
+		protected final function initialize(assets:Vector.<Asset>):void{
 			//Initialization complete
 			while(assets.length > 0){
 				var asset:Asset = assets.pop();

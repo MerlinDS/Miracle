@@ -9,7 +9,6 @@ package com.merlinds.miracle {
 	import com.merlinds.miracle.display.MiracleAnimation;
 	import com.merlinds.miracle.display.MiracleDisplayObject;
 	import com.merlinds.miracle.display.MiracleImage;
-	import com.merlinds.miracle.events.MiracleEvent;
 	import com.merlinds.miracle.geom.Color;
 	import com.merlinds.miracle.geom.Mesh2D;
 	import com.merlinds.miracle.geom.Polygon2D;
@@ -161,7 +160,7 @@ package com.merlinds.miracle {
 						for(var j:int = 0; j < m; j++){
 							var index:int = k * j + instance.currentFrame;
 							var frame:FrameInfo = animationHelper.frames[ index ];
-							if(frame != null){
+							if(!frame.isEmpty){
 								_polygon = mesh[ frame.polygonName ];
 								//draw on GPU
 								var transform:Transformation = instance.transformation;
@@ -184,7 +183,7 @@ package com.merlinds.miracle {
 		//==============================================================================
 		//{region						PRIVATE\PROTECTED METHODS
 		[Inline]
-		private function changeInstanceFrame(instance:MiracleDisplayObject, totalFrames:Number, time:Number):void {
+		private final function changeInstanceFrame(instance:MiracleDisplayObject, totalFrames:Number, time:Number):void {
 			//calculate possibility of frame changing
 			instance.timePassed += time;
 			if(instance.timePassed >= instance.frameDelta){
