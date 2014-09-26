@@ -48,7 +48,7 @@ package com.merlinds.miracle {
 
 		public function createInstance(serializer:Class):MiracleDisplayObject {
 			var instance:MiracleDisplayObject = new serializer();
-			_displayObjects[_displayObjects.length++] = instance;
+			_displayObjects[ _displayObjects.length++ ] = instance;
 			trace("Miracle: Instance was created.");
 			return instance;
 		}
@@ -151,7 +151,7 @@ package com.merlinds.miracle {
 			this.sortDisplayObjects();
 			this.uploadTextures();
 			//throw all errors that was collected
-			while(_errorsQueue.length > 0)throw _errorsQueue.shift();
+			if(_errorsQueue.length > 0)throw _errorsQueue.shift();
 			//draw frame
 			super.drawFrame(time);
 		}
