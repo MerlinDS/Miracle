@@ -18,23 +18,23 @@ package com.merlinds.miracle {
 		protected var _scale:Number;
 		protected var _context:Context3D;
 		//maps
-		protected var _displayObjects:Vector.<MiracleDisplayObject>;
-
 		protected var _meshes:Object;/**Mesh2D**/
 		protected var _textures:Object;/**TextureHelper**/
 		protected var _animations:Object;/**AnimationHelper**/
+		//
+		protected var _drawableObjects:Vector.<MiracleDisplayObject>;
 
 		private var _mtfReader:MtfReader;
 		private var _mafReader:MafReader;
 
 		public function AbstractScene(assets:Vector.<Asset>, scale:Number = 1) {
+			_drawableObjects = new <MiracleDisplayObject>[];
+			_mafReader = new MafReader();
+			_mtfReader = new MtfReader();
 			_scale = scale;
 			_meshes = {};
 			_textures = {};
 			_animations = {};
-			_displayObjects = new <MiracleDisplayObject>[];
-			_mafReader = new MafReader();
-			_mtfReader = new MtfReader();
 			this.initialize(assets);
 		}
 

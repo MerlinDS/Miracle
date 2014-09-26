@@ -7,6 +7,7 @@ package com.merlinds.miracle {
 	import com.merlinds.miracle.display.MiracleAnimation;
 	import com.merlinds.miracle.display.MiracleDisplayObject;
 	import com.merlinds.miracle.display.MiracleImage;
+	import com.merlinds.miracle.geom.Mesh2D;
 	import com.merlinds.miracle.textures.TextureHelper;
 	import com.merlinds.miracle.utils.Asset;
 
@@ -16,9 +17,15 @@ package com.merlinds.miracle {
 
 	public class DisplayScene extends RenderScene implements IScene{
 
+		private var _displayObjects:Vector.<MiracleDisplayObject>;
+		private var _textureNeedToUpload:Vector.<TextureHelper>;
+		private var _errorsQueue:Vector.<Error>;
 		//==============================================================================
 		//{region							PUBLIC METHODS
 		public function DisplayScene(assets:Vector.<Asset>, scale:Number = 1) {
+			_displayObjects = new <MiracleDisplayObject>[];
+			_textureNeedToUpload = new <TextureHelper>[];
+			_errorsQueue = new <Error>[];
 			super (assets, scale);
 		}
 
@@ -77,10 +84,75 @@ package com.merlinds.miracle {
 
 		//==============================================================================
 		//{region						PRIVATE\PROTECTED METHODS
+		/**
+		 * Sort display object in display objects list.
+		 * Remove from the list objects that will not be drawn.
+		 */
+		[Inline]
+		private final function sortDisplayObjects():void{
+			var instance:MiracleDisplayObject;
+			var n:int = _displayObjects.length;
+			for(var i:int = 0; i < n; i++){
+				instance = _displayObjects[i];
+				if( this.readyToDraw(instance) ){
+					_drawableObjects.push(instance);
+				}
+			}
+		}
+
+		[Inline]
+		private final function readyToDraw(instance:MiracleDisplayObject):Boolean {
+			var readiness:int = 4;
+			var meshHelper:Mesh2D;
+			var textureHelper:TextureHelper;
+			//check instance for mesh and animation field are filed
+			if(instance.mesh != null && instance.animation != null)readiness--;
+			if(instance.visible)readiness--;
+			//check for animation
+			if(_animations.hasOwnProperty( instance.mesh + "." + instance.animation ))
+				readiness--;
+			//check for necessary objects for instance
+			meshHelper =  _meshes[ instance.mesh ];
+			textureHelper = _textures[ meshHelper.textureLink ];
+
+			if(meshHelper == null || textureHelper == null){
+				_errorsQueue.push(new ArgumentError("Can not draw display object without mesh or texture"));
+			}else{
+				//check that texture was already uploaded
+				if(textureHelper.inUse)readiness--;
+				else if(!textureHelper.uploading){
+					_textureNeedToUpload.push(textureHelper);
+				}
+			}
+			return readiness == 0;
+		}
+
+		[Inline]
+		private final function uploadTextures():void {
+			var textureHelper:TextureHelper;
+			var n:int = _textureNeedToUpload.length;
+			while(--n >= 0){
+				textureHelper = _textureNeedToUpload[n];
+				textureHelper.texture = _context.createTexture(textureHelper.width,
+						textureHelper.height, textureHelper.format, false);
+				_textureNeedToUpload.length = n;
+			}
+		}
 		//} endregion PRIVATE\PROTECTED METHODS ========================================
 
 		//==============================================================================
 		//{region							EVENTS HANDLERS
+		override public function drawFrame(time:Number):void {
+			//clear previous object
+			_drawableObjects.length = 0;
+			//prepare frame data
+			this.sortDisplayObjects();
+			this.uploadTextures();
+			//throw all errors that was collected
+			while(_errorsQueue.length > 0)throw _errorsQueue.shift();
+			//draw frame
+			super.drawFrame(time);
+		}
 		//} endregion EVENTS HANDLERS ==================================================
 
 		//==============================================================================

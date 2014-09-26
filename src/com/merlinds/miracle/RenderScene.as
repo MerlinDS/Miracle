@@ -6,10 +6,7 @@
 package com.merlinds.miracle {
 	import com.merlinds.miracle.animations.AnimationHelper;
 	import com.merlinds.miracle.animations.FrameInfo;
-	import com.merlinds.miracle.display.MiracleAnimation;
 	import com.merlinds.miracle.display.MiracleDisplayObject;
-	import com.merlinds.miracle.display.MiracleImage;
-	import com.merlinds.miracle.events.MiracleEvent;
 	import com.merlinds.miracle.geom.Color;
 	import com.merlinds.miracle.geom.Mesh2D;
 	import com.merlinds.miracle.geom.Polygon2D;
@@ -20,8 +17,6 @@ package com.merlinds.miracle {
 
 	import flash.display3D.IndexBuffer3D;
 	import flash.display3D.VertexBuffer3D;
-	import flash.geom.Point;
-	import flash.utils.setTimeout;
 
 	internal class RenderScene extends AbstractScene{
 		/**
@@ -71,58 +66,38 @@ package com.merlinds.miracle {
 			var animationHelper:AnimationHelper;
 			var textureHelper:TextureHelper;
 			var instance:MiracleDisplayObject;
-			var n:int = _displayObjects.length;
+			var n:int = _drawableObjects.length;
 			for(var i:int = 0; i < n; i++){
-				instance = _displayObjects[i];
-				//instance is not ready to use
-				if(instance.mesh != null && instance.animation != null && instance.visible){
-
-					mesh = _meshes[ instance.mesh ];
-					textureHelper = _textures[ mesh.textureLink ];
-					animationHelper = _animations[ instance.mesh + "." + instance.animation ];
-					//set new bounds
-					if(!instance.transformation.bounds.equals(animationHelper.bounds)){
-						instance.transformation.bounds = animationHelper.bounds.clone();
-					}
-
-					if(mesh == null || textureHelper == null){
-						throw new ArgumentError("Can not draw display object without mesh or texture");
-					}
-
-					if(!textureHelper.inUse){
-						if(!textureHelper.uploading){
-							//upload texture to GPU
-							this.initializeInstance(instance);
-						}
-					}else{
-						//update texture
-						if(_currentTexture != mesh.textureLink){
-							if(_currentTexture != null)this.drawTriangles();
-							_context.setTextureAt(0, textureHelper.texture);
-							_currentTexture = mesh.textureLink;
-						}
-						//reset old sizes
-						var m:int = animationHelper.numLayers;
-						var k:int = animationHelper.totalFrames;
-						for(var j:int = 0; j < m; j++){
-							var index:int = k * j + instance.currentFrame;
-							var frame:FrameInfo = animationHelper.frames[ index ];
-							if(frame != null){
-								_polygon = mesh[ frame.polygonName ];
-								//draw on GPU
-								var transform:Transformation = instance.transformation;
-								this.calculateMatrix(transform.matrix, frame.m0.matrix, frame.m1.matrix, frame.t);
-								this.calculateColor(transform.color, frame.m0.color, frame.m1.color, frame.t);
-								this.draw();
-							}
-						}
-
-						this.changeInstanceFrame(instance, k, time);
-						//tell instance that it was drawn on GPU
-						instance.miracle_internal::drawn();
-					}
-
+				//collect instance data
+				instance = _drawableObjects[i];
+				mesh = _meshes[instance.mesh];
+				textureHelper = _textures[ mesh.textureLink ];
+				animationHelper = _animations[ instance.mesh + "." + instance.animation ];
+				//draw instance
+				if(_currentTexture != mesh.textureLink){
+					if(_currentTexture != null)this.drawTriangles();
+					_context.setTextureAt(0, textureHelper.texture);
+					_currentTexture = mesh.textureLink;
 				}
+				//reset old sizes
+				var m:int = animationHelper.numLayers;
+				var k:int = animationHelper.totalFrames;
+				for(var j:int = 0; j < m; j++){
+					var index:int = k * j + instance.currentFrame;
+					var frame:FrameInfo = animationHelper.frames[ index ];
+					if(frame != null){
+						_polygon = mesh[ frame.polygonName ];
+						//draw on GPU
+						var transform:Transformation = instance.transformation;
+						this.calculateMatrix(transform.matrix, frame.m0.matrix, frame.m1.matrix, frame.t);
+						this.calculateColor(transform.color, frame.m0.color, frame.m1.color, frame.t);
+						this.draw();
+					}
+				}
+
+				this.changeInstanceFrame(instance, k, time);
+				//tell instance that it was drawn on GPU
+				instance.miracle_internal::drawn();
 			}
 		}
 		//} endregion PUBLIC METHODS ===================================================
@@ -149,22 +124,6 @@ package com.merlinds.miracle {
 					}
 				}
 			}
-		}
-
-		private function initializeInstance( instance:MiracleDisplayObject ):void {
-			var mesh:Mesh2D = _meshes[instance.mesh];
-			var textureHelper:TextureHelper = _textures[mesh.textureLink];
-
-			if(mesh == null){
-				throw ArgumentError("Cannot find mesh with name " + instance.mesh);
-			}
-
-			if(textureHelper == null){
-				throw ArgumentError("Cannot find texture with name " + mesh.textureLink);
-			}
-
-			textureHelper.texture = _context.createTexture(textureHelper.width,
-					textureHelper.height, textureHelper.format, false);
 		}
 
 		[Inline]
