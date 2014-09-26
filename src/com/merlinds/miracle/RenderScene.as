@@ -78,13 +78,13 @@ package com.merlinds.miracle {
 				if(!instance.transformation.bounds.equals(animationHelper.bounds)){
 					instance.transformation.bounds = animationHelper.bounds.clone();
 				}
-				//draw instance
+				//draw previous instance
 				if(_currentTexture != mesh.textureLink){
 					if(_currentTexture != null)this.drawTriangles();
 					_context.setTextureAt(0, textureHelper.texture);
 					_currentTexture = mesh.textureLink;
 				}
-				//reset old sizes
+				//==
 				var m:int = animationHelper.numLayers;
 				var k:int = animationHelper.totalFrames;
 				for(var j:int = 0; j < m; j++){

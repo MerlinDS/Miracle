@@ -121,7 +121,9 @@ package com.merlinds.miracle {
 				//check that texture was already uploaded
 				if(textureHelper.inUse)readiness--;
 				else if(!textureHelper.uploading){
-					_textureNeedToUpload.push(textureHelper);
+					if(_textureNeedToUpload.indexOf(textureHelper) < 0){
+						_textureNeedToUpload.push(textureHelper);
+					}
 				}
 			}
 			return readiness == 0;
@@ -135,15 +137,15 @@ package com.merlinds.miracle {
 				textureHelper = _textureNeedToUpload[n];
 				textureHelper.texture = _context.createTexture(textureHelper.width,
 						textureHelper.height, textureHelper.format, false);
-				_textureNeedToUpload.length = n;
 			}
+			_textureNeedToUpload.length = 0;
 		}
 		//} endregion PRIVATE\PROTECTED METHODS ========================================
 
 		//==============================================================================
 		//{region							EVENTS HANDLERS
 		override public function drawFrame(time:Number):void {
-			//clear previous object
+			//clear previous objects list
 			_drawableObjects.length = 0;
 			//prepare frame data
 			this.sortDisplayObjects();
