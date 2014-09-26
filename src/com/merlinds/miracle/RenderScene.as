@@ -6,6 +6,7 @@
 package com.merlinds.miracle {
 	import com.merlinds.miracle.animations.AnimationHelper;
 	import com.merlinds.miracle.animations.FrameInfo;
+	import com.merlinds.miracle.display.MiracleAnimation;
 	import com.merlinds.miracle.display.MiracleDisplayObject;
 	import com.merlinds.miracle.geom.Color;
 	import com.merlinds.miracle.geom.Mesh2D;
@@ -99,7 +100,8 @@ package com.merlinds.miracle {
 					}
 				}
 
-				this.changeInstanceFrame(instance, k, time);
+				if(instance is MiracleAnimation)//only animation had timeline
+					this.changeInstanceFrame(instance, k, time);
 				//tell instance that it was drawn on GPU
 				instance.miracle_internal::drawn();
 			}
