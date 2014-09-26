@@ -74,7 +74,7 @@ package com.merlinds.miracle.geom {
 		 * Type doesn't clear parameters, but ignore them on calculation phase.
 		 * @default NONE
 		 *
-		 * @see com.merlinds.miracle.Scene.#calculateMatrix() calculateMatrix method
+		 * @see com.merlinds.miracle.RenderScene.#calculateMatrix() calculateMatrix method
 		 */
 		public var type:int;
 		//==============================================================================

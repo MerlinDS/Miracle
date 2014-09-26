@@ -23,7 +23,7 @@ package com.merlinds.miracle {
 	import flash.geom.Point;
 	import flash.utils.setTimeout;
 
-	internal class Scene extends AbstractScene implements IScene{
+	internal class RenderScene extends AbstractScene{
 		/**
 		 * [x,y] + [u,v] + [tx, ty] + [scaleX, scaleY, skewX, skewY] + [r,g,b,a] + [multiplierR, multiplierG, multiplierB, multiplierA]
 		 */
@@ -45,7 +45,7 @@ package com.merlinds.miracle {
 		//
 		use namespace miracle_internal;
 
-		public function Scene(assets:Vector.<Asset>, scale:Number = 1) {
+		public function RenderScene(assets:Vector.<Asset>, scale:Number = 1) {
 			_currentMatrix = new TransformMatrix();
 			_currentColor = new Color();
 			_vertexData = new <Number>[];
@@ -58,60 +58,6 @@ package com.merlinds.miracle {
 
 		//==============================================================================
 		//{region							PUBLIC METHODS
-		//IScene
-		public function createImage(mesh:String = null, animation:String = null):MiracleImage {
-			var instance:MiracleDisplayObject = this.createInstance(MiracleImage);
-			instance.mesh = mesh;
-			instance.animation = animation;
-			instance.currentFrame = 0;
-			instance.fps = 0;
-			return instance as MiracleImage;
-		}
-
-		public function createAnimation(mesh:String, animation:String, fps:int = 60):MiracleAnimation{
-			var instance:MiracleDisplayObject = this.createInstance(MiracleAnimation);
-			instance.mesh = mesh;
-			instance.animation = animation;
-			instance.currentFrame = 0;
-			instance.fps = fps;
-			return instance as MiracleAnimation;
-		}
-
-		public function createInstance(serializer:Class):MiracleDisplayObject {
-			var instance:MiracleDisplayObject = new serializer();
-			_displayObjects[_displayObjects.length++] = instance;
-			trace("Miracle: Instance was created.");
-			return instance;
-		}
-
-		public function removeInstance(instance:MiracleDisplayObject):void {
-			var index:int = _displayObjects.indexOf(instance);
-			if(index > - 1){
-				//delete instance only on next frame
-				setTimeout(_displayObjects.splice, 0, index, 1);
-			}
-		}
-
-		public function textureInUse(texture:String):Boolean{
-			var textureHelper:TextureHelper = _textures[texture];
-			return textureHelper.inUse;
-		}
-
-		public function hitTest(point:Point):Object {
-			// if nothing else is hit, the stage returns itself as target
-			var target:MiracleDisplayObject;
-			var n:int = _displayObjects.length;
-			for(var i:int = 0; i < n; i++){
-				target = _displayObjects[i];
-				if(target.hitTest(point)){
-					break;
-				}
-				target = null;
-			}
-//			= super.hitTest(localPoint, forTouch);
-			return target == null ? this : target;
-		}
-
 		//IRenderer
 		override public function end(present:Boolean = true):void {
 			this.drawTriangles();
@@ -360,10 +306,6 @@ package com.merlinds.miracle {
 
 		//==============================================================================
 		//{region							GETTERS/SETTERS
-		public function get displayObjects():Vector.<MiracleDisplayObject> {
-			return _displayObjects;
-		}
-
-//} endregion GETTERS/SETTERS ==================================================
+		//} endregion GETTERS/SETTERS ==================================================
 	}
 }

@@ -62,7 +62,7 @@ package com.merlinds.miracle {
 				throw new IllegalOperationError("Miracle was not started. Use start() before creating scene ");
 			}
 			//TODO delete old scene
-			_currentScene = new Scene(assets, scale);
+			_currentScene = new DisplayScene(assets, scale);
 			_instance.scene = _currentScene as IRenderer;
 			trace("Miracle: new scene was added. ");
 			return _currentScene;
