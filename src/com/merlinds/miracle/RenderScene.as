@@ -102,7 +102,7 @@ package com.merlinds.miracle {
 				}
 
 				if(instance is MiracleAnimation)//only animation had timeline
-					this.changeInstanceFrame(instance, k, time);
+					this.changeInstanceFrame(instance as MiracleAnimation, k, time);
 				//tell instance that it was drawn on GPU
 				instance.miracle_internal::drawn();
 			}
@@ -112,7 +112,7 @@ package com.merlinds.miracle {
 		//==============================================================================
 		//{region						PRIVATE\PROTECTED METHODS
 		[Inline]
-		private function changeInstanceFrame(instance:MiracleDisplayObject, totalFrames:Number, time:Number):void {
+		private function changeInstanceFrame(instance:MiracleAnimation, totalFrames:Number, time:Number):void {
 			//calculate possibility of frame changing
 			instance.timePassed += time;
 			if(instance.timePassed >= instance.frameDelta){

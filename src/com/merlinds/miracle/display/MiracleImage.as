@@ -7,12 +7,11 @@ package com.merlinds.miracle.display {
 
 	public class MiracleImage extends MiracleDisplayObject{
 
+		//==============================================================================
+		//{region							PUBLIC METHODS
 		public function MiracleImage() {
 			super();
 		}
-
-		//==============================================================================
-		//{region							PUBLIC METHODS
 		//} endregion PUBLIC METHODS ===================================================
 
 		//==============================================================================

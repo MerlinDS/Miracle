@@ -38,12 +38,12 @@ package com.merlinds.miracle {
 		}
 
 		public function createAnimation(mesh:String, animation:String, fps:int = 60):MiracleAnimation{
-			var instance:MiracleDisplayObject = this.createInstance(MiracleAnimation);
+			var instance:MiracleAnimation = this.createInstance(MiracleAnimation) as MiracleAnimation;
 			instance.mesh = mesh;
 			instance.animation = animation;
 			instance.currentFrame = 0;
 			instance.fps = fps;
-			return instance as MiracleAnimation;
+			return instance;
 		}
 
 		public function createInstance(serializer:Class):MiracleDisplayObject {

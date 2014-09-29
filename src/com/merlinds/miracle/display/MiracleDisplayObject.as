@@ -16,10 +16,6 @@ package com.merlinds.miracle.display {
 	import flash.geom.Vector3D;
 
 	/**
-	 * Will be dispatched when loop flag set as false and playback is complete
-	 */
-	[Event(type="com.merlinds.miracle.events.MiracleEvent", name="playbackComplete")]
-	/**
 	 * Will be dispatched when instance was added to stage.
 	 * If mesh or animation was changed will be dispatched again after drawing on stage with new parameters
 	 */
@@ -32,57 +28,24 @@ package com.merlinds.miracle.display {
 	public class MiracleDisplayObject extends EventDispatcher{
 
 		use namespace miracle_internal;
-
-		miracle_internal var frameDelta:Number;
-		miracle_internal var timePassed:Number;
-		miracle_internal var playbackDirection:int;
-		private var _prevPlaybackDirection:int;
 		//description
 		private var _mesh:String;
 		private var _animation:String;
-		//playback
-		private var _fps:int;
 		private var _currentFrame:int;
-		private var _loop:Boolean;
+		private var _visible:Boolean;
 		//Transformations
 		public var transformation:Transformation;
 		//Playback
-		private var _onStage:Boolean;
-		private var _visible:Boolean;
+		protected var onStage:Boolean;
 
 		public function MiracleDisplayObject() {
 			this.transformation = new Transformation( new TransformMatrix(), new Color(), new Rectangle());
-			_prevPlaybackDirection = playbackDirection = 1;
 			_currentFrame = 0;
-			_loop = true;
 			_visible = true;
-			this.fps = 60;//Default frame rate
 		}
 
 		//==============================================================================
 		//{region							PUBLIC METHODS
-		/** Stop animation immediately **/
-		public function stop():void {
-			_prevPlaybackDirection = playbackDirection;
-			playbackDirection = 0;
-		}
-
-		/** Start play animation **/
-		public function play():void {
-			_currentFrame = 0;
-			playbackDirection = 1;
-		}
-
-		/**
-		 *  Revert animation playing
-		 * @param autoPlay If autoPlay flag equals true, than animation will be played immediately.
-		 **/
-		public function revert(autoPlay:Boolean = true):void {
-			if(playbackDirection == 0)
-				playbackDirection = _prevPlaybackDirection;
-			playbackDirection = ~playbackDirection + 1;
-			if(!autoPlay)this.stop();
-		}
 
 		public function hitTest(point:Point):Boolean {
 			//temp
@@ -105,39 +68,37 @@ package com.merlinds.miracle.display {
 		}
 
 		miracle_internal function drawn():void{
-			if(!_onStage){
+			if(!onStage){
 				//After first draw dispatch event that display object was added to stage
 				if(this.hasEventListener(MiracleEvent.ADDED_TO_STAGE)){
 					this.dispatchEvent(new MiracleEvent(MiracleEvent.ADDED_TO_STAGE));
 				}
-				_onStage = true;
+				onStage = true;
+				this.afterDraw();
 			}
 		}
 
 		miracle_internal function remove():void{
-			if(_onStage){
+			if(onStage){
 				if(this.hasEventListener(MiracleEvent.REMOVED_FROM_STAGE)){
 					this.dispatchEvent(new MiracleEvent(MiracleEvent.REMOVED_FROM_STAGE));
 				}
-				playbackDirection = 0;
-				_prevPlaybackDirection = 1;
 				_currentFrame = 0;
-				_onStage = false;
-			}
-		}
-
-		miracle_internal function stopPlayback():void{
-			if(_onStage){
-				this.stop();
-				if(this.hasEventListener(MiracleEvent.PLAYBACK_COMPLETE)){
-					this.dispatchEvent(new MiracleEvent(MiracleEvent.PLAYBACK_COMPLETE));
-				}
+				onStage = false;
+				this.afterRemove();
 			}
 		}
 		//} endregion PUBLIC METHODS ===================================================
 
 		//==============================================================================
 		//{region						PRIVATE\PROTECTED METHODS
+		protected function afterDraw():void{
+
+		}
+
+		protected function afterRemove():void{
+
+		}
 		//} endregion PRIVATE\PROTECTED METHODS ========================================
 
 		//==============================================================================
@@ -288,31 +249,8 @@ package com.merlinds.miracle.display {
 		}
 
 		public function set currentFrame(value:int):void {
-			if(playbackDirection != 0)_currentFrame = value;
+			_currentFrame = value;
 		}
-
-		public function get fps():int {
-			return _fps;
-		}
-
-		public function set fps(value:int):void {
-			_fps = value;
-			miracle_internal::frameDelta = 1000 / value;
-			miracle_internal::timePassed = 0;
-		}
-
-		public function get loop():Boolean {
-			return _loop;
-		}
-
-		public function set loop(value:Boolean):void {
-			_loop = value;
-		}
-
-		public function get onPause():Boolean {
-			return playbackDirection == 0;
-		}
-
 //} endregion GETTERS/SETTERS ==================================================
 	}
 }
