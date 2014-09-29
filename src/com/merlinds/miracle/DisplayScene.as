@@ -131,6 +131,7 @@ package com.merlinds.miracle {
 
 		[Inline]
 		private final function uploadTextures():void {
+			//TODO MF-51 Load texture one by one
 			var textureHelper:TextureHelper;
 			var n:int = _textureNeedToUpload.length;
 			while(--n >= 0){
