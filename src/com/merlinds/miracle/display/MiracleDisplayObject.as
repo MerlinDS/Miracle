@@ -149,7 +149,6 @@ package com.merlinds.miracle.display {
 		/**
 		 * @private
 		 */
-		[Inline]
 		public final function get animation():String {
 			return _animation;
 		}
@@ -157,7 +156,6 @@ package com.merlinds.miracle.display {
 		/**
 		 * Name of the animation that will be used for this display object
 		 */
-		[Inline]
 		public final function set animation(value:String):void {
 			if(value != _animation){
 				_animation = value;
@@ -169,7 +167,6 @@ package com.merlinds.miracle.display {
 		/**
 		 * @private
 		 */
-		[Inline]
 		public final function get mesh():String {
 			return _mesh;
 		}
@@ -177,7 +174,6 @@ package com.merlinds.miracle.display {
 		/**
 		 * Name of the mesh that will be used for this display object
 		 */
-		[Inline]
 		public final function set mesh(value:String):void {
 			if(value != _mesh){
 				_mesh = value;

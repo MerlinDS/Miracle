@@ -9,7 +9,8 @@ package com.merlinds.miracle.animations {
 	/**
 	 * Information that contains animation parameter for the frame
 	 */
-	public class FrameInfo {
+	public class FrameInfo{
+
 		/** Name of the polygon in mesh for this frame.**/
 		public var polygonName:String;
 		/**
@@ -25,6 +26,8 @@ package com.merlinds.miracle.animations {
 		 * Where M0 and M1 is Mesh matrix. Used only for tween animation.
 		 */
 		public var t:Number;
+
+		public var isEmpty:Boolean;
 		//==============================================================================
 		//{region							PUBLIC METHODS
 
@@ -40,16 +43,17 @@ package com.merlinds.miracle.animations {
 			this.m0 = m0;
 			this.m1 = m1;
 			this.t = t;
-			if(this.polygonName == null){
+			if(this.polygonName == null && !isEmpty){
 				throw new ArgumentError("Polygon name can not be null!");
 			}
-			if(this.m0 == null){
+			if(this.m0 == null && !isEmpty){
 				throw new ArgumentError("Start mesh matrix name can not be null!");
 			}
 		}
 
 		public function toString():String {
-			return "[FrameInfo (polygonName = " + this. polygonName + ", m0 = " + this.m0 + ", " +
+			return isEmpty ? "[object EmptyFrameInfo]" :
+					"[object FrameInfo (polygonName = " + this. polygonName + ", m0 = " + this.m0 + ", " +
 					"m1 = " + this.m1 + ", t = " + this.t + ")]";
 		}
 		//} endregion PUBLIC METHODS ===================================================
