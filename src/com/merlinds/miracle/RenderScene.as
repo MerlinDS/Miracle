@@ -18,8 +18,6 @@ package com.merlinds.miracle {
 
 	import flash.display3D.IndexBuffer3D;
 	import flash.display3D.VertexBuffer3D;
-	import flash.geom.Point;
-	import flash.utils.setTimeout;
 
 	internal class RenderScene extends AbstractScene{
 		/**
