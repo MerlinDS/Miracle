@@ -17,13 +17,15 @@ package com.merlinds.miracle {
 		 * Create instance of the image on current scene
 		 * @param mesh Name of the mesh
 		 * @param animation Name of the animation
+		 * @param frame What frame of animation will be display as image
 		 * @return Instance of the display object
 		 */
-		function createImage(mesh:String = null, animation:String = null):MiracleImage;
+		function createImage(mesh:String = null, animation:String = null, frame:uint = 0):MiracleImage;
 		/**
 		 * Create instance of the animation on current scene
 		 * @param mesh Name of the mesh
 		 * @param animation Name of the animation
+		 * @param fps Speed of the animation
 		 * @return Instance of the display object
 		 */
 		function createAnimation(mesh:String, animation:String, fps:int = 60):MiracleAnimation;

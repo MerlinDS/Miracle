@@ -12,7 +12,6 @@ package com.merlinds.miracle {
 	import com.merlinds.miracle.utils.Asset;
 
 	import flash.geom.Point;
-
 	import flash.utils.setTimeout;
 
 	public class DisplayScene extends RenderScene implements IScene{
@@ -29,11 +28,11 @@ package com.merlinds.miracle {
 			super (assets, scale);
 		}
 
-		public function createImage(mesh:String = null, animation:String = null):MiracleImage {
-			var instance:MiracleDisplayObject = this.createInstance(MiracleImage);
+		public function createImage(mesh:String = null, animation:String = null, frame:uint = 0):MiracleImage {
+			var instance:MiracleImage = this.createInstance(MiracleImage) as MiracleImage;
 			instance.mesh = mesh;
 			instance.animation = animation;
-			instance.currentFrame = 0;
+			instance.currentFrame = frame;
 			return instance as MiracleImage;
 		}
 
