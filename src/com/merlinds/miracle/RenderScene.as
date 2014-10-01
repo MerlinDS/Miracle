@@ -91,12 +91,17 @@ package com.merlinds.miracle {
 				for(var j:int = 0; j < m; j++){
 					var index:int = k * j + instance.currentFrame;
 					var frame:FrameInfo = animationHelper.frames[ index ];
-					if(frame != null){
+					if(!frame.isEmpty){
 						_polygon = mesh[ frame.polygonName ];
 						//draw on GPU
 						var transform:Transformation = instance.transformation;
-						this.calculateMatrix(transform.matrix, frame.m0.matrix, frame.m1.matrix, frame.t);
-						this.calculateColor(transform.color, frame.m0.color, frame.m1.color, frame.t);
+						if(!frame.isMotion){
+							this.staticMatrix(transform.matrix, frame.m0.matrix);
+							this.staticColor(transform.color, frame.m0.color);
+						}else{
+							this.motionMatrix(transform.matrix, frame.m0.matrix, frame.m1.matrix, frame.t);
+							this.motionColor(transform.color, frame.m0.color, frame.m1.color, frame.t);
+						}
 						this.draw();
 					}
 				}
@@ -112,7 +117,7 @@ package com.merlinds.miracle {
 		//==============================================================================
 		//{region						PRIVATE\PROTECTED METHODS
 		[Inline]
-		private function changeInstanceFrame(instance:MiracleAnimation, totalFrames:Number, time:Number):void {
+		private final function changeInstanceFrame(instance:MiracleAnimation, totalFrames:Number, time:Number):void {
 			//calculate possibility of frame changing
 			instance.timePassed += time;
 			if(instance.timePassed >= instance.frameDelta){
@@ -199,6 +204,60 @@ package com.merlinds.miracle {
 			_indexStep += _polygon.numVertexes;
 		}
 
+		//static
+		/**
+		 * Calculate new matrix transformation for processed polygon
+		 * @param m0 instance matrix transformation
+		 * @param m1 initial matrix transformation
+		 */
+//		[Inline]
+		private final function staticMatrix(m0:TransformMatrix, m1:TransformMatrix):void {
+			/**** CALCULATE FORM TRANSFORMATIONS *****/
+			_currentMatrix.offsetX = m1.offsetX;
+			_currentMatrix.offsetY = m1.offsetY;
+			_currentMatrix.tx = m0.tx + m1.tx * m0.scaleX;
+			_currentMatrix.ty = m0.ty + m1.ty * m0.scaleY;
+			_currentMatrix.scaleX = m0.scaleX * m1.scaleX;
+			_currentMatrix.scaleY = m0.scaleY * m1.scaleY;
+			_currentMatrix.skewX = m0.skewX + m1.skewX;
+			_currentMatrix.skewY = m0.skewY + m1.skewY;
+		}
+
+		/**
+		 * Calculate new color transformation for processed polygon
+		 * @param c0 instance color transformation
+		 * @param c1 initial color transformation
+		 */
+//		[Inline]
+		private final function staticColor(c0:Color, c1:Color):void {
+			/**** CALCULATE COLOR TRANSFORMATIONS *****/
+			_currentColor.clear();//clear previous color transformation
+			var different:uint = c0.type | c1.type ;
+			var mask:uint = different & Color.COLOR;
+			//If one of the colors has some transformation that need to calculate new c0 c0
+			if(mask == Color.COLOR){
+				//calculate offsets
+				_currentColor.redOffset = c0.redOffset + c1.redOffset;//RED
+				_currentColor.greenOffset = c0.greenOffset + c1.greenOffset;//GREEN
+				_currentColor.blueOffset = c0.blueOffset + c1.blueOffset;//BLUE
+				//calculate multipliers
+				_currentColor.redMultiplier = c0.redMultiplier +  c1.redMultiplier;//RED
+				_currentColor.greenMultiplier = c0.greenMultiplier + c1.greenMultiplier;//GREEN
+				_currentColor.blueMultiplier = c0.blueMultiplier + c1.blueMultiplier;//BLUE
+			}
+			mask = different & Color.ALPHA;
+			if(mask == Color.ALPHA){
+				//calculate offsets
+				_currentColor.alphaOffset = c0.alphaOffset + c1.alphaOffset;//ALPHA
+				//calculate multipliers
+				_currentColor.alphaMultiplier = c0.alphaMultiplier + c1.alphaMultiplier;//ALPHA
+
+			}
+			//change type
+			_currentColor.type = Color.COLOR + Color.ALPHA;
+		}
+
+		//Motion
 		/**
 		 * Calculate new matrix transformation for processed polygon
 		 * @param m0 instance matrix transformation
@@ -206,8 +265,8 @@ package com.merlinds.miracle {
 		 * @param m2 terminal matrix transformation
 		 * @param t Time delta for formula: matrix = m0 + ( ( 1 - t ) * m1 + t * m2 )
 		 */
-		[Inline]
-		private final function calculateMatrix(m0:TransformMatrix, m1:TransformMatrix, m2:TransformMatrix, t:Number):void {
+//		[Inline]
+		private final function motionMatrix(m0:TransformMatrix, m1:TransformMatrix, m2:TransformMatrix, t:Number):void {
 			var t0:Number = 1 - t;
 			/**** CALCULATE FORM TRANSFORMATIONS *****/
 			_currentMatrix.offsetX = (t0 * m1.offsetX + t * m2.offsetX );
@@ -227,8 +286,8 @@ package com.merlinds.miracle {
 		 * @param c2 terminal color transformation
 		 * @param t Time delta for formula: color = c0 + ( ( 1 - t ) * c1 + t * c2 )
 		 */
-		[Inline]
-		private final function calculateColor(c0:Color, c1:Color, c2:Color, t:Number):void {
+//		[Inline]
+		private final function motionColor(c0:Color, c1:Color, c2:Color, t:Number):void {
 			/**** CALCULATE COLOR TRANSFORMATIONS *****/
 			_currentColor.clear();//clear previous color transformation
 			var t0:Number = 1 - t;

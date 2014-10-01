@@ -28,6 +28,7 @@ package com.merlinds.miracle.animations {
 		public var t:Number;
 
 		public var isEmpty:Boolean;
+		public var isMotion:Boolean;
 		//==============================================================================
 		//{region							PUBLIC METHODS
 
@@ -49,6 +50,7 @@ package com.merlinds.miracle.animations {
 			if(this.m0 == null && !isEmpty){
 				throw new ArgumentError("Start mesh matrix name can not be null!");
 			}
+			this.isMotion  = this.m1 != null;
 		}
 
 		public function toString():String {

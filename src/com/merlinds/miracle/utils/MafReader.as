@@ -83,7 +83,6 @@ package com.merlinds.miracle.utils {
 					if(frameData != null){
 						var m0:Transformation, m1:Transformation;
 						m0 = layer.matrixList[ frameData.index ];//target polygon matrix
-						m1 = MATRIX;
 						if(frameData.motion){
 							m1 = layer.matrixList[ frameData.index + 1 ];//next polygon matrix
 						}
