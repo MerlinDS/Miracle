@@ -35,6 +35,7 @@ package com.merlinds.miracle.display {
 		private var _visible:Boolean;
 		//Transformations
 		public var transformation:Transformation;
+		public var z:Number;
 		//Playback
 		protected var onStage:Boolean;
 
@@ -42,6 +43,7 @@ package com.merlinds.miracle.display {
 			this.transformation = new Transformation( new TransformMatrix(), new Color(), new Rectangle());
 			_currentFrame = 0;
 			_visible = true;
+			this.z = 0;
 		}
 
 		//==============================================================================
@@ -165,15 +167,6 @@ package com.merlinds.miracle.display {
 
 		public function set y(value:Number):void {
 			this.transformation.matrix.ty = value;
-		}
-
-		public function get z():Number {
-			//TODO MF-41 Add z-index sorting
-			return 0;
-		}
-
-		public function set z(value:Number):void {
-			//TODO MF-41 Add z-index sorting
 		}
 
 		public function get scaleX():Number {

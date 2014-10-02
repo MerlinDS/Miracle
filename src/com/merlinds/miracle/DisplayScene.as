@@ -68,8 +68,8 @@ package com.merlinds.miracle {
 		public function hitTest(point:Point):Object {
 			// if nothing else is hit, the stage returns itself as target
 			var target:MiracleDisplayObject;
-			var n:int = _drawableObjects.length;
-			for(var i:int = 0; i < n; i++){
+			var i:int = _drawableObjects.length;
+			while(i-- > 0){
 				target = _drawableObjects[i];
 				if(target.hitTest(point)){
 					break;
@@ -87,7 +87,7 @@ package com.merlinds.miracle {
 		 * Remove from the list objects that will not be drawn.
 		 */
 		[Inline]
-		private final function sortDisplayObjects():void{
+		private final function prepareDrawObjects():void{
 			var instance:MiracleDisplayObject;
 			var n:int = _displayObjects.length;
 			for(var i:int = 0; i < n; i++){
@@ -140,6 +140,13 @@ package com.merlinds.miracle {
 			}
 			_textureNeedToUpload.length = 0;
 		}
+
+		[Inline]
+		private final function sortMethod(a:MiracleDisplayObject, b:MiracleDisplayObject):Number {
+			if(a.z == b.z)return 0;
+			if(a.z < b.z)return 1;
+			return -1;//if(a.z > b.z)
+		}
 		//} endregion PRIVATE\PROTECTED METHODS ========================================
 
 		//==============================================================================
@@ -148,7 +155,8 @@ package com.merlinds.miracle {
 			//clear previous objects list
 			_drawableObjects.length = 0;
 			//prepare frame data
-			this.sortDisplayObjects();
+			this.prepareDrawObjects();
+			_drawableObjects.sort(this.sortMethod);
 			this.uploadTextures();
 			//throw all errors that was collected
 			if(_errorsQueue.length > 0)throw _errorsQueue.shift();
