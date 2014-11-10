@@ -205,6 +205,7 @@ package com.merlinds.miracle.display {
 		public function set direction(value:int):void {
 			value = value < 0 ? -1 : 1;
 			this.transformation.matrix.flipX = value;
+			this.transformation.matrix.scaleX *= value;
 		}
 
 		public function get direction():int {
