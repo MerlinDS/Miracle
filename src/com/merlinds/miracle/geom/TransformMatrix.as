@@ -27,6 +27,8 @@ package com.merlinds.miracle.geom {
 		public var offsetX:Number;
 		/** offset by Y **/
 		public var offsetY:Number;
+
+		public var flipX:int;
 		/** Color transformation object**/
 		//TODO: MF-36 Add type bynary mask to MeshMatrix
 		//==============================================================================
@@ -53,6 +55,7 @@ package com.merlinds.miracle.geom {
 			this.skewY = skewY;
 			this.tx = tx;
 			this.ty = ty;
+			this.flipX = 1;
 		}
 
 		public function toString():String {

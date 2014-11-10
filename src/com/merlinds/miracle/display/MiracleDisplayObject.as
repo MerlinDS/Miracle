@@ -145,6 +145,7 @@ package com.merlinds.miracle.display {
 		}
 
 //Transformations
+
 		public function get width():int {
 			return this.transformation.bounds.width;
 		}
@@ -174,7 +175,6 @@ package com.merlinds.miracle.display {
 		}
 
 		public function set scaleX(value:Number):void {
-			//TODO MF-47 Change DisplayObject instance bounds by new transformation
 			this.transformation.matrix.scaleX = value;
 		}
 
@@ -183,7 +183,6 @@ package com.merlinds.miracle.display {
 		}
 
 		public function set scaleY(value:Number):void {
-			//TODO MF-47 Change DisplayObject instance bounds by new transformation
 			this.transformation.matrix.scaleY = value;
 		}
 
@@ -192,7 +191,6 @@ package com.merlinds.miracle.display {
 		}
 
 		public function set skewX(value:Number):void {
-			//TODO MF-47 Change DisplayObject instance bounds by new transformation
 			this.transformation.matrix.skewX = value;
 		}
 
@@ -201,8 +199,16 @@ package com.merlinds.miracle.display {
 		}
 
 		public function set skewY(value:Number):void {
-			//TODO MF-47 Change DisplayObject instance bounds by new transformation
 			this.transformation.matrix.skewY = value;
+		}
+
+		public function set direction(value:int):void {
+			value = value < 0 ? -1 : 1;
+			this.transformation.matrix.flipX = value;
+		}
+
+		public function get direction():int {
+			return this.transformation.matrix.flipX;
 		}
 
 		public function get alpha():Number {

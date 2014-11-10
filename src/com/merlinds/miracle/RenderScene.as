@@ -275,8 +275,8 @@ package com.merlinds.miracle {
 			_currentMatrix.ty = m0.ty + ( t0 * m1.ty + t * m2.ty ) * m0.scaleY;
 			_currentMatrix.scaleX = m0.scaleX * (t0 * m1.scaleX + t * m2.scaleX);
 			_currentMatrix.scaleY = m0.scaleY * (t0 * m1.scaleY + t * m2.scaleY);
-			_currentMatrix.skewX = m0.skewX + (t0 * m1.skewX + t * m2.skewX );
-			_currentMatrix.skewY = m0.skewY + (t0 * m1.skewY + t * m2.skewY );
+			_currentMatrix.skewX = m0.skewX + (t0 * m1.skewX + t * m2.skewX ) * m0.flipX;
+			_currentMatrix.skewY = m0.skewY + (t0 * m1.skewY + t * m2.skewY ) * m0.flipX;
 		}
 
 		/**
