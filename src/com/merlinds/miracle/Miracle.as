@@ -72,8 +72,8 @@ package com.merlinds.miracle {
 			var scene:AbstractScene = new DisplayScene(scale);
 			_currentScene = scene as IScene;
 			_instance.scene = scene as IRenderer;
-			trace("Miracle: new scene was added. ");
 			scene.initialize(assets, function():void{
+				trace("Miracle: new scene was initialized. ");
 				_instance.resume();
 				callback.apply(this);
 			});

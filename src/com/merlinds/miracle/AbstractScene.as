@@ -4,12 +4,8 @@
  * Time: 18:42
  */
 package com.merlinds.miracle {
-	import com.merlinds.miracle.animations.AnimationHelper;
 	import com.merlinds.miracle.display.MiracleDisplayObject;
-	import com.merlinds.miracle.geom.Mesh2D;
 	import com.merlinds.miracle.utils.Asset;
-	import com.merlinds.miracle.utils.MafReader;
-	import com.merlinds.miracle.utils.MtfReader;
 
 	import flash.display3D.Context3D;
 
@@ -24,15 +20,10 @@ package com.merlinds.miracle {
 		//
 		protected var _drawableObjects:Vector.<MiracleDisplayObject>;
 
-		private var _mtfReader:MtfReader;
-		private var _mafReader:MafReader;
-
 		private var _initializationCallback:Function;
 
 		public function AbstractScene(scale:Number = 1) {
 			_drawableObjects = new <MiracleDisplayObject>[];
-			_mafReader = new MafReader();
-			_mtfReader = new MtfReader();
 			_scale = scale;
 			_meshes = {};
 			_textures = {};
@@ -43,7 +34,8 @@ package com.merlinds.miracle {
 		//{region							PUBLIC METHODS
 		public function initialize(assets:Vector.<Asset>, callback:Function):void{
 			_initializationCallback = callback;
-			this.loadAssets(assets);
+			var assetsParser:AssetsParser = new AssetsParser(assets, _meshes, _textures, _animations);
+			assetsParser.execute(this.completeInitialization, _scale);
 		}
 
 		public function start():void {
@@ -64,39 +56,15 @@ package com.merlinds.miracle {
 
 		//==============================================================================
 		//{region						PRIVATE\PROTECTED METHODS
-		[Inline]
-		protected final function loadAssets(assets:Vector.<Asset>):void{
-			//Initialization complete
-			while(assets.length > 0){
-				var asset:Asset = assets.pop();
-				if(asset.type == Asset.TEXTURE_TYPE){
-					_mtfReader.execute(asset.output, _scale);
-					for( var meshName:String in _mtfReader.meshes){
-						var mesh2D:Mesh2D = _mtfReader.meshes[ meshName ];
-						mesh2D.textureLink = asset.name;
-						_meshes[ meshName ] = mesh2D;
-
-					}
-					_textures[ asset.name ] = _mtfReader.texture;
-				}else{
-					_mafReader.execute(asset.output, _scale);
-					for each(var animation:AnimationHelper in _mafReader.animations){
-						_animations[ animation.name ] = animation;
-					}
-				}
-				//Other types will be ignored for now!
-				//TODO: clear readers
-				asset.destroy();
-			}
-
-			if(_initializationCallback is Function){
-				_initializationCallback.apply(this);
-			}
-		}
 		//} endregion PRIVATE\PROTECTED METHODS ========================================
 
 		//==============================================================================
 		//{region							EVENTS HANDLERS
+		private function completeInitialization():void {
+			if(_initializationCallback is Function){
+				_initializationCallback.apply(this);
+			}
+		}
 		//} endregion EVENTS HANDLERS ==================================================
 
 		//==============================================================================
@@ -109,5 +77,85 @@ package com.merlinds.miracle {
 			return _scale;
 		}
 //} endregion GETTERS/SETTERS ==================================================
+	}
+}
+
+import com.merlinds.miracle.animations.AnimationHelper;
+import com.merlinds.miracle.geom.Mesh2D;
+import com.merlinds.miracle.utils.Asset;
+import com.merlinds.miracle.utils.MafReader;
+import com.merlinds.miracle.utils.MtfReader;
+import com.merlinds.miracle.utils.delay.delayExecution;
+
+class AssetsParser{
+
+	private var _assets:Vector.<Asset>;
+	//maps
+	private var _meshes:Object;/**Mesh2D**/
+	private var _textures:Object;/**TextureHelper**/
+	private var _animations:Object;/**AnimationHelper**/
+	private var _callback:Function;
+
+	private var _mtfReader:MtfReader;
+	private var _mafReader:MafReader;
+	private var _scale:Number;
+
+	private var _n:int;
+
+	public function AssetsParser(assets:Vector.<Asset>, meshes:Object,
+	                             textures:Object, animations:Object) {
+		_assets = assets;
+		_meshes = meshes;
+		_textures = textures;
+		_animations = animations;
+	}
+
+
+	private function complete():void{
+		_callback.apply();
+		_assets.length = 0;
+		_assets = null;
+		_meshes = null;
+		_textures = null;
+		_animations = null;
+	}
+
+	public function execute(callbakc:Function, scale:Number):void {
+		_callback = callbakc;
+		_scale = scale;
+		_mafReader = new MafReader();
+		_mtfReader = new MtfReader();
+		this.parseAssets();
+	}
+
+	private function parseAssets():void {
+		_n = _assets.length;
+		while(_assets.length > 0){
+			var asset:Asset = _assets.pop();
+			delayExecution(this.parseAsset, 0, asset);
+		}
+	}
+
+	private function parseAsset(asset:Asset):void {
+		if(asset.type == Asset.TEXTURE_TYPE){
+			_mtfReader.execute(asset.output, _scale);
+			for( var meshName:String in _mtfReader.meshes){
+				var mesh2D:Mesh2D = _mtfReader.meshes[ meshName ];
+				mesh2D.textureLink = asset.name;
+				_meshes[ meshName ] = mesh2D;
+
+			}
+			_textures[ asset.name ] = _mtfReader.texture;
+		}else{
+			_mafReader.execute(asset.output, _scale);
+			for each(var animation:AnimationHelper in _mafReader.animations){
+				_animations[ animation.name ] = animation;
+			}
+		}
+		asset.destroy();
+
+		if(--_n == 0){
+			this.complete();
+		}
 	}
 }

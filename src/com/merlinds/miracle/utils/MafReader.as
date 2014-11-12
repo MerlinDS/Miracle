@@ -15,10 +15,6 @@ package com.merlinds.miracle.utils {
 	import flash.utils.ByteArray;
 
 	public class MafReader {
-		private static const MATRIX:Transformation = new Transformation(
-				new TransformMatrix(),
-				new Color()
-		);
 
 		private static const EMPTY_FRAME:EmptyFrameInfo = new EmptyFrameInfo();
 
