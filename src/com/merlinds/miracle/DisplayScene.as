@@ -19,6 +19,7 @@ package com.merlinds.miracle {
 		private var _displayObjects:Vector.<MiracleDisplayObject>;
 		private var _textureNeedToUpload:Vector.<TextureHelper>;
 		private var _errorsQueue:Vector.<Error>;
+		private var _textureLoading:Boolean;
 		//==============================================================================
 		//{region							PUBLIC METHODS
 		public function DisplayScene(scale:Number = 1) {
@@ -130,6 +131,7 @@ package com.merlinds.miracle {
 				else if(!textureHelper.uploading){
 					if(_textureNeedToUpload.indexOf(textureHelper) < 0){
 						_textureNeedToUpload.push(textureHelper);
+						textureHelper.uploading = true;
 					}
 				}
 			}
@@ -138,15 +140,13 @@ package com.merlinds.miracle {
 
 		[Inline]
 		private final function uploadTextures():void {
-			//TODO MF-51 Load texture one by one
-			var textureHelper:TextureHelper;
-			var n:int = _textureNeedToUpload.length;
-			while(--n >= 0){
-				textureHelper = _textureNeedToUpload[n];
+			if(!_textureLoading && _textureNeedToUpload.length > 0){
+				_textureLoading = true;
+				var textureHelper:TextureHelper = _textureNeedToUpload.pop();
+				textureHelper.callbakc = this.textureCallback;
 				textureHelper.texture = _context.createTexture(textureHelper.width,
 						textureHelper.height, textureHelper.format, false);
 			}
-			_textureNeedToUpload.length = 0;
 		}
 
 		[Inline]
@@ -170,6 +170,11 @@ package com.merlinds.miracle {
 			if(_errorsQueue.length > 0)throw _errorsQueue.shift();
 			//draw frame
 			super.drawFrame(time);
+		}
+
+		private function textureCallback():void {
+			delayExecution(this.uploadTextures);
+			_textureLoading = false;
 		}
 		//} endregion EVENTS HANDLERS ==================================================
 

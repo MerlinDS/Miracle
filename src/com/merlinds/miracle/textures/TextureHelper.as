@@ -26,6 +26,7 @@ package com.merlinds.miracle.textures {
 		private var _texture:Texture;
 		private var _bytes:ByteArray;
 		private var _uploading:Boolean;
+		private var _callback:Function;
 
 		public function TextureHelper(bytes:ByteArray) {
 			_bytes = bytes;
@@ -56,6 +57,9 @@ package com.merlinds.miracle.textures {
 			_texture.removeEventListener(event.type, this.textureReadyHandler);
 			_uploading = false;
 			inUse = true;
+			if(_callback is Function){
+				_callback.apply(this);
+			}
 		}
 		//} endregion EVENTS HANDLERS ==================================================
 
@@ -80,6 +84,9 @@ package com.merlinds.miracle.textures {
 			_uploading = value;
 		}
 
+		public function set callbakc(value:Function):void{
+			_callback = value;
+		}
 //} endregion GETTERS/SETTERS ==================================================
 	}
 }
