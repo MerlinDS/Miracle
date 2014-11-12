@@ -58,7 +58,7 @@ package com.merlinds.miracle.textures {
 			_uploading = false;
 			inUse = true;
 			if(_callback is Function){
-				_callback.apply(this);
+				_callback.apply(this, [this]);
 			}
 		}
 		//} endregion EVENTS HANDLERS ==================================================
@@ -84,7 +84,7 @@ package com.merlinds.miracle.textures {
 			_uploading = value;
 		}
 
-		public function set callbakc(value:Function):void{
+		public function set callback(value:Function):void{
 			_callback = value;
 		}
 //} endregion GETTERS/SETTERS ==================================================

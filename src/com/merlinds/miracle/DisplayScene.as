@@ -19,7 +19,10 @@ package com.merlinds.miracle {
 		private var _displayObjects:Vector.<MiracleDisplayObject>;
 		private var _textureNeedToUpload:Vector.<TextureHelper>;
 		private var _errorsQueue:Vector.<Error>;
+		//loading
 		private var _textureLoading:Boolean;
+		private var _textureListeners:Object;
+
 		//==============================================================================
 		//{region							PUBLIC METHODS
 		public function DisplayScene(scale:Number = 1) {
@@ -87,6 +90,13 @@ package com.merlinds.miracle {
 			}
 			return target == null ? this : target;
 		}
+
+		public function addTextureLoadListener(textureName:String, listener:Function):void {
+			if(_textureListeners == null){
+				_textureListeners = {};
+			}
+			_textureListeners[textureName] = listener;
+		}
 		//} endregion PUBLIC METHODS ===================================================
 
 		//==============================================================================
@@ -143,7 +153,7 @@ package com.merlinds.miracle {
 			if(!_textureLoading && _textureNeedToUpload.length > 0){
 				_textureLoading = true;
 				var textureHelper:TextureHelper = _textureNeedToUpload.pop();
-				textureHelper.callbakc = this.textureCallback;
+				textureHelper.callback = this.textureCallback;
 				textureHelper.texture = _context.createTexture(textureHelper.width,
 						textureHelper.height, textureHelper.format, false);
 			}
@@ -172,9 +182,21 @@ package com.merlinds.miracle {
 			super.drawFrame(time);
 		}
 
-		private function textureCallback():void {
-			delayExecution(this.uploadTextures);
+		private function textureCallback(textureHelper:TextureHelper):void {
 			_textureLoading = false;
+			if(_textureListeners != null) {
+				for (var name:String in _textures) {
+					var temp:TextureHelper = _textures[name];
+					if (temp == textureHelper) {
+						break;
+					}
+				}
+				if (_textureListeners.hasOwnProperty(name)) {
+					_textureListeners[name].apply(this, [name]);
+					delete _textureListeners[name];
+				}
+			}
+			delayExecution(this.uploadTextures);
 		}
 		//} endregion EVENTS HANDLERS ==================================================
 

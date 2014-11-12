@@ -37,6 +37,8 @@ package com.merlinds.miracle {
 		function removeInstance(instance:MiracleDisplayObject):void;
 
 		function hitTest(point:Point):Object;
+
+		function addTextureLoadListener(textureName:String, listener:Function):void;
 		//} endregion PUBLIC METHODS ===================================================
 
 		//==============================================================================
