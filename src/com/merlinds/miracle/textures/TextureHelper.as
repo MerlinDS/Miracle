@@ -75,6 +75,11 @@ package com.merlinds.miracle.textures {
 		public function get uploading():Boolean {
 			return _uploading;
 		}
-		//} endregion GETTERS/SETTERS ==================================================
+
+		public function set uploading(value:Boolean):void {
+			_uploading = value;
+		}
+
+//} endregion GETTERS/SETTERS ==================================================
 	}
 }
