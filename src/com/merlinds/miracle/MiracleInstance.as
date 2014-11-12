@@ -6,6 +6,7 @@
 package com.merlinds.miracle {
 
 	import com.adobe.utils.AGALMiniAssembler;
+	import com.merlinds.miracle.utils.delay.delayExecution;
 
 	import flash.display.BitmapData;
 
@@ -83,7 +84,7 @@ package com.merlinds.miracle {
 			_context.setProgramConstantsFromVector("vertex", 125, Vector.<Number>([1, -1, 0, 0]));
 			_context.setProgramConstantsFromVector("vertex", 126, Vector.<Number>([0, 0, 1, 0]));
 			_context.setProgramConstantsFromVector("vertex", 127, Vector.<Number>([0, 0, 0, 1]));
-			setTimeout(_executeQueue.shift(), 0, ShaderLib.VERTEX_SHADER, ShaderLib.FRAGMENT_SHADER);
+			delayExecution(_executeQueue.shift(), 0, ShaderLib.VERTEX_SHADER, ShaderLib.FRAGMENT_SHADER);
 		}
 
 		private function updateViewport():void {
@@ -104,14 +105,14 @@ package com.merlinds.miracle {
 					_agal.assemble(Context3DProgramType.FRAGMENT, fs)
 			);
 			_context.setProgram(program);
-			setTimeout(_executeQueue.shift(), 0);
+			delayExecution(_executeQueue.shift(), 0);
 		}
 
 		private function executeTimer():void {
 			//start looping
 			_lastFrameTimestamp = getTimer() / 1000.0;
 			_nativeStage.addEventListener(Event.ENTER_FRAME, this.enterFrameHandler);
-			setTimeout(this.dispatchEvent, 0, new Event(Event.COMPLETE) );
+			delayExecution(this.dispatchEvent, 0, new Event(Event.COMPLETE) );
 		}
 		//} endregion PRIVATE\PROTECTED METHODS ========================================
 
@@ -121,7 +122,7 @@ package com.merlinds.miracle {
 			_stage3D.removeEventListener(event.type, arguments.callee);
 			_context = _stage3D.context3D;
 			trace("Miracle: context3D was obtained", "3D driver:", _context.driverInfo);
-			setTimeout(_executeQueue.shift(), 0);
+			delayExecution(_executeQueue.shift(), 0);
 		}
 
 		private function enterFrameHandler(event:Event):void {
@@ -169,5 +170,8 @@ package com.merlinds.miracle {
 		}
 
 //} endregion GETTERS/SETTERS ==================================================
+		override public function addEventListener(type:String, listener:Function, useCapture:Boolean = false, priority:int = 0, useWeakReference:Boolean = false):void {
+			super.addEventListener(type, listener, useCapture, priority, useWeakReference);
+		}
 	}
 }

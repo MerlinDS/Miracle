@@ -11,9 +11,9 @@ package com.merlinds.miracle {
 	import com.merlinds.miracle.geom.Mesh2D;
 	import com.merlinds.miracle.textures.TextureHelper;
 	import com.merlinds.miracle.utils.Asset;
+	import com.merlinds.miracle.utils.delay.delayExecution;
 
 	import flash.geom.Point;
-	import flash.utils.setTimeout;
 
 	public class DisplayScene extends RenderScene implements IScene{
 
@@ -65,7 +65,7 @@ package com.merlinds.miracle {
 			var index:int = _displayObjects.indexOf(instance);
 			if(index > - 1){
 				//delete instance only on next frame
-				setTimeout(_displayObjects.splice, 0, index, 1);
+				delayExecution(_displayObjects.splice, 0, index, 1);
 			}
 		}
 
