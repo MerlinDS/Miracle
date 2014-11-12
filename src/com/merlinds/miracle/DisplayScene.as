@@ -10,7 +10,6 @@ package com.merlinds.miracle {
 	import com.merlinds.miracle.display.MiracleImage;
 	import com.merlinds.miracle.geom.Mesh2D;
 	import com.merlinds.miracle.textures.TextureHelper;
-	import com.merlinds.miracle.utils.Asset;
 	import com.merlinds.miracle.utils.delay.delayExecution;
 
 	import flash.geom.Point;
@@ -22,11 +21,11 @@ package com.merlinds.miracle {
 		private var _errorsQueue:Vector.<Error>;
 		//==============================================================================
 		//{region							PUBLIC METHODS
-		public function DisplayScene(assets:Vector.<Asset>, scale:Number = 1) {
+		public function DisplayScene(scale:Number = 1) {
 			_displayObjects = new <MiracleDisplayObject>[];
 			_textureNeedToUpload = new <TextureHelper>[];
 			_errorsQueue = new <Error>[];
-			super (assets, scale);
+			super (scale);
 		}
 
 		public function createImage(mesh:String = null, animation:String = null, frame:uint = 0):MiracleImage {

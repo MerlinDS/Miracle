@@ -14,7 +14,6 @@ package com.merlinds.miracle {
 	import com.merlinds.miracle.geom.TransformMatrix;
 	import com.merlinds.miracle.geom.Transformation;
 	import com.merlinds.miracle.textures.TextureHelper;
-	import com.merlinds.miracle.utils.Asset;
 
 	import flash.display3D.IndexBuffer3D;
 	import flash.display3D.VertexBuffer3D;
@@ -41,7 +40,7 @@ package com.merlinds.miracle {
 		//
 		use namespace miracle_internal;
 
-		public function RenderScene(assets:Vector.<Asset>, scale:Number = 1) {
+		public function RenderScene(scale:Number = 1) {
 			_currentMatrix = new TransformMatrix();
 			_currentColor = new Color();
 			_vertexData = new <Number>[];
@@ -49,7 +48,7 @@ package com.merlinds.miracle {
 			_vertexOffset = 0;
 			_indexOffset = 0;
 			_indexStep = 0;
-			super(assets, scale);
+			super(scale);
 		}
 
 		//==============================================================================

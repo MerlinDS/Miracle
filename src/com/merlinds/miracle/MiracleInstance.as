@@ -22,7 +22,6 @@ package com.merlinds.miracle {
 	import flash.events.EventDispatcher;
 	import flash.geom.Rectangle;
 	import flash.utils.getTimer;
-	import flash.utils.setTimeout;
 
 	internal class MiracleInstance extends EventDispatcher{
 		private var _agal:AGALMiniAssembler;
@@ -50,7 +49,7 @@ package com.merlinds.miracle {
 
 		public function start(enableErrorChecking:Boolean = true):void {
 			_agal = new AGALMiniAssembler();
-			_executeQueue = new <Function>[this.setupContext, this.updateShader, this.executeTimer];
+			_executeQueue = new <Function>[this.setupContext, this.updateShader, this.completeMethod];
 			_enableErrorChecking = enableErrorChecking;
 			_stage3D = _nativeStage.stage3Ds[0];
 			_stage3D.addEventListener(Event.CONTEXT3D_CREATE, this.contextCreateHandler);
@@ -64,10 +63,14 @@ package com.merlinds.miracle {
 				/*_scene.start();
 				_scene.end();*/
 			}
+			_nativeStage.removeEventListener(Event.ENTER_FRAME, this.enterFrameHandler);
 		}
 
 		public function resume():void {
 			_onPause = false;
+			//start looping
+			_lastFrameTimestamp = getTimer();
+			_nativeStage.addEventListener(Event.ENTER_FRAME, this.enterFrameHandler);
 		}
 		//} endregion PUBLIC METHODS ===================================================
 
@@ -105,14 +108,12 @@ package com.merlinds.miracle {
 					_agal.assemble(Context3DProgramType.FRAGMENT, fs)
 			);
 			_context.setProgram(program);
-			delayExecution(_executeQueue.shift(), 0);
+			delayExecution( _executeQueue.shift() );
 		}
 
-		private function executeTimer():void {
-			//start looping
-			_lastFrameTimestamp = getTimer() / 1000.0;
-			_nativeStage.addEventListener(Event.ENTER_FRAME, this.enterFrameHandler);
-			delayExecution(this.dispatchEvent, 0, new Event(Event.COMPLETE) );
+		private function completeMethod():void {
+			_onPause = true;
+			this.dispatchEvent( new Event(Event.COMPLETE) );
 		}
 		//} endregion PRIVATE\PROTECTED METHODS ========================================
 

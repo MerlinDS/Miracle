@@ -27,7 +27,9 @@ package com.merlinds.miracle {
 		private var _mtfReader:MtfReader;
 		private var _mafReader:MafReader;
 
-		public function AbstractScene(assets:Vector.<Asset>, scale:Number = 1) {
+		private var _initializationCallback:Function;
+
+		public function AbstractScene(scale:Number = 1) {
 			_drawableObjects = new <MiracleDisplayObject>[];
 			_mafReader = new MafReader();
 			_mtfReader = new MtfReader();
@@ -35,11 +37,15 @@ package com.merlinds.miracle {
 			_meshes = {};
 			_textures = {};
 			_animations = {};
-			this.initialize(assets);
 		}
 
 		//==============================================================================
 		//{region							PUBLIC METHODS
+		public function initialize(assets:Vector.<Asset>, callback:Function):void{
+			_initializationCallback = callback;
+			this.loadAssets(assets);
+		}
+
 		public function start():void {
 			_context.clear(0.8, 0.8, 0.8, 1);
 		}
@@ -59,7 +65,7 @@ package com.merlinds.miracle {
 		//==============================================================================
 		//{region						PRIVATE\PROTECTED METHODS
 		[Inline]
-		protected final function initialize(assets:Vector.<Asset>):void{
+		protected final function loadAssets(assets:Vector.<Asset>):void{
 			//Initialization complete
 			while(assets.length > 0){
 				var asset:Asset = assets.pop();
@@ -81,6 +87,10 @@ package com.merlinds.miracle {
 				//Other types will be ignored for now!
 				//TODO: clear readers
 				asset.destroy();
+			}
+
+			if(_initializationCallback is Function){
+				_initializationCallback.apply(this);
 			}
 		}
 		//} endregion PRIVATE\PROTECTED METHODS ========================================

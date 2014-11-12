@@ -57,15 +57,26 @@ package com.merlinds.miracle {
 			}
 		}
 
-		public static function createScene(assets:Vector.<Asset>, scale:Number = 1):IScene {
+		/**
+		 *
+		 * @param assets Assets for this scene
+		 * @param callback Initialization scene complete
+		 * @param scale Global scale of the scene
+		 * @return New Scene
+		 */
+		public static function createScene(assets:Vector.<Asset>, callback:Function, scale:Number = 1):void {
 			if(_instance == null){
 				throw new IllegalOperationError("Miracle was not started. Use start() before creating scene ");
 			}
 			//TODO delete old scene
-			_currentScene = new DisplayScene(assets, scale);
-			_instance.scene = _currentScene as IRenderer;
+			var scene:AbstractScene = new DisplayScene(scale);
+			_currentScene = scene as IScene;
+			_instance.scene = scene as IRenderer;
 			trace("Miracle: new scene was added. ");
-			return _currentScene;
+			scene.initialize(assets, function():void{
+				_instance.resume();
+				callback.apply(this);
+			});
 		}
 
 		public static function pause():void {
