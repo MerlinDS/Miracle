@@ -266,7 +266,7 @@ package com.merlinds.miracle.display {
 		}
 
 
-		protected function get animationInstance():AnimationHelper {
+		protected final function get animationInstance():AnimationHelper {
 			return _animationInstance;
 		}
 
