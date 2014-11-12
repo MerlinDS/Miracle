@@ -4,6 +4,8 @@
  * Time: 13:48
  */
 package com.merlinds.miracle.animations {
+	import com.merlinds.miracle.animations.AnimationHelper;
+
 	import flash.geom.Rectangle;
 
 	/**
@@ -47,6 +49,17 @@ package com.merlinds.miracle.animations {
 			this.frames = frames;
 			this.numLayers = numLayers;
 			this.totalFrames = totalFrames;
+		}
+
+		public function clone():AnimationHelper {
+			var frames:Vector.<FrameInfo> = new <FrameInfo>[];
+			var n:int = frames.length = this.frames.length;
+			for(var i:int = 0; i < n; i++){
+				frames[i] = this.frames[i].clone();
+			}
+			var clone:AnimationHelper = new AnimationHelper(this.name, this.totalFrames, this.numLayers, frames);
+			clone.bounds = this.bounds.clone();
+			return clone;
 		}
 		//} endregion PUBLIC METHODS ===================================================
 

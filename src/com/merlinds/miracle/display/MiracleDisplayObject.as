@@ -4,6 +4,7 @@
  * Time: 20:56
  */
 package com.merlinds.miracle.display {
+	import com.merlinds.miracle.animations.AnimationHelper;
 	import com.merlinds.miracle.events.MiracleEvent;
 	import com.merlinds.miracle.geom.Color;
 	import com.merlinds.miracle.geom.TransformMatrix;
@@ -38,6 +39,9 @@ package com.merlinds.miracle.display {
 		public var z:Number;
 		//Playback
 		protected var onStage:Boolean;
+		//
+		private var _demandAnimationInstance:Boolean;
+		private var _animationInstance:AnimationHelper;
 
 		public function MiracleDisplayObject() {
 			this.transformation = new Transformation( new TransformMatrix(), new Color(), new Rectangle());
@@ -100,6 +104,15 @@ package com.merlinds.miracle.display {
 
 		protected function afterRemove():void{
 
+		}
+
+		protected final function demandAnimationInstance():void {
+			if(_animation != null && _mesh != null){
+				_demandAnimationInstance = true;
+			}else{
+				throw new ArgumentError("Can not demand animation instance " +
+						"without animation name and mesh name declaration");
+			}
 		}
 		//} endregion PRIVATE\PROTECTED METHODS ========================================
 
@@ -251,6 +264,21 @@ package com.merlinds.miracle.display {
 		public function set currentFrame(value:int):void {
 			_currentFrame = value;
 		}
+
+
+		protected function get animationInstance():AnimationHelper {
+			return _animationInstance;
+		}
+
+
+		miracle_internal function set animationInstance(value:AnimationHelper):void {
+			_animationInstance = value;
+		}
+
+		miracle_internal function get demandAnimationInstance():Boolean {
+			return _demandAnimationInstance;
+		}
+
 //} endregion GETTERS/SETTERS ==================================================
 	}
 }

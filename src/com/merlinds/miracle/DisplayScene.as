@@ -4,6 +4,7 @@
  * Time: 18:49
  */
 package com.merlinds.miracle {
+	import com.merlinds.miracle.animations.AnimationHelper;
 	import com.merlinds.miracle.display.MiracleAnimation;
 	import com.merlinds.miracle.display.MiracleDisplayObject;
 	import com.merlinds.miracle.display.MiracleImage;
@@ -48,7 +49,15 @@ package com.merlinds.miracle {
 		public function createInstance(serializer:Class):MiracleDisplayObject {
 			var instance:MiracleDisplayObject = new serializer();
 			_displayObjects[ _displayObjects.length++ ] = instance;
-			trace("Miracle: Instance was created.");
+			if(instance.miracle_internal::demandAnimationInstance){
+				//create new animation helper and set it to instance
+				var animation:AnimationHelper = _animations[  instance.mesh + "." + instance.animation ];
+				animation = animation.clone();
+				instance.animation = instance.animation + "clone";
+				_animations[  instance.mesh + "." + instance.animation ] = animation;
+				instance.miracle_internal::animationInstance = animation;
+			}
+			trace("Miracle: Instance was created.", serializer);
 			return instance;
 		}
 

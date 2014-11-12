@@ -22,6 +22,16 @@ package com.merlinds.miracle.geom {
 		public function clear():void{
 
 		}
+
+		public function clone():Transformation {
+			var matrix:TransformMatrix = this.matrix == null ? null : new TransformMatrix(this.matrix.offsetX, this.matrix.offsetY,
+					this.matrix.tx, this.matrix.ty, this.matrix.scaleX, this.matrix.scaleY, this.matrix.skewX, this.matrix.skewY);
+			var color:Color = this.color == null ? null : new Color(this.color.redMultiplier, this.color.greenMultiplier,
+					this.color.blueMultiplier, this.color.alphaMultiplier,
+					this.color.redOffset, this.color.greenOffset, this.color.blueOffset, this.color.alphaOffset);
+			var bounds:Rectangle = this.bounds == null ? null :this.bounds.clone();
+			return new Transformation(matrix, color, bounds);
+		}
 		//} endregion PUBLIC METHODS ===================================================
 
 		//==============================================================================

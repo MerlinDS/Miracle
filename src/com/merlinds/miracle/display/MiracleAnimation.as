@@ -116,7 +116,6 @@ package com.merlinds.miracle.display {
 		public function get onPause():Boolean {
 			return playbackDirection == 0;
 		}
-
 		//} endregion GETTERS/SETTERS ==================================================
 	}
 }

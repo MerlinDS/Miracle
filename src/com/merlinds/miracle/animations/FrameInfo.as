@@ -58,6 +58,13 @@ package com.merlinds.miracle.animations {
 					"[object FrameInfo (polygonName = " + this. polygonName + ", m0 = " + this.m0 + ", " +
 					"m1 = " + this.m1 + ", t = " + this.t + ")]";
 		}
+
+		public function clone():FrameInfo {
+			var clone:FrameInfo = new FrameInfo(this.polygonName, this.m0.clone(),
+					this.m1 != null ? this.m1.clone() : null, this.t);
+			clone.isEmpty = this.isEmpty;
+			return clone;
+		}
 		//} endregion PUBLIC METHODS ===================================================
 
 		//==============================================================================
