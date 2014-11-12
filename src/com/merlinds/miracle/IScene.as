@@ -38,7 +38,7 @@ package com.merlinds.miracle {
 
 		function hitTest(point:Point):Object;
 
-		function addTextureLoadListener(textureName:String, listener:Function):void;
+		function loadTexturesImmediately(textures:Vector.<String> = null, callback:Function = null):void;
 		//} endregion PUBLIC METHODS ===================================================
 
 		//==============================================================================

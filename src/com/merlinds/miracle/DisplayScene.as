@@ -21,7 +21,7 @@ package com.merlinds.miracle {
 		private var _errorsQueue:Vector.<Error>;
 		//loading
 		private var _textureLoading:Boolean;
-		private var _textureListeners:Object;
+		private var _loadingCallback:Function;
 
 		//==============================================================================
 		//{region							PUBLIC METHODS
@@ -91,13 +91,33 @@ package com.merlinds.miracle {
 			return target == null ? this : target;
 		}
 
-		public function addTextureLoadListener(textureName:String, listener:Function):void {
-			if(_textureListeners == null){
-				_textureListeners = {};
+
+		public function loadTexturesImmediately(textures:Vector.<String> = null, callback:Function = null):void {
+			_loadingCallback = callback;
+			//load all textures in textures parameter is null
+			var textureHelper:TextureHelper;
+			if(textures == null){
+				for each(textureHelper in _textures){
+					if(!textureHelper.uploading && _textureNeedToUpload.indexOf(textureHelper) < 0){
+						_textureNeedToUpload.push(textureHelper);
+						textureHelper.uploading = true;
+					}
+				}
+			}else{
+				for(var i:int = 0; i < textures.length; i++){
+					var name:String = textures[i];
+					if(_textures.hasOwnProperty(name)){
+						textureHelper = _textures[name];
+						if(!textureHelper.uploading && _textureNeedToUpload.indexOf(textureHelper) < 0){
+							_textureNeedToUpload.push(textureHelper);
+							textureHelper.uploading = true;
+						}
+					}
+				}
 			}
-			_textureListeners[textureName] = listener;
 		}
-		//} endregion PUBLIC METHODS ===================================================
+
+//} endregion PUBLIC METHODS ===================================================
 
 		//==============================================================================
 		//{region						PRIVATE\PROTECTED METHODS
@@ -150,12 +170,18 @@ package com.merlinds.miracle {
 
 		[Inline]
 		private final function uploadTextures():void {
-			if(!_textureLoading && _textureNeedToUpload.length > 0){
+			if(_textureLoading)return;
+			if(_textureNeedToUpload.length > 0){
 				_textureLoading = true;
 				var textureHelper:TextureHelper = _textureNeedToUpload.pop();
 				textureHelper.callback = this.textureCallback;
 				textureHelper.texture = _context.createTexture(textureHelper.width,
 						textureHelper.height, textureHelper.format, false);
+			}else{
+				if(_loadingCallback is Function){
+					_loadingCallback.apply(this);
+					_loadingCallback = null;
+				}
 			}
 		}
 
@@ -184,18 +210,6 @@ package com.merlinds.miracle {
 
 		private function textureCallback(textureHelper:TextureHelper):void {
 			_textureLoading = false;
-			if(_textureListeners != null) {
-				for (var name:String in _textures) {
-					var temp:TextureHelper = _textures[name];
-					if (temp == textureHelper) {
-						break;
-					}
-				}
-				if (_textureListeners.hasOwnProperty(name)) {
-					_textureListeners[name].apply(this, [name]);
-					delete _textureListeners[name];
-				}
-			}
 			delayExecution(this.uploadTextures);
 		}
 		//} endregion EVENTS HANDLERS ==================================================
