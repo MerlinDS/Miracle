@@ -67,8 +67,7 @@ package com.merlinds.miracle {
 		public function removeInstance(instance:MiracleDisplayObject):void {
 			var index:int = _displayObjects.indexOf(instance);
 			if(index > - 1){
-				//delete instance only on next frame
-				delayExecution(_displayObjects.splice, 0, index, 1);
+				_displayObjects.splice(index, 1);
 			}
 		}
 
