@@ -150,11 +150,14 @@ package com.merlinds.miracle {
 				readiness--;
 			//check for necessary objects for instance
 			meshHelper =  _meshes[ instance.mesh ];
-			textureHelper = _textures[ meshHelper.textureLink ];
 
-			if(meshHelper == null || textureHelper == null){
-				_errorsQueue.push(new ArgumentError("Can not draw display object without mesh or texture"));
+			if(meshHelper == null){
+				_errorsQueue.push(new ArgumentError("Can not draw display object without mesh"));
 			}else{
+				textureHelper = _textures[ meshHelper.textureLink ];
+				if(textureHelper == null){
+					_errorsQueue.push(new ArgumentError("Can not draw display object without texture"));
+				}
 				//check that texture was already uploaded
 				if(textureHelper.inUse)readiness--;
 				else if(!textureHelper.uploading){
