@@ -22,6 +22,7 @@ package com.merlinds.miracle {
 		//loading
 		private var _textureLoading:Boolean;
 		private var _loadingCallback:Function;
+		private var _loadingCallbackSet:Boolean;
 
 		//==============================================================================
 		//{region							PUBLIC METHODS
@@ -93,6 +94,7 @@ package com.merlinds.miracle {
 
 		public function loadTexturesImmediately(textures:Vector.<String> = null, callback:Function = null):void {
 			_loadingCallback = callback;
+			_loadingCallbackSet = true;
 			//load all textures in textures parameter is null
 			var textureHelper:TextureHelper;
 			if(textures == null){
@@ -180,8 +182,9 @@ package com.merlinds.miracle {
 				textureHelper.texture = _context.createTexture(textureHelper.width,
 						textureHelper.height, textureHelper.format, false);
 			}else{
-				if(_loadingCallback is Function){
+				if(_loadingCallbackSet){
 					_loadingCallback.apply(this);
+					_loadingCallbackSet = false;
 					_loadingCallback = null;
 				}
 			}
