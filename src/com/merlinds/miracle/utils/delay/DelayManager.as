@@ -4,9 +4,10 @@
  * Time: 14:03
  */
 package com.merlinds.miracle.utils.delay {
-	import flash.utils.clearTimeout;
+	import flash.events.Event;
+	import flash.events.TimerEvent;
+	import flash.utils.Timer;
 	import flash.utils.getTimer;
-	import flash.utils.setTimeout;
 
 	internal class DelayManager {
 
@@ -15,7 +16,7 @@ package com.merlinds.miracle.utils.delay {
 		private var _onNextFrame:Vector.<DelayMethod>;
 		private var _methods:Vector.<DelayMethod>;
 
-		private var _intervalId:uint;
+		private var _timer:Timer;
 		//==============================================================================
 		//{region							PUBLIC METHODS
 		public function DelayManager(singletonKey:SingletoneKey){
@@ -24,6 +25,8 @@ package com.merlinds.miracle.utils.delay {
 			}
 			_methods = new <DelayMethod>[];
 			_onNextFrame = new <DelayMethod>[];
+			_timer = new Timer(17, 1);
+			_timer.addEventListener(TimerEvent.TIMER_COMPLETE, this.tickHandler);
 		}
 
 		public static function getInstance():DelayManager {
@@ -36,7 +39,10 @@ package com.merlinds.miracle.utils.delay {
 
 		public function add(delayMethod:DelayMethod):void{
 			_methods[_methods.length] = delayMethod;
-			if(_intervalId == 0)_intervalId = setTimeout(this.tickHandler, 0);
+			if(!_timer.running){
+				_timer.reset();
+				_timer.start();
+			}
 		}
 		//} endregion PUBLIC METHODS ===================================================
 
@@ -46,10 +52,7 @@ package com.merlinds.miracle.utils.delay {
 
 		//==============================================================================
 		//{region							EVENTS HANDLERS
-		private function tickHandler():void {
-			//release from timer
-			clearTimeout(_intervalId);
-			_intervalId = 0;
+		private function tickHandler(event:Event):void {
 			//execute delay methods
 			var frameTime:int = getTimer();
 			while (_methods.length) {
@@ -68,8 +71,8 @@ package com.merlinds.miracle.utils.delay {
 			_methods = _methods.concat(_onNextFrame);
 			_onNextFrame.length = 0;
 			if(_methods.length > 0){
-				//add new timeout if not all methods was executed
-				_intervalId = setTimeout(this.tickHandler, 0);
+				_timer.reset();
+				_timer.start();
 			}
 
 		}
