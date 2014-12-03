@@ -85,7 +85,8 @@ import com.merlinds.miracle.geom.Mesh2D;
 import com.merlinds.miracle.utils.Asset;
 import com.merlinds.miracle.utils.MafReader;
 import com.merlinds.miracle.utils.MtfReader;
-import com.merlinds.miracle.utils.delay.delayExecution;
+
+import flash.utils.setTimeout;
 
 class AssetsParser{
 
@@ -132,7 +133,7 @@ class AssetsParser{
 		_n = _assets.length;
 		while(_assets.length > 0){
 			var asset:Asset = _assets.pop();
-			delayExecution(this.parseAsset, 0, asset);
+			setTimeout(this.parseAsset, 0, asset);
 		}
 	}
 

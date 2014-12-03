@@ -6,10 +6,8 @@
 package com.merlinds.miracle {
 
 	import com.adobe.utils.AGALMiniAssembler;
-	import com.merlinds.miracle.utils.delay.delayExecution;
 
 	import flash.display.BitmapData;
-
 	import flash.display.Stage;
 	import flash.display.Stage3D;
 	import flash.display3D.Context3D;
@@ -22,6 +20,7 @@ package com.merlinds.miracle {
 	import flash.events.EventDispatcher;
 	import flash.geom.Rectangle;
 	import flash.utils.getTimer;
+	import flash.utils.setTimeout;
 
 	internal class MiracleInstance extends EventDispatcher{
 		private var _agal:AGALMiniAssembler;
@@ -87,7 +86,7 @@ package com.merlinds.miracle {
 			_context.setProgramConstantsFromVector("vertex", 125, Vector.<Number>([1, -1, 0, 0]));
 			_context.setProgramConstantsFromVector("vertex", 126, Vector.<Number>([0, 0, 1, 0]));
 			_context.setProgramConstantsFromVector("vertex", 127, Vector.<Number>([0, 0, 0, 1]));
-			delayExecution(_executeQueue.shift(), 0, ShaderLib.VERTEX_SHADER, ShaderLib.FRAGMENT_SHADER);
+			setTimeout(_executeQueue.shift(), 0, ShaderLib.VERTEX_SHADER, ShaderLib.FRAGMENT_SHADER);
 		}
 
 		private function updateViewport():void {
@@ -108,7 +107,7 @@ package com.merlinds.miracle {
 					_agal.assemble(Context3DProgramType.FRAGMENT, fs)
 			);
 			_context.setProgram(program);
-			delayExecution( _executeQueue.shift() );
+			setTimeout( _executeQueue.shift(), 0 );
 		}
 
 		private function completeMethod():void {
@@ -123,7 +122,7 @@ package com.merlinds.miracle {
 			_stage3D.removeEventListener(event.type, arguments.callee);
 			_context = _stage3D.context3D;
 			trace("Miracle: context3D was obtained", "3D driver:", _context.driverInfo);
-			delayExecution(_executeQueue.shift(), 0);
+			setTimeout(_executeQueue.shift(), 0);
 		}
 
 		private function enterFrameHandler(event:Event):void {

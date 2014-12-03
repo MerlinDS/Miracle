@@ -10,9 +10,9 @@ package com.merlinds.miracle {
 	import com.merlinds.miracle.display.MiracleImage;
 	import com.merlinds.miracle.geom.Mesh2D;
 	import com.merlinds.miracle.textures.TextureHelper;
-	import com.merlinds.miracle.utils.delay.delayExecution;
 
 	import flash.geom.Point;
+	import flash.utils.setTimeout;
 
 	public class DisplayScene extends RenderScene implements IScene{
 
@@ -215,7 +215,7 @@ package com.merlinds.miracle {
 
 		private function textureCallback(textureHelper:TextureHelper):void {
 			_textureLoading = false;
-			delayExecution(this.uploadTextures);
+			setTimeout(this.uploadTextures, 0);
 		}
 		//} endregion EVENTS HANDLERS ==================================================
 
