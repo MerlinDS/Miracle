@@ -4,6 +4,7 @@
  * Time: 11:57
  */
 package com.merlinds.miracle.display {
+	import com.merlinds.miracle.animations.EmptyFrameInfo;
 	import com.merlinds.miracle.animations.FrameInfo;
 
 	public class MiracleFont extends MiracleDisplayObject {
@@ -46,8 +47,13 @@ package com.merlinds.miracle.display {
 			var n:int = chars.length;
 			for(var i:int = 0; i < n; i++){
 				var char:String = chars[i];
-				var glyph:FrameInfo = _glyphs[ char ].clone();
-				glyph.m0.matrix.tx = this.glyphSize * i;
+				var glyph:FrameInfo = _glyphs[ char ];
+				if(glyph != null){
+					glyph = glyph.clone();
+					glyph.m0.matrix.tx = this.glyphSize * i;
+				}else{
+					glyph = new EmptyFrameInfo();
+				}
 				this.animationInstance.frames[i] = glyph;
 			}
 			this.animationInstance.numLayers = n;
