@@ -114,6 +114,10 @@ package com.merlinds.miracle.display {
 						"without animation name and mesh name declaration");
 			}
 		}
+
+		protected function afterAnimationDemand():void{
+
+		}
 		//} endregion PRIVATE\PROTECTED METHODS ========================================
 
 		//==============================================================================
@@ -273,6 +277,7 @@ package com.merlinds.miracle.display {
 
 		miracle_internal function set animationInstance(value:AnimationHelper):void {
 			_animationInstance = value;
+			this.afterAnimationDemand();
 		}
 
 		miracle_internal function get demandAnimationInstance():Boolean {

@@ -7,6 +7,7 @@ package com.merlinds.miracle {
 	import com.merlinds.miracle.animations.AnimationHelper;
 	import com.merlinds.miracle.display.MiracleAnimation;
 	import com.merlinds.miracle.display.MiracleDisplayObject;
+	import com.merlinds.miracle.display.MiracleFont;
 	import com.merlinds.miracle.display.MiracleImage;
 	import com.merlinds.miracle.geom.Mesh2D;
 	import com.merlinds.miracle.textures.TextureHelper;
@@ -50,6 +51,23 @@ package com.merlinds.miracle {
 			return instance;
 		}
 
+		public function createTxt(mesh:String, fontName:String, text:String = null, glyphSize:int = 30):MiracleFont {
+			var instance:MiracleFont = this.createInstance(MiracleFont) as MiracleFont;
+			instance.mesh = mesh;
+			instance.animation = fontName;
+			instance.glyphSize = glyphSize;
+			instance.currentFrame = 0;
+			instance.text = text;
+			//
+			var animation:AnimationHelper = _animations[  mesh + "." + fontName ];
+			animation = animation.clone();
+			instance.animation = instance.animation + ".font";
+			_animations[  mesh + "." + instance.animation ] = animation;
+			instance.miracle_internal::animationInstance = animation;
+			//
+			return instance;
+		}
+
 		public function createInstance(serializer:Class):MiracleDisplayObject {
 			var instance:MiracleDisplayObject = new serializer();
 			_displayObjects[ _displayObjects.length++ ] = instance;
@@ -57,7 +75,7 @@ package com.merlinds.miracle {
 				//create new animation helper and set it to instance
 				var animation:AnimationHelper = _animations[  instance.mesh + "." + instance.animation ];
 				animation = animation.clone();
-				instance.animation = instance.animation + "clone";
+				instance.animation = instance.animation + ".clone";
 				_animations[  instance.mesh + "." + instance.animation ] = animation;
 				instance.miracle_internal::animationInstance = animation;
 			}
