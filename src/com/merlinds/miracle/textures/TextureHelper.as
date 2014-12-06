@@ -58,7 +58,7 @@ package com.merlinds.miracle.textures {
 			_uploading = false;
 			inUse = true;
 			if(_callback is Function){
-				_callback.apply(this, [this]);
+				_callback.apply(this);
 			}
 		}
 		//} endregion EVENTS HANDLERS ==================================================

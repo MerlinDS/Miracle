@@ -231,7 +231,7 @@ package com.merlinds.miracle {
 			super.drawFrame(time);
 		}
 
-		private function textureCallback(textureHelper:TextureHelper):void {
+		private function textureCallback():void {
 			_textureLoading = false;
 			setTimeout(this.uploadTextures, 0);
 		}
