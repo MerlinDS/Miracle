@@ -23,6 +23,9 @@ package com.merlinds.miracle {
 	import flash.utils.setTimeout;
 
 	internal class MiracleInstance extends EventDispatcher{
+
+		private static const CONTEXT_DISPOSED:String = "Disposed";
+		//only for dev stage
 		private var _agal:AGALMiniAssembler;
 		private var _stage3D:Stage3D;
 		private var _nativeStage:Stage;
@@ -37,6 +40,7 @@ package com.merlinds.miracle {
 		private var _ratioX:Number;
 		private var _ratioY:Number;
 		private var _onPause:Boolean;
+		private var _reloading:Boolean;
 		//
 		//==============================================================================
 		//{region							PUBLIC METHODS
@@ -68,10 +72,21 @@ package com.merlinds.miracle {
 		}
 
 		public function resume():void {
-			_onPause = false;
+			_reloading = _context.driverInfo == CONTEXT_DISPOSED;
 			//start looping
-			_lastFrameTimestamp = getTimer();
-			_nativeStage.addEventListener(Event.ENTER_FRAME, this.enterFrameHandler);
+			if(!_reloading){
+				_onPause = false;
+				_lastFrameTimestamp = getTimer();
+				_nativeStage.addEventListener(Event.ENTER_FRAME, this.enterFrameHandler);
+			}
+		}
+
+		public function reload():void {
+			if(_reloading){
+				this.start(_enableErrorChecking);
+			}else{
+				trace("No need to reload Miracle");
+			}
 		}
 		//} endregion PUBLIC METHODS ===================================================
 
@@ -83,11 +98,11 @@ package com.merlinds.miracle {
 			_context.setBlendFactors(Context3DBlendFactor.SOURCE_ALPHA, Context3DBlendFactor.ONE_MINUS_SOURCE_ALPHA);
 			this.updateViewport();
 			//set vertex buffers
-			_context.setProgramConstantsFromVector("vertex", 0, Vector.<Number>([_ratioX, -_ratioX, 0, _ratioX]));
-			_context.setProgramConstantsFromVector("vertex", 1, Vector.<Number>([-_ratioY, _ratioY, 0, -_ratioY]));
-			_context.setProgramConstantsFromVector("vertex", 125, Vector.<Number>([1, -1, 0, 0]));
-			_context.setProgramConstantsFromVector("vertex", 126, Vector.<Number>([0, 0, 1, 0]));
-			_context.setProgramConstantsFromVector("vertex", 127, Vector.<Number>([0, 0, 0, 1]));
+			_context.setProgramConstantsFromVector(Context3DProgramType.VERTEX, 0, Vector.<Number>([_ratioX, -_ratioX, 0, _ratioX]));
+			_context.setProgramConstantsFromVector(Context3DProgramType.VERTEX, 1, Vector.<Number>([-_ratioY, _ratioY, 0, -_ratioY]));
+			_context.setProgramConstantsFromVector(Context3DProgramType.VERTEX, 125, Vector.<Number>([1, -1, 0, 0]));
+			_context.setProgramConstantsFromVector(Context3DProgramType.VERTEX, 126, Vector.<Number>([0, 0, 1, 0]));
+			_context.setProgramConstantsFromVector(Context3DProgramType.VERTEX, 127, Vector.<Number>([0, 0, 0, 1]));
 			setTimeout(_executeQueue.shift(), 0, ShaderLib.VERTEX_SHADER, ShaderLib.FRAGMENT_SHADER);
 		}
 
@@ -114,7 +129,14 @@ package com.merlinds.miracle {
 
 		private function completeMethod():void {
 			_onPause = true;
-			this.dispatchEvent( new Event(Event.COMPLETE) );
+			if(!_reloading){
+				this.dispatchEvent( new Event(Event.COMPLETE) );
+			}else{
+				//reload scene
+				this.scene = _scene;
+				_reloading = false;
+				_scene.reload(this.completeMethod);
+			}
 		}
 		//} endregion PRIVATE\PROTECTED METHODS ========================================
 
@@ -160,6 +182,9 @@ package com.merlinds.miracle {
 			return _scene;
 		}
 
+		public function get reloading():Boolean {
+			return _reloading;
+		}
 //} endregion GETTERS/SETTERS ==================================================
 	}
 }

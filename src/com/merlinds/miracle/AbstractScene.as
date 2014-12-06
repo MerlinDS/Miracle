@@ -52,6 +52,9 @@ package com.merlinds.miracle {
 		public function drawFrame(time:Number):void {
 		}
 
+		public function reload(callback:Function):void {
+
+		}
 		//} endregion PUBLIC METHODS ===================================================
 
 		//==============================================================================

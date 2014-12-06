@@ -68,7 +68,6 @@ package com.merlinds.miracle {
 			if(_instance == null){
 				throw new IllegalOperationError("Miracle was not started. Use start() before creating scene ");
 			}
-			//TODO delete old scene
 			var scene:AbstractScene = new DisplayScene(scale);
 			_scene = scene as IScene;
 			_instance.scene = scene as IRenderer;
@@ -79,14 +78,32 @@ package com.merlinds.miracle {
 			});
 		}
 
-		public static function pause():void {
-			if(_instance != null)
+		public static function pause():Boolean {
+			if(_instance != null){
 				_instance.pause();
+				return true;
+			}
+			return false;
 		}
 
-		public static function resume():void {
-			if(_instance != null)
+		public static function resume():Boolean {
+			if(_instance != null){
 				_instance.resume();
+				return _instance.reloading;
+			}
+			return false;
+		}
+
+		public static function reload(callback:Function = null):void{
+			if(_instance != null){
+				_instance.addEventListener(Event.COMPLETE, function(event:Event):void{
+					_instance.removeEventListener(event.type, arguments.callee);
+					trace("Miracle: Reload completed");
+					callback.apply(this);
+					callback = null;
+				});
+				_instance.reload();
+			}
 		}
 		//} endregion PUBLIC METHODS ===================================================
 

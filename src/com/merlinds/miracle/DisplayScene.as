@@ -136,7 +136,22 @@ package com.merlinds.miracle {
 			}
 		}
 
-//} endregion PUBLIC METHODS ===================================================
+
+		override public function reload(callback:Function):void {
+			_drawableObjects.length = 0;
+			for each(var textureHelper:TextureHelper in _textures){
+				if(textureHelper.inUse){
+					//reload texture
+					_textureNeedToUpload.push(textureHelper);
+					textureHelper.uploading = true;
+				}
+			}
+			_loadingCallbackSet = true;
+			_loadingCallback = callback;
+			this.uploadTextures();
+		}
+
+		//} endregion PUBLIC METHODS ===================================================
 
 		//==============================================================================
 		//{region						PRIVATE\PROTECTED METHODS

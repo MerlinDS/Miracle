@@ -12,6 +12,7 @@ package com.merlinds.miracle {
 		//{region							METHODS
 		function start():void;
 		function end(present:Boolean = true):void;
+		function reload(callback:Function):void;
 		function kill():void;
 
 		function drawFrame(time:Number):void;
