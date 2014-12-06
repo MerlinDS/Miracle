@@ -7,6 +7,7 @@ package com.merlinds.miracle.textures {
 	import flash.display3D.textures.Texture;
 	import flash.events.Event;
 	import flash.utils.ByteArray;
+	import flash.utils.setTimeout;
 
 	public class TextureHelper {
 
@@ -58,7 +59,7 @@ package com.merlinds.miracle.textures {
 			_uploading = false;
 			inUse = true;
 			if(_callback is Function){
-				_callback.apply(this);
+				setTimeout(_callback.apply, 0);
 			}
 		}
 		//} endregion EVENTS HANDLERS ==================================================
