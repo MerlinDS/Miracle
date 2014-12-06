@@ -80,11 +80,13 @@ package com.merlinds.miracle {
 		}
 
 		public static function pause():void {
-			_instance.pause();
+			if(_instance != null)
+				_instance.pause();
 		}
 
 		public static function resume():void {
-			_instance.resume();
+			if(_instance != null)
+				_instance.resume();
 		}
 		//} endregion PUBLIC METHODS ===================================================
 
