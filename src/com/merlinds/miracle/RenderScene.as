@@ -19,6 +19,8 @@ package com.merlinds.miracle {
 
 	import flash.display3D.IndexBuffer3D;
 	import flash.display3D.VertexBuffer3D;
+	import flash.utils.ByteArray;
+	import flash.utils.Endian;
 
 	internal class RenderScene extends AbstractScene{
 		/**
@@ -28,8 +30,8 @@ package com.merlinds.miracle {
 		//GPU
 		private var _vertexBuffer:VertexBuffer3D;
 		private var _indexBuffer:IndexBuffer3D;
-		private var _vertexData:Vector.<Number>;
-		private var _indexData:Vector.<uint>;
+		private var _verticesData:ByteArray;
+		private var _indexData:ByteArray;
 		//
 		private var _vertexOffset:Number;
 		private var _indexOffset:Number;
@@ -45,8 +47,10 @@ package com.merlinds.miracle {
 		public function RenderScene(scale:Number = 1) {
 			_currentMatrix = new TransformMatrix();
 			_currentColor = new Color();
-			_vertexData = new <Number>[];
-			_indexData = new <uint>[];
+			_verticesData = new ByteArray();
+			_verticesData.endian = Endian.LITTLE_ENDIAN;
+			_indexData = new ByteArray();
+			_indexData.endian = Endian.LITTLE_ENDIAN;
 			_vertexOffset = 0;
 			_indexOffset = 0;
 			_indexStep = 0;
@@ -142,14 +146,15 @@ package com.merlinds.miracle {
 		[Inline]
 		private final function drawTriangles():void {
 			var n:int;
-			if(_vertexData.length > 0){
-				n = _vertexData.length / VERTEX_PARAMS_LENGTH;
-				_vertexBuffer = _context.createVertexBuffer( n , VERTEX_PARAMS_LENGTH);
-				_vertexBuffer.uploadFromVector(_vertexData, 0, n );
-				n = _indexData.length;
+			_indexData.position = 0;
+			_verticesData.position = 0;
+			if(_verticesData.length > 0){
+				n = (_verticesData.length >> 2)/ VERTEX_PARAMS_LENGTH;
+				_vertexBuffer = _context.createVertexBuffer( n , VERTEX_PARAMS_LENGTH );
+				_vertexBuffer.uploadFromByteArray(_verticesData, 0, 0, n );
+				n = _indexData.length >> 1;
 				_indexBuffer = _context.createIndexBuffer(n);
-				_indexBuffer.uploadFromVector(_indexData, 0, n);
-
+				_indexBuffer.uploadFromByteArray(_indexData, 0, 0, n);
 				_context.setVertexBufferAt(0, _vertexBuffer, 0, Context3DVertexBufferFormat.FLOAT_2); //x, y
 				_context.setVertexBufferAt(1, _vertexBuffer, 2, Context3DVertexBufferFormat.FLOAT_2); //u, v
 				_context.setVertexBufferAt(2, _vertexBuffer, 4, Context3DVertexBufferFormat.FLOAT_2); //tx, ty
@@ -157,52 +162,56 @@ package com.merlinds.miracle {
 				_context.setVertexBufferAt(4, _vertexBuffer, 10, Context3DVertexBufferFormat.FLOAT_4); //R, G, B, A
 				_context.setVertexBufferAt(5, _vertexBuffer, 14, Context3DVertexBufferFormat.FLOAT_4); //multiplierR, multiplierG, multiplierB, multiplierA
 				_context.drawTriangles( _indexBuffer );
+
+				_vertexBuffer.dispose();
+				_indexBuffer.dispose();
 			}
 			_vertexOffset = 0;
-			_indexOffset = 0;
 			_indexStep = 0;
 			//
-			_vertexData.length = 0;
-			_indexData.length = 0;
+			_verticesData.clear();
+			_indexData.clear();
 		}
 
 		[Inline]
 		private final function draw():void {
 			var i:int;
 			var dataIndex:int = 0;
-			var n:int = _polygon.numVertexes;
+			var n:int = _polygon.numVertices;
+			//_verticesData.position = _vertexOffset;
 			//set vertexes
 			for(i = 0; i < n; i++){
 				/**** ADD VERTEX DATA *****/
-				_vertexData[_vertexOffset++] = _polygon.buffer[ dataIndex++ ] + _currentMatrix.offsetX;
-				_vertexData[_vertexOffset++] = _polygon.buffer[ dataIndex++ ] + _currentMatrix.offsetY;
+				_verticesData.writeFloat(_polygon.buffer[ dataIndex++ ] + _currentMatrix.offsetX);
+				_verticesData.writeFloat(_polygon.buffer[ dataIndex++ ] + _currentMatrix.offsetY);
 				/**** ADD UV DATA *****/
-				_vertexData[_vertexOffset++] = _polygon.buffer[ dataIndex++ ];
-				_vertexData[_vertexOffset++] = _polygon.buffer[ dataIndex++ ];
+				_verticesData.writeFloat(_polygon.buffer[ dataIndex++ ]);
+				_verticesData.writeFloat(_polygon.buffer[ dataIndex++ ]);
 				/**** ADD TRANSFORM INDEXES DATA *****/
-				_vertexData[_vertexOffset++] = _currentMatrix.tx;
-				_vertexData[_vertexOffset++] = _currentMatrix.ty;
-				_vertexData[_vertexOffset++] = _currentMatrix.scaleX;
-				_vertexData[_vertexOffset++] = _currentMatrix.scaleY;
-				_vertexData[_vertexOffset++] = _currentMatrix.skewX;
-				_vertexData[_vertexOffset++] = _currentMatrix.skewY;
+				_verticesData.writeFloat( _currentMatrix.tx );
+				_verticesData.writeFloat( _currentMatrix.ty );
+				_verticesData.writeFloat( _currentMatrix.scaleX );
+				_verticesData.writeFloat( _currentMatrix.scaleY );
+				_verticesData.writeFloat( _currentMatrix.skewX );
+				_verticesData.writeFloat( _currentMatrix.skewY );
 				/**** ADD COLOR OFFSET DATA *****/
-				_vertexData[_vertexOffset++] = _currentColor.redOffset;
-				_vertexData[_vertexOffset++] = _currentColor.greenOffset;
-				_vertexData[_vertexOffset++] = _currentColor.blueOffset;
-				_vertexData[_vertexOffset++] = _currentColor.alphaOffset;
+				_verticesData.writeFloat( _currentColor.redOffset );
+				_verticesData.writeFloat( _currentColor.greenOffset );
+				_verticesData.writeFloat( _currentColor.blueOffset );
+				_verticesData.writeFloat( _currentColor.alphaOffset );
 				/**** ADD COLOR MULTIPLIER DATA *****/
-				_vertexData[_vertexOffset++] = _currentColor.redMultiplier;
-				_vertexData[_vertexOffset++] = _currentColor.greenMultiplier;
-				_vertexData[_vertexOffset++] = _currentColor.blueMultiplier;
-				_vertexData[_vertexOffset++] = _currentColor.alphaMultiplier;
+				_verticesData.writeFloat( _currentColor.redMultiplier );
+				_verticesData.writeFloat( _currentColor.greenMultiplier );
+				_verticesData.writeFloat( _currentColor.blueMultiplier );
+				_verticesData.writeFloat( _currentColor.alphaMultiplier );
 			}
+		//	_vertexOffset += VERTEX_PARAMS_LENGTH * 4;
 			/**** FILL INDEXES BUFFER *****/
 			n = _polygon.indexes.length;
 			for(i = 0; i < n; i++){
-				_indexData[_indexOffset++] = _indexStep + _polygon.indexes[i];
+				_indexData.writeShort( _indexStep + _polygon.indexes[i] );
 			}
-			_indexStep += _polygon.numVertexes;
+			_indexStep += _polygon.numVertices;
 		}
 
 		//static

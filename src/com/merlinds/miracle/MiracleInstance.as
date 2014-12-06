@@ -61,6 +61,8 @@ package com.merlinds.miracle {
 				//clear GPU from graphics till miracle on pause
 				/*_scene.start();
 				_scene.end();*/
+				//test context loosing
+//				_context.dispose();
 			}
 			_nativeStage.removeEventListener(Event.ENTER_FRAME, this.enterFrameHandler);
 		}
