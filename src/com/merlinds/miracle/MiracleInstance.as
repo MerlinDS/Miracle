@@ -160,20 +160,6 @@ package com.merlinds.miracle {
 			return _scene;
 		}
 
-		public function get snapshot():BitmapData {
-			var snapshot:BitmapData = new BitmapData(_viewport.width, _viewport.height, true, 0x00000000);
-			_scene.start();
-			_scene.drawFrame(0);
-			_scene.end(false);
-			_context.drawToBitmapData(snapshot);
-			_context.present();
-//			snapshot.lock();
-			return snapshot;
-		}
-
 //} endregion GETTERS/SETTERS ==================================================
-		override public function addEventListener(type:String, listener:Function, useCapture:Boolean = false, priority:int = 0, useWeakReference:Boolean = false):void {
-			super.addEventListener(type, listener, useCapture, priority, useWeakReference);
-		}
 	}
 }

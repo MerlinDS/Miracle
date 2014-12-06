@@ -17,7 +17,7 @@ package com.merlinds.miracle {
 	public final class Miracle {
 
 		private static var _instance:MiracleInstance;
-		private static var _currentScene:IScene;
+		private static var _scene:IScene;
 		//==============================================================================
 		//{region							PUBLIC METHODS
 		public function Miracle() {
@@ -70,7 +70,7 @@ package com.merlinds.miracle {
 			}
 			//TODO delete old scene
 			var scene:AbstractScene = new DisplayScene(scale);
-			_currentScene = scene as IScene;
+			_scene = scene as IScene;
 			_instance.scene = scene as IRenderer;
 			scene.initialize(assets, function():void{
 				trace("Miracle: new scene was initialized. ");
@@ -104,12 +104,8 @@ package com.merlinds.miracle {
 			return _instance != null;
 		}
 
-		public static function get currentScene():IScene {
-			return  _currentScene;
-		}
-
-		public static function get snapshot():BitmapData{
-			return _instance.snapshot;
+		public static function get scene():IScene {
+			return  _scene;
 		}
 //} endregion GETTERS/SETTERS ==================================================
 	}
