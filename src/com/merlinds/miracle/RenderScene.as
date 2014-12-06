@@ -23,18 +23,27 @@ package com.merlinds.miracle {
 	import flash.utils.Endian;
 
 	internal class RenderScene extends AbstractScene{
-		/**
-		 * [x,y] + [u,v] + [tx, ty] + [scaleX, scaleY, skewX, skewY] + [r,g,b,a] + [multiplierR, multiplierG, multiplierB, multiplierA]
-		 */
-		private const VERTEX_PARAMS_LENGTH:int = 2 + 2 + 2 + 4 + 4 + 4;
+		private const NULL:int = 0;
+		//
+		private const XY:int = 2;
+		/** [u,v] */
+		private const UV:int = 2;
+		/** [tx, ty] */
+		private const OFFSET:int = 2;
+		/** [scaleX, scaleY, skewX, skewY] */
+		private const TRANSFORM:int = 4;
+		/** [r,g,b,a] **/
+		private const COROL:int = 4;
+		/** [multiplierR, multiplierG, multiplierB, multiplierA] **/
+		private const CMULT:int = 4;
+
+		private const VERTEX_PARAMS_LENGTH:int = XY + UV + OFFSET + TRANSFORM + COROL + CMULT;
+
 		//GPU
 		private var _vertexBuffer:VertexBuffer3D;
 		private var _indexBuffer:IndexBuffer3D;
 		private var _verticesData:ByteArray;
 		private var _indexData:ByteArray;
-		//
-		private var _vertexOffset:Number;
-		private var _indexOffset:Number;
 		private var _indexStep:Number;
 		//drawing
 		private var _polygon:Polygon2D;
@@ -51,8 +60,6 @@ package com.merlinds.miracle {
 			_verticesData.endian = Endian.LITTLE_ENDIAN;
 			_indexData = new ByteArray();
 			_indexData.endian = Endian.LITTLE_ENDIAN;
-			_vertexOffset = 0;
-			_indexOffset = 0;
 			_indexStep = 0;
 			super(scale);
 		}
@@ -146,27 +153,26 @@ package com.merlinds.miracle {
 		[Inline]
 		private final function drawTriangles():void {
 			var n:int;
-			_indexData.position = 0;
-			_verticesData.position = 0;
+			_indexData.position = NULL;
+			_verticesData.position = NULL;
 			if(_verticesData.length > 0){
 				n = (_verticesData.length >> 2)/ VERTEX_PARAMS_LENGTH;
 				_vertexBuffer = _context.createVertexBuffer( n , VERTEX_PARAMS_LENGTH );
-				_vertexBuffer.uploadFromByteArray(_verticesData, 0, 0, n );
+				_vertexBuffer.uploadFromByteArray(_verticesData, NULL, NULL, n );
 				n = _indexData.length >> 1;
 				_indexBuffer = _context.createIndexBuffer(n);
-				_indexBuffer.uploadFromByteArray(_indexData, 0, 0, n);
-				_context.setVertexBufferAt(0, _vertexBuffer, 0, Context3DVertexBufferFormat.FLOAT_2); //x, y
-				_context.setVertexBufferAt(1, _vertexBuffer, 2, Context3DVertexBufferFormat.FLOAT_2); //u, v
-				_context.setVertexBufferAt(2, _vertexBuffer, 4, Context3DVertexBufferFormat.FLOAT_2); //tx, ty
-				_context.setVertexBufferAt(3, _vertexBuffer, 6, Context3DVertexBufferFormat.FLOAT_4); //scaleX, scaleY, skewX, skewY
-				_context.setVertexBufferAt(4, _vertexBuffer, 10, Context3DVertexBufferFormat.FLOAT_4); //R, G, B, A
-				_context.setVertexBufferAt(5, _vertexBuffer, 14, Context3DVertexBufferFormat.FLOAT_4); //multiplierR, multiplierG, multiplierB, multiplierA
+				_indexBuffer.uploadFromByteArray(_indexData, NULL, NULL, n);
+				_context.setVertexBufferAt(0, _vertexBuffer, NULL, Context3DVertexBufferFormat.FLOAT_2); //x, y
+				_context.setVertexBufferAt(1, _vertexBuffer, XY, Context3DVertexBufferFormat.FLOAT_2); //u, v
+				_context.setVertexBufferAt(2, _vertexBuffer, XY + UV, Context3DVertexBufferFormat.FLOAT_2); //tx, ty
+				_context.setVertexBufferAt(3, _vertexBuffer, XY + UV + OFFSET, Context3DVertexBufferFormat.FLOAT_4); //scaleX, scaleY, skewX, skewY
+				_context.setVertexBufferAt(4, _vertexBuffer, XY + UV + OFFSET + TRANSFORM, Context3DVertexBufferFormat.FLOAT_4); //R, G, B, A
+				_context.setVertexBufferAt(5, _vertexBuffer, VERTEX_PARAMS_LENGTH - CMULT, Context3DVertexBufferFormat.FLOAT_4); //multiplierR, multiplierG, multiplierB, multiplierA
 				_context.drawTriangles( _indexBuffer );
 
 				_vertexBuffer.dispose();
 				_indexBuffer.dispose();
 			}
-			_vertexOffset = 0;
 			_indexStep = 0;
 			//
 			_verticesData.clear();
