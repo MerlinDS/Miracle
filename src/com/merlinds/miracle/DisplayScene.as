@@ -166,7 +166,7 @@ package com.merlinds.miracle {
 			if(instance.mesh != null && instance.animation != null)readiness--;
 			if(instance.visible)readiness--;
 			//check for animation
-			if(_animations[ instance.mesh + "." + instance.animation] != null)
+			if(_animations[ instance.animationId] != null)
 				readiness--;
 			//check for necessary objects for instance
 			meshHelper =  _meshes[ instance.mesh ];

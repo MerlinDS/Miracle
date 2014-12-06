@@ -130,10 +130,10 @@ class AssetsParser{
 	}
 
 	private function parseAssets():void {
-		_n = _assets.length;
-		while(_assets.length > 0){
-			var asset:Asset = _assets.pop();
-			setTimeout(this.parseAsset, 0, asset);
+		if(_assets.length > 0){
+			this.parseAsset(_assets.pop());
+		}else{
+			this.complete();
 		}
 	}
 
@@ -155,8 +155,6 @@ class AssetsParser{
 		}
 		asset.destroy();
 
-		if(--_n == 0){
-			this.complete();
-		}
+		setTimeout(this.parseAssets, 0);
 	}
 }

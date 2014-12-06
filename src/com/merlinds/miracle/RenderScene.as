@@ -15,6 +15,8 @@ package com.merlinds.miracle {
 	import com.merlinds.miracle.geom.Transformation;
 	import com.merlinds.miracle.textures.TextureHelper;
 
+	import flash.display3D.Context3DVertexBufferFormat;
+
 	import flash.display3D.IndexBuffer3D;
 	import flash.display3D.VertexBuffer3D;
 
@@ -73,7 +75,7 @@ package com.merlinds.miracle {
 				instance = _drawableObjects[i];
 				mesh = _meshes[instance.mesh];
 				textureHelper = _textures[ mesh.textureLink ];
-				animationHelper = _animations[ instance.mesh + "." + instance.animation ];
+				animationHelper = _animations[ instance.animationId ];
 				//set new bounds
 				if(!instance.transformation.bounds.equals(animationHelper.bounds)){
 					instance.transformation.bounds = animationHelper.bounds.clone();
@@ -148,12 +150,12 @@ package com.merlinds.miracle {
 				_indexBuffer = _context.createIndexBuffer(n);
 				_indexBuffer.uploadFromVector(_indexData, 0, n);
 
-				_context.setVertexBufferAt(0, _vertexBuffer, 0, "float2"); //x, y
-				_context.setVertexBufferAt(1, _vertexBuffer, 2, "float2"); //u, v
-				_context.setVertexBufferAt(2, _vertexBuffer, 4, "float2"); //tx, ty
-				_context.setVertexBufferAt(3, _vertexBuffer, 6, "float4"); //scaleX, scaleY, skewX, skewY
-				_context.setVertexBufferAt(4, _vertexBuffer, 10, "float4"); //R, G, B, A
-				_context.setVertexBufferAt(5, _vertexBuffer, 14, "float4"); //multiplierR, multiplierG, multiplierB, multiplierA
+				_context.setVertexBufferAt(0, _vertexBuffer, 0, Context3DVertexBufferFormat.FLOAT_2); //x, y
+				_context.setVertexBufferAt(1, _vertexBuffer, 2, Context3DVertexBufferFormat.FLOAT_2); //u, v
+				_context.setVertexBufferAt(2, _vertexBuffer, 4, Context3DVertexBufferFormat.FLOAT_2); //tx, ty
+				_context.setVertexBufferAt(3, _vertexBuffer, 6, Context3DVertexBufferFormat.FLOAT_4); //scaleX, scaleY, skewX, skewY
+				_context.setVertexBufferAt(4, _vertexBuffer, 10, Context3DVertexBufferFormat.FLOAT_4); //R, G, B, A
+				_context.setVertexBufferAt(5, _vertexBuffer, 14, Context3DVertexBufferFormat.FLOAT_4); //multiplierR, multiplierG, multiplierB, multiplierA
 				_context.drawTriangles( _indexBuffer );
 			}
 			_vertexOffset = 0;

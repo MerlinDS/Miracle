@@ -32,6 +32,7 @@ package com.merlinds.miracle.display {
 		//description
 		private var _mesh:String;
 		private var _animation:String;
+		private var _animationId:String;
 		private var _currentFrame:int;
 		private var _visible:Boolean;
 		//Transformations
@@ -140,6 +141,7 @@ package com.merlinds.miracle.display {
 			if(value != _animation){
 				_animation = value;
 				_currentFrame = 0;
+				_animationId = _mesh + "." + _animation;
 				this.miracle_internal::remove();
 			}
 		}
@@ -157,8 +159,13 @@ package com.merlinds.miracle.display {
 		public final function set mesh(value:String):void {
 			if(value != _mesh){
 				_mesh = value;
+				_animationId = _mesh + "." + _animation;
 				this.miracle_internal::remove();
 			}
+		}
+
+		public final function get animationId():String{
+			return _animationId;
 		}
 
 //Transformations

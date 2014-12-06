@@ -6,7 +6,12 @@
         <dependencies>
           <sdk name="AIR.15.0.0.249" />
         </dependencies>
-        <compiler-options />
+        <compiler-options>
+          <map>
+            <entry key="compiler.debug.swc" value="false" />
+          </map>
+          <option name="additionalOptions" value="-inline" />
+        </compiler-options>
         <packaging-air-desktop />
         <packaging-android />
         <packaging-ios />
