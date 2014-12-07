@@ -58,6 +58,7 @@ package com.merlinds.miracle {
 		private var _iTextureHelper:TextureHelper;
 		//
 		use namespace miracle_internal;
+		private var _bytes:ByteArray;
 
 		public function RenderScene(scale:Number = 1) {
 			_currentMatrix = new TransformMatrix();
@@ -67,6 +68,10 @@ package com.merlinds.miracle {
 			_indexData = new ByteArray();
 			_indexData.endian = Endian.LITTLE_ENDIAN;
 			_indexStep = 0;
+			_bytes = new ByteArray();
+			var n:int = 0;
+			while(n-- > VERTEX_PARAMS_LENGTH)
+				_bytes.writeFloat(0);
 			super(scale);
 		}
 
@@ -81,7 +86,7 @@ package com.merlinds.miracle {
 			}
 		}
 
-		override public function drawFrame(time:Number):void {
+		override public function drawFrames(time:Number):void {
 			var n:int = _drawableObjects.length;
 			for(var i:int = 0; i < n; i++){
 				//collect instance data
@@ -90,7 +95,16 @@ package com.merlinds.miracle {
 				this.setInstanceBounds();
 				if(_currentTexture != _iMesh.textureLink)
 					this.finalizeTexture();
-				this.drawInstances();
+
+				var index:int;
+				var canBeDrawn:Boolean;
+				var m:int = _iAnimationHelper.numLayers;
+				var k:int = _iAnimationHelper.totalFrames;
+				for(var j:int = 0; j < m; j++) {
+					index = k * j + _instance.currentFrame;
+					canBeDrawn = this.collectFrameData(index);
+					if(canBeDrawn)this.draw();
+				}
 
 				if(_instance is MiracleAnimation)//only animation had timeline
 					this.changeInstanceFrame(time);
@@ -125,26 +139,21 @@ package com.merlinds.miracle {
 		}
 
 		[Inline]
-		private final function drawInstances():void {
-			var m:int = _iAnimationHelper.numLayers;
-			var k:int = _iAnimationHelper.totalFrames;
-			for(var j:int = 0; j < m; j++){
-				var index:int = k * j + _instance.currentFrame;
-				var frame:FrameInfo = _iAnimationHelper.frames[ index ];
-				if(!frame.isEmpty){
-					_polygon = _iMesh[ frame.polygonName ];
-					//draw on GPU
-					var transform:Transformation = _instance.transformation;
-					if(!frame.isMotion){
-						this.staticMatrix(transform.matrix, frame.m0.matrix);
-						this.staticColor(transform.color, frame.m0.color);
-					}else{
-						this.motionMatrix(transform.matrix, frame.m0.matrix, frame.m1.matrix, frame.t);
-						this.motionColor(transform.color, frame.m0.color, frame.m1.color, frame.t);
-					}
-					this.draw();
+		private final function collectFrameData(index:int):Boolean {
+			var frame:FrameInfo = _iAnimationHelper.frames[ index ];
+			if(!frame.isEmpty){
+				_polygon = _iMesh[ frame.polygonName ];
+				//draw on GPU
+				var transform:Transformation = _instance.transformation;
+				if(!frame.isMotion){
+					this.staticMatrix(transform.matrix, frame.m0.matrix);
+					this.staticColor(transform.color, frame.m0.color);
+				}else{
+					this.motionMatrix(transform.matrix, frame.m0.matrix, frame.m1.matrix, frame.t);
+					this.motionColor(transform.color, frame.m0.color, frame.m1.color, frame.t);
 				}
 			}
+			return !frame.isEmpty;
 		}
 
 		[Inline]
@@ -204,9 +213,9 @@ package com.merlinds.miracle {
 			var i:int;
 			var dataIndex:int = 0;
 			var n:int = _polygon.numVertices;
-			//_verticesData.position = _vertexOffset;
 			//set vertexes
 			for(i = 0; i < n; i++){
+//				_verticesData.writeBytes(_bytes, _verticesData.length, _bytes.length);
 				/**** ADD VERTEX DATA *****/
 				_verticesData.writeFloat(_polygon.buffer[ dataIndex++ ] + _currentMatrix.offsetX);
 				_verticesData.writeFloat(_polygon.buffer[ dataIndex++ ] + _currentMatrix.offsetY);
@@ -214,24 +223,23 @@ package com.merlinds.miracle {
 				_verticesData.writeFloat(_polygon.buffer[ dataIndex++ ]);
 				_verticesData.writeFloat(_polygon.buffer[ dataIndex++ ]);
 				/**** ADD TRANSFORM INDEXES DATA *****/
-				_verticesData.writeFloat( _currentMatrix.tx );
-				_verticesData.writeFloat( _currentMatrix.ty );
-				_verticesData.writeFloat( _currentMatrix.scaleX );
-				_verticesData.writeFloat( _currentMatrix.scaleY );
-				_verticesData.writeFloat( _currentMatrix.skewX );
-				_verticesData.writeFloat( _currentMatrix.skewY );
+				_verticesData.writeFloat(_currentMatrix.tx );
+				_verticesData.writeFloat(_currentMatrix.ty );
+				_verticesData.writeFloat(_currentMatrix.scaleX );
+				_verticesData.writeFloat(_currentMatrix.scaleY );
+				_verticesData.writeFloat(_currentMatrix.skewX );
+				_verticesData.writeFloat(_currentMatrix.skewY );
 				/**** ADD COLOR OFFSET DATA *****/
-				_verticesData.writeFloat( _currentColor.redOffset );
-				_verticesData.writeFloat( _currentColor.greenOffset );
-				_verticesData.writeFloat( _currentColor.blueOffset );
-				_verticesData.writeFloat( _currentColor.alphaOffset );
+				_verticesData.writeFloat(_currentColor.redOffset );
+				_verticesData.writeFloat(_currentColor.greenOffset );
+				_verticesData.writeFloat(_currentColor.blueOffset );
+				_verticesData.writeFloat(_currentColor.alphaOffset );
 				/**** ADD COLOR MULTIPLIER DATA *****/
-				_verticesData.writeFloat( _currentColor.redMultiplier );
-				_verticesData.writeFloat( _currentColor.greenMultiplier );
-				_verticesData.writeFloat( _currentColor.blueMultiplier );
-				_verticesData.writeFloat( _currentColor.alphaMultiplier );
+				_verticesData.writeFloat(_currentColor.redMultiplier );
+				_verticesData.writeFloat(_currentColor.greenMultiplier );
+				_verticesData.writeFloat(_currentColor.blueMultiplier );
+				_verticesData.writeFloat(_currentColor.alphaMultiplier );
 			}
-		//	_vertexOffset += VERTEX_PARAMS_LENGTH * 4;
 			/**** FILL INDEXES BUFFER *****/
 			n = _polygon.indexes.length;
 			for(i = 0; i < n; i++){
@@ -239,6 +247,7 @@ package com.merlinds.miracle {
 			}
 			_indexStep += _polygon.numVertices;
 		}
+
 
 		//static
 		/**

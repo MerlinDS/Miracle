@@ -49,7 +49,7 @@ package com.merlinds.miracle {
 			_context = null;
 		}
 
-		public function drawFrame(time:Number):void {
+		public function drawFrames(time:Number):void {
 		}
 
 		public function reload(callback:Function):void {

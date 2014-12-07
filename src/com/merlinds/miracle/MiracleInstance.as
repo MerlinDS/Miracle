@@ -56,7 +56,7 @@ package com.merlinds.miracle {
 			_enableErrorChecking = enableErrorChecking;
 			_stage3D = _nativeStage.stage3Ds[0];
 			_stage3D.addEventListener(Event.CONTEXT3D_CREATE, this.contextCreateHandler);
-			_stage3D.requestContext3D(Context3DRenderMode.AUTO, Context3DProfile.BASELINE_CONSTRAINED);
+			_stage3D.requestContext3D(Context3DRenderMode.AUTO, Context3DProfile.BASELINE);
 		}
 
 		public function pause():void {
@@ -162,7 +162,7 @@ package com.merlinds.miracle {
 			//draw frame
 			if(_scene != null && _context != null && !_onPause){
 				_scene.start();
-				_scene.drawFrame(time);
+				_scene.drawFrames(time);
 				_scene.end();
 			}
 		}

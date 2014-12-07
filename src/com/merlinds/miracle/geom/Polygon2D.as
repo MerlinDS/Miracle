@@ -7,13 +7,13 @@
 package com.merlinds.miracle.geom {
 	public class Polygon2D {
 
+		public var indexes:Vector.<int>;
 		public var buffer:Vector.<Number>;
-		public var indexes:Vector.<Number>;
 		public var numVertices:Number;
 
 		public function Polygon2D(data:Object, scale:Number = 1) {
 			this.numVertices = data.vertexes.length >> 1;
-			this.indexes = new Vector.<Number>( data.indexes.length );
+			this.indexes = new Vector.<int>( data.indexes.length );
 			this.buffer = new Vector.<Number>( this.numVertices * 4 );
 
 			var i:uint;

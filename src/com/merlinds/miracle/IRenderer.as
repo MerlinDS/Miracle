@@ -15,7 +15,7 @@ package com.merlinds.miracle {
 		function reload(callback:Function):void;
 		function kill():void;
 
-		function drawFrame(time:Number):void;
+		function drawFrames(time:Number):void;
 		//} endregion PUBLIC METHODS ===================================================
 
 		//==============================================================================

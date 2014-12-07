@@ -233,7 +233,7 @@ package com.merlinds.miracle {
 
 		//==============================================================================
 		//{region							EVENTS HANDLERS
-		override public function drawFrame(time:Number):void {
+		override public function drawFrames(time:Number):void {
 			//clear previous objects list
 			_drawableObjects.length = 0;
 			//prepare frame data
@@ -243,7 +243,7 @@ package com.merlinds.miracle {
 			//throw all errors that was collected
 			if(_errorsQueue.length > 0)throw _errorsQueue.shift();
 			//draw frame
-			super.drawFrame(time);
+			super.drawFrames(time);
 		}
 
 		private function textureCallback():void {
