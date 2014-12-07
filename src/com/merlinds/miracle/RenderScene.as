@@ -57,7 +57,6 @@ package com.merlinds.miracle {
 		private var _iTextureHelper:TextureHelper;
 		//
 		use namespace miracle_internal;
-		private var _bytes:ByteArray;
 
 		public function RenderScene(scale:Number = 1) {
 			_currentMatrix = new TransformMatrix();
@@ -67,10 +66,6 @@ package com.merlinds.miracle {
 			_indexData = new ByteArray();
 			_indexData.endian = Endian.LITTLE_ENDIAN;
 			_indexStep = 0;
-			_bytes = new ByteArray();
-			var n:int = 0;
-			while(n-- > VERTEX_PARAMS_LENGTH)
-				_bytes.writeFloat(0);
 			super(scale);
 		}
 
@@ -78,14 +73,14 @@ package com.merlinds.miracle {
 		//{region							PUBLIC METHODS
 		//IScene
 		//IRenderer
-		override public function end(present:Boolean = true):void {
+		override protected function end(present:Boolean = true):void {
 			this.drawTriangles();
 			if(present) {
 				_context.present();
 			}
 		}
 
-		override public function drawFrames(time:Number):void {
+		override protected function drawFrames():void {
 			var n:int = _drawableObjects.length;
 			for(var i:int = 0; i < n; i++){
 				//collect instance data
@@ -111,7 +106,7 @@ package com.merlinds.miracle {
 				}
 
 				if(_instance.isAnimated)//only animation had timeline
-					this.changeInstanceFrame(time);
+					this.changeInstanceFrame();
 				//tell instance that it was drawn on GPU
 				_instance.miracle_internal::drawn();
 			}
@@ -154,10 +149,10 @@ package com.merlinds.miracle {
 		}
 
 		[Inline]
-		private final function changeInstanceFrame(time:Number):void {
+		private final function changeInstanceFrame():void {
 			var instance:MiracleAnimation = _instance as MiracleAnimation;
 			//calculate possibility of frame changing
-			instance.timePassed += time;
+			instance.timePassed += _passedTime;
 			if(instance.timePassed >= instance.frameDelta){
 				instance.timePassed = 0;
 				//need to change frame

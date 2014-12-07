@@ -8,11 +8,14 @@ package com.merlinds.miracle {
 	import com.merlinds.miracle.utils.Asset;
 
 	import flash.display3D.Context3D;
+	import flash.events.Event;
+	import flash.events.IEventDispatcher;
 
 	internal class AbstractScene implements IRenderer{
 
 		protected var _scale:Number;
 		protected var _context:Context3D;
+		protected var _passedTime:Number;
 		//maps
 		protected var _meshes:Object;/**Mesh2D**/
 		protected var _textures:Object;/**TextureHelper**/
@@ -21,6 +24,9 @@ package com.merlinds.miracle {
 		protected var _drawableObjects:Vector.<MiracleDisplayObject>;
 
 		private var _initializationCallback:Function;
+		//
+		private var _lastFrameTimestamp:Number;
+		private var _timer:IEventDispatcher;
 
 		public function AbstractScene(scale:Number = 1) {
 			_drawableObjects = new <MiracleDisplayObject>[];
@@ -38,34 +44,56 @@ package com.merlinds.miracle {
 			assetsParser.execute(this.completeInitialization, _scale);
 		}
 
-		public function start():void {
-			_context.clear(0.8, 0.8, 0.8, 1);
-		}
-
-		public function end(present:Boolean = true):void {
-		}
-
-		public function kill():void {
-			_context = null;
-		}
-
-		public function drawFrames(time:Number):void {
-		}
-
 		public function reload(callback:Function):void {
 
 		}
-		//} endregion PUBLIC METHODS ===================================================
+
+		public function pause():void {
+			_timer.removeEventListener(Event.ENTER_FRAME, this.enterFrameHandler);
+		}
+
+		public function resume():void {
+			_lastFrameTimestamp = new Date().time;
+			_timer.addEventListener(Event.ENTER_FRAME, this.enterFrameHandler);
+		}
+
+//} endregion PUBLIC METHODS ===================================================
 
 		//==============================================================================
 		//{region						PRIVATE\PROTECTED METHODS
+
+		protected function prepareFrames():void {
+
+		}
+
+		protected function drawFrames():void {
+		}
+
+		protected function end(present:Boolean = true):void {
+			if(present) {
+				_context.present();
+			}
+		}
 		//} endregion PRIVATE\PROTECTED METHODS ========================================
 
 		//==============================================================================
 		//{region							EVENTS HANDLERS
-		private function completeInitialization():void {
+		protected function completeInitialization():void {
 			if(_initializationCallback is Function){
 				_initializationCallback.apply(this);
+			}
+		}
+
+		public function enterFrameHandler(event:Event):void {
+			var now:Number = new Date().time;
+			_passedTime = now - _lastFrameTimestamp;
+			_lastFrameTimestamp = now;
+			//draw frame
+			if(_context != null){
+				_context.clear(0.8, 0.8, 0.8, 1);
+				this.prepareFrames();
+				this.drawFrames();
+				this.end();
 			}
 		}
 		//} endregion EVENTS HANDLERS ==================================================
@@ -79,6 +107,11 @@ package com.merlinds.miracle {
 		public function get scale():Number{
 			return _scale;
 		}
+
+		public function set timer(value:IEventDispatcher):void {
+			_timer = value;
+		}
+
 //} endregion GETTERS/SETTERS ==================================================
 	}
 }

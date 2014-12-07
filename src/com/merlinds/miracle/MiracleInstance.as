@@ -18,8 +18,6 @@ package com.merlinds.miracle {
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.geom.Rectangle;
-	import flash.text.TextField;
-	import flash.utils.getTimer;
 	import flash.utils.setTimeout;
 
 	internal class MiracleInstance extends EventDispatcher{
@@ -34,7 +32,6 @@ package com.merlinds.miracle {
 		//
 		private var _executeQueue:Vector.<Function>;
 		//
-		private var _lastFrameTimestamp:Number;
 		private var _enableErrorChecking:Boolean;
 		private var _viewport:Rectangle;
 		private var _ratioX:Number;
@@ -48,6 +45,7 @@ package com.merlinds.miracle {
 			_nativeStage = nativeStage;
 			_viewport = viewport == null ? new Rectangle(0, 0, nativeStage.stageWidth,
 					nativeStage.stageHeight) : viewport;
+			_onPause = true;
 		}
 
 		public function start(enableErrorChecking:Boolean = true):void {
@@ -56,30 +54,31 @@ package com.merlinds.miracle {
 			_enableErrorChecking = enableErrorChecking;
 			_stage3D = _nativeStage.stage3Ds[0];
 			_stage3D.addEventListener(Event.CONTEXT3D_CREATE, this.contextCreateHandler);
-			_stage3D.requestContext3D(Context3DRenderMode.AUTO, Context3DProfile.BASELINE);
+			_stage3D.requestContext3D(Context3DRenderMode.AUTO, Context3DProfile.BASELINE_CONSTRAINED);
 		}
 
 		public function pause():void {
-			_onPause = true;
-			if(_scene != null && _context != null){
-				//clear GPU from graphics till miracle on pause
-				/*_scene.start();
-				_scene.end();*/
-				//test context loosing
+			if(!_onPause){
+				_onPause = true;
+				if(_scene != null){
+					//clear GPU from graphics till miracle on pause
+					/*_scene.start();
+					 _scene.end();*/
+					//test context loosing
 //				_context.dispose();
+					_scene.pause();
+				}
 			}
-			_nativeStage.removeEventListener(Event.ENTER_FRAME, this.enterFrameHandler);
 		}
 
-		private var _label:TextField;
-
 		public function resume():void {
-			_reloading = _context == null || _context.driverInfo == CONTEXT_DISPOSED;
-			//start looping
-			if(!_reloading){
-				_onPause = false;
-				_lastFrameTimestamp = getTimer();
-				_nativeStage.addEventListener(Event.ENTER_FRAME, this.enterFrameHandler);
+			if(_onPause){
+				_reloading = _context == null || _context.driverInfo == CONTEXT_DISPOSED;
+				//start looping
+				if(!_reloading){
+					_onPause = false;
+					_scene.resume();
+				}
 			}
 		}
 
@@ -150,22 +149,6 @@ package com.merlinds.miracle {
 			trace("Miracle: context3D was obtained", "3D driver:", _context.driverInfo);
 			setTimeout(_executeQueue.shift(), 0);
 		}
-
-		private function enterFrameHandler(event:Event):void {
-			var now:Number = getTimer();
-			var passedTime:Number = now - _lastFrameTimestamp;
-			_lastFrameTimestamp = now;
-			this.executeFrame(passedTime);
-		}
-
-		private function executeFrame(time:Number):void{
-			//draw frame
-			if(_scene != null && _context != null && !_onPause){
-				_scene.start();
-				_scene.drawFrames(time);
-				_scene.end();
-			}
-		}
 		//} endregion EVENTS HANDLERS ==================================================
 
 		//==============================================================================
@@ -178,6 +161,7 @@ package com.merlinds.miracle {
 			//add new scene and context to it
 			_scene = value;
 			_scene.context = _context;
+			_scene.timer = _nativeStage;
 		}
 
 		public function get scene():IRenderer{
