@@ -6,6 +6,7 @@
 package com.merlinds.miracle {
 	import com.merlinds.miracle.display.MiracleDisplayObject;
 	import com.merlinds.miracle.utils.Asset;
+	import com.merlinds.miracle.utils.ContextDisposeState;
 
 	import flash.display3D.Context3D;
 	import flash.events.Event;
@@ -27,6 +28,7 @@ package com.merlinds.miracle {
 		//
 		private var _lastFrameTimestamp:Number;
 		private var _timer:IEventDispatcher;
+		private var _lostContextCallback:Function;
 
 		public function AbstractScene(scale:Number = 1) {
 			_drawableObjects = new <MiracleDisplayObject>[];
@@ -38,14 +40,16 @@ package com.merlinds.miracle {
 
 		//==============================================================================
 		//{region							PUBLIC METHODS
-		public function initialize(assets:Vector.<Asset>, callback:Function):void{
+		public function create(assets:Vector.<Asset>, callback:Function):void{
 			_initializationCallback = callback;
 			var assetsParser:AssetsParser = new AssetsParser(assets, _meshes, _textures, _animations);
 			assetsParser.execute(this.completeInitialization, _scale);
 		}
 
-		public function reload(callback:Function):void {
-
+		public function initialize(context:Context3D, timer:IEventDispatcher, lostContextCallback:Function):void {
+			_lostContextCallback = lostContextCallback;
+			_context = context;
+			_timer = timer;
 		}
 
 		public function pause():void {
@@ -57,7 +61,14 @@ package com.merlinds.miracle {
 			_timer.addEventListener(Event.ENTER_FRAME, this.enterFrameHandler);
 		}
 
-//} endregion PUBLIC METHODS ===================================================
+		public function restore(callback:Function):void {
+
+		}
+
+		public function stopRestoring():void {
+
+		}
+		//} endregion PUBLIC METHODS ===================================================
 
 		//==============================================================================
 		//{region						PRIVATE\PROTECTED METHODS
@@ -85,33 +96,29 @@ package com.merlinds.miracle {
 		}
 
 		public function enterFrameHandler(event:Event):void {
-			var now:Number = new Date().time;
-			_passedTime = now - _lastFrameTimestamp;
-			_lastFrameTimestamp = now;
-			//draw frame
-			if(_context != null){
+			if(_context != null && _context.driverInfo != ContextDisposeState.DISPOSED){
+				var now:Number = new Date().time;
+				_passedTime = now - _lastFrameTimestamp;
+				_lastFrameTimestamp = now;
+				//draw frame
 				_context.clear(0.8, 0.8, 0.8, 1);
 				this.prepareFrames();
 				this.drawFrames();
 				this.end();
+			}else{
+				_timer.removeEventListener(Event.ENTER_FRAME, this.enterFrameHandler);
+				if(_lostContextCallback is Function){
+					_lostContextCallback.apply(this);
+				}
 			}
 		}
 		//} endregion EVENTS HANDLERS ==================================================
 
 		//==============================================================================
 		//{region							GETTERS/SETTERS
-		public function set context(value:Context3D):void {
-			_context = value;
-		}
-
-		public function get scale():Number{
+		public function get scale():Number {
 			return _scale;
 		}
-
-		public function set timer(value:IEventDispatcher):void {
-			_timer = value;
-		}
-
 //} endregion GETTERS/SETTERS ==================================================
 	}
 }

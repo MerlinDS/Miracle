@@ -79,7 +79,7 @@ package com.merlinds.miracle {
 				_animations[  instance.mesh + "." + instance.animation ] = animation;
 				instance.miracle_internal::animationInstance = animation;
 			}
-			trace("Miracle: Instance was created.", serializer);
+			trace("Miracle:", serializer, "instance was created.");
 			return instance;
 		}
 
@@ -137,7 +137,8 @@ package com.merlinds.miracle {
 		}
 
 
-		override public function reload(callback:Function):void {
+		override public function restore(callback:Function):void {
+			_textureLoading = false;
 			_drawableObjects.length = 0;
 			for each(var textureHelper:TextureHelper in _textures){
 				if(textureHelper.inUse){
@@ -149,6 +150,13 @@ package com.merlinds.miracle {
 			_loadingCallbackSet = true;
 			_loadingCallback = callback;
 			this.uploadTextures();
+		}
+
+		override public function stopRestoring():void {
+			_textureNeedToUpload.length = 0;
+			_loadingCallbackSet = false;
+			_loadingCallback = null;
+			_textureLoading = false;
 		}
 
 		//} endregion PUBLIC METHODS ===================================================
@@ -246,6 +254,7 @@ package com.merlinds.miracle {
 		}
 
 		private function textureCallback():void {
+			trace("Miracle: Texture was loaded to GPU");
 			_textureLoading = false;
 			setTimeout(this.uploadTextures, 0);
 		}

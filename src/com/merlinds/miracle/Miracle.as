@@ -18,6 +18,9 @@ package com.merlinds.miracle {
 
 		private static var _instance:MiracleInstance;
 		private static var _scene:IScene;
+		//
+		private static var _reloadCallback:Function;
+		private static var _lostContextCallback:Function;
 		//==============================================================================
 		//{region							PUBLIC METHODS
 		public function Miracle() {
@@ -41,16 +44,18 @@ package com.merlinds.miracle {
 				nativeStage.align = StageAlign.TOP_LEFT;
 				nativeStage.scaleMode = StageScaleMode.NO_SCALE;
 				//create _instance
-				var localInstance:MiracleInstance = new MiracleInstance(nativeStage);
-				localInstance.addEventListener(Event.COMPLETE, function(event:Event):void{
-					localInstance.removeEventListener(event.type, arguments.callee);
+				var instance:MiracleInstance = new MiracleInstance(nativeStage);
+				instance.addEventListener(Event.COMPLETE, function(event:Event):void{
+					instance.removeEventListener(event.type, arguments.callee);
+					instance.addEventListener(Event.COMPLETE, Miracle.completeHandler);
+					instance.addEventListener(Event.CLOSE, Miracle.lostContextHandler);
 					trace("Miracle: Start completed");
-					_instance = localInstance;
+					_instance = instance;
 					if(callback is Function){
 						callback.apply(null);
 					}
 				});
-				localInstance.start(enableErrorChecking);
+				instance.start(enableErrorChecking);
 			} else {
 				throw new IllegalOperationError("Miracle already happened! " +
 					"Only one miracle per game session could be started.");
@@ -71,7 +76,7 @@ package com.merlinds.miracle {
 			var scene:AbstractScene = new DisplayScene(scale);
 			_scene = scene as IScene;
 			_instance.scene = scene as IRenderer;
-			scene.initialize(assets, function():void{
+			scene.create(assets, function():void{
 				trace("Miracle: new scene was initialized. ");
 				_instance.resume();
 				callback.apply(this);
@@ -93,22 +98,23 @@ package com.merlinds.miracle {
 			}
 			return false;
 		}
-
-		public static function reload(callback:Function = null):void{
-			if(_instance != null){
-				_instance.addEventListener(Event.COMPLETE, function(event:Event):void{
-					_instance.removeEventListener(event.type, arguments.callee);
-					trace("Miracle: Reload completed");
-					callback.apply(this);
-					callback = null;
-				});
-				_instance.reload();
-			}
-		}
 		//} endregion PUBLIC METHODS ===================================================
 
 		//==============================================================================
 		//{region						PRIVATE\PROTECTED METHODS
+		private static function lostContextHandler(event:Event):void {
+			trace("Miracle: Context was lost. Try to reload Miracle");
+			if(_lostContextCallback is Function){
+				_lostContextCallback.apply();
+			}
+		}
+
+		private static function completeHandler(event:Event):void {
+			trace("Miracle: Context was reloaded successful");
+			if(_reloadCallback is Function){
+				_reloadCallback.apply();
+			}
+		}
 		//} endregion PRIVATE\PROTECTED METHODS ========================================
 
 		//==============================================================================
@@ -123,6 +129,14 @@ package com.merlinds.miracle {
 
 		public static function get scene():IScene {
 			return  _scene;
+		}
+
+		public static function set reloadCallback(value:Function):void {
+			_reloadCallback  = value;
+		}
+
+		public static function set lostContextCallback(value:Function):void {
+			_lostContextCallback = value;
 		}
 //} endregion GETTERS/SETTERS ==================================================
 	}

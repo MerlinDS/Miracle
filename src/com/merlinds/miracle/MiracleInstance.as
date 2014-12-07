@@ -6,6 +6,7 @@
 package com.merlinds.miracle {
 
 	import com.adobe.utils.AGALMiniAssembler;
+	import com.merlinds.miracle.utils.ContextDisposeState;
 
 	import flash.display.Stage;
 	import flash.display.Stage3D;
@@ -20,9 +21,10 @@ package com.merlinds.miracle {
 	import flash.geom.Rectangle;
 	import flash.utils.setTimeout;
 
-	internal class MiracleInstance extends EventDispatcher{
+	[Event(type="flash.events.Event", name="complete")]
+	[Event(type="flash.events.Event", name="complete")]
 
-		private static const CONTEXT_DISPOSED:String = "Disposed";
+	internal class MiracleInstance extends EventDispatcher{
 		//only for dev stage
 		private var _agal:AGALMiniAssembler;
 		private var _stage3D:Stage3D;
@@ -61,11 +63,6 @@ package com.merlinds.miracle {
 			if(!_onPause){
 				_onPause = true;
 				if(_scene != null){
-					//clear GPU from graphics till miracle on pause
-					/*_scene.start();
-					 _scene.end();*/
-					//test context loosing
-//				_context.dispose();
 					_scene.pause();
 				}
 			}
@@ -73,20 +70,11 @@ package com.merlinds.miracle {
 
 		public function resume():void {
 			if(_onPause){
-				_reloading = _context == null || _context.driverInfo == CONTEXT_DISPOSED;
 				//start looping
 				if(!_reloading){
 					_onPause = false;
 					_scene.resume();
 				}
-			}
-		}
-
-		public function reload():void {
-			if(_reloading){
-				this.start(_enableErrorChecking);
-			}else{
-				trace("No need to reload Miracle");
 			}
 		}
 		//} endregion PUBLIC METHODS ===================================================
@@ -129,14 +117,22 @@ package com.merlinds.miracle {
 		}
 
 		private function completeMethod():void {
+			trace("completeMethod", _reloading);
 			_onPause = true;
-			if(!_reloading){
-				this.dispatchEvent( new Event(Event.COMPLETE) );
-			}else{
-				//reload scene
+			if(_reloading){
+				//restore scene
+				//reinitialize scene with new 3DContext
 				this.scene = _scene;
+				/*
+				 * On mobile devices 3DContext can be disposed while textures restoring.
+				 * To handle this issue start check 3DContext by timer
+				 */
+				_nativeStage.addEventListener(Event.ENTER_FRAME, this.enterFrameHandler);
+				_scene.restore(this.completeMethod);
 				_reloading = false;
-				_scene.reload(this.completeMethod);
+			}else{
+				_nativeStage.removeEventListener(Event.ENTER_FRAME, this.enterFrameHandler);
+				this.dispatchEvent( new Event(Event.COMPLETE) );
 			}
 		}
 		//} endregion PRIVATE\PROTECTED METHODS ========================================
@@ -149,19 +145,32 @@ package com.merlinds.miracle {
 			trace("Miracle: context3D was obtained", "3D driver:", _context.driverInfo);
 			setTimeout(_executeQueue.shift(), 0);
 		}
+
+		private function lostContextCallback():void {
+			if(!reloading){
+				//Do not dispatch complete event if reloading already started
+				this.dispatchEvent(new Event(Event.CLOSE));
+				this.pause();
+			}
+			this.start(_enableErrorChecking);
+			_reloading = true;
+		}
+
+		private function enterFrameHandler(event:Event):void {
+			if(_context == null || _context.driverInfo == ContextDisposeState.DISPOSED){
+				trace("Miracle: Context was lost twice");
+				_nativeStage.removeEventListener(event.type, this.enterFrameHandler);
+				_scene.stopRestoring();
+				this.lostContextCallback();
+			}
+		}
 		//} endregion EVENTS HANDLERS ==================================================
 
 		//==============================================================================
 		//{region							GETTERS/SETTERS
 		public function set scene(value:IRenderer):void{
-			//clear old scene if it exist
-			if(_scene != null){
-				_scene.context = null;
-			}
-			//add new scene and context to it
+			value.initialize(_context, _nativeStage, lostContextCallback);
 			_scene = value;
-			_scene.context = _context;
-			_scene.timer = _nativeStage;
 		}
 
 		public function get scene():IRenderer{
