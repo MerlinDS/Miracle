@@ -31,6 +31,7 @@ package com.merlinds.miracle.display {
 		public function MiracleAnimation() {
 			super();
 			_prevPlaybackDirection = playbackDirection = 1;
+			_isAnimated = true;
 			_currentFrame = 0;
 			_loop = true;
 			this.fps = 60;//Default frame rate

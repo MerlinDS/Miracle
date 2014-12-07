@@ -35,6 +35,7 @@ package com.merlinds.miracle.display {
 		private var _animationId:String;
 		private var _currentFrame:int;
 		private var _visible:Boolean;
+		internal var _isAnimated:Boolean;
 		//Transformations
 		public var transformation:Transformation;
 		public var z:Number;
@@ -266,6 +267,10 @@ package com.merlinds.miracle.display {
 			this.transformation.matrix.ty = value.y;
 		}
 
+		public function get isAnimated():Boolean {
+			return _isAnimated;
+		}
+
 		//end of transformations
 		//playback
 		public function get currentFrame():int {
@@ -280,7 +285,6 @@ package com.merlinds.miracle.display {
 		protected final function get animationInstance():AnimationHelper {
 			return _animationInstance;
 		}
-
 
 		miracle_internal function set animationInstance(value:AnimationHelper):void {
 			_animationInstance = value;

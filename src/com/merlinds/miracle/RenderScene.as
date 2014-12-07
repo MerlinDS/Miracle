@@ -8,7 +8,6 @@ package com.merlinds.miracle {
 	import com.merlinds.miracle.animations.FrameInfo;
 	import com.merlinds.miracle.display.MiracleAnimation;
 	import com.merlinds.miracle.display.MiracleDisplayObject;
-	import com.merlinds.miracle.display.MiracleDisplayObject;
 	import com.merlinds.miracle.geom.Color;
 	import com.merlinds.miracle.geom.Mesh2D;
 	import com.merlinds.miracle.geom.Polygon2D;
@@ -94,8 +93,13 @@ package com.merlinds.miracle {
 				this.collectInstanceData();
 				this.setInstanceBounds();
 				if(_currentTexture != _iMesh.textureLink)
-					this.finalizeTexture();
-
+				{
+					//Finalize textures
+					if(_currentTexture != null)this.drawTriangles();
+					_context.setTextureAt(0, _iTextureHelper.texture);
+					_currentTexture = _iMesh.textureLink;
+				}
+				//draw instance
 				var index:int;
 				var canBeDrawn:Boolean;
 				var m:int = _iAnimationHelper.numLayers;
@@ -106,7 +110,7 @@ package com.merlinds.miracle {
 					if(canBeDrawn)this.draw();
 				}
 
-				if(_instance is MiracleAnimation)//only animation had timeline
+				if(_instance.isAnimated)//only animation had timeline
 					this.changeInstanceFrame(time);
 				//tell instance that it was drawn on GPU
 				_instance.miracle_internal::drawn();
@@ -129,13 +133,6 @@ package com.merlinds.miracle {
 			if(!_instance.transformation.bounds.equals(_iAnimationHelper.bounds)){
 				_instance.transformation.bounds = _iAnimationHelper.bounds.clone();
 			}
-		}
-
-		[Inline]
-		private final function finalizeTexture():void{
-			if(_currentTexture != null)this.drawTriangles();
-			_context.setTextureAt(0, _iTextureHelper.texture);
-			_currentTexture = _iMesh.textureLink;
 		}
 
 		[Inline]
