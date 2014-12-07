@@ -7,7 +7,6 @@ package com.merlinds.miracle {
 
 	import com.adobe.utils.AGALMiniAssembler;
 
-	import flash.display.BitmapData;
 	import flash.display.Stage;
 	import flash.display.Stage3D;
 	import flash.display3D.Context3D;
@@ -19,6 +18,7 @@ package com.merlinds.miracle {
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.geom.Rectangle;
+	import flash.text.TextField;
 	import flash.utils.getTimer;
 	import flash.utils.setTimeout;
 
@@ -56,7 +56,7 @@ package com.merlinds.miracle {
 			_enableErrorChecking = enableErrorChecking;
 			_stage3D = _nativeStage.stage3Ds[0];
 			_stage3D.addEventListener(Event.CONTEXT3D_CREATE, this.contextCreateHandler);
-			_stage3D.requestContext3D(Context3DRenderMode.AUTO, Context3DProfile.BASELINE);
+			_stage3D.requestContext3D(Context3DRenderMode.AUTO, Context3DProfile.BASELINE_CONSTRAINED);
 		}
 
 		public function pause():void {
@@ -71,8 +71,10 @@ package com.merlinds.miracle {
 			_nativeStage.removeEventListener(Event.ENTER_FRAME, this.enterFrameHandler);
 		}
 
+		private var _label:TextField;
+
 		public function resume():void {
-			_reloading = _context.driverInfo == CONTEXT_DISPOSED;
+			_reloading = _context == null || _context.driverInfo == CONTEXT_DISPOSED;
 			//start looping
 			if(!_reloading){
 				_onPause = false;

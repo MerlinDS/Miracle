@@ -37,7 +37,7 @@ package com.merlinds.miracle {
 		                             enableErrorChecking:Boolean = true):void {
 			if (_instance == null) {
 				//prepare native stage
-				nativeStage.frameRate = 60;
+//				nativeStage.frameRate = 60;
 				nativeStage.align = StageAlign.TOP_LEFT;
 				nativeStage.scaleMode = StageScaleMode.NO_SCALE;
 				//create _instance

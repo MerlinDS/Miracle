@@ -8,6 +8,7 @@ package com.merlinds.miracle {
 	import com.merlinds.miracle.animations.FrameInfo;
 	import com.merlinds.miracle.display.MiracleAnimation;
 	import com.merlinds.miracle.display.MiracleDisplayObject;
+	import com.merlinds.miracle.display.MiracleDisplayObject;
 	import com.merlinds.miracle.geom.Color;
 	import com.merlinds.miracle.geom.Mesh2D;
 	import com.merlinds.miracle.geom.Polygon2D;
@@ -50,6 +51,11 @@ package com.merlinds.miracle {
 		private var _currentMatrix:TransformMatrix;
 		private var _currentColor:Color;
 		private var _currentTexture:String;
+		//current instance parameters
+		private var _instance:MiracleDisplayObject;
+		private var _iMesh:Mesh2D;
+		private var _iAnimationHelper:AnimationHelper;
+		private var _iTextureHelper:TextureHelper;
 		//
 		use namespace miracle_internal;
 
@@ -76,60 +82,74 @@ package com.merlinds.miracle {
 		}
 
 		override public function drawFrame(time:Number):void {
-			var mesh:Mesh2D;
-			var animationHelper:AnimationHelper;
-			var textureHelper:TextureHelper;
-			var instance:MiracleDisplayObject;
 			var n:int = _drawableObjects.length;
 			for(var i:int = 0; i < n; i++){
 				//collect instance data
-				instance = _drawableObjects[i];
-				mesh = _meshes[instance.mesh];
-				textureHelper = _textures[ mesh.textureLink ];
-				animationHelper = _animations[ instance.animationId ];
-				//set new bounds
-				if(!instance.transformation.bounds.equals(animationHelper.bounds)){
-					instance.transformation.bounds = animationHelper.bounds.clone();
-				}
-				//draw previous instance
-				if(_currentTexture != mesh.textureLink){
-					if(_currentTexture != null)this.drawTriangles();
-					_context.setTextureAt(0, textureHelper.texture);
-					_currentTexture = mesh.textureLink;
-				}
-				//==
-				var m:int = animationHelper.numLayers;
-				var k:int = animationHelper.totalFrames;
-				for(var j:int = 0; j < m; j++){
-					var index:int = k * j + instance.currentFrame;
-					var frame:FrameInfo = animationHelper.frames[ index ];
-					if(!frame.isEmpty){
-						_polygon = mesh[ frame.polygonName ];
-						//draw on GPU
-						var transform:Transformation = instance.transformation;
-						if(!frame.isMotion){
-							this.staticMatrix(transform.matrix, frame.m0.matrix);
-							this.staticColor(transform.color, frame.m0.color);
-						}else{
-							this.motionMatrix(transform.matrix, frame.m0.matrix, frame.m1.matrix, frame.t);
-							this.motionColor(transform.color, frame.m0.color, frame.m1.color, frame.t);
-						}
-						this.draw();
-					}
-				}
+				_instance = _drawableObjects[i];
+				this.collectInstanceData();
+				this.setInstanceBounds();
+				if(_currentTexture != _iMesh.textureLink)
+					this.finalizeTexture();
+				this.drawInstances();
 
-				if(instance is MiracleAnimation)//only animation had timeline
-					this.changeInstanceFrame(instance as MiracleAnimation, k, time);
+				if(_instance is MiracleAnimation)//only animation had timeline
+					this.changeInstanceFrame(time);
 				//tell instance that it was drawn on GPU
-				instance.miracle_internal::drawn();
+				_instance.miracle_internal::drawn();
 			}
 		}
 		//} endregion PUBLIC METHODS ===================================================
 
 		//==============================================================================
 		//{region						PRIVATE\PROTECTED METHODS
+		//draw frame methods
 		[Inline]
-		private final function changeInstanceFrame(instance:MiracleAnimation, totalFrames:Number, time:Number):void {
+		private final function collectInstanceData():void {
+			_iMesh = _meshes[_instance.mesh];
+			_iTextureHelper = _textures[ _iMesh.textureLink ];
+			_iAnimationHelper = _animations[ _instance.animationId ];
+		}
+
+		[Inline]
+		private final function setInstanceBounds():void{
+			if(!_instance.transformation.bounds.equals(_iAnimationHelper.bounds)){
+				_instance.transformation.bounds = _iAnimationHelper.bounds.clone();
+			}
+		}
+
+		[Inline]
+		private final function finalizeTexture():void{
+			if(_currentTexture != null)this.drawTriangles();
+			_context.setTextureAt(0, _iTextureHelper.texture);
+			_currentTexture = _iMesh.textureLink;
+		}
+
+		[Inline]
+		private final function drawInstances():void {
+			var m:int = _iAnimationHelper.numLayers;
+			var k:int = _iAnimationHelper.totalFrames;
+			for(var j:int = 0; j < m; j++){
+				var index:int = k * j + _instance.currentFrame;
+				var frame:FrameInfo = _iAnimationHelper.frames[ index ];
+				if(!frame.isEmpty){
+					_polygon = _iMesh[ frame.polygonName ];
+					//draw on GPU
+					var transform:Transformation = _instance.transformation;
+					if(!frame.isMotion){
+						this.staticMatrix(transform.matrix, frame.m0.matrix);
+						this.staticColor(transform.color, frame.m0.color);
+					}else{
+						this.motionMatrix(transform.matrix, frame.m0.matrix, frame.m1.matrix, frame.t);
+						this.motionColor(transform.color, frame.m0.color, frame.m1.color, frame.t);
+					}
+					this.draw();
+				}
+			}
+		}
+
+		[Inline]
+		private final function changeInstanceFrame(time:Number):void {
+			var instance:MiracleAnimation = _instance as MiracleAnimation;
 			//calculate possibility of frame changing
 			instance.timePassed += time;
 			if(instance.timePassed >= instance.frameDelta){
@@ -137,10 +157,10 @@ package com.merlinds.miracle {
 				//need to change frame
 				if(instance.playbackDirection != 0){//stop frame changing if playback direction equals 0
 					instance.currentFrame += instance.playbackDirection;
-					if(instance.currentFrame == totalFrames || instance.currentFrame < 0){
+					if(instance.currentFrame == _iAnimationHelper.totalFrames || instance.currentFrame < 0){
 						if(instance.loop){
 							//switch current frame to start or end
-							instance.currentFrame = instance.playbackDirection > 0 ? 0 : totalFrames - 1;
+							instance.currentFrame = instance.playbackDirection > 0 ? 0 : _iAnimationHelper.totalFrames - 1;
 						}else{
 							instance.currentFrame -= instance.playbackDirection;//return to previous frame
 							instance.miracle_internal::stopPlayback();
@@ -149,7 +169,7 @@ package com.merlinds.miracle {
 				}
 			}
 		}
-
+		//draw parts methods
 		[Inline]
 		private final function drawTriangles():void {
 			var n:int;
