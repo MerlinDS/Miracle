@@ -25,6 +25,7 @@ package com.merlinds.miracle {
 		private var _textureLoading:Boolean;
 		private var _loadingCallback:Function;
 		private var _loadingCallbackSet:Boolean;
+		private var _sessionUniqueCounter:int;
 
 		//==============================================================================
 		//{region							PUBLIC METHODS
@@ -32,6 +33,7 @@ package com.merlinds.miracle {
 			_displayObjects = new <MiracleDisplayObject>[];
 			_textureNeedToUpload = new <TextureHelper>[];
 			_errorsQueue = new <Error>[];
+			_sessionUniqueCounter = 0;
 			super (scale);
 		}
 
@@ -62,7 +64,7 @@ package com.merlinds.miracle {
 			//
 			var animation:AnimationHelper = _animations[  mesh + "." + fontName ];
 			animation = animation.clone();
-			instance.animation = instance.animation + ".font";
+			instance.animation = instance.animation + MiracleFont.FONT_POSTFIX + _sessionUniqueCounter++;
 			_animations[  mesh + "." + instance.animation ] = animation;
 			instance.miracle_internal::animationInstance = animation;
 			//
@@ -76,7 +78,7 @@ package com.merlinds.miracle {
 				//create new animation helper and set it to instance
 				var animation:AnimationHelper = _animations[  instance.mesh + "." + instance.animation ];
 				animation = animation.clone();
-				instance.animation = instance.animation + ".clone";
+				instance.animation = instance.animation + ".clone" + _sessionUniqueCounter++;
 				_animations[  instance.mesh + "." + instance.animation ] = animation;
 				instance.miracle_internal::animationInstance = animation;
 			}
@@ -87,6 +89,7 @@ package com.merlinds.miracle {
 		public function removeInstance(instance:MiracleDisplayObject):void {
 			var index:int = _displayObjects.indexOf(instance);
 			if(index > - 1){
+				//TODO delete demand Animation
 				_displayObjects.splice(index, 1);
 			}
 		}

@@ -9,10 +9,12 @@ package com.merlinds.miracle.display {
 
 	public class MiracleFont extends MiracleDisplayObject {
 
+		public static const FONT_POSTFIX:String = ".font";
+
 		private var _text:String;
-		private var _glyphs:Object;
 
 		public var glyphSize:int;
+		protected var _glyphs:Object;
 		//==============================================================================
 		//{region							PUBLIC METHODS
 		public function MiracleFont() {
@@ -24,7 +26,8 @@ package com.merlinds.miracle.display {
 		//{region						PRIVATE\PROTECTED METHODS
 		override protected function afterAnimationDemand():void {
 			_glyphs = {};
-			var k:int = this.animation.length - 4;
+			var k:int = this.animation.indexOf(FONT_POSTFIX);
+			k = this.animation.substr(0, k).length + 1;
 			var n:int = this.animationInstance.frames.length;
 			for(var i:int = 0; i < n; i++){
 				var glyph:FrameInfo = this.animationInstance.frames[i];
@@ -39,6 +42,7 @@ package com.merlinds.miracle.display {
 			this.visible = false;
 		}
 
+		[Inline]
 		private final function update():void {
 			var chars:Array = _text.split("");
 			this.visible = false;
