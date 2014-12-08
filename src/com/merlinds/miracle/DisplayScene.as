@@ -11,6 +11,7 @@ package com.merlinds.miracle {
 	import com.merlinds.miracle.display.MiracleImage;
 	import com.merlinds.miracle.geom.Mesh2D;
 	import com.merlinds.miracle.textures.TextureHelper;
+	import com.merlinds.miracle.utils.ContextDisposeState;
 
 	import flash.geom.Point;
 	import flash.utils.setTimeout;
@@ -218,10 +219,16 @@ package com.merlinds.miracle {
 			if(_textureLoading)return;
 			if(_textureNeedToUpload.length > 0){
 				_textureLoading = true;
-				var textureHelper:TextureHelper = _textureNeedToUpload.pop();
-				textureHelper.callback = this.textureCallback;
-				textureHelper.texture = _context.createTexture(textureHelper.width,
-						textureHelper.height, textureHelper.format, false);
+				if(_context != null && _context.driverInfo != ContextDisposeState.DISPOSED){
+					var textureHelper:TextureHelper = _textureNeedToUpload.pop();
+					textureHelper.callback = this.textureCallback;
+					textureHelper.texture = _context.createTexture(textureHelper.width,
+							textureHelper.height, textureHelper.format, false);
+				}else{
+					//context can be disposed while texture downloads to GPU memory
+					this.enterFrameHandler();
+				}
+
 			}else{
 				if(_loadingCallbackSet){
 					_loadingCallback.apply(this);

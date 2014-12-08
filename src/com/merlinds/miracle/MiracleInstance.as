@@ -64,6 +64,7 @@ package com.merlinds.miracle {
 				_onPause = true;
 				if(_scene != null){
 					_scene.pause();
+//					_context.dispose();//fro disposing test
 				}
 			}
 		}
@@ -117,7 +118,6 @@ package com.merlinds.miracle {
 		}
 
 		private function completeMethod():void {
-			trace("completeMethod", _reloading);
 			_onPause = true;
 			if(_reloading){
 				//restore scene

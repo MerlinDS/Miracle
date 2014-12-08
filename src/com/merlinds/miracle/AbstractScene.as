@@ -95,7 +95,7 @@ package com.merlinds.miracle {
 			}
 		}
 
-		public function enterFrameHandler(event:Event):void {
+		protected function enterFrameHandler(event:Event = null):void {
 			if(_context != null && _context.driverInfo != ContextDisposeState.DISPOSED){
 				var now:Number = new Date().time;
 				_passedTime = now - _lastFrameTimestamp;
