@@ -8,8 +8,9 @@
         </dependencies>
         <compiler-options>
           <map>
-            <entry key="compiler.debug.swc" value="true" />
+            <entry key="compiler.debug.swc" value="false" />
           </map>
+          <option name="additionalOptions" value="-inline" />
         </compiler-options>
         <packaging-air-desktop />
         <packaging-android />
