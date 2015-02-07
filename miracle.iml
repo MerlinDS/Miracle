@@ -4,11 +4,16 @@
     <configurations>
       <configuration name="miracle" target-platform="Desktop" pure-as="true" output-type="Library" output-file="miracle.swc" output-folder="$MODULE_DIR$/bin">
         <dependencies>
+          <entries>
+            <entry library-name="flexunit_as" library-level="application">
+              <dependency linkage="Merged" />
+            </entry>
+          </entries>
           <sdk name="AIR.16.Beta" />
         </dependencies>
         <compiler-options>
           <map>
-            <entry key="compiler.debug.swc" value="false" />
+            <entry key="compiler.debug.swc" value="true" />
           </map>
         </compiler-options>
         <packaging-air-desktop />
@@ -22,8 +27,10 @@
     <exclude-output />
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="true" />
     </content>
     <orderEntry type="jdk" jdkName="AIR.16.Beta" jdkType="Flex SDK Type (new)" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" exported="" name="flexunit_as" level="application" />
   </component>
 </module>
