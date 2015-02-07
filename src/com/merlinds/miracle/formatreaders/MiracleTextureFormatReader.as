@@ -43,7 +43,7 @@ package com.merlinds.miracle.formatreaders {
 				throw new ArgumentError("Can't read file with current signature. Bad file signature");
 			}
 			this.readFileHeader();
-			trace(_header);
+			trace(_header);//TODO remove after developing
 		}
 
 		public function dispose():void {
@@ -51,6 +51,7 @@ package com.merlinds.miracle.formatreaders {
 			_signatureBytes.position = 0;
 			_buffer.clear();
 			_buffer.position = 0;
+			_header = null;
 			_bytes = null;
 		}
 		//} endregion PUBLIC METHODS ===================================================
