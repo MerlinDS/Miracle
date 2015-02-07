@@ -44,6 +44,9 @@ package com.merlinds.miracle.formatreaders {
 			}
 			this.readFileHeader();
 			trace(_header);//TODO remove after developing
+			//read likes block and prepare for data block reading
+			//start read data block
+			//read texture bytes
 		}
 
 		public function dispose():void {
