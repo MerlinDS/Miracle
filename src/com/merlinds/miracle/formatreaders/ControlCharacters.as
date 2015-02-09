@@ -35,18 +35,10 @@ package com.merlinds.miracle.formatreaders {
 		public function ControlCharacters() {
 			throw new IllegalOperationError("Object of this class can not be implemented");
 		}
+
+		public static function isFlag(byte:uint):Boolean {
+			return byte == EOT || byte == ETB || byte == DLE || byte == GS || byte == RS || byte == US;
+		}
 		//} endregion PUBLIC METHODS ===================================================
-
-		//==============================================================================
-		//{region						PRIVATE\PROTECTED METHODS
-		//} endregion PRIVATE\PROTECTED METHODS ========================================
-
-		//==============================================================================
-		//{region							EVENTS HANDLERS
-		//} endregion EVENTS HANDLERS ==================================================
-
-		//==============================================================================
-		//{region							GETTERS/SETTERS
-		//} endregion GETTERS/SETTERS ==================================================
 	}
 }

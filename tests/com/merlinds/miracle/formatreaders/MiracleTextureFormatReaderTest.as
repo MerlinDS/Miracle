@@ -16,7 +16,20 @@ package com.merlinds.miracle.formatreaders {
 		[Before]
 		public function setUp():void {
 			_charSet = "us-ascii";
-			_fileBytes = new TestMTF1File1(_charSet);
+			var file:TestMTF1File1 = new TestMTF1File1(_charSet);
+			file.writeMTF1Header();
+
+			file.writeAnimationName("ball");
+			file.writeAnimationPartName("ball_image");
+			file.writeAnimationSizes(8, 6);
+
+			file.writeAnimationName("shapes");
+			file.writeAnimationPartName("circle");
+			file.writeAnimationSizes(8, 6);
+			file.writeAnimationPartName("rect");
+			file.writeAnimationSizes(8, 6);
+
+			_fileBytes = file;
 			_reader = new MiracleTextureFormatReader(Signatures.MTF1);
 		}
 
@@ -38,6 +51,8 @@ package com.merlinds.miracle.formatreaders {
 		[Test]
 		public function testRead():void {
 			_reader.read(_fileBytes);
+			trace("A");
+
 		}
 
 		//} endregion PUBLIC METHODS ===================================================

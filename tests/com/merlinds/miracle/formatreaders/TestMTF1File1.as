@@ -13,13 +13,10 @@ package com.merlinds.miracle.formatreaders {
 		//{region							PUBLIC METHODS
 		public function TestMTF1File1(charSet:String) {
 			_charSet = charSet;
-			this.create();
 		}
-		//} endregion PUBLIC METHODS ===================================================
 
-		//==============================================================================
-		//{region						PRIVATE\PROTECTED METHODS
-		private function create():void {
+		public function writeMTF1Header():void {
+			this.clear();
 			this.position = 0;
 			//write signature
 			this.writeMultiByte(Signatures.MTF1, _charSet);
@@ -31,34 +28,43 @@ package com.merlinds.miracle.formatreaders {
 			this.position = TextureHeadersFormat.DATE;
 			this.writeInt(new Date().getTime());
 			//write linkers block
-			var testData:Object = {
-				vertices:[1,2,3,4,5,6,7,8],
-				uv:[1,2,3,4,5,6,7,8],
-				indexes:[1,2,3,4,5,6]
-			};
-			this.openNewLinkBlock("ball", true);
-			this.writeLinkUnit("ball_image", testData);
-			this.openNewLinkBlock("shapes");
-			this.writeLinkUnit("circle", testData);
-			this.writeLinkUnit("rect", testData);
-			//write data block
-			//write textures bytes
+//			var testData:Object = {
+//				vertices:[1,2,3,4,5,6,7,8],
+//				uv:[1,2,3,4,5,6,7,8],
+//				indexes:[1,2,3,4,5,6]
+//			};
 		}
 
-		private function openNewLinkBlock(name:String, isFirst:Boolean = false):void {
-			if(!isFirst)
-				this.writeByte(ControlCharacters.GS);
-			this.writeUTFBytes(name);
-			this.writeByte(ControlCharacters.US);
+		public function writeAnimationName(name:String):void
+		{
+			//write header
+			this.writeByte(ControlCharacters.GS);
+			//write block length
+			this.writeShort(name.length);
+			this.writeMultiByte(name, _charSet);
 		}
 
-		private function writeLinkUnit(name:String, data:Object):void {
-			this.writeUTFBytes(name);
-			this.writeByte(ControlCharacters.ETB);
-			this.writeShort(4);//Number of points
-			this.writeShort(6);//Number of indexes
-			this.writeByte(ControlCharacters.US);
+		public function writeAnimationPartName(name:String):void
+		{
+			//write header
+			this.writeByte(ControlCharacters.RS);
+			//write block length
+			this.writeShort(name.length);
+			this.writeMultiByte(name, _charSet);
 		}
+
+		public function writeAnimationSizes(points:int, indexes:int):void
+		{
+			//write header
+			this.writeByte(ControlCharacters.RS);
+			this.writeShort(points);
+			this.writeShort(indexes);
+		}
+		//} endregion PUBLIC METHODS ===================================================
+
+		//==============================================================================
+		//{region						PRIVATE\PROTECTED METHODS
+
 		//} endregion PRIVATE\PROTECTED METHODS ========================================
 
 		//==============================================================================

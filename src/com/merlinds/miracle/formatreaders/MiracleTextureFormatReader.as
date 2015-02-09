@@ -11,11 +11,11 @@ package com.merlinds.miracle.formatreaders {
 	 */
 	public class MiracleTextureFormatReader {
 
+		private var _status:int;
 		private var _charSet:String;
 		private var _correctSignature:String;
 		//bytes
 		private var _bytes:ByteArray;
-		private var _buffer:ByteArray;
 		private var _signatureBytes:ByteArray;
 		//objects
 		private var _header:MTFHeader;
@@ -24,8 +24,8 @@ package com.merlinds.miracle.formatreaders {
 		public function MiracleTextureFormatReader(signature:String) {
 			_charSet = "us-ascii";
 			_correctSignature = signature;
-			_buffer = new ByteArray();
 			_signatureBytes = new ByteArray();
+			_status = ReaderStatus.WAIT;
 		}
 
 		/**
@@ -42,8 +42,11 @@ package com.merlinds.miracle.formatreaders {
 			if(this.isValidSignature == false){
 				throw new ArgumentError("Can't read file with current signature. Bad file signature");
 			}
+			//change status
+			_status = ReaderStatus.PROCESSING;
 			this.readFileHeader();
 			trace(_header);//TODO remove after developing
+			this.readBytesToBuffer();
 			//read likes block and prepare for data block reading
 			//start read data block
 			//read texture bytes
@@ -52,10 +55,10 @@ package com.merlinds.miracle.formatreaders {
 		public function dispose():void {
 			_signatureBytes.clear();
 			_signatureBytes.position = 0;
-			_buffer.clear();
-			_buffer.position = 0;
 			_header = null;
 			_bytes = null;
+			//set new status
+			_status = ReaderStatus.WAIT;
 		}
 		//} endregion PUBLIC METHODS ===================================================
 
@@ -78,6 +81,13 @@ package com.merlinds.miracle.formatreaders {
 			_bytes.position = TextureHeadersFormat.DATE;
 			_header.modificationDate = _bytes.readInt();
 		}
+
+		private function readBytesToBuffer():void {
+			trace("readBytesToBuffer");
+			//read buffer to buffer till controls character not found
+
+
+		}
 		//} endregion PRIVATE\PROTECTED METHODS ========================================
 
 		//==============================================================================
@@ -89,6 +99,10 @@ package com.merlinds.miracle.formatreaders {
 		public function get isValidSignature():Boolean {
 			_signatureBytes.position = 0;
 			return _signatureBytes.readMultiByte(Signatures.SIZE, _charSet) == _correctSignature;
+		}
+
+		public function get status():int {
+			return _status;
 		}
 		//} endregion GETTERS/SETTERS ==================================================
 	}
