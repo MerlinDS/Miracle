@@ -14,14 +14,18 @@ package com.merlinds.miracle.formatreaders {
 	 */
 	public class MiracleTextureFormatReader {
 
-		private static const BYTE_CHUNK:int = 256;
+//		private static const BYTE_CHUNK:int = 256;
 		private static const SHORT:int = 1;
-		private static const FLOAT:uint = 2;
+//		private static const FLOAT:uint = 2;
+//		private static const INT:uint = 3;
 
 		private var _status:int;
 		private var _charSet:String;
 		private var _correctSignature:String;
-		private var _endOfBlock:Boolean;
+		private var _endOfMethod:Boolean;
+		private var _currentMethod:int;
+		private var _readingMethods:Vector.<Function>;
+		private var _errors:Vector.<Error>;
 		//bytes
 		private var _bytes:ByteArray;
 		private var _signatureBytes:ByteArray;
@@ -37,6 +41,10 @@ package com.merlinds.miracle.formatreaders {
 			_correctSignature = signature;
 			_signatureBytes = new ByteArray();
 			_metadataHeaders = new <MetadataHeader>[];
+			_errors = new <Error>[];
+			//initialize methods
+			_readingMethods = new <Function>[this.readFileHeader, this.readMetadata,
+				this.readDataBlock, this.prepareForTextureReading, this.readTextureBlock];
 			_status = ReaderStatus.WAIT;
 		}
 
@@ -55,35 +63,34 @@ package com.merlinds.miracle.formatreaders {
 			_texture = texture;
 			_bytes.position = 0;
 			_bytes.readBytes(_signatureBytes, 0, Signatures.SIZE);
-			if(this.isValidSignature == false){
-				throw new ArgumentError("Can't read file with current signature. Bad file signature");
-			}
 			//change status
 			_status = ReaderStatus.PROCESSING;
-			this.readFileHeader();
-			trace(_header);//TODO remove after developing
-			//read metadata
-			while(!_endOfBlock)this.readMetadata();
-			trace(_metadataHeaders);//TODO remove after developing
-			_endOfBlock = false;
-			while(!_endOfBlock)this.readDataBlock();
-			//after all data blocks must be a data link escape byte
-			if(_bytes.readByte() != ControlCharacters.DLE)
-				throw new ArgumentError("Bad MTF1 file structure");
-			//prepare texture output byte array for writing in it
-			var textureFormat:String = this.getTextureFormat();
-			if(_header.textureFormat != textureFormat)
-				throw new ArgumentError("Bad MTF1 texture format " + textureFormat);
-			_texture.clear();
-			_texture.position = 0;
-			_endOfBlock = false;
-			while(!_endOfBlock)this.readTextureBlock();
+			_currentMethod = 0;
+			_endOfMethod = false;
+			//
+			this.assert(this.isValidSignature, "Can't read file with current signature. Bad file signature");
+		}
+
+		public function readingStep():void {
+			if(_status == ReaderStatus.PROCESSING){
+				var method:Function = _readingMethods[ _currentMethod ];
+				method.apply(this);
+				if(_status != ReaderStatus.ERROR){
+					if(_endOfMethod)_currentMethod++;
+					_endOfMethod = false;
+					//reading was ended successfully
+					if(_currentMethod == _readingMethods.length){
+						_status = ReaderStatus.READY;
+					}
+				}
+			}
 		}
 
 		public function dispose():void {
 			_signatureBytes.clear();
 			_signatureBytes.position = 0;
 			_metadataHeaders.length = 0;
+			_errors.length = 0;
 			_texture = null;
 			_meshes = null;
 			_header = null;
@@ -111,11 +118,13 @@ package com.merlinds.miracle.formatreaders {
 					TextureHeadersFormat.DATE - TextureHeadersFormat.TEXTURE_FORMAT, _charSet);
 			_bytes.position = TextureHeadersFormat.DATE;
 			_header.modificationDate = _bytes.readInt();
+			trace(_header);//TODO remove after developing
+			_endOfMethod = true;
 		}
 
 		/**
 		 * Read metadata of the MTF1 file that contains information about animation names and data array sizes.
-		 * Will set flag _endOfBlock equals true when metadata block will be fully read.
+		 * Will set flag _endOfMethod equals true when metadata block will be fully read.
 		 * </ br>Reading sequence:
 		 * </ br>Read animation block name - ControlCharacters.GS
 		 * </ br>Read animation part name - ControlCharacters.RS
@@ -140,7 +149,7 @@ package com.merlinds.miracle.formatreaders {
 				metadata.sizes.push(points, indexes);
 			}else if(headerByte == ControlCharacters.DLE){
 				//End of metadata block
-				_endOfBlock = true;
+				_endOfMethod = true;
 			}else{
 				//read animation block name or part of animation name
 				var length:int = _bytes.readShort();
@@ -179,7 +188,7 @@ package com.merlinds.miracle.formatreaders {
 			_meshes[metadata.name] = mesh;
 			metadata.dispose();
 			//no more header to read
-			_endOfBlock = _metadataHeaders.length == 0;
+			_endOfMethod = _metadataHeaders.length == 0;
 		}
 
 		/**
@@ -196,18 +205,45 @@ package com.merlinds.miracle.formatreaders {
 			}
 		}
 
-		private function getTextureFormat():String {
+		/**
+		 * Check for bad file texture or bad texture format
+		 * and prepare texture output for reading in it.
+		 */
+		private function prepareForTextureReading():void {
+			//after all data blocks must be a data link escape byte
+			this.assert(_bytes.readByte() == ControlCharacters.DLE,
+					"Bad MTF1 file structure");
+			//assert texture format
 			var tp:int = _bytes.position;//save temp position
-			var signature:String = _bytes.readUTFBytes(4);
+			var textureFormat:String = _bytes.readUTFBytes(4);
 			_bytes.position = tp;
-			return signature;
+			this.assert(_header.textureFormat == textureFormat,
+					"Bad MTF1 texture format " + textureFormat);
+			//prepare texture output byte array for writing in it
+			_texture.clear();
+			_texture.position = 0;
+			_endOfMethod = true;
 		}
 		/**
 		 * Read texture block by chunks will MTF1 file bytes are available
 		 */
 		private function readTextureBlock():void {
 			_bytes.readBytes(_texture, 0, _bytes.bytesAvailable);
-			_endOfBlock = true;
+			_endOfMethod = true;
+		}
+
+		/**
+		 * Error assertion method
+		 * @param condition
+		 * @param errorMessage
+		 */
+		private function assert(condition:Boolean, errorMessage:String = null):void {
+			if(!condition){
+				if(errorMessage == null)
+					errorMessage = "Error has occurred";
+				_errors[_errors.length] = new Error(errorMessage);
+				_status = ReaderStatus.ERROR;
+			}
 		}
 		//} endregion PRIVATE\PROTECTED METHODS ========================================
 
@@ -229,6 +265,10 @@ package com.merlinds.miracle.formatreaders {
 		 */
 		public function get status():int {
 			return _status;
+		}
+
+		public function get errors():Vector.<Error> {
+			return _errors;
 		}
 		//} endregion GETTERS/SETTERS ==================================================
 	}

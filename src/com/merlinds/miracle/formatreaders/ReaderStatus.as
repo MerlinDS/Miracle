@@ -17,6 +17,8 @@ package com.merlinds.miracle.formatreaders {
 		public static const PROCESSING:uint = 0x2;
 		/** Output of format reader is ready to use **/
 		public static const READY:uint = 0x4;
+		/** Error has occurred while reading **/
+		public static const ERROR:uint = 0x8;
 		//==============================================================================
 		//{region							PUBLIC METHODS
 		/**

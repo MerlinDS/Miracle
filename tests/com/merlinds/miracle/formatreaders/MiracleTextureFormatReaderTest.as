@@ -6,6 +6,8 @@
 package com.merlinds.miracle.formatreaders {
 	import flash.utils.ByteArray;
 
+	import flexunit.framework.Assert;
+
 	public class MiracleTextureFormatReaderTest {
 
 		private var _charSet:String;
@@ -52,11 +54,15 @@ package com.merlinds.miracle.formatreaders {
 		}
 
 
-		[Test(expects="ArgumentError")]
+		[Test]
 		public function testSignatureError():void {
 			var errorBytes:ByteArray = new ByteArray();
 			errorBytes.writeMultiByte("ERROR", _charSet);
 			_reader.read(errorBytes, {}, null);
+			_reader.readingStep();
+			Assert.assertEquals("Error of signature was not occurred", ReaderStatus.ERROR, _reader.status);
+			Assert.assertFalse("Signature must be invalid", _reader.isValidSignature);
+			Assert.assertEquals("Error list is empty", 1, _reader.errors.length);
 		}
 
 		[Test(async)]
@@ -64,8 +70,9 @@ package com.merlinds.miracle.formatreaders {
 			var meshes:Object = {};
 			var texture:ByteArray = new ByteArray();
 			_reader.read(_fileBytes, meshes, texture);
-			trace("A");
-
+			while(_reader.status == ReaderStatus.PROCESSING){
+				_reader.readingStep();
+			}
 		}
 
 		//} endregion PUBLIC METHODS ===================================================
