@@ -56,13 +56,14 @@ package com.merlinds.miracle.formatreaders {
 		public function testSignatureError():void {
 			var errorBytes:ByteArray = new ByteArray();
 			errorBytes.writeMultiByte("ERROR", _charSet);
-			_reader.read(errorBytes, {});
+			_reader.read(errorBytes, {}, null);
 		}
 
-		[Test]
+		[Test(async)]
 		public function testRead():void {
 			var meshes:Object = {};
-			_reader.read(_fileBytes, meshes);
+			var texture:ByteArray = new ByteArray();
+			_reader.read(_fileBytes, meshes, texture);
 			trace("A");
 
 		}

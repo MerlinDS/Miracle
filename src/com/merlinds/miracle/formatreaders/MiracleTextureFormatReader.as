@@ -14,6 +14,7 @@ package com.merlinds.miracle.formatreaders {
 	 */
 	public class MiracleTextureFormatReader {
 
+		private static const BYTE_CHUNK:int = 256;
 		private static const SHORT:int = 1;
 		private static const FLOAT:uint = 2;
 
@@ -28,6 +29,7 @@ package com.merlinds.miracle.formatreaders {
 		private var _header:MTFHeader;
 		private var _metadataHeaders:Vector.<MetadataHeader>;
 		private var _meshes:Object;
+		private var _texture:ByteArray;
 		//==============================================================================
 		//{region							PUBLIC METHODS
 		public function MiracleTextureFormatReader(signature:String) {
@@ -41,14 +43,16 @@ package com.merlinds.miracle.formatreaders {
 		/**
 		 * Read MTF file and parse it to output
 		 * @param bytes MTF file bytes
-		 * @param meshes output target for parsed meshes
+		 * @param meshes output object for parsed meshes
+		 * @param texture output byte array for texture
 		 *
 		 * @throws ArgumentError Bad file signature
 		 */
-		public function read(bytes:ByteArray, meshes:Object):void {
+		public function read(bytes:ByteArray, meshes:Object, texture:ByteArray):void {
 			this.dispose();
 			_bytes = bytes;
 			_meshes = meshes;
+			_texture = texture;
 			_bytes.position = 0;
 			_bytes.readBytes(_signatureBytes, 0, Signatures.SIZE);
 			if(this.isValidSignature == false){
@@ -60,21 +64,27 @@ package com.merlinds.miracle.formatreaders {
 			trace(_header);//TODO remove after developing
 			//read metadata
 			while(!_endOfBlock)this.readMetadata();
-			trace(_metadataHeaders);
+			trace(_metadataHeaders);//TODO remove after developing
 			_endOfBlock = false;
 			while(!_endOfBlock)this.readDataBlock();
-			_endOfBlock = false;
 			//after all data blocks must be a data link escape byte
 			if(_bytes.readByte() != ControlCharacters.DLE)
 				throw new ArgumentError("Bad MTF1 file structure");
-
-			this.readTextureBlock();
+			//prepare texture output byte array for writing in it
+			var textureFormat:String = this.getTextureFormat();
+			if(_header.textureFormat != textureFormat)
+				throw new ArgumentError("Bad MTF1 texture format " + textureFormat);
+			_texture.clear();
+			_texture.position = 0;
+			_endOfBlock = false;
+			while(!_endOfBlock)this.readTextureBlock();
 		}
 
 		public function dispose():void {
 			_signatureBytes.clear();
 			_signatureBytes.position = 0;
 			_metadataHeaders.length = 0;
+			_texture = null;
 			_meshes = null;
 			_header = null;
 			_bytes = null;
@@ -172,10 +182,6 @@ package com.merlinds.miracle.formatreaders {
 			_endOfBlock = _metadataHeaders.length == 0;
 		}
 
-		private function readTextureBlock():void {
-
-		}
-
 		/**
 		 * Read list of data from data block
 		 * @param target output for read data
@@ -188,6 +194,20 @@ package com.merlinds.miracle.formatreaders {
 			for(var i:int = 0; i < count; i++){
 				target[i] = readMethod.apply();
 			}
+		}
+
+		private function getTextureFormat():String {
+			var tp:int = _bytes.position;//save temp position
+			var signature:String = _bytes.readUTFBytes(4);
+			_bytes.position = tp;
+			return signature;
+		}
+		/**
+		 * Read texture block by chunks will MTF1 file bytes are available
+		 */
+		private function readTextureBlock():void {
+			_bytes.readBytes(_texture, 0, _bytes.bytesAvailable);
+			_endOfBlock = true;
 		}
 		//} endregion PRIVATE\PROTECTED METHODS ========================================
 
