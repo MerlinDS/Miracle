@@ -16,6 +16,8 @@ package com.merlinds.miracle.format {
 		private var _charSet:String;
 		private var _reader:MTFReader;
 		private var _fileBytes:ByteArray;
+
+		private var _texture:ByteArray;
 		private var _textureSize:int;
 
 		private var _animations:Vector.<AnimationsData>;
@@ -30,7 +32,7 @@ package com.merlinds.miracle.format {
 					new AnimationsData("ball", [new AnimationPart("ball_image")]),
 					new AnimationsData("shapes", [new AnimationPart("circle"), new AnimationPart("rect")])
 			];
-			var atf:FakeATFFile = new FakeATFFile(_textureSize);
+			_texture = new FakeATFFile(_textureSize);
 			var file:TestMTF1File1 = new TestMTF1File1(_charSet);
 			file.writeMTF1Header();
 			n = 0;
@@ -53,7 +55,7 @@ package com.merlinds.miracle.format {
 			}
 
 			file.writeDataEscape();
-			file.writeBytes(atf, 0, atf.length);
+			file.writeBytes(_texture, 0, _texture.length);
 
 			_fileBytes = file;
 			_reader = new MTFReader(Signatures.MTF1, 256);
@@ -110,11 +112,11 @@ package com.merlinds.miracle.format {
 			Assert.assertEquals("Texture size is bad", _textureSize, texture.length);
 			var signature:String = texture.readUTFBytes(3);
 			Assert.assertEquals("Texture signature is bad", "ATF", signature);
-			var n:int = _fileBytes.length;
-			_fileBytes.position = 0;
+			var n:int = _texture.length;
+			_texture.position = 0;
 			texture.position = 0;
 			for(i = 0; i < n; i++){
-				var byte0:uint = _fileBytes.readByte();
+				var byte0:uint = _texture.readByte();
 				var byte1:uint = texture.readByte();
 				if(byte0 != byte1){
 					Assert.fail("Texture not equals input texture");
