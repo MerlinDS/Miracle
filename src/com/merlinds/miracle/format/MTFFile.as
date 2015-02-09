@@ -12,6 +12,7 @@ package com.merlinds.miracle.format {
 		private var _charSet:String;
 		private var _signature:String;
 
+		private var _meshesOrder:Vector.<String>;
 		private var _meshes:Object;
 		private var _texture:ByteArray;
 		private var _header:MTFHeader;
@@ -27,6 +28,7 @@ package com.merlinds.miracle.format {
 			_signature = signature;
 			_charSet = charSet;
 			_meshes = {};
+			_meshesOrder = new <String>[];
 			_header = new MTFHeader();
 			super();
 		}
@@ -60,6 +62,7 @@ package com.merlinds.miracle.format {
 				throw new ArgumentError("Mesh has no polygons");
 			//data is fine and can be added
 			_meshes[name] = mesh;
+			_meshesOrder.push(name);
 		}
 
 		/**
@@ -118,6 +121,7 @@ package com.merlinds.miracle.format {
 		override public function clear():void {
 			super.clear();
 			_header = new MTFHeader();
+			_meshesOrder.length = 0;
 			_meshes = {};
 			_texture = null;
 			_finalized = false;
@@ -153,13 +157,14 @@ package com.merlinds.miracle.format {
 			this.writeShort(_header.uvsSize);//Write uvs list element type = float
 			this.writeShort(_header.indexesSize);//Write indexes list element type = float
 			this.writeMultiByte(_header.textureFormat, _charSet);//Write texture format
+			this.position = MTFHeadersFormat.DATE;
 			this.writeInt(_header.modificationDate);//Write creation time
 		}
 
 		private function writeMeshes():void {
 			var meshesBlock:ByteArray = new ByteArray();
 			var dataBlock:ByteArray = new ByteArray();
-			for(var n:String in _meshes){
+			for each(var n:String in _meshesOrder){
 				var mesh:Object = _meshes[n];
 				meshesBlock.writeByte(ControlCharacters.GS);
 				//write block length
@@ -167,10 +172,10 @@ package com.merlinds.miracle.format {
 				meshesBlock.writeMultiByte(n, _charSet);
 				//write mesh
 				for(var m:String in mesh){
-					this.writeByte(ControlCharacters.RS);
+					meshesBlock.writeByte(ControlCharacters.RS);
 					//write block length
-					this.writeShort(m.length);
-					this.writeMultiByte(m, _charSet);
+					meshesBlock.writeShort(m.length);
+					meshesBlock.writeMultiByte(m, _charSet);
 					//write polygon
 					meshesBlock.writeByte(ControlCharacters.US);
 					meshesBlock.writeShort(mesh[m].uv.length / 2 );
@@ -186,19 +191,19 @@ package com.merlinds.miracle.format {
 
 		private function writeDataToTarget(data:Object, target:ByteArray):void {
 			//write vertices
-			var method:Function = _header.verticesSize == 1 ? target.writeFloat : target.writeShort;
+			var method:Function = _header.verticesSize != 1 ? target.writeFloat : target.writeShort;
 			var i:int, n:int = data.vertices.length;
 			for(i = 0; i < n; i++){
 				method.apply(this, [data.vertices[i]]);
 			}
 			//write uvs
-			method = _header.uvsSize == 1 ? target.writeFloat : target.writeShort;
+			method = _header.uvsSize != 1 ? target.writeFloat : target.writeShort;
 			n = data.uv.length;
 			for(i = 0; i < n; i++){
 				method.apply(this, [data.uv[i]]);
 			}
 			//write indexes
-			method = _header.uvsSize == 1 ? target.writeFloat : target.writeShort;
+			method = _header.indexesSize != 1 ? target.writeFloat : target.writeShort;
 			n = data.indexes.length;
 			for(i = 0; i < n; i++){
 				method.apply(this, [data.indexes[i]]);
