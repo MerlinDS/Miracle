@@ -21,18 +21,18 @@ package com.merlinds.miracle.formatreaders {
 
 			file.writeAnimationName("ball");
 			file.writeAnimationPartName("ball_image");
-			file.writeAnimationSizes(8, 6);
+			file.writeAnimationSizes(4, 6);
 
 			file.writeAnimationName("shapes");
 			file.writeAnimationPartName("circle");
-			file.writeAnimationSizes(8, 6);
+			file.writeAnimationSizes(4, 6);
 			file.writeAnimationPartName("rect");
-			file.writeAnimationSizes(8, 6);
+			file.writeAnimationSizes(4, 6);
 			file.writeDataEscape();
 
 			for(var i:int = 0; i < 3; i++){
-				file.writeFloatArray(0, 1, 2, 3, 4, 5, 6, 7);
-				file.writeFloatArray(0, 1, 2, 3, 4, 5, 6, 7);
+				file.writeFloatArray(0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0);
+				file.writeFloatArray(0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0);
 				file.writeShortArray(0, 1, 2, 3, 4, 5);
 			}
 
@@ -54,12 +54,13 @@ package com.merlinds.miracle.formatreaders {
 		public function testSignatureError():void {
 			var errorBytes:ByteArray = new ByteArray();
 			errorBytes.writeMultiByte("ERROR", _charSet);
-			_reader.read(errorBytes);
+			_reader.read(errorBytes, {});
 		}
 
 		[Test]
 		public function testRead():void {
-			_reader.read(_fileBytes);
+			var meshes:Object = {};
+			_reader.read(_fileBytes, meshes);
 			trace("A");
 
 		}

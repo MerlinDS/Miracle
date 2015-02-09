@@ -21,9 +21,9 @@ package com.merlinds.miracle.formatreaders {
 			//write signature
 			this.writeMultiByte(Signatures.MTF1, _charSet);
 			//write header
-			this.writeShort(4);//float type
-			this.writeShort(4);//float type
-			this.writeShort(4);//float type
+			this.writeShort(2);//float type flag
+			this.writeShort(2);//float type flag
+			this.writeShort(1);//int type flag
 			this.writeMultiByte("ATF", _charSet);
 			this.position = TextureHeadersFormat.DATE;
 			this.writeInt(new Date().getTime());

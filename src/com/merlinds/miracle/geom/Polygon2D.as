@@ -18,6 +18,8 @@ package com.merlinds.miracle.geom {
 		public var buffer:Vector.<Number>;
 		/** Number of vertices of polygon in buffer **/
 		public var numVertices:Number;
+		//==============================================================================
+		//{region							PUBLIC METHODS
 		/**
 		 * Constructor
 		 * @param indexes List of indexes for point in polygon
@@ -42,8 +44,14 @@ package com.merlinds.miracle.geom {
 			//copy data indexes list
 			this.indexes = indexes.concat();
 		}
-		//==============================================================================
-		//{region							PUBLIC METHODS
+
+		public function toString():String {
+			return "[Polygon2D(\n" +
+					"\tbuffer = " + this.buffer + ";\n " +
+					"\tindexes = " + this.indexes + ";\n " +
+					"\t_scale = " + _scale +
+					"\n)]";
+		}
 		//} endregion PUBLIC METHODS ===================================================
 
 		//==============================================================================
