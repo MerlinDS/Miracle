@@ -4,22 +4,21 @@
  * Time: 12:16
  */
 package com.merlinds.miracle.format.mtf {
-	import com.merlinds.miracle.format.*;
+	import com.merlinds.miracle.format.FormatFile;
 	import com.merlinds.miracle.utils.ControlCharacters;
 
 	import flash.errors.IllegalOperationError;
 	import flash.utils.ByteArray;
 
-	internal class MTFFile extends ByteArray {
-
-		private var _charSet:String;
-		private var _signature:String;
+	/**
+	 * Miracle texture format File creator
+	 */
+	internal class MTFFile extends FormatFile {
 
 		private var _meshesOrder:Vector.<String>;
 		private var _meshes:Object;
 		private var _texture:ByteArray;
 		private var _header:MTFHeader;
-		private var _finalized:Boolean;
 		//==============================================================================
 		//{region							PUBLIC METHODS
 		/**
@@ -28,12 +27,10 @@ package com.merlinds.miracle.format.mtf {
 		 * @param charSet Characters set
 		 */
 		public function MTFFile(signature:String, charSet:String) {
-			_signature = signature;
-			_charSet = charSet;
-			_meshes = {};
+			super(signature, charSet);
 			_meshesOrder = new <String>[];
 			_header = new MTFHeader();
-			super();
+			_meshes = {};
 		}
 
 		/**
@@ -93,7 +90,7 @@ package com.merlinds.miracle.format.mtf {
 		 * Finalize MTF file.
 		 * Write all data to file bytes.
 		 */
-		public function finalize():void {
+		override public function finalize():void {
 			//validate header
 			if(_header.indexesSize == 0 || _header.verticesSize == 0 || _header.uvsSize == 0)
 				throw new IllegalOperationError("Header contains 0 type of size fields");
@@ -117,17 +114,15 @@ package com.merlinds.miracle.format.mtf {
 			_header = new MTFHeader();
 			_meshes = {};
 			_texture = null;
-
-			_finalized = true;
+			super.finalize();
 		}
 
 		override public function clear():void {
-			super.clear();
 			_header = new MTFHeader();
 			_meshesOrder.length = 0;
 			_meshes = {};
 			_texture = null;
-			_finalized = false;
+			super.clear();
 		}
 
 		//} endregion PUBLIC METHODS ===================================================
@@ -154,12 +149,12 @@ package com.merlinds.miracle.format.mtf {
 		}
 
 		private function writeHeader():void {
-			this.writeMultiByte(_signature, _charSet);
+			this.writeMultiByte(this.signature, this.charSet);
 			this.position = MTFHeadersFormat.VT;
 			this.writeShort(_header.verticesSize);//Write vertices list element type = float
 			this.writeShort(_header.uvsSize);//Write uvs list element type = float
 			this.writeShort(_header.indexesSize);//Write indexes list element type = float
-			this.writeMultiByte(_header.textureFormat, _charSet);//Write texture format
+			this.writeMultiByte(_header.textureFormat, this.charSet);//Write texture format
 			this.position = MTFHeadersFormat.DATE;
 			this.writeInt(_header.modificationDate);//Write creation time
 		}
@@ -172,13 +167,13 @@ package com.merlinds.miracle.format.mtf {
 				meshesBlock.writeByte(ControlCharacters.GS);
 				//write block length
 				meshesBlock.writeShort(n.length);
-				meshesBlock.writeMultiByte(n, _charSet);
+				meshesBlock.writeMultiByte(n, this.charSet);
 				//write mesh
 				for(var m:String in mesh){
 					meshesBlock.writeByte(ControlCharacters.RS);
 					//write block length
 					meshesBlock.writeShort(m.length);
-					meshesBlock.writeMultiByte(m, _charSet);
+					meshesBlock.writeMultiByte(m, this.charSet);
 					//write polygon
 					meshesBlock.writeByte(ControlCharacters.US);
 					meshesBlock.writeShort(mesh[m].uv.length / 2 );
@@ -225,15 +220,7 @@ package com.merlinds.miracle.format.mtf {
 
 		//==============================================================================
 		//{region							GETTERS/SETTERS
-		/** Return flag of finalization.
-		 * If flag equals true, file are finalized,
-		 * all data was written to bytes and file can be saved to disk as MTF file.
-		 * In other case file was not finalized and has no written data.
-		 **/
-		public function get finalized():Boolean {
-			return _finalized;
-		}
 
-//} endregion GETTERS/SETTERS ==================================================
+		//} endregion GETTERS/SETTERS ==================================================
 	}
 }
