@@ -44,7 +44,7 @@ package com.merlinds.miracle.utils {
 				//read polygons
 				for(var j:int = 0; j < m; j++){
 					var name:String = meshData.mesh[j].name;
-					mesh[name] = new Polygon2D(meshData.mesh[j], scale);
+//					mesh[name] = new Polygon2D(meshData.mesh[j], scale);
 				}
 				meshes[meshData.name] = mesh;
 			}
