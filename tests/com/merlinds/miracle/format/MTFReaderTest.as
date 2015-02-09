@@ -110,6 +110,18 @@ package com.merlinds.miracle.format {
 			Assert.assertEquals("Texture size is bad", _textureSize, texture.length);
 			var signature:String = texture.readUTFBytes(3);
 			Assert.assertEquals("Texture signature is bad", "ATF", signature);
+			var n:int = _fileBytes.length;
+			_fileBytes.position = 0;
+			texture.position = 0;
+			for(i = 0; i < n; i++){
+				var byte0:uint = _fileBytes.readByte();
+				var byte1:uint = texture.readByte();
+				if(byte0 != byte1){
+					Assert.fail("Texture not equals input texture");
+				}
+			}
+
+			_reader.dispose();
 		}
 
 		//} endregion PUBLIC METHODS ===================================================

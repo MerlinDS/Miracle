@@ -69,7 +69,7 @@ package com.merlinds.miracle.format {
 			_currentMethod = 0;
 			_endOfMethod = false;
 			//
-			this.assert(this.isValidSignature, "Can't read file with current signature. Bad file signature");
+			this.assert(this.isValidSignature, ReaderError.BAD_FILE_SIGNATURE);
 		}
 
 		public function readingStep():void {
@@ -108,16 +108,16 @@ package com.merlinds.miracle.format {
 		 */
 		private function readFileHeader():void {
 			_header = new MTFHeader();
-			_bytes.position = TextureHeadersFormat.VT;
+			_bytes.position = MTFHeadersFormat.VT;
 			_header.verticesSize = _bytes.readShort();
-			_bytes.position = TextureHeadersFormat.UVT;
+			_bytes.position = MTFHeadersFormat.UVT;
 			_header.uvsSize = _bytes.readShort();
-			_bytes.position = TextureHeadersFormat.IT;
+			_bytes.position = MTFHeadersFormat.IT;
 			_header.indexesSize = _bytes.readShort();
-			_bytes.position = TextureHeadersFormat.TEXTURE_FORMAT;
+			_bytes.position = MTFHeadersFormat.TEXTURE_FORMAT;
 			_header.textureFormat = _bytes.readMultiByte(
-					TextureHeadersFormat.DATE - TextureHeadersFormat.TEXTURE_FORMAT, _charSet);
-			_bytes.position = TextureHeadersFormat.DATE;
+					MTFHeadersFormat.DATE - MTFHeadersFormat.TEXTURE_FORMAT, _charSet);
+			_bytes.position = MTFHeadersFormat.DATE;
 			_header.modificationDate = _bytes.readInt();
 			_endOfMethod = true;
 		}
@@ -210,14 +210,12 @@ package com.merlinds.miracle.format {
 		 */
 		private function prepareForTextureReading():void {
 			//after all data blocks must be a data link escape byte
-			this.assert(_bytes.readByte() == ControlCharacters.DLE,
-					"Bad MTF1 file structure");
+			this.assert(_bytes.readByte() == ControlCharacters.DLE, ReaderError.BAD_FILE_STRUCTURE);
 			//assert texture format
 			var tp:int = _bytes.position;//save temp position
 			var textureFormat:String = _bytes.readUTFBytes(4);
 			_bytes.position = tp;
-			this.assert(_header.textureFormat == textureFormat,
-					"Bad " + _header.textureFormat + " texture format " + textureFormat);
+			this.assert(_header.textureFormat == textureFormat, ReaderError.BAD_TEXTURE_FORMAT);
 			//prepare texture output byte array for writing in it
 			_texture.clear();
 			_texture.position = 0;
@@ -240,13 +238,11 @@ package com.merlinds.miracle.format {
 		/**
 		 * Error assertion method
 		 * @param condition
-		 * @param errorMessage
+		 * @param errorId
 		 */
-		private function assert(condition:Boolean, errorMessage:String = null):void {
+		private function assert(condition:Boolean, errorId:int = 0):void {
 			if(!condition){
-				if(errorMessage == null)
-					errorMessage = "Error has occurred";
-				_errors[_errors.length] = new Error(errorMessage);
+				_errors[_errors.length] = ReaderError.castError(errorId);
 				_status = ReaderStatus.ERROR;
 			}
 		}

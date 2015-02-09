@@ -25,7 +25,7 @@ package com.merlinds.miracle.format {
 			this.writeShort(2);//float type flag
 			this.writeShort(1);//int type flag
 			this.writeMultiByte("ATF", _charSet);
-			this.position = TextureHeadersFormat.DATE;
+			this.position = MTFHeadersFormat.DATE;
 			this.writeInt(new Date().getTime());
 			//write linkers block
 //			var testData:Object = {

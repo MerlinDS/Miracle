@@ -9,7 +9,7 @@ package com.merlinds.miracle.format {
 	/**
 	 * Contained constants with header format
 	 */
-	internal class TextureHeadersFormat {
+	internal class MTFHeadersFormat {
 
 		//Data types
 		/** Position of descriptor of vertices elements size (2 bytes)**/
@@ -24,7 +24,7 @@ package com.merlinds.miracle.format {
 		/** Position of descriptor of modification date (4 bytes)**/
 		public static const DATE:int = 14;
 		/**Size of the header in bytes **/
-//		public static const HEADER_SIZE:int = DATE + 4;//Last pointer + pointer size
+		public static const HEADER_SIZE:int = DATE + 4;//Last pointer + pointer size
 
 		//==============================================================================
 		//{region							PUBLIC METHODS
@@ -32,7 +32,7 @@ package com.merlinds.miracle.format {
 		 * Constructor.
 		 * @throw flash.errors.IllegalOperationError Object of this class can not be implemented
 		 */
-		public function TextureHeadersFormat() {
+		public function MTFHeadersFormat() {
 			throw new IllegalOperationError("Object of this class can not be implemented");
 		}
 		//} endregion PUBLIC METHODS ===================================================
