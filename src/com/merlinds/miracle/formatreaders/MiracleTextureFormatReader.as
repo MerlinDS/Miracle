@@ -63,6 +63,11 @@ package com.merlinds.miracle.formatreaders {
 			trace(_metadataHeaders);
 			_endOfBlock = false;
 			while(!_endOfBlock)this.readDataBlock();
+			_endOfBlock = false;
+			//after all data blocks must be a data link escape byte
+			if(_bytes.readByte() != ControlCharacters.DLE)
+				throw new ArgumentError("Bad MTF1 file structure");
+
 			this.readTextureBlock();
 		}
 
@@ -192,19 +197,22 @@ package com.merlinds.miracle.formatreaders {
 
 		//==============================================================================
 		//{region							GETTERS/SETTERS
+		/** Check for file signature correctness. Return true if signature is correct, false in other case **/
 		public function get isValidSignature():Boolean {
 			_signatureBytes.position = 0;
 			return _signatureBytes.readMultiByte(Signatures.SIZE, _charSet) == _correctSignature;
 		}
 
+		/**
+		 * Get reader status.
+		 * @see com.merlinds.miracle.formatreaders.ReaderStatus
+		 */
 		public function get status():int {
 			return _status;
 		}
 		//} endregion GETTERS/SETTERS ==================================================
 	}
 }
-
-import org.hamcrest.object.nullValue;
 
 class MetadataHeader{
 	/** animation name **/

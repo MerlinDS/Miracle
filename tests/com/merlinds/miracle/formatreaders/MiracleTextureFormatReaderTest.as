@@ -16,6 +16,7 @@ package com.merlinds.miracle.formatreaders {
 		[Before]
 		public function setUp():void {
 			_charSet = "us-ascii";
+			var atf:FakeATFFile = new FakeATFFile(300);
 			var file:TestMTF1File1 = new TestMTF1File1(_charSet);
 			file.writeMTF1Header();
 
@@ -37,6 +38,7 @@ package com.merlinds.miracle.formatreaders {
 			}
 
 			file.writeDataEscape();
+			file.writeBytes(atf, 0, atf.length);
 
 			_fileBytes = file;
 			_reader = new MiracleTextureFormatReader(Signatures.MTF1);
