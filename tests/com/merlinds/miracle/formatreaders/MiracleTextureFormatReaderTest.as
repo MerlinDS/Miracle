@@ -25,7 +25,7 @@ package com.merlinds.miracle.formatreaders {
 		public function setUp():void {
 			var i:int, n:int;
 			_charSet = "us-ascii";
-			_textureSize = 300;
+			_textureSize = 4000;
 			_animations = new <AnimationsData>[
 					new AnimationsData("ball", [new AnimationPart("ball_image")]),
 					new AnimationsData("shapes", [new AnimationPart("circle"), new AnimationPart("rect")])
@@ -56,7 +56,7 @@ package com.merlinds.miracle.formatreaders {
 			file.writeBytes(atf, 0, atf.length);
 
 			_fileBytes = file;
-			_reader = new MiracleTextureFormatReader(Signatures.MTF1);
+			_reader = new MiracleTextureFormatReader(Signatures.MTF1, 256);
 		}
 
 		[After]

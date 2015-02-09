@@ -14,12 +14,12 @@ package com.merlinds.miracle.formatreaders {
 	 */
 	public class MiracleTextureFormatReader {
 
-//		private static const BYTE_CHUNK:int = 256;
 		private static const SHORT:int = 1;
 //		private static const FLOAT:uint = 2;
 //		private static const INT:uint = 3;
 
 		private var _status:int;
+		private var _bytesChunk:int;
 		private var _charSet:String;
 		private var _correctSignature:String;
 		private var _endOfMethod:Boolean;
@@ -36,8 +36,9 @@ package com.merlinds.miracle.formatreaders {
 		private var _texture:ByteArray;
 		//==============================================================================
 		//{region							PUBLIC METHODS
-		public function MiracleTextureFormatReader(signature:String) {
+		public function MiracleTextureFormatReader(signature:String, bytesChunk:int = 8960) {
 			_charSet = "us-ascii";
+			_bytesChunk = bytesChunk;
 			_correctSignature = signature;
 			_signatureBytes = new ByteArray();
 			_metadataHeaders = new <MetadataHeader>[];
@@ -216,18 +217,24 @@ package com.merlinds.miracle.formatreaders {
 			var textureFormat:String = _bytes.readUTFBytes(4);
 			_bytes.position = tp;
 			this.assert(_header.textureFormat == textureFormat,
-					"Bad MTF1 texture format " + textureFormat);
+					"Bad " + _header.textureFormat + " texture format " + textureFormat);
 			//prepare texture output byte array for writing in it
 			_texture.clear();
 			_texture.position = 0;
 			_endOfMethod = true;
 		}
 		/**
-		 * Read texture block by chunks will MTF1 file bytes are available
+		 * Read texture block by chunks will file bytes are available
 		 */
 		private function readTextureBlock():void {
-			_bytes.readBytes(_texture, 0, _bytes.bytesAvailable);
-			_endOfMethod = true;
+			if(_bytes.bytesAvailable > _bytesChunk){
+				_bytes.readBytes(_texture, _texture.position, _bytesChunk);
+				_texture.position += _bytesChunk;
+			}else{
+				_bytes.readBytes(_texture, _texture.position, _bytes.bytesAvailable);
+				_texture.position = 0;
+				_endOfMethod = true;
+			}
 		}
 
 		/**
