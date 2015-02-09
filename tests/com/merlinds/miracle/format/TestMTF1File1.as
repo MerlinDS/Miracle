@@ -3,7 +3,7 @@
  * Date: 07.02.2015
  * Time: 10:11
  */
-package com.merlinds.miracle.formatreaders {
+package com.merlinds.miracle.format {
 	import flash.utils.ByteArray;
 
 	public class TestMTF1File1 extends ByteArray{

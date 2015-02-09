@@ -3,7 +3,7 @@
  * Date: 07.02.2015
  * Time: 9:29
  */
-package com.merlinds.miracle.formatreaders {
+package com.merlinds.miracle.format {
 	import flash.errors.IllegalOperationError;
 
 	/**
@@ -24,7 +24,7 @@ package com.merlinds.miracle.formatreaders {
 		/** Position of descriptor of modification date (4 bytes)**/
 		public static const DATE:int = 14;
 		/**Size of the header in bytes **/
-		public static const HEADER_SIZE:int = DATE + 4;//Last pointer + pointer size
+//		public static const HEADER_SIZE:int = DATE + 4;//Last pointer + pointer size
 
 		//==============================================================================
 		//{region							PUBLIC METHODS

@@ -3,7 +3,7 @@
  * Date: 07.02.2015
  * Time: 9:28
  */
-package com.merlinds.miracle.formatreaders {
+package com.merlinds.miracle.format {
 	import com.merlinds.miracle.geom.Mesh2D;
 	import com.merlinds.miracle.geom.Polygon2D;
 
@@ -266,7 +266,7 @@ package com.merlinds.miracle.formatreaders {
 
 		/**
 		 * Get reader status.
-		 * @see com.merlinds.miracle.formatreaders.ReaderStatus
+		 * @see com.merlinds.miracle.format.ReaderStatus
 		 */
 		public function get status():int {
 			return _status;

@@ -3,7 +3,7 @@
  * Date: 07.02.2015
  * Time: 9:33
  */
-package com.merlinds.miracle.formatreaders {
+package com.merlinds.miracle.format {
 	import flash.errors.IllegalOperationError;
 
 	/**

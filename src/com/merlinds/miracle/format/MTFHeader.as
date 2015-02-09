@@ -3,7 +3,7 @@
  * Date: 07.02.2015
  * Time: 10:37
  */
-package com.merlinds.miracle.formatreaders {
+package com.merlinds.miracle.format {
 	/**
 	 * Object of this class contains information of the MTF file header
 	 */

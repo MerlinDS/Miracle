@@ -3,7 +3,7 @@
  * Date: 09.02.2015
  * Time: 9:34
  */
-package com.merlinds.miracle.formatreaders {
+package com.merlinds.miracle.format {
 	import flash.utils.ByteArray;
 
 	public class FakeATFFile extends ByteArray {

@@ -3,7 +3,7 @@
  * Date: 07.02.2015
  * Time: 9:51
  */
-package com.merlinds.miracle.formatreaders {
+package com.merlinds.miracle.format {
 	import flash.errors.IllegalOperationError;
 
 	internal class ControlCharacters {
@@ -34,10 +34,6 @@ package com.merlinds.miracle.formatreaders {
 		 */
 		public function ControlCharacters() {
 			throw new IllegalOperationError("Object of this class can not be implemented");
-		}
-
-		public static function isFlag(byte:uint):Boolean {
-			return byte == EOT || byte == ETB || byte == DLE || byte == GS || byte == RS || byte == US;
 		}
 		//} endregion PUBLIC METHODS ===================================================
 	}
