@@ -28,6 +28,15 @@ package com.merlinds.miracle.formatreaders {
 			file.writeAnimationSizes(8, 6);
 			file.writeAnimationPartName("rect");
 			file.writeAnimationSizes(8, 6);
+			file.writeDataEscape();
+
+			for(var i:int = 0; i < 3; i++){
+				file.writeFloatArray(0, 1, 2, 3, 4, 5, 6, 7);
+				file.writeFloatArray(0, 1, 2, 3, 4, 5, 6, 7);
+				file.writeShortArray(0, 1, 2, 3, 4, 5);
+			}
+
+			file.writeDataEscape();
 
 			_fileBytes = file;
 			_reader = new MiracleTextureFormatReader(Signatures.MTF1);

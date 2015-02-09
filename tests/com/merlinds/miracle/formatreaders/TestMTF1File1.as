@@ -56,9 +56,25 @@ package com.merlinds.miracle.formatreaders {
 		public function writeAnimationSizes(points:int, indexes:int):void
 		{
 			//write header
-			this.writeByte(ControlCharacters.RS);
+			this.writeByte(ControlCharacters.US);
 			this.writeShort(points);
 			this.writeShort(indexes);
+		}
+
+		public function writeDataEscape():void {
+			this.writeByte(ControlCharacters.DLE);
+		}
+
+		public function writeShortArray(...args):void {
+			for(var i:int = 0; i < args.length; i++){
+				this.writeShort(args[i]);
+			}
+		}
+
+		public function writeFloatArray(...args):void {
+			for(var i:int = 0; i < args.length; i++){
+				this.writeFloat(args[i]);
+			}
 		}
 		//} endregion PUBLIC METHODS ===================================================
 
