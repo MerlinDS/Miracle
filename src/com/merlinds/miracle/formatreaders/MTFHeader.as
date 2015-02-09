@@ -7,7 +7,7 @@ package com.merlinds.miracle.formatreaders {
 	/**
 	 * Object of this class contains information of the MTF file header
 	 */
-	public class MTFHeader {
+	internal class MTFHeader {
 
 		public var verticesSize:int;
 		public var uvsSize:int;
