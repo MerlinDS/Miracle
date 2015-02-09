@@ -118,7 +118,6 @@ package com.merlinds.miracle.formatreaders {
 					TextureHeadersFormat.DATE - TextureHeadersFormat.TEXTURE_FORMAT, _charSet);
 			_bytes.position = TextureHeadersFormat.DATE;
 			_header.modificationDate = _bytes.readInt();
-			trace(_header);//TODO remove after developing
 			_endOfMethod = true;
 		}
 
@@ -182,7 +181,6 @@ package com.merlinds.miracle.formatreaders {
 				this.readDataList(uvs, _header.uvsSize, pc);
 				this.readDataList(indexes, _header.indexesSize, ic);
 				mesh[ metadata.parts[i] ] = new Polygon2D(indexes, vertices, uvs);
-				trace( metadata.parts[i], new Polygon2D(indexes, vertices, uvs));
 				vertices.length = uvs.length = indexes.length = 0;
 			}
 			_meshes[metadata.name] = mesh;
