@@ -11,10 +11,10 @@ package com.merlinds.miracle.format {
 
 	import flexunit.framework.Assert;
 
-	public class MiracleTextureFormatReaderTest {
+	public class MTFReaderTest {
 
 		private var _charSet:String;
-		private var _reader:MiracleTextureFormatReader;
+		private var _reader:MTFReader;
 		private var _fileBytes:ByteArray;
 		private var _textureSize:int;
 
@@ -56,7 +56,7 @@ package com.merlinds.miracle.format {
 			file.writeBytes(atf, 0, atf.length);
 
 			_fileBytes = file;
-			_reader = new MiracleTextureFormatReader(Signatures.MTF1, 256);
+			_reader = new MTFReader(Signatures.MTF1, 256);
 		}
 
 		[After]

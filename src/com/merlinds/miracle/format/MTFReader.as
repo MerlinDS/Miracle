@@ -12,7 +12,7 @@ package com.merlinds.miracle.format {
 	/**
 	 * Instance of this class read data from MTF files and parse it for miracle engine.
 	 */
-	public class MiracleTextureFormatReader {
+	public class MTFReader {
 
 		private static const SHORT:int = 1;
 //		private static const FLOAT:uint = 2;
@@ -36,7 +36,7 @@ package com.merlinds.miracle.format {
 		private var _texture:ByteArray;
 		//==============================================================================
 		//{region							PUBLIC METHODS
-		public function MiracleTextureFormatReader(signature:String, bytesChunk:int = 8960) {
+		public function MTFReader(signature:String, bytesChunk:int = 8960) {
 			_charSet = "us-ascii";
 			_bytesChunk = bytesChunk;
 			_correctSignature = signature;
