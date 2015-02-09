@@ -3,7 +3,8 @@
  * Date: 09.02.2015
  * Time: 12:20
  */
-package com.merlinds.miracle.format {
+package com.merlinds.miracle.format.mtf {
+	import com.merlinds.miracle.format.*;
 	public final class MTF1 extends MTFFile{
 
 		//==============================================================================

@@ -3,10 +3,10 @@
  * Date: 07.02.2015
  * Time: 9:51
  */
-package com.merlinds.miracle.format {
+package com.merlinds.miracle.utils {
 	import flash.errors.IllegalOperationError;
 
-	internal class ControlCharacters {
+	public class ControlCharacters {
 
 		/**
 		 * Contained constants with available controls characters from ASCII table

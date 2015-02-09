@@ -3,9 +3,11 @@
  * Date: 07.02.2015
  * Time: 9:28
  */
-package com.merlinds.miracle.format {
+package com.merlinds.miracle.format.mtf {
+	import com.merlinds.miracle.format.*;
 	import com.merlinds.miracle.geom.Mesh2D;
 	import com.merlinds.miracle.geom.Polygon2D;
+	import com.merlinds.miracle.utils.ControlCharacters;
 
 	import flash.utils.ByteArray;
 

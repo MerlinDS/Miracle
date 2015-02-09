@@ -9,7 +9,7 @@ package com.merlinds.miracle.format {
 	/**
 	 * Contained constants with available signatures of the format files
 	 */
-	internal class Signatures {
+	public class Signatures {
 
 		/** Size of the signature in bytes **/
 		public static const SIZE:int = 4;

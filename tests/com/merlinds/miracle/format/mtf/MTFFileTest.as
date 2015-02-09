@@ -3,7 +3,12 @@
  * Date: 09.02.2015
  * Time: 12:33
  */
-package com.merlinds.miracle.format {
+package com.merlinds.miracle.format.mtf {
+	import com.merlinds.miracle.format.*;
+	import com.merlinds.miracle.format.mtf.MTFFile;
+	import com.merlinds.miracle.format.mtf.MTFHeadersFormat;
+	import com.merlinds.miracle.utils.ControlCharacters;
+
 	import flash.utils.ByteArray;
 
 	import flexunit.framework.Assert;
@@ -223,6 +228,7 @@ package com.merlinds.miracle.format {
 			do
 				var seed:int = Math.random() * 100;
 			while(_usedSeed.indexOf(seed) > -1);
+			_usedSeed.push(seed);
 
 			var data:Object = {
 				vertices:[0,1,2,3,4,5,6,7],

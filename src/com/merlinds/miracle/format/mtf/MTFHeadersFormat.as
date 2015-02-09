@@ -3,7 +3,7 @@
  * Date: 07.02.2015
  * Time: 9:29
  */
-package com.merlinds.miracle.format {
+package com.merlinds.miracle.format.mtf {
 	import flash.errors.IllegalOperationError;
 
 	/**

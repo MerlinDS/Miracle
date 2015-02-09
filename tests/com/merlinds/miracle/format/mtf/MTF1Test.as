@@ -3,7 +3,11 @@
  * Date: 09.02.2015
  * Time: 12:34
  */
-package com.merlinds.miracle.format {
+package com.merlinds.miracle.format.mtf {
+	import com.merlinds.miracle.format.*;
+	import com.merlinds.miracle.format.mtf.MTF1;
+	import com.merlinds.miracle.format.mtf.MTFHeadersFormat;
+
 	import flexunit.framework.Assert;
 
 	public class MTF1Test {

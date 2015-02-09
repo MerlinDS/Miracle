@@ -3,7 +3,7 @@
  * Date: 07.02.2015
  * Time: 10:37
  */
-package com.merlinds.miracle.format {
+package com.merlinds.miracle.format.mtf {
 	/**
 	 * Object of this class contains information of the MTF file header
 	 */
