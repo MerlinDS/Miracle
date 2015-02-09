@@ -9,15 +9,19 @@ package com.merlinds.miracle.format {
 		private static const _ERROR_ID_PREFIX:int = 9000;
 		private static const _ERROR_MESSAGES:Vector.<String> = new <String>[
 			"Unknown error",
+			"MTF file bytes equals null",
+			"MTF file size is to small",
 			"Can't read file with current signature. Bad file signature",
 			"Bad MTF file structure",
 			"Bad texture format"
 		];
 
 		public static const UNKNOWN_ERROR:int = 0;
-		public static const BAD_FILE_SIGNATURE:int = 1;
-		public static const BAD_FILE_STRUCTURE:int = 2;
-		public static const BAD_TEXTURE_FORMAT:int = 3;
+		public static const FILE_IS_NULL:int = 1;
+		public static const BAD_FILE_SIZE:int = 2;
+		public static const BAD_FILE_SIGNATURE:int = 3;
+		public static const BAD_FILE_STRUCTURE:int = 4;
+		public static const BAD_TEXTURE_FORMAT:int = 5;
 
 		//==============================================================================
 		//{region							PUBLIC METHODS

@@ -28,7 +28,7 @@ package com.merlinds.miracle.format {
 		private var _errors:Vector.<Error>;
 		//bytes
 		private var _bytes:ByteArray;
-		private var _signatureBytes:ByteArray;
+		private var _signature:String;
 		//objects
 		private var _header:MTFHeader;
 		private var _metadataHeaders:Vector.<MetadataHeader>;
@@ -40,7 +40,6 @@ package com.merlinds.miracle.format {
 			_charSet = "us-ascii";
 			_bytesChunk = bytesChunk;
 			_correctSignature = signature;
-			_signatureBytes = new ByteArray();
 			_metadataHeaders = new <MetadataHeader>[];
 			_errors = new <Error>[];
 			//initialize methods
@@ -62,14 +61,17 @@ package com.merlinds.miracle.format {
 			_bytes = bytes;
 			_meshes = meshes;
 			_texture = texture;
-			_bytes.position = 0;
-			_bytes.readBytes(_signatureBytes, 0, Signatures.SIZE);
-			//change status
-			_status = ReaderStatus.PROCESSING;
-			_currentMethod = 0;
-			_endOfMethod = false;
-			//
-			this.assert(this.isValidSignature, ReaderError.BAD_FILE_SIGNATURE);
+			this.assert(_bytes != null, ReaderError.FILE_IS_NULL);
+			this.assert(_bytes.length > MTFHeadersFormat.HEADER_SIZE, ReaderError.BAD_FILE_SIZE);
+			if(_status != ReaderStatus.ERROR){
+				_bytes.position = 0;
+				_signature = _bytes.readMultiByte(Signatures.SIZE, _charSet);
+				//change status
+				_status = ReaderStatus.PROCESSING;
+				_currentMethod = 0;
+				_endOfMethod = false;
+				this.assert(this.isValidSignature, ReaderError.BAD_FILE_SIGNATURE);
+			}
 		}
 
 		public function readingStep():void {
@@ -88,10 +90,9 @@ package com.merlinds.miracle.format {
 		}
 
 		public function dispose():void {
-			_signatureBytes.clear();
-			_signatureBytes.position = 0;
 			_metadataHeaders.length = 0;
 			_errors.length = 0;
+			_signature = null;
 			_texture = null;
 			_meshes = null;
 			_header = null;
@@ -256,8 +257,7 @@ package com.merlinds.miracle.format {
 		//{region							GETTERS/SETTERS
 		/** Check for file signature correctness. Return true if signature is correct, false in other case **/
 		public function get isValidSignature():Boolean {
-			_signatureBytes.position = 0;
-			return _signatureBytes.readMultiByte(Signatures.SIZE, _charSet) == _correctSignature;
+			return _signature == _correctSignature;
 		}
 
 		/**

@@ -15,56 +15,56 @@ package com.merlinds.miracle.format {
 
 		private var _charSet:String;
 		private var _reader:MTFReader;
-		private var _fileBytes:ByteArray;
+		private var _mtf1:ByteArray;
 
 		private var _texture:ByteArray;
 		private var _textureSize:int;
 
-		private var _animations:Vector.<AnimationsData>;
+		private var _meshes:Object;
 		//==============================================================================
 		//{region							PUBLIC METHODS
 		[Before]
 		public function setUp():void {
-			var i:int, n:int;
 			_charSet = "us-ascii";
 			_textureSize = 4000;
-			_animations = new <AnimationsData>[
-					new AnimationsData("ball", [new AnimationPart("ball_image")]),
-					new AnimationsData("shapes", [new AnimationPart("circle"), new AnimationPart("rect")])
-			];
-			_texture = new FakeATFFile(_textureSize);
-			var file:TestMTF1File1 = new TestMTF1File1(_charSet);
-			file.writeMTF1Header();
-			n = 0;
-			for(i = 0; i < _animations.length; i++){
-				var animationData:AnimationsData = _animations[i];
-				file.writeAnimationName(animationData.name);
-				for(var j:int = 0; j < animationData.parts.length; j++){
-					var animationPart:AnimationPart = animationData.parts[i];
-					file.writeAnimationPartName(animationPart.name);
-					file.writeAnimationSizes(animationPart.points, animationPart.indexes);
-					n++;
+
+			var polygonData:Object = {
+				vertices:[0, 1, 2, 3, 4, 5, 6, 7],
+				uv:[0, 1, 2, 3, 4, 5, 6, 7],
+				indexes:[0, 1, 2, 3, 4, 5]
+			};
+
+			_meshes = {
+				mesh_0:{
+					polygon_0:polygonData
+				},
+				mesh_1:{
+					polygon_0:polygonData,
+					polygon_1:polygonData
+				},
+				mesh_2:{
+					polygon_0:polygonData,
+					polygon_1:polygonData,
+					polygon_3:polygonData
 				}
+			};
+			_texture = new FakeATFFile(_textureSize);
+			var mtf1:MTF1 = new MTF1();
+			mtf1.addTexture(_texture);
+
+			for(var m:String in _meshes){
+				mtf1.addMesh(m, _meshes[m]);
 			}
-			file.writeDataEscape();
 
-			for(i = 0; i < n; i++){
-				file.writeFloatArray(0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0);
-				file.writeFloatArray(0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0);
-				file.writeShortArray(0, 1, 2, 3, 4, 5);
-			}
-
-			file.writeDataEscape();
-			file.writeBytes(_texture, 0, _texture.length);
-
-			_fileBytes = file;
+			mtf1.finalize();
+			_mtf1 = mtf1;
 			_reader = new MTFReader(Signatures.MTF1, 256);
 		}
 
 		[After]
 		public function tearDown():void {
-			_fileBytes.clear();
-			_fileBytes = null;
+			_mtf1.clear();
+			_mtf1 = null;
 			_reader = null;
 		}
 
@@ -85,24 +85,21 @@ package com.merlinds.miracle.format {
 			var meshes:Object = {};
 			var texture:ByteArray = new ByteArray();
 			Assert.assertEquals("Reader was not set to read yet", ReaderStatus.WAIT, _reader.status);
-			_reader.read(_fileBytes, meshes, texture);
-			Assert.assertTrue("Signature must be valid", _reader.isValidSignature);
+			_reader.read(_mtf1, meshes, texture);
 			Assert.assertEquals("Reader status must equals PROCESSING", ReaderStatus.PROCESSING, _reader.status);
+			Assert.assertTrue("Signature must be valid", _reader.isValidSignature);
 			while(_reader.status == ReaderStatus.PROCESSING){
 				_reader.readingStep();
 			}
 			Assert.assertEquals("Reader status must equals READY", ReaderStatus.READY, _reader.status);
 			var buffer:Vector.<Number> = new <Number>[0,1,0,1,2,3,2,3,4,5,4,5,6,7,6,7];
 			var indexes:Vector.<int> = new <int>[0,1,2,3,4,5];
-			var i:int;
-			for(i = 0; i < _animations.length; i++){
-				var animationData:AnimationsData = _animations[i];
-				var mesh:Mesh2D = this.findFieldInObject(meshes, animationData.name);
-				Assert.assertNotNull("Mesh " + animationData.name + " was not found in output", mesh);
-				for(var j:int = 0; j < animationData.parts.length; j++){
-					var animationPart:AnimationPart = animationData.parts[i];
-					var polygon:Polygon2D = this.findFieldInObject(mesh, animationPart.name);
-					Assert.assertNotNull("Polygon " + animationPart.name + " was not found in mesh", polygon);
+			for(var m:String in _meshes){
+				var mesh:Mesh2D = this.findFieldInObject(meshes, m);
+				Assert.assertNotNull("Mesh " + m + " was not found in output", mesh);
+				for(var p:String in meshes[m]){
+					var polygon:Polygon2D = this.findFieldInObject(mesh, p);
+					Assert.assertNotNull("Polygon " + p + " was not found in mesh", polygon);
 					Assert.assertContained("Buffer is bad", buffer, polygon.buffer);
 					Assert.assertContained("Indexes is bad", indexes, polygon.indexes);
 				}
@@ -115,7 +112,7 @@ package com.merlinds.miracle.format {
 			var n:int = _texture.length;
 			_texture.position = 0;
 			texture.position = 0;
-			for(i = 0; i < n; i++){
+			for(var i:int = 0; i < n; i++){
 				var byte0:uint = _texture.readByte();
 				var byte1:uint = texture.readByte();
 				if(byte0 != byte1){
@@ -145,28 +142,5 @@ package com.merlinds.miracle.format {
 		//==============================================================================
 		//{region							GETTERS/SETTERS
 		//} endregion GETTERS/SETTERS ==================================================
-	}
-}
-class AnimationsData{
-	public var name:String;
-	public var parts:Vector.<AnimationPart>;
-
-
-	public function AnimationsData(name:String, parts:Array) {
-		this.name = name;
-		this.parts = Vector.<AnimationPart>(parts);
-	}
-}
-
-class AnimationPart{
-	public var name:String;
-	public var points:int;
-	public var indexes:int;
-
-
-	public function AnimationPart(name:String, points:int = 4, indexes:int = 6) {
-		this.name = name;
-		this.points = points;
-		this.indexes = indexes;
 	}
 }
