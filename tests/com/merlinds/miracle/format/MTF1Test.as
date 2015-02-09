@@ -14,6 +14,14 @@ package com.merlinds.miracle.format {
 		[Test]
 		public function testConstructor():void {
 			var file:MTF1 = new MTF1();
+			var polygonData:Object = {
+				vertices:[0, 1, 2, 3, 4, 5, 6, 7],
+				uv:[0, 1, 2, 3, 4, 5, 6, 7],
+				indexes:[0, 1, 2, 3, 4, 5]
+			};
+			file.addMesh("test", {test:polygonData});
+			file.addTexture(new FakeATFFile(200));
+			file.finalize();
 			file.position = 0;
 			var charSet:String = "us-ascii";
 			var signature:String = file.readMultiByte(MTFHeadersFormat.VT, charSet);
@@ -25,7 +33,7 @@ package com.merlinds.miracle.format {
 			Assert.assertEquals("Signature", Signatures.MTF1, signature);
 			Assert.assertEquals("vertices", 2, vertices);
 			Assert.assertEquals("uvs", 2, uvs);
-			Assert.assertEquals("indexes", 2, indexes);
+			Assert.assertEquals("indexes", 1, indexes);
 			Assert.assertEquals("textureFormat", "ATF", textureFormat);
 			Assert.assertNotNull("dateOfCreation", dateOfCreation);
 
