@@ -65,9 +65,9 @@ package com.merlinds.miracle.format.maf {
 			var byte:uint;
 			var length:uint;
 			var string:String;
+			var j:int, m:int, k:int, o:int;
 			for(i = 0; i < n; ++i)
 			{
-				a = this.animations[i];
 				//test animation header
 				byte = this.readByte();
 				Assert.assertEquals("First flag of " + i + " animation must be DLE",
@@ -75,13 +75,82 @@ package com.merlinds.miracle.format.maf {
 				//read name
 				length = this.readShort();
 				string = this.readMultiByte(length, _charSet);
-				Assert.assertEquals("Animation name is not equals", a.name, string);
+				//find animation
+				for(j = 0; j < n; ++j)
+				{
+					a = this.animations[j];
+					if(a.name == string)break;
+					a = null;
+				}
+				Assert.assertNotNull("Can not found animation " + string, a);
 				//read bounds
 				Assert.assertEquals("Bounds for " + a.name + " x", a.bounds.x, this.readFloat());
 				Assert.assertEquals("Bounds for " + a.name + " y", a.bounds.y, this.readFloat());
 				Assert.assertEquals("Bounds for " + a.name + " width", a.bounds.width, this.readFloat());
 				Assert.assertEquals("Bounds for " + a.name + " height", a.bounds.height, this.readFloat());
 				Assert.assertEquals("Layer count for " + a.name, a.layers.length, this.readShort());
+
+				m = a.layers.length;
+				for(j = 0; j < m; ++j)
+				{
+					var layer:TestLayer = a.layers[j];
+					byte = this.readByte();
+					Assert.assertEquals("First flag of layer " + j +
+							" animation of animation " + a.name + " must be GS", ControlCharacters.GS, byte);
+					//length
+					Assert.assertEquals("Transformation length", layer.matrix.length, this.readShort());
+					Assert.assertEquals("Frames length", layer.frames.length, this.readShort());
+					//polygon names
+					o = layer.polygons.length;
+					for(k = 0; k < o; ++k)
+					{
+						length = this.readShort();
+						string = this.readMultiByte(length, _charSet);
+						Assert.assertEquals("Polygon", layer.polygons[k], string);
+					}
+					byte = this.readByte();
+					Assert.assertEquals("First second layer " + j +
+					" animation of animation " + a.name + " must be RS", ControlCharacters.RS, byte);
+					//check transformations
+					o = layer.matrix.length;
+					for(k = 0; k < o; ++k)
+					{
+						var t:Transformation = layer.matrix[k];
+						//TODO FIX PROBLEMS WITH FLOAT
+						//check transformation matrix
+						Assert.assertEquals("offsetX", t.matrix.offsetX, this.readFloat());
+						Assert.assertEquals("offsetY", t.matrix.offsetY, this.readFloat());
+						Assert.assertEquals("scaleX", t.matrix.scaleX, this.readFloat().toFixed(3));
+						Assert.assertEquals("scaleY", t.matrix.scaleY, this.readFloat().toFixed(3));
+						Assert.assertEquals("skewX", t.matrix.skewX, this.readFloat().toFixed(3));
+						Assert.assertEquals("skewY", t.matrix.skewY, this.readFloat().toFixed(3));
+						Assert.assertEquals("tx", t.matrix.tx, this.readFloat());
+						Assert.assertEquals("ty", t.matrix.ty, this.readFloat());
+						//check color
+						Assert.assertEquals("type", t.color.type, this.readBoolean());
+						this.position++;
+						Assert.assertEquals("alphaOffset", t.color.alphaOffset, (this.readShort() / 255).toFixed(2));
+						Assert.assertEquals("alphaMultiplier", t.color.alphaMultiplier, (this.readShort() / 255).toFixed(2));
+						Assert.assertEquals("redOffset", t.color.redOffset, (this.readShort() / 255).toFixed(2));
+						Assert.assertEquals("redMultiplier", t.color.redMultiplier, (this.readShort() / 255).toFixed(2));
+						Assert.assertEquals("greenOffset", t.color.greenOffset, (this.readShort() / 255).toFixed(2));
+						Assert.assertEquals("greenMultiplier", t.color.greenMultiplier, (this.readShort() / 255).toFixed(2));
+						Assert.assertEquals("blueOffset", t.color.blueOffset, (this.readShort() / 255).toFixed(2));
+						Assert.assertEquals("blueMultiplier", t.color.blueMultiplier, (this.readShort() / 255).toFixed(2));
+					}
+					//check frames
+					o = layer.frames.length;
+					for(k = 0; k < o; ++k)
+					{
+						var f:TestFrame = layer.frames[k];
+						var pIndex:int = layer.polygons.indexOf(f.polygonName);
+						Assert.assertEquals("Frame type", f.type, this.readBoolean());
+						this.position++;
+						Assert.assertEquals("Polygon index", pIndex, this.readShort());
+						Assert.assertEquals("Transform index", f.matrixIndex, this.readShort());
+						Assert.assertEquals("Time", f.t, this.readFloat().toFixed(2));
+					}
+				}
 			}
 
 		}
@@ -98,13 +167,13 @@ package com.merlinds.miracle.format.maf {
 				m = layer.matrix.length;
 				//add layer transformations
 				for(j = 0; j < m; ++j)
-					this.addTransformation(a.name, j, layer.matrix[j]);
+					this.addTransformation(a.name, i, layer.matrix[j]);
 				//add frames
 				m = layer.frames.length;
 				for(j = 0; j < m; ++j)
 				{
 					var tf:TestFrame = layer.frames[j];
-					this.addFrame(a.name, j, tf.polygonName, tf.type, tf.matrixIndex, tf.t);
+					this.addFrame(a.name, i, tf.polygonName, tf.type, tf.matrixIndex, tf.t);
 				}
 
 			}
@@ -117,6 +186,7 @@ package com.merlinds.miracle.format.maf {
 			layer = new TestLayer();
 			layer.matrix[0] = this.getUniqueTransformation();
 			layer.frames[0] = new TestFrame("shape0", false, 0, 1);
+			layer.polygons[0] = "shape0";
 			a0.layers[0] = layer;
 			animations[0] = a0;
 			var a1:TestAnimationData = new TestAnimationData("anim_1", new Rectangle(-1, -2, -100, -200));
@@ -125,10 +195,13 @@ package com.merlinds.miracle.format.maf {
 			layer.matrix[1] = this.getUniqueTransformation();
 			layer.frames[0] = new TestFrame("shape0", true, 1, 1);
 			layer.frames[1] = new TestFrame("shape1", false, 0, 2);
+			layer.polygons[0] = "shape0";
+			layer.polygons[1] = "shape1";
 			a1.layers[0] = layer;
 			layer = new TestLayer();
 			layer.matrix[0] = this.getUniqueTransformation();
 			layer.frames[0] = new TestFrame("shape2", true, 0, 3);
+			layer.polygons[0] = "shape2";
 			a1.layers[1] = layer;
 			animations[1] = a1;
 		}
@@ -172,10 +245,12 @@ class TestAnimationData{
 class TestLayer{
 	public var frames:Vector.<TestFrame>;
 	public var matrix:Vector.<Transformation>;
+	public var polygons:Vector.<String>;
 
 	public function TestLayer() {
 		this.frames = new <TestFrame>[];
 		this.matrix = new <Transformation>[];
+		this.polygons = new <String>[];
 	}
 }
 

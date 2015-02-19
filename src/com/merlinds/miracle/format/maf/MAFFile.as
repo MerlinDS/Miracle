@@ -85,7 +85,7 @@ package com.merlinds.miracle.format.maf {
 			//get polygonName index if it already added
 			var pIndex:int = layer.polygons.indexOf(polygonName);
 			if(pIndex < 0)
-				layer.polygons.push(polygonName);
+				pIndex = layer.polygons.push(polygonName) - 1;
 
 			var bytes:ByteArray = new ByteArray();
 			bytes.writeBoolean(type);
@@ -150,11 +150,13 @@ package com.merlinds.miracle.format.maf {
 		 * @return Layer Structure
 		 */
 		private function extendLayers(animation:AnimationStruct, layerIndex:int):LayerStruct {
-			if(animation.layers.length <= layerIndex)//extends layer array
+			if(animation.layers.length <= layerIndex)
+			{
+				//extends layer array
 				animation.layers.length = layerIndex + 1;
-			var layer:LayerStruct = new LayerStruct();
-			animation.layers[layerIndex] = layer;
-			return layer;
+				animation.layers[layerIndex] = new LayerStruct();
+			}
+			return animation.layers[layerIndex];
 		}
 
 		/**
@@ -223,6 +225,45 @@ package com.merlinds.miracle.format.maf {
 				animation.header.position = 0;
 				this.writeBytes(animation.header, 0, animation.header.length);
 				this.writeShort(animation.layers.length);
+				this.writeLayers(animation);
+			}
+			this.writeByte(ControlCharacters.EOF);
+		}
+
+		private function writeLayers(animation:AnimationStruct):void {
+			var n:int = animation.layers.length;
+			for(var i:int = 0; i < n; i++)
+			{
+				this.writeByte(ControlCharacters.GS);
+				var j:int, m:int;
+				var layer:LayerStruct = animation.layers[i];
+				//write layer header
+				this.writeShort(layer.transformations.length);
+				this.writeShort(layer.frames.length);
+				//write polygon names
+				m = layer.polygons.length;
+				for(j = 0; j < m; ++j)
+				{
+					this.writeShort(layer.polygons[j].length);
+					this.writeMultiByte(layer.polygons[j], this.charSet);
+				}
+				this.writeByte(ControlCharacters.RS);
+				//write layer transformations
+				m = layer.transformations.length;
+				for(j = 0; j < m; ++j)
+				{
+					layer.transformations[j].position = 0;
+					this.writeBytes(layer.transformations[j],
+							0, layer.transformations[j].length);
+				}
+				//write layer frames
+				m = layer.frames.length;
+				for(j = 0; j < m; ++j)
+				{
+					layer.frames[j].position = 0;
+					this.writeBytes(layer.frames[j],
+							0, layer.frames[j].length);
+				}
 			}
 		}
 		//} endregion PRIVATE\PROTECTED METHODS ========================================
