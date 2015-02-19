@@ -13,7 +13,8 @@ package com.merlinds.miracle.format {
 			"MTF file size is to small",
 			"Can't read file with current signature. Bad file signature",
 			"Bad MTF file structure",
-			"Bad texture format"
+			"Bad texture format",
+			"Bad reader format, has no reading methods"
 		];
 
 		public static const UNKNOWN_ERROR:int = 0;
@@ -22,6 +23,7 @@ package com.merlinds.miracle.format {
 		public static const BAD_FILE_SIGNATURE:int = 3;
 		public static const BAD_FILE_STRUCTURE:int = 4;
 		public static const BAD_TEXTURE_FORMAT:int = 5;
+		public static const BAD_READER_FORMAT:int = 6;
 
 		//==============================================================================
 		//{region							PUBLIC METHODS
