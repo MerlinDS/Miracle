@@ -1,32 +1,30 @@
 /**
  * User: MerlinDS
- * Date: 07.02.2015
- * Time: 10:37
+ * Date: 19.02.2015
+ * Time: 13:53
  */
-package com.merlinds.miracle.format.mtf {
-	import com.merlinds.miracle.format.AbstractHeader;
+package com.merlinds.miracle.format {
 
 	/**
-	 * Object of this class contains information of the MTF file header
+	 * Class contains information about file header.
+	 * This is abstract class for MAFHeader and MTFHeader.
+	 * Do not instantiate it.
+	 *
+	 * @see com.merlinds.miracle.format.maf.MAFHeader
+	 * @see com.merlinds.miracle.format.mtf.MTFHeader
 	 */
-	internal class MTFHeader extends AbstractHeader{
+	public class AbstractHeader {
 
-		public var uvsSize:int;
-		public var indexesSize:int;
-		public var textureFormat:String;
+		public var verticesSize:int;
+		public var modificationDate:Number;
 		//==============================================================================
 		//{region							PUBLIC METHODS
-		public function MTFHeader() {
-		}
+		/**
+		 * Constructor
+		 * This is abstract class. Do not instantiate it!
+		 */
+		public function AbstractHeader() {
 
-		public function toString():String {
-			return "[MTFHeader(" +
-					"verticesSize = " + this.verticesSize + " " +
-					"uvsSize = " + this.uvsSize + " " +
-					"indexesSize = " + this.indexesSize + " " +
-					"textureFormat = " + this.textureFormat + " " +
-					"modificationDate = " + this.formattedDate +
-					")]";
 		}
 		//} endregion PUBLIC METHODS ===================================================
 
@@ -40,6 +38,11 @@ package com.merlinds.miracle.format.mtf {
 
 		//==============================================================================
 		//{region							GETTERS/SETTERS
+		protected function get formattedDate():String {
+			var date:Date = new Date();
+			date.setTime(this.modificationDate);
+			return date.toUTCString();
+		}
 		//} endregion GETTERS/SETTERS ==================================================
 	}
 }

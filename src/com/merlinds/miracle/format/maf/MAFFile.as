@@ -1,33 +1,20 @@
 /**
  * User: MerlinDS
- * Date: 07.02.2015
- * Time: 10:37
+ * Date: 09.02.2015
+ * Time: 18:46
  */
-package com.merlinds.miracle.format.mtf {
-	import com.merlinds.miracle.format.AbstractHeader;
+package com.merlinds.miracle.format.maf {
+	import com.merlinds.miracle.format.FormatFile;
 
-	/**
-	 * Object of this class contains information of the MTF file header
-	 */
-	internal class MTFHeader extends AbstractHeader{
+	public class MAFFile extends FormatFile {
 
-		public var uvsSize:int;
-		public var indexesSize:int;
-		public var textureFormat:String;
+		private var _header:MAFHeader;
 		//==============================================================================
 		//{region							PUBLIC METHODS
-		public function MTFHeader() {
+		public function MAFFile(signature:String, charSet:String) {
+			super(signature, charSet);
 		}
 
-		public function toString():String {
-			return "[MTFHeader(" +
-					"verticesSize = " + this.verticesSize + " " +
-					"uvsSize = " + this.uvsSize + " " +
-					"indexesSize = " + this.indexesSize + " " +
-					"textureFormat = " + this.textureFormat + " " +
-					"modificationDate = " + this.formattedDate +
-					")]";
-		}
 		//} endregion PUBLIC METHODS ===================================================
 
 		//==============================================================================
