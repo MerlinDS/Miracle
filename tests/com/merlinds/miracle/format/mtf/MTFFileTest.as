@@ -5,8 +5,6 @@
  */
 package com.merlinds.miracle.format.mtf {
 	import com.merlinds.miracle.format.*;
-	import com.merlinds.miracle.format.mtf.MTFFile;
-	import com.merlinds.miracle.format.mtf.MTFHeadersFormat;
 	import com.merlinds.miracle.utils.ControlCharacters;
 
 	import flash.utils.ByteArray;
@@ -20,7 +18,7 @@ package com.merlinds.miracle.format.mtf {
 		//==============================================================================
 		//{region							PUBLIC METHODS
 		public function MTFFileTest() {
-			_signature = "MTF0";
+			_signature = Signatures.MTF1;
 			_charSet = "us-ascii";
 			super(_signature, _charSet);
 		}

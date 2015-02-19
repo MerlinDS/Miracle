@@ -89,6 +89,12 @@ package com.merlinds.miracle.format.mtf {
 		/**
 		 * Finalize MTF file.
 		 * Write all data to file bytes.
+		 *
+		 * @throws flash.errors.IllegalOperationError Header contains 0 type of size fields
+		 * @throws flash.errors.IllegalOperationError Header not contains texture format
+		 * @throws flash.errors.IllegalOperationError Modification date can not be null
+		 * @throws flash.errors.IllegalOperationError Meshes was not set
+		 * @throws flash.errors.IllegalOperationError Texture was not set
 		 */
 		override public function finalize():void {
 			//validate header

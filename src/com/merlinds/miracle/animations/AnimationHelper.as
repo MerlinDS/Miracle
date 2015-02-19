@@ -4,8 +4,6 @@
  * Time: 13:48
  */
 package com.merlinds.miracle.animations {
-	import com.merlinds.miracle.animations.AnimationHelper;
-
 	import flash.geom.Rectangle;
 
 	/**

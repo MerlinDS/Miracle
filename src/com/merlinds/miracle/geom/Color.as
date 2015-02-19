@@ -14,8 +14,8 @@ package com.merlinds.miracle.geom {
 	public class Color{
 		//constants Types of the Color transformations
 		public static const NONE:uint = 0;
-		public static const COLOR:int = 1;
-		public static const ALPHA:int = 1 << 1;
+		public static const COLOR:uint = 1;
+		public static const ALPHA:uint = 1 << 1;
 		//offsets
 		/**
 		 * A number from -1 to 1 that is added to the red channel value

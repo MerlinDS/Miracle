@@ -11,6 +11,7 @@ package com.merlinds.miracle.format.mtf {
 	 */
 	internal class MTFHeadersFormat {
 
+		//4 bytes offset for signature
 		//Data types
 		/** Position of descriptor of vertices elements size (2 bytes)**/
 		public static const VT:int = 4;
