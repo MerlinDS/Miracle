@@ -11,9 +11,20 @@ package com.merlinds.miracle.format.maf {
 	 */
 	public class MAFHeader extends AbstractHeader{
 
+		public var matrixSize:int;
+		public var frameSize:int;
 		//==============================================================================
 		//{region							PUBLIC METHODS
 		public function MAFHeader() {
+		}
+
+		public function toString():String {
+			return "[MTFHeader(" +
+					"verticesSize = " + this.verticesSize + " " +
+					"matrixSize = " + this.matrixSize + " " +
+					"frameSize = " + this.frameSize + " " +
+					"modificationDate = " + this.formattedDate +
+					")]";
 		}
 		//} endregion PUBLIC METHODS ===================================================
 
