@@ -50,11 +50,14 @@ package com.merlinds.miracle.format.maf {
 		 * @param transformation Transformation object
 		 *
 		 * @throws ArgumentError Can't add transformation to unknown animation.
+		 * @throws Transformation matrix and color transformations and not equals null
 		 */
 		public function addTransformation(animationName:String, layerIndex:int,
 		                                  transformation:Transformation):void {
 			if(!_animations.hasOwnProperty(animationName))
 				throw new ArgumentError("Can't add transformation to unknown animation");
+			if(transformation.matrix == null || transformation.color == null)
+				throw new ArgumentError("Transformation matrix and color transformations and not equals null");
 			var animation:AnimationStruct = _animations[animationName];
 			var layer:LayerStruct = this.extendLayers(animation, layerIndex);
 			var bytes:ByteArray = new ByteArray();
