@@ -4,7 +4,6 @@
  * Time: 14:22
  */
 package com.merlinds.miracle.format.maf {
-	import com.merlinds.miracle.animations.FrameInfo;
 	import com.merlinds.miracle.animations.FrameType;
 	import com.merlinds.miracle.format.Signatures;
 	import com.merlinds.miracle.geom.Color;
@@ -33,8 +32,39 @@ package com.merlinds.miracle.format.maf {
 			super(_signature, _charSet);
 			this.prepareTestData();
 		}
+		//errors
+		[Test(expects="flash.errors.IllegalOperationError")]
+		public function testHeaderSizesError():void {
+			this.finalize();
+		}
 
+		[Test(expects="flash.errors.IllegalOperationError")]
+		public function testHeaderAnimationError():void {
+			this.addHeader(2, 2, 1);
+			this.finalize();
+		}
 
+		[Test(expects="ArgumentError")]
+		public function testFrameAddingError():void {
+			this.addHeader(8*4, 2+8*2, 10);
+			this.addFrame("error", 0, FrameType.EMPTY, null, 0, 0);
+		}
+
+		[Test(expects="ArgumentError")]
+		public function testTransformationAddingError():void {
+			this.addHeader(8*4, 2+8*2, 10);
+			this.addTransformation("error", 0, null);
+		}
+
+		[Test(expects="ArgumentError")]
+		public function testNullTransformationAddingError():void {
+			this.addHeader(8*4, 2+8*2, 10);
+			this.addAnimation("error", new Rectangle());
+			var t:Transformation = new Transformation();
+			this.addTransformation("error", 0, t);
+		}
+
+		//normal
 		[Test]
 		public function testNormalFinalization():void {
 			var matrixSize:int = 8 * 4;//8 field * 4 bytes
