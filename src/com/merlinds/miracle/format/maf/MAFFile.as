@@ -4,6 +4,7 @@
  * Time: 18:46
  */
 package com.merlinds.miracle.format.maf {
+	import com.merlinds.miracle.animations.FrameType;
 	import com.merlinds.miracle.format.FormatFile;
 	import com.merlinds.miracle.geom.Color;
 	import com.merlinds.miracle.geom.TransformMatrix;
@@ -76,23 +77,25 @@ package com.merlinds.miracle.format.maf {
 		 * @throws ArgumentError Can't add transformation to unknown animation.
 		 */
 		public function addFrame(animationName:String, layerIndex:int,
-		                         polygonName:String, type:Boolean, index:int, t:Number):void {
+		                         type:uint, polygonName:String, index:int, t:Number):void {
 
 			if(!_animations.hasOwnProperty(animationName))
 				throw new ArgumentError("Can't add transformation to unknown animation");
 			var animation:AnimationStruct = _animations[animationName];
 			var layer:LayerStruct = this.extendLayers(animation, layerIndex);
-			//get polygonName index if it already added
-			var pIndex:int = layer.polygons.indexOf(polygonName);
-			if(pIndex < 0)
-				pIndex = layer.polygons.push(polygonName) - 1;
-
 			var bytes:ByteArray = new ByteArray();
-			bytes.writeBoolean(type);
-			bytes.position++;//reserved byte, to be in odd order
-			bytes.writeShort(pIndex);
-			bytes.writeShort(index);
-			bytes.writeFloat(t);
+			bytes.writeByte(type);
+			if(type != FrameType.EMPTY)
+			{
+				//get polygonName index if it already added
+				var pIndex:int = layer.polygons.indexOf(polygonName);
+				if(pIndex < 0)
+					pIndex = layer.polygons.push(polygonName) - 1;
+				//
+				bytes.writeShort(pIndex);
+				bytes.writeShort(index);
+				bytes.writeFloat(t);
+			}
 			layer.frames.push(bytes);
 		}
 

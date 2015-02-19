@@ -4,6 +4,8 @@
  * Time: 14:22
  */
 package com.merlinds.miracle.format.maf {
+	import com.merlinds.miracle.animations.FrameInfo;
+	import com.merlinds.miracle.animations.FrameType;
 	import com.merlinds.miracle.format.Signatures;
 	import com.merlinds.miracle.geom.Color;
 	import com.merlinds.miracle.geom.TransformMatrix;
@@ -31,6 +33,7 @@ package com.merlinds.miracle.format.maf {
 			super(_signature, _charSet);
 			this.prepareTestData();
 		}
+
 
 		[Test]
 		public function testNormalFinalization():void {
@@ -143,12 +146,14 @@ package com.merlinds.miracle.format.maf {
 					for(k = 0; k < o; ++k)
 					{
 						var f:TestFrame = layer.frames[k];
-						var pIndex:int = layer.polygons.indexOf(f.polygonName);
-						Assert.assertEquals("Frame type", f.type, this.readBoolean());
-						this.position++;
-						Assert.assertEquals("Polygon index", pIndex, this.readShort());
-						Assert.assertEquals("Transform index", f.matrixIndex, this.readShort());
-						Assert.assertEquals("Time", f.t, this.readFloat().toFixed(2));
+						Assert.assertEquals("Frame type", f.type, this.readByte());
+						if(f.type != FrameType.EMPTY)
+						{
+							var pIndex:int = layer.polygons.indexOf(f.polygonName);
+							Assert.assertEquals("Polygon index", pIndex, this.readShort());
+							Assert.assertEquals("Transform index", f.matrixIndex, this.readShort());
+							Assert.assertEquals("Time", f.t, this.readFloat().toFixed(2));
+						}
 					}
 				}
 			}
@@ -173,7 +178,7 @@ package com.merlinds.miracle.format.maf {
 				for(j = 0; j < m; ++j)
 				{
 					var tf:TestFrame = layer.frames[j];
-					this.addFrame(a.name, i, tf.polygonName, tf.type, tf.matrixIndex, tf.t);
+					this.addFrame(a.name, i, tf.type, tf.polygonName,  tf.matrixIndex, tf.t);
 				}
 
 			}
@@ -185,25 +190,26 @@ package com.merlinds.miracle.format.maf {
 			var a0:TestAnimationData = new TestAnimationData("anim_0", new Rectangle(1, 2, 100, 200));
 			layer = new TestLayer();
 			layer.matrix[0] = this.getUniqueTransformation();
-			layer.frames[0] = new TestFrame("shape0", false, 0, 1);
+			layer.frames[0] = new TestFrame("shape0", FrameType.MOTION, 0, 1);
 			layer.polygons[0] = "shape0";
 			a0.layers[0] = layer;
-			animations[0] = a0;
+			animations.push(a0);
 			var a1:TestAnimationData = new TestAnimationData("anim_1", new Rectangle(-1, -2, -100, -200));
 			layer = new TestLayer();
 			layer.matrix[0] = this.getUniqueTransformation();
 			layer.matrix[1] = this.getUniqueTransformation();
-			layer.frames[0] = new TestFrame("shape0", true, 1, 1);
-			layer.frames[1] = new TestFrame("shape1", false, 0, 2);
+			layer.frames[0] = new TestFrame("shape0", FrameType.MOTION, 1, 1);
+			layer.frames[1] = new TestFrame(null, FrameType.EMPTY, 0, 0);
+			layer.frames[2] = new TestFrame("shape1", FrameType.MOTION, 0, 2);
 			layer.polygons[0] = "shape0";
 			layer.polygons[1] = "shape1";
 			a1.layers[0] = layer;
 			layer = new TestLayer();
 			layer.matrix[0] = this.getUniqueTransformation();
-			layer.frames[0] = new TestFrame("shape2", true, 0, 3);
+			layer.frames[0] = new TestFrame("shape2", FrameType.STATIC, 0, 3);
 			layer.polygons[0] = "shape2";
 			a1.layers[1] = layer;
-			animations[1] = a1;
+			animations.push(a1);
 		}
 
 		private function getUniqueTransformation():Transformation {
@@ -256,11 +262,11 @@ class TestLayer{
 
 class TestFrame{
 	public var polygonName:String;
-	public var type:Boolean;
+	public var type:uint;
 	public var matrixIndex:int;
 	public var t:Number;
 
-	public function TestFrame(polygonName:String, type:Boolean, matrixIndex:int, t:Number) {
+	public function TestFrame(polygonName:String, type:uint, matrixIndex:int, t:Number) {
 		this.polygonName = polygonName;
 		this.type = type;
 		this.matrixIndex = matrixIndex;
