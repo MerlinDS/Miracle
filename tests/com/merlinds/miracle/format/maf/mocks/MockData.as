@@ -5,6 +5,7 @@
  */
 package com.merlinds.miracle.format.maf.mocks {
 	import com.merlinds.miracle.animations.FrameType;
+	import com.merlinds.miracle.format.maf.MAFFile;
 	import com.merlinds.miracle.geom.Color;
 	import com.merlinds.miracle.geom.TransformMatrix;
 	import com.merlinds.miracle.geom.Transformation;
@@ -14,16 +15,50 @@ package com.merlinds.miracle.format.maf.mocks {
 	public class MockData {
 
 		private var tCount:int;
+		private var _file:MAFFile;
 		private var _animations:Vector.<TestAnimationData>;
 		//==============================================================================
 		//{region							PUBLIC METHODS
 		public function MockData() {
 			this.prepareTestData();
 		}
+
+		public function addDataToFile(file:MAFFile):void {
+			_file = file;
+			var i:int, n:int;
+			n = this.animations.length;
+			for(i = 0; i < n; ++i)
+			{
+				var a:TestAnimationData = this.animations[i];
+				_file.addAnimation(a.name, a.bounds);
+				this.addAnimation(a);
+			}
+		}
 		//} endregion PUBLIC METHODS ===================================================
 
 		//==============================================================================
 		//{region						PRIVATE\PROTECTED METHODS
+		private function addAnimation(a:TestAnimationData):void {
+			var i:int, j:int, n:int, m:int;
+			n = a.layers.length;
+			for(i = 0; i < n; ++i)
+			{
+				var layer:TestLayer = a.layers[i];
+				m = layer.matrix.length;
+				//add layer transformations
+				for(j = 0; j < m; ++j)
+					_file.addTransformation(a.name, i, layer.matrix[j]);
+				//add frames
+				m = layer.frames.length;
+				for(j = 0; j < m; ++j)
+				{
+					var tf:TestFrame = layer.frames[j];
+					_file.addFrame(a.name, i, tf.type, tf.polygonName,  tf.matrixIndex, tf.t);
+				}
+
+			}
+		}
+
 		private function prepareTestData():void {
 			var layer:TestLayer;
 			_animations = new <TestAnimationData>[];

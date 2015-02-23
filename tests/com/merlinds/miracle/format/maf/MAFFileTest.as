@@ -23,6 +23,7 @@ package com.merlinds.miracle.format.maf {
 		private var _charSet:String;
 
 		private var animations:Vector.<TestAnimationData>;
+		private var _mock:MockData;
 
 		//==============================================================================
 		//{region							PUBLIC METHODS
@@ -30,7 +31,8 @@ package com.merlinds.miracle.format.maf {
 			_signature = Signatures.MAF1;
 			_charSet = "us-ascii";
 			super(_signature, _charSet);
-			this.animations = new MockData().animations;
+			_mock = new MockData();
+			this.animations = _mock.animations;
 		}
 		//errors
 		[Test(expects="flash.errors.IllegalOperationError")]
@@ -74,12 +76,9 @@ package com.merlinds.miracle.format.maf {
 			//add data to file
 			var i:int, n:int;
 			n = this.animations.length;
-			for(i = 0; i < n; ++i)
-			{
-				var a:TestAnimationData = this.animations[i];
-				this.addAnimation(a.name, a.bounds);
-				this.addDataToFile(a);
-			}
+			///
+			var a:TestAnimationData;
+			_mock.addDataToFile(this);
 			//assert file
 			Assert.assertFalse("Finalized flag was set before finalization", this.finalized);
 			this.finalize();
@@ -193,26 +192,6 @@ package com.merlinds.miracle.format.maf {
 
 		//==============================================================================
 		//{region						PRIVATE\PROTECTED METHODS
-		private function addDataToFile(a:TestAnimationData):void {
-			var i:int, j:int, n:int, m:int;
-			n = a.layers.length;
-			for(i = 0; i < n; ++i)
-			{
-				var layer:TestLayer = a.layers[i];
-				m = layer.matrix.length;
-				//add layer transformations
-				for(j = 0; j < m; ++j)
-					this.addTransformation(a.name, i, layer.matrix[j]);
-				//add frames
-				m = layer.frames.length;
-				for(j = 0; j < m; ++j)
-				{
-					var tf:TestFrame = layer.frames[j];
-					this.addFrame(a.name, i, tf.type, tf.polygonName,  tf.matrixIndex, tf.t);
-				}
-
-			}
-		}
 
 		//} endregion PRIVATE\PROTECTED METHODS ========================================
 
