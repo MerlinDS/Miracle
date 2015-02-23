@@ -160,7 +160,7 @@ package com.merlinds.miracle.format.maf {
 						Assert.assertEquals("tx", t.matrix.tx, this.readFloat());
 						Assert.assertEquals("ty", t.matrix.ty, this.readFloat());
 						//check color
-						Assert.assertEquals("type", t.color.type, this.readBoolean());
+						Assert.assertEquals("type", t.color.type, this.readByte());
 						this.position++;
 						Assert.assertEquals("alphaOffset", t.color.alphaOffset, (this.readShort() / 255).toFixed(2));
 						Assert.assertEquals("alphaMultiplier", t.color.alphaMultiplier, (this.readShort() / 255).toFixed(2));

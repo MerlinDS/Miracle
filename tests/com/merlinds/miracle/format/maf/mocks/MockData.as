@@ -71,7 +71,7 @@ package com.merlinds.miracle.format.maf.mocks {
 			a0.layers[0] = layer;
 			_animations.push(a0);
 			var a1:TestAnimationData = new TestAnimationData("anim_1", new Rectangle(-1, -2, -100, -200));
-			a0.totalFrames = 3;
+			a1.totalFrames = 3;
 			layer = new TestLayer();
 			layer.matrix[0] = this.getUniqueTransformation();
 			layer.matrix[1] = this.getUniqueTransformation();

@@ -14,7 +14,9 @@ package com.merlinds.miracle.format {
 			"Can't read file with current signature. Bad file signature",
 			"Bad MTF file structure",
 			"Bad texture format",
-			"Bad reader format, has no reading methods"
+			"Bad reader format, has no reading methods",
+			"Bad animation header",
+			"Bad layer header"
 		];
 
 		public static const UNKNOWN_ERROR:int = 0;
@@ -24,6 +26,8 @@ package com.merlinds.miracle.format {
 		public static const BAD_FILE_STRUCTURE:int = 4;
 		public static const BAD_TEXTURE_FORMAT:int = 5;
 		public static const BAD_READER_FORMAT:int = 6;
+		public static const BAD_ANIMATION_HEADER:int = 7;
+		public static const BAD_LAYER_HEADER:int = 8;
 
 		//==============================================================================
 		//{region							PUBLIC METHODS
