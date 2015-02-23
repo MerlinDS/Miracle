@@ -61,7 +61,7 @@ package com.merlinds.miracle.format.maf {
 		[Test(expects="ArgumentError")]
 		public function testNullTransformationAddingError():void {
 			this.addHeader(8*4, 2+8*2, 10);
-			this.addAnimation("error", new Rectangle());
+			this.addAnimation("error", new Rectangle(), 0);
 			var t:Transformation = new Transformation();
 			this.addTransformation("error", 0, t);
 		}
@@ -120,6 +120,7 @@ package com.merlinds.miracle.format.maf {
 				Assert.assertEquals("Bounds for " + a.name + " y", a.bounds.y, this.readFloat());
 				Assert.assertEquals("Bounds for " + a.name + " width", a.bounds.width, this.readFloat());
 				Assert.assertEquals("Bounds for " + a.name + " height", a.bounds.height, this.readFloat());
+				Assert.assertEquals("Total frames for " + a.name, a.totalFrames, this.readShort());
 				Assert.assertEquals("Layer count for " + a.name, a.layers.length, this.readShort());
 
 				m = a.layers.length;

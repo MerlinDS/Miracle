@@ -27,7 +27,7 @@ package com.merlinds.miracle.format.maf {
 			_animations = {};/**AnimationStruct**/
 		}
 
-		public function addAnimation(name:String, bounds:Rectangle):void {
+		public function addAnimation(name:String, bounds:Rectangle, totalFrames:int):void {
 			var animation:AnimationStruct = new AnimationStruct();
 			animation.header.writeByte(ControlCharacters.DLE);
 			animation.header.writeShort(name.length);
@@ -37,6 +37,7 @@ package com.merlinds.miracle.format.maf {
 			animation.header.writeFloat(bounds.y);
 			animation.header.writeFloat(bounds.width);
 			animation.header.writeFloat(bounds.height);
+			animation.header.writeShort(totalFrames);
 			//
 			_animations[name] = animation;
 		}

@@ -30,7 +30,7 @@ package com.merlinds.miracle.format.maf.mocks {
 			for(i = 0; i < n; ++i)
 			{
 				var a:TestAnimationData = this.animations[i];
-				_file.addAnimation(a.name, a.bounds);
+				_file.addAnimation(a.name, a.bounds, a.totalFrames);
 				this.addAnimation(a);
 			}
 		}
@@ -63,6 +63,7 @@ package com.merlinds.miracle.format.maf.mocks {
 			var layer:TestLayer;
 			_animations = new <TestAnimationData>[];
 			var a0:TestAnimationData = new TestAnimationData("anim_0", new Rectangle(1, 2, 100, 200));
+			a0.totalFrames = 1;
 			layer = new TestLayer();
 			layer.matrix[0] = this.getUniqueTransformation();
 			layer.frames[0] = new TestFrame("shape0", FrameType.MOTION, 0, 1);
@@ -70,6 +71,7 @@ package com.merlinds.miracle.format.maf.mocks {
 			a0.layers[0] = layer;
 			_animations.push(a0);
 			var a1:TestAnimationData = new TestAnimationData("anim_1", new Rectangle(-1, -2, -100, -200));
+			a0.totalFrames = 3;
 			layer = new TestLayer();
 			layer.matrix[0] = this.getUniqueTransformation();
 			layer.matrix[1] = this.getUniqueTransformation();

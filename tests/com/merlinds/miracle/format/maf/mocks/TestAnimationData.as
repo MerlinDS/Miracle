@@ -10,6 +10,7 @@ package com.merlinds.miracle.format.maf.mocks {
 		public var name:String;
 		public var bounds:Rectangle;
 		public var layers:Vector.<TestLayer>;
+		public var totalFrames:int;
 		//==============================================================================
 		//{region							PUBLIC METHODS
 		public function TestAnimationData(name:String, bouds:Rectangle) {
