@@ -6,8 +6,10 @@
 package com.merlinds.miracle.format.maf {
 	import com.merlinds.miracle.animations.FrameType;
 	import com.merlinds.miracle.format.Signatures;
-	import com.merlinds.miracle.geom.Color;
-	import com.merlinds.miracle.geom.TransformMatrix;
+	import com.merlinds.miracle.format.maf.mocks.MockData;
+	import com.merlinds.miracle.format.maf.mocks.TestAnimationData;
+	import com.merlinds.miracle.format.maf.mocks.TestFrame;
+	import com.merlinds.miracle.format.maf.mocks.TestLayer;
 	import com.merlinds.miracle.geom.Transformation;
 	import com.merlinds.miracle.utils.ControlCharacters;
 
@@ -16,8 +18,6 @@ package com.merlinds.miracle.format.maf {
 	import flexunit.framework.Assert;
 
 	public class MAFFileTest extends MAFFile{
-
-		private var tCount:int;
 
 		private var _signature:String;
 		private var _charSet:String;
@@ -30,7 +30,7 @@ package com.merlinds.miracle.format.maf {
 			_signature = Signatures.MAF1;
 			_charSet = "us-ascii";
 			super(_signature, _charSet);
-			this.prepareTestData();
+			this.animations = new MockData().animations;
 		}
 		//errors
 		[Test(expects="flash.errors.IllegalOperationError")]
@@ -214,42 +214,6 @@ package com.merlinds.miracle.format.maf {
 			}
 		}
 
-		private function prepareTestData():void {
-			var layer:TestLayer;
-			animations = new <TestAnimationData>[];
-			var a0:TestAnimationData = new TestAnimationData("anim_0", new Rectangle(1, 2, 100, 200));
-			layer = new TestLayer();
-			layer.matrix[0] = this.getUniqueTransformation();
-			layer.frames[0] = new TestFrame("shape0", FrameType.MOTION, 0, 1);
-			layer.polygons[0] = "shape0";
-			a0.layers[0] = layer;
-			animations.push(a0);
-			var a1:TestAnimationData = new TestAnimationData("anim_1", new Rectangle(-1, -2, -100, -200));
-			layer = new TestLayer();
-			layer.matrix[0] = this.getUniqueTransformation();
-			layer.matrix[1] = this.getUniqueTransformation();
-			layer.frames[0] = new TestFrame("shape0", FrameType.MOTION, 1, 1);
-			layer.frames[1] = new TestFrame(null, FrameType.EMPTY, 0, 0);
-			layer.frames[2] = new TestFrame("shape1", FrameType.MOTION, 0, 2);
-			layer.polygons[0] = "shape0";
-			layer.polygons[1] = "shape1";
-			a1.layers[0] = layer;
-			layer = new TestLayer();
-			layer.matrix[0] = this.getUniqueTransformation();
-			layer.frames[0] = new TestFrame("shape2", FrameType.STATIC, 0, 3);
-			layer.polygons[0] = "shape2";
-			a1.layers[1] = layer;
-			animations.push(a1);
-		}
-
-		private function getUniqueTransformation():Transformation {
-			return new Transformation(
-					new TransformMatrix(tCount + 1, tCount + 2, tCount + 3, tCount + 4,
-							tCount + 0.5, tCount + 0.6, tCount + 0.7, tCount + 0.8),
-					new Color(tCount + 0.1, tCount + 0.2, tCount + 0.3,
-							tCount + 0.4, tCount + 0.5, tCount + 0.6, tCount + 0.7, tCount + 0.8)
-			);
-		}
 		//} endregion PRIVATE\PROTECTED METHODS ========================================
 
 		//==============================================================================
@@ -259,47 +223,5 @@ package com.merlinds.miracle.format.maf {
 		//==============================================================================
 		//{region							GETTERS/SETTERS
 		//} endregion GETTERS/SETTERS ==================================================
-	}
-}
-
-import com.merlinds.miracle.geom.Transformation;
-
-import flash.geom.Rectangle;
-
-class TestAnimationData{
-	public var name:String;
-	public var bounds:Rectangle;
-	public var layers:Vector.<TestLayer>;
-
-
-	public function TestAnimationData(name:String, bouds:Rectangle) {
-		this.name = name;
-		this.bounds = bouds;
-		this.layers = new <TestLayer>[];
-	}
-}
-class TestLayer{
-	public var frames:Vector.<TestFrame>;
-	public var matrix:Vector.<Transformation>;
-	public var polygons:Vector.<String>;
-
-	public function TestLayer() {
-		this.frames = new <TestFrame>[];
-		this.matrix = new <Transformation>[];
-		this.polygons = new <String>[];
-	}
-}
-
-class TestFrame{
-	public var polygonName:String;
-	public var type:uint;
-	public var matrixIndex:int;
-	public var t:Number;
-
-	public function TestFrame(polygonName:String, type:uint, matrixIndex:int, t:Number) {
-		this.polygonName = polygonName;
-		this.type = type;
-		this.matrixIndex = matrixIndex;
-		this.t = t;
 	}
 }
