@@ -15,7 +15,6 @@ package com.merlinds.miracle.format.maf {
 
 	import flash.errors.IllegalOperationError;
 	import flash.geom.Rectangle;
-	import flash.utils.ByteArray;
 
 	public class MAFFile extends FormatFile {
 
@@ -26,7 +25,8 @@ package com.merlinds.miracle.format.maf {
 		private var _transforms:Vector.<Transformation>;
 		//==============================================================================
 		//{region							PUBLIC METHODS
-		public function MAFFile(signature:String, charSet:String) {
+		public function MAFFile(signature:String, charSet:String)
+		{
 			super(signature, charSet);
 			_header = new MAFHeader();
 			_animations = {};/**AnimationStruct**/
@@ -34,82 +34,11 @@ package com.merlinds.miracle.format.maf {
 			_polygons = new <String>[];
 		}
 
-		public function addAnimation(name:String, animation:AnimationHelper):void {
+		public function addAnimation(name:String, animation:AnimationHelper):void
+		{
 			_animations[name] = animation;
-			/*var animation:AnimationStruct = new AnimationStruct();
-			animation.header.writeByte(ControlCharacters.DLE);
-			animation.header.writeShort(name.length);
-			animation.header.writeMultiByte(name, this.charSet);
-			//write bounds
-			animation.header.writeFloat(bounds.x);
-			animation.header.writeFloat(bounds.y);
-			animation.header.writeFloat(bounds.width);
-			animation.header.writeFloat(bounds.height);
-			animation.header.writeShort(totalFrames);*/
-			//
-//			_animations[name] = animation;
+			//TODO valid animation
 		}
-
-		/**
-		 *
-		 * Add transformation object to file
-		 * @param animationName Animation name.
-		 * Must be set previously by addAnimation() method!
-		 * @param layerIndex Index of the layer in animation.
-		 * @param transformation Transformation object
-		 *
-		 * @throws ArgumentError Can't add transformation to unknown animation.
-		 * @throws Transformation matrix and color transformations and not equals null
-		 */
-		/*public function addTransformation(animationName:String, layerIndex:int,
-		                                  transformation:Transformation):void {
-			if(!_animations.hasOwnProperty(animationName))
-				throw new ArgumentError("Can't add transformation to unknown animation");
-			if(transformation.matrix == null || transformation.color == null)
-				throw new ArgumentError("Transformation matrix and color transformations and not equals null");
-			var animation:AnimationStruct = _animations[animationName];
-			var layer:LayerStruct = this.extendLayers(animation, layerIndex);
-			var bytes:ByteArray = new ByteArray();
-			this.writeMatrix(transformation.matrix, bytes);
-			this.writeColor(transformation.color, bytes);
-			//may be will need a transformation id
-			layer.transformations.push(bytes);
-		}*/
-
-		/**
-		 * Add frame to animation
-		 * @param animationName Animation name.
-		 * Must be set previously by addAnimation() method!
-		 * @param layerIndex Index of the layer in animation.
-		 * @param polygonName Name of the polygon in texture that will be linked to this frame
-		 * @param type Type of the animation: true - motion, false - static
-		 * @param index Index of transformation object the will be linked to this frame
-		 * @param t Global time of the animation for this frame (gap from 0 to 1)
-		 *
-		 * @throws ArgumentError Can't add transformation to unknown animation.
-		 */
-/*		public function addFrame(animationName:String, layerIndex:int,
-		                         type:uint, polygonName:String, index:int, t:Number):void {
-
-			if(!_animations.hasOwnProperty(animationName))
-				throw new ArgumentError("Can't add transformation to unknown animation");
-			var animation:AnimationStruct = _animations[animationName];
-			var layer:LayerStruct = this.extendLayers(animation, layerIndex);
-			var bytes:ByteArray = new ByteArray();
-			bytes.writeByte(type);
-			if(type != FrameType.EMPTY)
-			{
-				//get polygonName index if it already added
-				var pIndex:int = layer.polygons.indexOf(polygonName);
-				if(pIndex < 0)
-					pIndex = layer.polygons.push(polygonName) - 1;
-				//
-				bytes.writeShort(pIndex);
-				bytes.writeShort(index);
-				bytes.writeFloat(t);
-			}
-			layer.frames.push(bytes);
-		}*/
 
 		/**
 		 * Finalize MAF file.
@@ -119,7 +48,8 @@ package com.merlinds.miracle.format.maf {
 		 * @throws flash.errors.IllegalOperationError Modification date can not be null
 		 * @throws flash.errors.IllegalOperationError Animations was not set
 		 */
-		override public function finalize():void {
+		override public function finalize():void
+		{
 			//validate header
 			if(_header.colorSize == 0 || _header.frameSize == 0 || _header.matrixSize == 0)
 				throw new IllegalOperationError("Header contains 0 type of size fields");
@@ -167,14 +97,9 @@ package com.merlinds.miracle.format.maf {
 				var animation:AnimationHelper = _animations[name];
 				this.collectData(animation);
 				this.writeAnimationHeader(name, animation);
-				/*this.writeAnimationHeader();
 				this.writePolygons();
 				this.writeTransformations();
-				this.writeFrames();*/
-
-				/*this.writeBytes(animation.header, 0, animation.header.length);
-				this.writeShort(animation.layers.length);
-				this.writeLayers(animation);*/
+				this.writeFrames(animation);
 			}
 			this.writeByte(ControlCharacters.EOF);
 		}
@@ -203,7 +128,8 @@ package com.merlinds.miracle.format.maf {
 			}
 		}
 
-		private function writeAnimationHeader(name:String, animation:AnimationHelper):void {
+		private function writeAnimationHeader(name:String, animation:AnimationHelper):void
+		{
 			this.writeByte(ControlCharacters.DLE);
 			this.writeShort(name.length);
 			this.writeMultiByte(name, this.charSet);
@@ -212,6 +138,50 @@ package com.merlinds.miracle.format.maf {
 			this.writeShort(animation.totalFrames);
 			this.writeShort(_transforms.length);
 			this.writeShort(_polygons.length);
+		}
+
+		private function writePolygons():void
+		{
+			var n:int = _polygons.length;
+			for(var i:int = 0; i < n; ++i)
+			{
+				var name:String = _polygons[i];
+				this.writeShort(name.length);
+				this.writeMultiByte(name, this.charSet);
+			}
+		}
+
+		private function writeTransformations():void
+		{
+			var n:int = _transforms.length;
+			for(var i:int = 0; i < n; ++i)
+			{
+				var t:Transformation = _transforms[i];
+				this.writeMatrix(t.matrix);
+				this.writeColor(t.color);
+			}
+		}
+
+		private function writeFrames(animation:AnimationHelper):void
+		{
+			var n:int = animation.frames.length;
+			for(var i:int = 0; i < n; ++i)
+			{
+				var frame:FrameInfo = animation.frames[i];
+				if(frame.isEmpty)
+					this.writeByte( FrameType.EMPTY );
+				else{
+					var index:int;
+					this.writeByte( frame.isMotion ? FrameType.MOTION : FrameType.STATIC );
+					index = _polygons.indexOf( frame.polygonName );
+					this.writeShort(index);
+					index = _transforms.indexOf( frame.m0 );
+					this.writeShort(index);
+					index = frame.isMotion ? _transforms.indexOf( frame.m1 ) : -1;
+					this.writeShort(index);
+					this.writeFloat(frame.t);
+				}
+			}
 		}
 		//Tools
 		private final function writeBounds(bounds:Rectangle):void
@@ -223,47 +193,43 @@ package com.merlinds.miracle.format.maf {
 		}
 
 		/**
-		 * Write transformation matrix to byte array
+		 * Write transformation matrix to file
 		 * @param matrix Transformation matrix
-		 * @param bytes Target byte array
 		 */
 		[Inline]
-		private final function writeMatrix(matrix:TransformMatrix, bytes:ByteArray):void
+		private final function writeMatrix(matrix:TransformMatrix):void
 		{
-			bytes.position = 0;
-			bytes.writeFloat(matrix.offsetX);
-			bytes.writeFloat(matrix.offsetY);
-			bytes.writeFloat(matrix.scaleX);
-			bytes.writeFloat(matrix.scaleY);
-			bytes.writeFloat(matrix.skewX);
-			bytes.writeFloat(matrix.skewY);
-			bytes.writeFloat(matrix.tx);
-			bytes.writeFloat(matrix.ty);
+			this.writeFloat(matrix.offsetX);
+			this.writeFloat(matrix.offsetY);
+			this.writeFloat(matrix.scaleX);
+			this.writeFloat(matrix.scaleY);
+			this.writeFloat(matrix.skewX);
+			this.writeFloat(matrix.skewY);
+			this.writeFloat(matrix.tx);
+			this.writeFloat(matrix.ty);
 		}
 
 		/**
-		 * Write color transformation to byte array
+		 * Write color transformation to file
 		 * @param color Color transformation
-		 * @param bytes Target byte array
 		 */
 		[Inline]
-		private final function writeColor(color:Color, bytes:ByteArray):void
+		private final function writeColor(color:Color):void
 		{
-			bytes.position = _header.matrixSize;
-			bytes.writeByte(color.type);
-			bytes.position++;//reserved byte, to be in odd order
+			this.writeByte(color.type);
+			this.position++;//reserved byte, to be in odd order
 			/**
 			 * Colors will be converted to gap from -255 to 255.
 			 * (May be gap from -127 to 127(1 byte) will be fine)
 			 */
-			bytes.writeShort(color.alphaOffset * 255);
-			bytes.writeShort(color.alphaMultiplier * 255);
-			bytes.writeShort(color.redOffset * 255);
-			bytes.writeShort(color.redMultiplier * 255);
-			bytes.writeShort(color.greenOffset * 255);
-			bytes.writeShort(color.greenMultiplier * 255);
-			bytes.writeShort(color.blueOffset * 255);
-			bytes.writeShort(color.blueMultiplier * 255);
+			this.writeShort(color.alphaOffset * 255);
+			this.writeShort(color.alphaMultiplier * 255);
+			this.writeShort(color.redOffset * 255);
+			this.writeShort(color.redMultiplier * 255);
+			this.writeShort(color.greenOffset * 255);
+			this.writeShort(color.greenMultiplier * 255);
+			this.writeShort(color.blueOffset * 255);
+			this.writeShort(color.blueMultiplier * 255);
 		}
 
 		//write to file

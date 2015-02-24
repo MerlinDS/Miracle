@@ -6,8 +6,11 @@
 package com.merlinds.miracle.format.maf {
 	import com.merlinds.miracle.animations.AnimationHelper;
 	import com.merlinds.miracle.animations.FrameInfo;
+	import com.merlinds.miracle.animations.FrameType;
 	import com.merlinds.miracle.format.Signatures;
 	import com.merlinds.miracle.format.maf.mocks.MAFMockData;
+	import com.merlinds.miracle.geom.Color;
+	import com.merlinds.miracle.geom.TransformMatrix;
 	import com.merlinds.miracle.geom.Transformation;
 	import com.merlinds.miracle.utils.ControlCharacters;
 
@@ -51,7 +54,10 @@ package com.merlinds.miracle.format.maf {
 			for(var i:int = 0; i < n; ++i)
 			{
 				Assert.assertTrue("File was ended unexpectedly", this.bytesAvailable > 0);
-				this.testAnimationHeader();
+				var animation:AnimationHelper = this.testAnimationHeader();
+				this.testPolygonNames();
+				this.testTransformations();
+				this.testFrames(animation);
 			}
 		}
 
@@ -124,6 +130,86 @@ package com.merlinds.miracle.format.maf {
 					if(index < 0)_transforms.push(frame.m1);
 				}
 			}
+		}
+
+		private function testPolygonNames():void {
+			var n:int = _polygons.length;
+			for(var i:int = 0; i < n; ++i)
+			{
+				var expected:String = _polygons[i];
+				var size:int = this.readShort();
+				var name:String = this.readMultiByte(size, _charSet);
+				Assert.assertEquals("Polygon name not equals", expected, name);
+			}
+		}
+
+		private function testTransformations():void {
+			var n:int = _transforms.length;
+			for(var i:int = 0; i < n; ++i)
+			{
+				var t:Transformation = _transforms[i];
+				this.testMatrix(t.matrix);
+				this.testColor(t.color);
+			}
+		}
+
+		private function testFrames(animation:AnimationHelper):void
+		{
+			var n:int = animation.frames.length;
+			for(var i:int = 0; i < n; ++i)
+			{
+				var frame:FrameInfo = animation.frames[i];
+				if(frame.isEmpty)
+					Assert.assertEquals("Frame type is bad", FrameType.EMPTY, this.readByte());
+				else
+				{
+					var index:int;
+					Assert.assertEquals("Frame type is bad",
+							frame.isMotion ? FrameType.MOTION : FrameType.STATIC, this.readByte());
+					index = _polygons.indexOf( frame.polygonName );
+					Assert.assertEquals("Polygon index is bad", index, this.readShort());
+					index = _transforms.indexOf( frame.m0 );
+					Assert.assertEquals("First matrix index is bad", index, this.readShort());
+					index = frame.isMotion ? _transforms.indexOf( frame.m1 ) : -1;
+					Assert.assertEquals("Second matrix index is bad", index, this.readShort());
+					Assert.assertEquals("T is bad", frame.t, this.readFloat());
+				}
+			}
+		}
+
+		private function testMatrix(matrix:TransformMatrix):void
+		{
+			var value:String = this.readFloat().toFixed(3);
+			Assert.assertEquals("Bad matrix.offsetX", matrix.offsetX, value);
+			value = this.readFloat().toFixed(3);
+			Assert.assertEquals("Bad matrix.offsetY", matrix.offsetY, value);
+			value = this.readFloat().toFixed(3);
+			Assert.assertEquals("Bad matrix.scaleX", matrix.scaleX, value);
+			value = this.readFloat().toFixed(3);
+			Assert.assertEquals("Bad matrix.scaleY", matrix.scaleY, value);
+			value = this.readFloat().toFixed(3);
+			Assert.assertEquals("Bad matrix.skewX", matrix.skewX, value);
+			value = this.readFloat().toFixed(3);
+			Assert.assertEquals("Bad matrix.skewY", matrix.skewY, value);
+			value = this.readFloat().toFixed(3);
+			Assert.assertEquals("Bad matrix.tx", matrix.tx, value);
+			value = this.readFloat().toFixed(3);
+			Assert.assertEquals("Bad matrix.ty", matrix.ty, value);
+		}
+
+		private function testColor(color:Color):void
+		{
+			var type:uint = this.readByte();
+			this.position++;
+			Assert.assertEquals("Bad color.type", color.type, type);
+			Assert.assertEquals("Bad color.alphaOffset", int(color.alphaOffset * 255), this.readShort());
+			Assert.assertEquals("Bad color.alphaMultiplier", int(color.alphaMultiplier * 255), this.readShort());
+			Assert.assertEquals("Bad color.redOffset", int(color.redOffset * 255), this.readShort());
+			Assert.assertEquals("Bad color.redMultiplier", int(color.redMultiplier * 255), this.readShort());
+			Assert.assertEquals("Bad color.greenOffset", int(color.greenOffset * 255), this.readShort());
+			Assert.assertEquals("Bad color.greenMultiplier", int(color.greenMultiplier * 255), this.readShort());
+			Assert.assertEquals("Bad color.blueOffset", int(color.blueOffset * 255), this.readShort());
+			Assert.assertEquals("Bad color.blueMultiplier", int(color.blueMultiplier * 255), this.readShort());
 		}
 		//} endregion PRIVATE\PROTECTED METHODS ========================================
 
