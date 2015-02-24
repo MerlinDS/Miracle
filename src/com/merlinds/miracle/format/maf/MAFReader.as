@@ -28,18 +28,17 @@ package com.merlinds.miracle.format.maf {
 		///Helpers, contains data from file before adding this data to animation helper
 		private var _polygons:Vector.<String>;
 		private var _transforms:Vector.<Transformation>;
+		private var _polygonsLength:int;
 		private var _transformsLength:int;
-		private var _framesLength:int;
-		private var _layersRead:int;
+
 		//
 
 		//==============================================================================
 		//{region							PUBLIC METHODS
 		public function MAFReader(signature:String, bytesChunk:int = 8960) {
 			this.addReadingMethod(this.readAnimationHeader);
-			this.addReadingMethod(this.readLayerHeader);
 			this.addReadingMethod(this.readPolygons);
-			this.addReadingMethod(this.readTransforms);
+			this.addReadingMethod(this.readTransformations);
 			this.addReadingMethod(this.readFrames);
 			this.addReadingMethod(this.completeAnimation);
 			_transforms = new <Transformation>[];
@@ -86,19 +85,15 @@ package com.merlinds.miracle.format.maf {
 			assert(this.bytes.readByte() == ControlCharacters.DLE, ReaderError.BAD_ANIMATION_HEADER);
 			if(this.status != ReaderStatus.ERROR)
 			{
-				this.cleanTempData();
 				//read animation header
 				var length:int = this.bytes.readShort();
 				var name:String = this.bytes.readMultiByte(length, this.charSet);
 				//read bounds of animation
-				var bounds:Rectangle = new Rectangle(
-					this.bytes.readFloat(),
-					this.bytes.readFloat(),
-					this.bytes.readFloat(),
-					this.bytes.readFloat()
-				);
-				var totalFrames:int = this.bytes.readShort();
+				var bounds:Rectangle = this.readBounds();
 				var numLayers:int = this.bytes.readShort();
+				var totalFrames:int = this.bytes.readShort();
+				_transformsLength = this.bytes.readShort();
+				_polygonsLength = this.bytes.readShort();
 				//TODO remove name from animation helper
 				_animation = new AnimationHelper(name, totalFrames, numLayers);
 				_animation.bounds = bounds;
@@ -109,39 +104,15 @@ package com.merlinds.miracle.format.maf {
 		}
 
 		/**
-		 * Read layer information form file
-		 */
-		private function readLayerHeader():void {
-			if(_layersRead < _animation.numLayers)
-			{
-				assert(this.bytes.readByte() == ControlCharacters.GS, ReaderError.BAD_LAYER_HEADER);
-				if(this.status != ReaderStatus.ERROR)//Do nothing if error was occurred
-				{
-					_transformsLength = this.bytes.readShort();
-					_framesLength = this.bytes.readShort();
-					_layersRead++;//Increase layers read counter
-					this.methodEnded();
-				}
-			}else
-			{
-				//All layers was read. Try to finish reading
-				this.methodEnded(this.completeAnimation);
-			}
-		}
-
-		/**
-		 * Read polygons names from file and save it to temporary list
+		 * Read polygons names in temporary list
 		 */
 		private function readPolygons():void {
 			var finishByFlag:Boolean = true;
 			var sp:int = this.bytes.position;//start reading position
-			/* can be a problem with RS flag founding */
-			while(this.bytes.readByte() != ControlCharacters.RS)
+			while(_polygons.length < _polygonsLength)
 			{
-				this.bytes.position--;
-				var size:int = this.bytes.readShort();//polygon name size
+				var size:int = this.bytes.readShort();
 				_polygons.push( this.bytes.readMultiByte(size, this.charSet) );
-				/*If bytes counter more than bytesChuck size, that stop reading and */
 				if(this.bytes.position - sp >= this.bytesChunk)
 				{
 					finishByFlag = false;
@@ -149,23 +120,23 @@ package com.merlinds.miracle.format.maf {
 				}
 			}
 
-			if(finishByFlag)//Go to next method only if flag RS was found
+			if(finishByFlag)//Go to next method only if reading was ended
 				this.methodEnded();
 		}
 
 		/**
-		 * Read transformations from file and save it to temporary list
+		 * Read transformations in temporary list
 		 */
-		private function readTransforms():void
-		{
+		private function readTransformations():void {
 			var finishByFlag:Boolean = true;
 			var sp:int = this.bytes.position;//start reading position
 			while(_transforms.length < _transformsLength)
 			{
-				var tm:TransformMatrix = this.readTransformMatrix();
-				var color:Color = this.readColor();
-				_transforms.push( new Transformation(tm, color) );
-				/*If bytes counter more than bytesChuck size, that stop reading and */
+				var t:Transformation = new Transformation(
+					this.readTransformMatrix(),
+					this.readColor()
+				);
+				_transforms.push(t);
 				if(this.bytes.position - sp >= this.bytesChunk)
 				{
 					finishByFlag = false;
@@ -173,48 +144,36 @@ package com.merlinds.miracle.format.maf {
 				}
 			}
 
-			if(finishByFlag)//Go to next method when all transformation for current layer was read
+			if(finishByFlag)//Go to next method only if reading was ended
 				this.methodEnded();
 		}
 
 		/**
-		 * Read frames information from file and save it to animation helper
+		 * Read frames to animation
 		 */
 		private function readFrames():void {
 			var finishByFlag:Boolean = true;
 			var sp:int = this.bytes.position;//start reading position
-			/* Frames in liner list */
-			while( _layersRead * _animation.frames.length < _framesLength)
+			while(_animation.frames.length < _animation.totalFrames * _animation.numLayers)
 			{
 				var frame:FrameInfo;
 				var type:uint = this.bytes.readByte();
 				if(type == FrameType.EMPTY)frame = new EmptyFrameInfo();
-				else{
-					var index:int;
-					var t0:Transformation, t1:Transformation;
-					index = this.bytes.readShort();
-					assert(_polygons.length > index, ReaderError.BAD_POLYGON_INDEX);
-					if(status == ReaderStatus.ERROR)return;
+				else
+				{
+					var index:int = this.bytes.readShort();
+					//TODO add validation
 					var polygonName:String = _polygons[index];
-
 					index = this.bytes.readShort();
-					assert(_transforms.length > index, ReaderError.BAD_TRANSFORM_INDEX);
-					if(status == ReaderStatus.ERROR)return;
-					t0 = _transforms[index];
-
-					if(type == FrameType.MOTION)//Only motion has second transformation
-					{
-						assert(_transforms.length > index + 1, ReaderError.BAD_TRANSFORM_INDEX);
-						if(status == ReaderStatus.ERROR)return;
-						t1 = _transforms[index + 1];
-					}
-
+					var m0:Transformation, m1:Transformation;
+					m0 = _transforms[index];
+					index = this.bytes.readShort();
+					if(index >= 0)m1 = _transforms[index];
 					var t:Number = this.bytes.readFloat();
-					frame = new FrameInfo(polygonName, t0, t1, t);
+					frame = new FrameInfo(polygonName, m0, m1, t);
 				}
 				_animation.frames.push(frame);
-
-				/*If bytes counter more than bytesChuck size, that stop reading and */
+				//breaker
 				if(this.bytes.position - sp >= this.bytesChunk)
 				{
 					finishByFlag = false;
@@ -222,10 +181,13 @@ package com.merlinds.miracle.format.maf {
 				}
 			}
 
-			if(finishByFlag)//Go to next method when all transformation for current layer was read
-				this.methodEnded(this.readLayerHeader);
+			if(finishByFlag)//Go to next method only if reading was ended
+				this.methodEnded();
 		}
 
+		/**
+		 * End reading or read next animation
+		 */
 		private function completeAnimation():void {
 			var nextMethod:Function;
 			if(this.bytes.readByte() != ControlCharacters.EOF)
@@ -233,6 +195,7 @@ package com.merlinds.miracle.format.maf {
 				this.bytes.position--;
 				nextMethod = this.readAnimationHeader;
 			}
+			this.cleanTempData();
 			this.methodEnded(nextMethod);
 		}
 
@@ -243,11 +206,24 @@ package com.merlinds.miracle.format.maf {
 		 */
 		[Inline]
 		private final function cleanTempData():void {
+			_transformsLength = 0;
+			_polygonsLength = 0;
 			_transforms.length = 0;
 			_polygons.length = 0;
-			_transformsLength = 0;
-			_framesLength = 0;
-			_layersRead = 0;
+		}
+
+		/**
+		 * @private
+		 * Read bounds from file
+		 * @return Bounds rect
+		 */
+		private function readBounds():Rectangle {
+			return new Rectangle(
+					this.bytes.readFloat(),
+					this.bytes.readFloat(),
+					this.bytes.readFloat(),
+					this.bytes.readFloat()
+			);
 		}
 
 		/**
