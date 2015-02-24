@@ -87,8 +87,18 @@ package com.merlinds.miracle.format {
 			throw new Error("Need to be overridden!");
 		}
 
-		protected final function methodEnded():void
+		/**
+		 * Mark that method finish calculations.
+		 * @param method Go to method in scope
+		 */
+		protected final function methodEnded(method:Function = null):void
 		{
+			if(method is Function)
+			{
+				//get method index
+				var index:int = _readingMethods.indexOf(method);
+				if(index >= 0)_currentMethod = index - 1;//Set position to previous method
+			}
 			_endOfMethod = true;
 		}
 
