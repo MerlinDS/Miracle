@@ -24,7 +24,7 @@ package com.merlinds.miracle.format.maf.mocks {
 		}
 
 		public function addDataToFile(file:MAFFile):void {
-			_file = file;
+			/*_file = file;
 			var i:int, n:int;
 			n = this.animations.length;
 			for(i = 0; i < n; ++i)
@@ -32,14 +32,14 @@ package com.merlinds.miracle.format.maf.mocks {
 				var a:TestAnimationData = this.animations[i];
 				_file.addAnimation(a.name, a.bounds, a.totalFrames);
 				this.addAnimation(a);
-			}
+			}*/
 		}
 		//} endregion PUBLIC METHODS ===================================================
 
 		//==============================================================================
 		//{region						PRIVATE\PROTECTED METHODS
 		private function addAnimation(a:TestAnimationData):void {
-			var i:int, j:int, n:int, m:int;
+			/*var i:int, j:int, n:int, m:int;
 			n = a.layers.length;
 			for(i = 0; i < n; ++i)
 			{
@@ -56,7 +56,7 @@ package com.merlinds.miracle.format.maf.mocks {
 					_file.addFrame(a.name, i, tf.type, tf.polygonName,  tf.matrixIndex, tf.t);
 				}
 
-			}
+			}*/
 		}
 
 		private function prepareTestData():void {
@@ -69,6 +69,7 @@ package com.merlinds.miracle.format.maf.mocks {
 			layer.frames[0] = new TestFrame("shape0", FrameType.STATIC, 0, 1);
 			layer.polygons[0] = "shape0";
 			a0.layers[0] = layer;
+			a0.polygonsCount = 1;
 			_animations.push(a0);
 			var a1:TestAnimationData = new TestAnimationData("anim_1", new Rectangle(-1, -2, -100, -200));
 			a1.totalFrames = 3;
@@ -86,6 +87,7 @@ package com.merlinds.miracle.format.maf.mocks {
 			layer.frames[0] = new TestFrame("shape2", FrameType.STATIC, 0, 3);
 			layer.polygons[0] = "shape2";
 			a1.layers[1] = layer;
+			a0.polygonsCount = 3;
 			_animations.push(a1);
 		}
 

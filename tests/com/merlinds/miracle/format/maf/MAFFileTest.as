@@ -4,16 +4,12 @@
  * Time: 14:22
  */
 package com.merlinds.miracle.format.maf {
-	import com.merlinds.miracle.animations.FrameType;
+	import com.merlinds.miracle.animations.AnimationHelper;
+	import com.merlinds.miracle.animations.FrameInfo;
 	import com.merlinds.miracle.format.Signatures;
-	import com.merlinds.miracle.format.maf.mocks.MockData;
-	import com.merlinds.miracle.format.maf.mocks.TestAnimationData;
-	import com.merlinds.miracle.format.maf.mocks.TestFrame;
-	import com.merlinds.miracle.format.maf.mocks.TestLayer;
+	import com.merlinds.miracle.format.maf.mocks.MAFMockData;
 	import com.merlinds.miracle.geom.Transformation;
 	import com.merlinds.miracle.utils.ControlCharacters;
-
-	import flash.geom.Rectangle;
 
 	import flexunit.framework.Assert;
 
@@ -22,67 +18,48 @@ package com.merlinds.miracle.format.maf {
 		private var _signature:String;
 		private var _charSet:String;
 
-		private var animations:Vector.<TestAnimationData>;
-		private var _mock:MockData;
-
+		private var _data:MAFMockData;
+		// temporary data
+		private var _polygons:Vector.<String>;
+		private var _transforms:Vector.<Transformation>;
 		//==============================================================================
 		//{region							PUBLIC METHODS
 		public function MAFFileTest() {
 			_signature = Signatures.MAF1;
 			_charSet = "us-ascii";
 			super(_signature, _charSet);
-			_mock = new MockData();
-			this.animations = _mock.animations;
-		}
-		//errors
-		[Test(expects="flash.errors.IllegalOperationError")]
-		public function testHeaderSizesError():void {
-			this.finalize();
+			_data = new MAFMockData();
+			_transforms = new <Transformation>[];
+			_polygons = new <String>[];
 		}
 
-		[Test(expects="flash.errors.IllegalOperationError")]
-		public function testHeaderAnimationError():void {
-			this.addHeader(2, 2, 1);
-			this.finalize();
-		}
 
-		[Test(expects="ArgumentError")]
-		public function testFrameAddingError():void {
-			this.addHeader(8*4, 2+8*2, 10);
-			this.addFrame("error", 0, FrameType.EMPTY, null, 0, 0);
-		}
-
-		[Test(expects="ArgumentError")]
-		public function testTransformationAddingError():void {
-			this.addHeader(8*4, 2+8*2, 10);
-			this.addTransformation("error", 0, null);
-		}
-
-		[Test(expects="ArgumentError")]
-		public function testNullTransformationAddingError():void {
-			this.addHeader(8*4, 2+8*2, 10);
-			this.addAnimation("error", new Rectangle(), 0);
-			var t:Transformation = new Transformation();
-			this.addTransformation("error", 0, t);
-		}
-
-		//normal
 		[Test]
-		public function testNormalFinalization():void {
+		public function testFinalize():void {
 			var matrixSize:int = 8 * 4;//8 field * 4 bytes
 			var colorSize:int = 2 + 8 * 2;//color type + 8 field * 2 bytes
 			var frameSize:int = 2 + 2 * 2 + 4;//frame type + 2 field * 2 bytes + 1 field * 4 bytes
 			this.addHeader(matrixSize, colorSize, frameSize);
-			//add data to file
-			var i:int, n:int;
-			n = this.animations.length;
-			///
-			var a:TestAnimationData;
-			_mock.addDataToFile(this);
-			//assert file
+
+			_data.writeToFile(this);
 			Assert.assertFalse("Finalized flag was set before finalization", this.finalized);
 			this.finalize();
 			Assert.assertTrue("Finalized flag was not set", this.finalized);
+			this.testHeader(matrixSize, colorSize, frameSize);
+			//test animations
+			var n:int = _data.animationsLength;
+			for(var i:int = 0; i < n; ++i)
+			{
+				Assert.assertTrue("File was ended unexpectedly", this.bytesAvailable > 0);
+				this.testAnimationHeader();
+			}
+		}
+
+//} endregion PUBLIC METHODS ===================================================
+
+		//==============================================================================
+		//{region						PRIVATE\PROTECTED METHODS
+		private function testHeader(matrixSize:int, colorSize:int, frameSize:int):void {
 			this.position = 0;
 			var signature:String = this.readMultiByte(_signature.length, _charSet);
 			Assert.assertEquals("Signature", _signature, signature);
@@ -93,107 +70,61 @@ package com.merlinds.miracle.format.maf {
 			this.position = MAFHeaderFormat.FT;
 			Assert.assertEquals("frameSize", frameSize, this.readShort());
 			this.position = MAFHeaderFormat.HEADER_SIZE;
-			//test data
-			var byte:uint;
-			var length:uint;
-			var string:String;
-			var j:int, m:int, k:int, o:int;
-			for(i = 0; i < n; ++i)
-			{
-				//test animation header
-				byte = this.readByte();
-				Assert.assertEquals("First flag of " + i + " animation must be DLE",
-						ControlCharacters.DLE, byte);
-				//read name
-				length = this.readShort();
-				string = this.readMultiByte(length, _charSet);
-				//find animation
-				for(j = 0; j < n; ++j)
-				{
-					a = this.animations[j];
-					if(a.name == string)break;
-					a = null;
-				}
-				Assert.assertNotNull("Can not found animation " + string, a);
-				//read bounds
-				Assert.assertEquals("Bounds for " + a.name + " x", a.bounds.x, this.readFloat());
-				Assert.assertEquals("Bounds for " + a.name + " y", a.bounds.y, this.readFloat());
-				Assert.assertEquals("Bounds for " + a.name + " width", a.bounds.width, this.readFloat());
-				Assert.assertEquals("Bounds for " + a.name + " height", a.bounds.height, this.readFloat());
-				Assert.assertEquals("Total frames for " + a.name, a.totalFrames, this.readShort());
-				Assert.assertEquals("Layer count for " + a.name, a.layers.length, this.readShort());
+		}
 
-				m = a.layers.length;
-				for(j = 0; j < m; ++j)
+		private function testAnimationHeader():AnimationHelper {
+			var byte:uint = this.readByte();
+			Assert.assertEquals("Animation must begin with DLE byte", ControlCharacters.DLE, byte);
+			var size:int = this.readShort();
+			var name:String = this.readMultiByte(size, _charSet);
+			var animationHelper:AnimationHelper;
+			for(var n:String in _data.animations)
+			{
+				if(n == name)
 				{
-					var layer:TestLayer = a.layers[j];
-					byte = this.readByte();
-					Assert.assertEquals("First flag of layer " + j +
-							" animation of animation " + a.name + " must be GS", ControlCharacters.GS, byte);
-					//length
-					Assert.assertEquals("Transformation length", layer.matrix.length, this.readShort());
-					Assert.assertEquals("Frames length", layer.frames.length, this.readShort());
-					//polygon names
-					o = layer.polygons.length;
-					for(k = 0; k < o; ++k)
-					{
-						length = this.readShort();
-						string = this.readMultiByte(length, _charSet);
-						Assert.assertEquals("Polygon", layer.polygons[k], string);
-					}
-					byte = this.readByte();
-					Assert.assertEquals("First second layer " + j +
-					" animation of animation " + a.name + " must be RS", ControlCharacters.RS, byte);
-					//check transformations
-					o = layer.matrix.length;
-					for(k = 0; k < o; ++k)
-					{
-						var t:Transformation = layer.matrix[k];
-						//TODO FIX PROBLEMS WITH FLOAT
-						//check transformation matrix
-						Assert.assertEquals("offsetX", t.matrix.offsetX, this.readFloat());
-						Assert.assertEquals("offsetY", t.matrix.offsetY, this.readFloat());
-						Assert.assertEquals("scaleX", t.matrix.scaleX, this.readFloat().toFixed(3));
-						Assert.assertEquals("scaleY", t.matrix.scaleY, this.readFloat().toFixed(3));
-						Assert.assertEquals("skewX", t.matrix.skewX, this.readFloat().toFixed(3));
-						Assert.assertEquals("skewY", t.matrix.skewY, this.readFloat().toFixed(3));
-						Assert.assertEquals("tx", t.matrix.tx, this.readFloat());
-						Assert.assertEquals("ty", t.matrix.ty, this.readFloat());
-						//check color
-						Assert.assertEquals("type", t.color.type, this.readByte());
-						this.position++;
-						Assert.assertEquals("alphaOffset", t.color.alphaOffset, (this.readShort() / 255).toFixed(2));
-						Assert.assertEquals("alphaMultiplier", t.color.alphaMultiplier, (this.readShort() / 255).toFixed(2));
-						Assert.assertEquals("redOffset", t.color.redOffset, (this.readShort() / 255).toFixed(2));
-						Assert.assertEquals("redMultiplier", t.color.redMultiplier, (this.readShort() / 255).toFixed(2));
-						Assert.assertEquals("greenOffset", t.color.greenOffset, (this.readShort() / 255).toFixed(2));
-						Assert.assertEquals("greenMultiplier", t.color.greenMultiplier, (this.readShort() / 255).toFixed(2));
-						Assert.assertEquals("blueOffset", t.color.blueOffset, (this.readShort() / 255).toFixed(2));
-						Assert.assertEquals("blueMultiplier", t.color.blueMultiplier, (this.readShort() / 255).toFixed(2));
-					}
-					//check frames
-					o = layer.frames.length;
-					for(k = 0; k < o; ++k)
-					{
-						var f:TestFrame = layer.frames[k];
-						Assert.assertEquals("Frame type", f.type, this.readByte());
-						if(f.type != FrameType.EMPTY)
-						{
-							var pIndex:int = layer.polygons.indexOf(f.polygonName);
-							Assert.assertEquals("Polygon index", pIndex, this.readShort());
-							Assert.assertEquals("Transform index", f.matrixIndex, this.readShort());
-							Assert.assertEquals("Time", f.t, this.readFloat().toFixed(2));
-						}
-					}
+					animationHelper = _data.animations[n];
+					break;
 				}
 			}
-
+			var prefix:String = "Animation " + name + " ";
+			Assert.assertNotNull(prefix + "was not found", animationHelper);
+			//check bounds
+			Assert.assertEquals(prefix + "bad bounds.x", animationHelper.bounds.x, this.readFloat());
+			Assert.assertEquals(prefix + " bad bounds.y", animationHelper.bounds.y, this.readFloat());
+			Assert.assertEquals(prefix + " bad bounds.width", animationHelper.bounds.width, this.readFloat());
+			Assert.assertEquals(prefix + " bad bounds.height", animationHelper.bounds.height, this.readFloat());
+			//check additional data
+			this.collectData(animationHelper);
+			Assert.assertEquals(prefix + " bad numLayers", animationHelper.numLayers, this.readShort());
+			Assert.assertEquals(prefix + " bad totalFrames", animationHelper.totalFrames, this.readShort());
+			Assert.assertEquals(prefix + " bad transformation count", _transforms.length, this.readShort());
+			Assert.assertEquals(prefix + " bad polygons count", _polygons.length, this.readShort());
+			return animationHelper;
 		}
-		//} endregion PUBLIC METHODS ===================================================
 
-		//==============================================================================
-		//{region						PRIVATE\PROTECTED METHODS
-
+		//Tool
+		private function collectData(animation:AnimationHelper):void {
+			_polygons.length = 0;
+			_transforms.length = 0;
+			var n:int = animation.frames.length;
+			for(var i:int = 0; i < n; ++i)
+			{
+				var index:int;
+				var frame:FrameInfo = animation.frames[i];
+				if(frame.isEmpty)continue;
+				//save polygon if was not saved
+				index = _polygons.indexOf(frame.polygonName);
+				if(index < 0)_polygons.push(frame.polygonName);
+				//save transformations
+				index = _transforms.indexOf(frame.m0);
+				if(index < 0)_transforms.push(frame.m0);
+				if(frame.isMotion)
+				{
+					index = _transforms.indexOf(frame.m1);
+					if(index < 0)_transforms.push(frame.m1);
+				}
+			}
+		}
 		//} endregion PRIVATE\PROTECTED METHODS ========================================
 
 		//==============================================================================

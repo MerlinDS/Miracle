@@ -11,6 +11,7 @@ package com.merlinds.miracle.format.maf.mocks {
 		public var bounds:Rectangle;
 		public var layers:Vector.<TestLayer>;
 		public var totalFrames:int;
+		public var polygonsCount:int;
 		//==============================================================================
 		//{region							PUBLIC METHODS
 		public function TestAnimationData(name:String, bouds:Rectangle) {
