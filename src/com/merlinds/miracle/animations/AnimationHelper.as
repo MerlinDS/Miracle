@@ -37,14 +37,14 @@ package com.merlinds.miracle.animations {
 		 * @throws ArgumentError if Total count of frames will be bigger than frames list length
 		 */
 		public function AnimationHelper(name:String, totalFrames:int, numLayers:int, frames:Vector.<FrameInfo> = null) {
-			if(frames.length < totalFrames){
+			if(frames != null && frames.length < totalFrames){
 				throw new ArgumentError("Length of frames can not be less than totalFrames count!");
 			}
 			if(totalFrames < 1){
 				throw new ArgumentError("Must be at least one frame for animation!");
 			}
 			this.name = name;
-			this.frames = frames;
+			this.frames = frames != null ? frames : new <FrameInfo>[];
 			this.numLayers = numLayers;
 			this.totalFrames = totalFrames;
 		}

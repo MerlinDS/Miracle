@@ -24,7 +24,7 @@ package com.merlinds.miracle.format.maf {
 		[Before]
 		public function setUp():void {
 			_charSet = "us-ascii";
-			_reader = new MAFReader(Signatures.MAF1, 256);
+			_reader = new MAFReader(Signatures.MAF1, 6);
 			var maf:MAF1 = new MAF1();
 			_mock = new MockData();
 			_mock.addDataToFile(maf);
@@ -42,7 +42,8 @@ package com.merlinds.miracle.format.maf {
 			while(_reader.status == ReaderStatus.PROCESSING){
 				_reader.readingStep();
 			}
-			Assert.assertEquals("Reader status must equals READY", ReaderStatus.READY, _reader.status);
+			Assert.assertEquals("Reader status must equals READY: " + _reader.errors[0]
+					, ReaderStatus.READY, _reader.status);
 
 			Assert.fail("Test not yet implemented");
 		}

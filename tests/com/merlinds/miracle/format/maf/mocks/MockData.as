@@ -66,7 +66,7 @@ package com.merlinds.miracle.format.maf.mocks {
 			a0.totalFrames = 1;
 			layer = new TestLayer();
 			layer.matrix[0] = this.getUniqueTransformation();
-			layer.frames[0] = new TestFrame("shape0", FrameType.MOTION, 0, 1);
+			layer.frames[0] = new TestFrame("shape0", FrameType.STATIC, 0, 1);
 			layer.polygons[0] = "shape0";
 			a0.layers[0] = layer;
 			_animations.push(a0);
@@ -75,9 +75,9 @@ package com.merlinds.miracle.format.maf.mocks {
 			layer = new TestLayer();
 			layer.matrix[0] = this.getUniqueTransformation();
 			layer.matrix[1] = this.getUniqueTransformation();
-			layer.frames[0] = new TestFrame("shape0", FrameType.MOTION, 1, 1);
+			layer.frames[0] = new TestFrame("shape0", FrameType.MOTION, 0, 1);
 			layer.frames[1] = new TestFrame(null, FrameType.EMPTY, 0, 0);
-			layer.frames[2] = new TestFrame("shape1", FrameType.MOTION, 0, 2);
+			layer.frames[2] = new TestFrame("shape1", FrameType.STATIC, 1, 2);
 			layer.polygons[0] = "shape0";
 			layer.polygons[1] = "shape1";
 			a1.layers[0] = layer;

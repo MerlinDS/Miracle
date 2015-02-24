@@ -16,7 +16,9 @@ package com.merlinds.miracle.format {
 			"Bad texture format",
 			"Bad reader format, has no reading methods",
 			"Bad animation header",
-			"Bad layer header"
+			"Bad layer header",
+			"Bad polygon index. Can not find polygon in temporary list",
+			"Bad transformation index. Can not find transformation in temporary list"
 		];
 
 		public static const UNKNOWN_ERROR:int = 0;
@@ -28,6 +30,8 @@ package com.merlinds.miracle.format {
 		public static const BAD_READER_FORMAT:int = 6;
 		public static const BAD_ANIMATION_HEADER:int = 7;
 		public static const BAD_LAYER_HEADER:int = 8;
+		public static const BAD_POLYGON_INDEX:int = 9;
+		public static const BAD_TRANSFORM_INDEX:int = 10;
 
 		//==============================================================================
 		//{region							PUBLIC METHODS
