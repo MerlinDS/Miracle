@@ -51,7 +51,6 @@ package com.merlinds.miracle.format.mtf {
 			var empty:Boolean = true;
 			for each(var polygon:Object in mesh){
 				if(
-					!polygon.hasOwnProperty("name") ||
 					!polygon.hasOwnProperty("vertices") ||
 					!polygon.hasOwnProperty("uv") ||
 					!polygon.hasOwnProperty("indexes")
