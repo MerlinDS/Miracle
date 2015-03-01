@@ -10,7 +10,7 @@ package com.merlinds.miracle {
 			/*
 			 * va[0] = [x, y] Need z
 			 * va[1] = [u, v]
-			 * va[2] = [tx,ty]
+			 * va[2] = [tx,ty,offsetX,offsetY]
 			 * va[3] = [scaleX, scaleY, skewX, skewY]
 			 * va[4] = [R, G, B, A]
 			 * va[5] = [multiplierR, multiplierG, multiplierB, multiplierA]
@@ -24,6 +24,8 @@ package com.merlinds.miracle {
 			 * view formula m1:[a*ratioX, c*-ratioX, 0, tx*ratioX-1], m2:[b*-ratioY, d*ratioY, 0, ty*-ratioY+1]
 			 */
 
+			"mov vt4 va0",
+			"add vt4.xy vt4.xy, va2.zw",//x + offsetX, y + offsetY
 			"mul vt3.x, va3.z, vc125.y", //skewX * -1, get -1 from vc125.y
 			"cos vt0.x, va3.w", //cos(skewY)
 			"sin vt0.y, vt3.x", //sin(-skewX)
@@ -46,10 +48,10 @@ package com.merlinds.miracle {
 			"mul vt2, vt2, vc1", //apply view ratio
 			"add vt2.w, vt2.w, vc125.x", //apply view position, ty + 1
 
-			"dp4 op.x, va0, vt1",
-			"dp4 op.y, va0, vt2",
-			"dp4 op.z, va0, vc126",
-			"dp4 op.w, va0, vc127",
+			"dp4 op.x, vt4, vt1",
+			"dp4 op.y, vt4, vt2",
+			"dp4 op.z, vt4, vc126",
+			"dp4 op.w, vt4, vc127",
 			"mov v0, va1.xy",
 			"mov v1, va4",
 			"mov v2, va5"

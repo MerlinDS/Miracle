@@ -5,25 +5,30 @@
  * Coied form com.salazkin.framework.Shape
  */
 package com.merlinds.miracle.geom {
+	import flash.utils.ByteArray;
+	import flash.utils.Endian;
+
 	public class Polygon2D {
 
+		public static const BUFFER_SIZE:int = 4 * 4;//4 field * 4 bytes
+
 		public var indexes:Vector.<int>;
-		public var buffer:Vector.<Number>;
+		public var buffer:ByteArray;
 		public var numVertices:Number;
 
 		public function Polygon2D(data:Object, scale:Number = 1) {
 			this.numVertices = data.vertexes.length >> 1;
 			this.indexes = new Vector.<int>( data.indexes.length );
-			this.buffer = new Vector.<Number>( this.numVertices * 4 );
+			this.buffer = new ByteArray();
+			this.buffer.endian = Endian.LITTLE_ENDIAN;
 
 			var i:uint;
-			var dataIndex:int = 0;
 			var n:int = this.numVertices;
 			for(i = 0; i < n; i++){
-				this.buffer[dataIndex++] = data.vertexes[ i * 2 ] * scale;
-				this.buffer[dataIndex++] = data.vertexes[ i * 2 + 1 ] * scale;
-				this.buffer[dataIndex++] = data.uv[ i * 2 ];
-				this.buffer[dataIndex++] = data.uv[ i * 2 + 1 ];
+				this.buffer.writeFloat(data.vertexes[ i * 2 ] * scale);
+				this.buffer.writeFloat(data.vertexes[ i * 2 + 1 ] * scale);
+				this.buffer.writeFloat(data.uv[ i * 2 ]);
+				this.buffer.writeFloat(data.uv[ i * 2 + 1 ]);
 			}
 
 			n = data.indexes.length;
