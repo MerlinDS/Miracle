@@ -36,11 +36,17 @@ package com.merlinds.miracle {
 		/** [multiplierR, multiplierG, multiplierB, multiplierA] **/
 		private const CMULT:int = 4;
 
-		private var COLOR_OFFSET:int = 8 * 4; //8 field * 4 byte
-		private var ALPHA_OFFSET:int = 6 * 4; //6 field * 4 byte
-		private var MATRIX_SIZE:int = COLOR_OFFSET + ALPHA_OFFSET + 8;
-
 		private const VERTEX_PARAMS_LENGTH:int = XY + UV + OFFSET + TRANSFORM + COLOR + CMULT;
+
+		/** positions in byte array **/
+		private const FLOAT_SIZE:int = 4;
+		private const TRANSFORM_SIZE:int = (OFFSET + TRANSFORM) * FLOAT_SIZE;
+		private const COLOR_SIZE:int = (COLOR + CMULT) * FLOAT_SIZE;
+		private const MATRIX_SIZE:int = TRANSFORM_SIZE + COLOR_SIZE;
+		/** color offsets **/
+		private const MULTIPLIER_OFFSET:int = TRANSFORM_SIZE + COLOR * FLOAT_SIZE;
+		private const ALPHA_OFFSET:int = MULTIPLIER_OFFSET - FLOAT_SIZE;//- Alpha
+		private const ALPHA_MULTIPLIER_OFFSET:int = MATRIX_SIZE -FLOAT_SIZE;//- Alpha multiplier
 
 		//GPU
 		private var _vertexBuffer:VertexBuffer3D;
@@ -263,7 +269,7 @@ package com.merlinds.miracle {
 			/**** CALCULATE COLOR TRANSFORMATIONS *****/
 			var different:uint = c0.type | c1.type ;
 			var mask:uint = different & Color.COLOR;
-			_currentMatrix.position = COLOR_OFFSET;
+			_currentMatrix.position = TRANSFORM_SIZE;
 			//If one of the colors has some transformation that need to calculate new c0 c0
 			if(mask == Color.COLOR){
 				//calculate offsets
@@ -271,16 +277,18 @@ package com.merlinds.miracle {
 				_currentMatrix.writeFloat( c0.greenOffset + c1.greenOffset );//GREEN
 				_currentMatrix.writeFloat( c0.blueOffset + c1.blueOffset );//BLUE
 				//calculate multipliers
+				_currentMatrix.position = MULTIPLIER_OFFSET;
 				_currentMatrix.writeFloat( c0.redMultiplier +  c1.redMultiplier );//RED
 				_currentMatrix.writeFloat( c0.greenMultiplier + c1.greenMultiplier );//GREEN
 				_currentMatrix.writeFloat( c0.blueMultiplier + c1.blueMultiplier );//BLUE
 			}
-			_currentMatrix.position = COLOR_OFFSET + ALPHA_OFFSET;
 			mask = different & Color.ALPHA;
 			if(mask == Color.ALPHA){
 				//calculate offsets
+				_currentMatrix.position = ALPHA_OFFSET;
 				_currentMatrix.writeFloat( c0.alphaOffset + c1.alphaOffset );//ALPHA
 				//calculate multipliers
+				_currentMatrix.position = ALPHA_MULTIPLIER_OFFSET;
 				_currentMatrix.writeFloat( c0.alphaMultiplier + c1.alphaMultiplier );//ALPHA
 
 			}
@@ -321,7 +329,7 @@ package com.merlinds.miracle {
 			var t0:Number = 1 - t;
 			var different:uint = c0.type | c1.type | c2.type;
 			var mask:uint = different & Color.COLOR;
-			_currentMatrix.position = COLOR_OFFSET;
+			_currentMatrix.position = TRANSFORM_SIZE;
 			//If one of the colors has some transformation that need to calculate new c0 c0
 			if(mask == Color.COLOR){
 				//calculate offsets
@@ -332,6 +340,7 @@ package com.merlinds.miracle {
 				_currentMatrix.writeFloat( c0.blueOffset +
 						(t0 * c1.blueOffset + t * c2.blueOffset) );//BLUE
 				//calculate multipliers
+				_currentMatrix.position = MULTIPLIER_OFFSET;
 				_currentMatrix.writeFloat( c0.redMultiplier +
 						(t0 * c1.redMultiplier + t * c2.redMultiplier) );//RED
 				_currentMatrix.writeFloat( c0.greenMultiplier +
@@ -340,12 +349,13 @@ package com.merlinds.miracle {
 						(t0 * c1.blueMultiplier + t * c2.blueMultiplier) );//BLUE
 			}
 			mask = different & Color.ALPHA;
-			_currentMatrix.position = COLOR_OFFSET + ALPHA_OFFSET;
 			if(mask == Color.ALPHA){
 				//calculate offsets
+				_currentMatrix.position = ALPHA_OFFSET;
 				_currentMatrix.writeFloat( c0.alphaOffset +
 						(t0 * c1.alphaOffset + t * c2.alphaOffset) );//ALPHA
 				//calculate multipliers
+				_currentMatrix.position = ALPHA_MULTIPLIER_OFFSET;
 				_currentMatrix.writeFloat( c0.alphaMultiplier +
 						(t0 * c1.alphaMultiplier + t * c2.alphaMultiplier) );//ALPHA
 
