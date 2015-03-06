@@ -40,7 +40,7 @@ package com.merlinds.miracle.display {
 		public var transformation:Transformation;
 		public var z:Number;
 		//Playback
-		protected var onStage:Boolean;
+		private var _onStage:Boolean;
 		//
 		private var _demandAnimationInstance:Boolean;
 		private var _animationInstance:AnimationHelper;
@@ -76,23 +76,23 @@ package com.merlinds.miracle.display {
 		}
 
 		miracle_internal function drawn():void{
-			if(!onStage){
+			if(!_onStage){
 				//After first draw dispatch event that display object was added to stage
 				if(this.hasEventListener(MiracleEvent.ADDED_TO_STAGE)){
 					this.dispatchEvent(new MiracleEvent(MiracleEvent.ADDED_TO_STAGE));
 				}
-				onStage = true;
+				_onStage = true;
 				this.afterDraw();
 			}
 		}
 
 		miracle_internal function remove():void{
-			if(onStage){
+			if(_onStage){
 				if(this.hasEventListener(MiracleEvent.REMOVED_FROM_STAGE)){
 					this.dispatchEvent(new MiracleEvent(MiracleEvent.REMOVED_FROM_STAGE));
 				}
 				_currentFrame = 0;
-				onStage = false;
+				_onStage = false;
 				this.afterRemove();
 			}
 		}
@@ -293,6 +293,10 @@ package com.merlinds.miracle.display {
 
 		miracle_internal function get demandAnimationInstance():Boolean {
 			return _demandAnimationInstance;
+		}
+
+		public function get onStage():Boolean {
+			return _onStage;
 		}
 
 //} endregion GETTERS/SETTERS ==================================================
