@@ -24,7 +24,6 @@ package com.merlinds.miracle.display {
 		private var _prevPlaybackDirection:int;
 		//playback
 		private var _fps:int;
-		private var _currentFrame:int;
 		private var _loop:Boolean;
 		//==============================================================================
 		//{region							PUBLIC METHODS
@@ -32,7 +31,6 @@ package com.merlinds.miracle.display {
 			super();
 			_prevPlaybackDirection = playbackDirection = 1;
 			_isAnimated = true;
-			_currentFrame = 0;
 			_loop = true;
 			this.fps = 60;//Default frame rate
 		}
@@ -45,7 +43,7 @@ package com.merlinds.miracle.display {
 
 		/** Start play animation **/
 		public function play():void {
-			_currentFrame = 0;
+			this.currentFrame = 0;
 			playbackDirection = 1;
 		}
 
@@ -88,12 +86,9 @@ package com.merlinds.miracle.display {
 		//{region							GETTERS/SETTERS
 		//end of transformations
 		//playback
-		public override function get currentFrame():int {
-			return _currentFrame;
-		}
 
 		public override function set currentFrame(value:int):void {
-			if(playbackDirection != 0)_currentFrame = value;
+			if(playbackDirection != 0)super .currentFrame = value;
 		}
 
 		public function get fps():int {
