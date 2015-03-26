@@ -4,7 +4,7 @@
  * Time: 11:57
  */
 package com.merlinds.miracle.display {
-	import com.merlinds.miracle.animations.EmptyFrameInfo;
+
 	import com.merlinds.miracle.animations.FrameInfo;
 
 	import flash.utils.ByteArray;
@@ -64,7 +64,7 @@ package com.merlinds.miracle.display {
 			_buffer.position = 0;
 			if(_xInterval == 0)
 				_xInterval = this.glyphSize;
-			var x:int, y:int;
+			var x:int = 0, y:int = 0;
 			var n:int = _buffer.length;
 			for(var i:int = 0; i < n; i++){
 				var char:uint = _buffer.readByte();
