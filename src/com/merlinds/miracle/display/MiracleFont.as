@@ -7,6 +7,9 @@ package com.merlinds.miracle.display {
 	import com.merlinds.miracle.animations.EmptyFrameInfo;
 	import com.merlinds.miracle.animations.FrameInfo;
 
+	import flash.utils.ByteArray;
+	import flash.utils.setTimeout;
+
 	public class MiracleFont extends MiracleDisplayObject {
 
 		public static const FONT_POSTFIX:String = ".font";
@@ -14,11 +17,19 @@ package com.merlinds.miracle.display {
 		private var _text:String;
 
 		public var glyphSize:int;
+
+		private var _xInterval:int;
+		private var _yInterval:int;
+		private var _markForUpdate:Boolean;
+
 		protected var _glyphs:Object;
+		private var _buffer:ByteArray;
+
 		//==============================================================================
 		//{region							PUBLIC METHODS
 		public function MiracleFont() {
 			super();
+			_buffer = new ByteArray();
 		}
 		//} endregion PUBLIC METHODS ===================================================
 
@@ -31,8 +42,8 @@ package com.merlinds.miracle.display {
 			var n:int = this.animationInstance.frames.length;
 			for(var i:int = 0; i < n; i++){
 				var glyph:FrameInfo = this.animationInstance.frames[i];
-				var name:String = glyph.polygonName.substr(k);
-				_glyphs[name] = glyph;
+				var name:String = "0x"+glyph.polygonName.substr(k);
+				_glyphs[uint(name)] = glyph;
 			}
 			this.animationInstance.frames.length = 0;
 			this.animationInstance.totalFrames = 1;
@@ -44,25 +55,39 @@ package com.merlinds.miracle.display {
 
 		[Inline]
 		private final function update():void {
-			var chars:Array = _text.split("");
+			_buffer.clear();
+			this.animationInstance.numLayers = 0;
+			this.animationInstance.frames.length = 0;
 			this.visible = false;
-			this.animationInstance.frames.length = chars.length;
 			//update glyphs
-			var n:int = chars.length;
+			_buffer.writeUTFBytes(_text);
+			_buffer.position = 0;
+			if(_xInterval == 0)
+				_xInterval = this.glyphSize;
+			var x:int, y:int;
+			var n:int = _buffer.length;
 			for(var i:int = 0; i < n; i++){
-				var char:String = chars[i];
+				var char:uint = _buffer.readByte();
 				var glyph:FrameInfo = _glyphs[ char ];
+
 				if(glyph != null){
 					glyph = glyph.clone();
-					glyph.m0.matrix.tx = this.glyphSize * i;
+					glyph.m0.matrix.tx = x;
+					glyph.m0.matrix.ty = y;
+					this.animationInstance.frames.push(glyph);
+					this.animationInstance.numLayers++;
 				}else{
-					glyph = new EmptyFrameInfo();
+					if(char == 0x9)
+					{
+						x = -_xInterval;
+						y += _yInterval;
+					}
 				}
-				this.animationInstance.frames[i] = glyph;
+				x += _xInterval;
+
 			}
-			this.animationInstance.numLayers = n;
-			chars.length = 0;
 			this.visible = true;
+			_markForUpdate = false;
 		}
 
 		//} endregion PRIVATE\PROTECTED METHODS ========================================
@@ -82,12 +107,42 @@ package com.merlinds.miracle.display {
 			if(value != _text){
 				_text = value;
 				if(value == null || value.length == 0){
-					this.visible = true;
+					this.visible = false;
 				}else{
 					if(_glyphs != null){
 						this.update();
 					}
 				}
+			}
+		}
+
+		public function get xInterval():int
+		{
+			return _xInterval;
+		}
+
+		public function set xInterval(value:int):void
+		{
+			_xInterval = value;
+			if(!_markForUpdate)
+			{
+				setTimeout(this.update, 0);
+				_markForUpdate = true;
+			}
+		}
+
+		public function get yInterval():int
+		{
+			return _yInterval;
+		}
+
+		public function set yInterval(value:int):void
+		{
+			_yInterval = value;
+			if(!_markForUpdate)
+			{
+				setTimeout(this.update, 0);
+				_markForUpdate = true;
 			}
 		}
 
