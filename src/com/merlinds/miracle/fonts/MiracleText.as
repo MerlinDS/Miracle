@@ -60,9 +60,12 @@ package com.merlinds.miracle.fonts
 			}
 			else
 			{
+				var visibility:Boolean = this.visible;
 				this.clearOldData();
 				this.updateGlyphs();
 				this.alignText();
+				_markForUpdate = false;
+				this.visible = visibility;
 			}
 		}
 
@@ -111,8 +114,6 @@ package com.merlinds.miracle.fonts
 
 
 			}
-			this.visible = true;
-			_markForUpdate = false;
 		}
 
 		[Inline]

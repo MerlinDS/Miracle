@@ -247,10 +247,11 @@ package com.merlinds.miracle.display {
 			value = value > 1 ? 1: value < 0 ? 0 : value;
 			value = 1 - value;//revert value for right alpha transformation
 			this.transformation.color.alphaMultiplier = value;
+
 			if(value > 0){
-				this.transformation.color.type += Color.ALPHA;
+				this.transformation.color.type |= Color.ALPHA;
 			}else if((this.transformation.color.type & Color.ALPHA) != 0){
-				this.transformation.color.type -= Color.ALPHA;
+				this.transformation.color.type ^= Color.ALPHA;
 			}
 		}
 
