@@ -121,6 +121,7 @@ package com.merlinds.miracle.fonts
 			var x:int, y:int;
 			var i:int, j:int, n:int, m:int;
 			var char:uint;
+			var offset:Number;
 			var glyph:FrameInfo;
 			var frames:Vector.<FrameInfo> = this.animationInstance.frames;
 			n = _textLines.length;
@@ -131,8 +132,13 @@ package com.merlinds.miracle.fonts
 				x = 0;
 				if(_align == MiracleTextAlign.CENTER)
 				{
-					var offset:Number = -_biggestLineSize >> 1;
+					offset = -_biggestLineSize >> 1;
 					offset += _biggestLineSize - textLine.size >> 1;
+					x = offset;
+				} else if(_align == MiracleTextAlign.RIGHT)
+				{
+					offset = -_biggestLineSize;
+					offset += _biggestLineSize - textLine.size;
 					x = offset;
 				}
 				//TODO add Right alignment
