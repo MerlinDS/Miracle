@@ -7,7 +7,8 @@ package com.merlinds.miracle {
 	import com.merlinds.miracle.animations.AnimationHelper;
 	import com.merlinds.miracle.display.MiracleAnimation;
 	import com.merlinds.miracle.display.MiracleDisplayObject;
-	import com.merlinds.miracle.display.MiracleFont;
+	import com.merlinds.miracle.fonts.MiracleFonts;
+	import com.merlinds.miracle.fonts.MiracleText;
 	import com.merlinds.miracle.display.MiracleImage;
 	import com.merlinds.miracle.geom.Mesh2D;
 	import com.merlinds.miracle.textures.TextureHelper;
@@ -54,20 +55,18 @@ package com.merlinds.miracle {
 			return instance;
 		}
 
-		public function createTxt(mesh:String, fontName:String, text:String = null, glyphSize:int = 30):MiracleFont {
-			var instance:MiracleFont = this.createInstance(MiracleFont) as MiracleFont;
+		public function createTxt(mesh:String, fontName:String, text:String = null):MiracleText {
+			var instance:MiracleText = this.createInstance(MiracleText) as MiracleText;
 			instance.mesh = mesh;
 			instance.animation = fontName;
-			instance.glyphSize = glyphSize;
 			instance.currentFrame = 0;
-			instance.text = text;
 			//
 			var animation:AnimationHelper = _animations[  mesh + "." + fontName ];
-			animation = animation.clone();
-			instance.animation = instance.animation + MiracleFont.FONT_POSTFIX + _sessionUniqueCounter++;
-			_animations[  mesh + "." + instance.animation ] = animation;
-			instance.miracle_internal::animationInstance = animation;
+			MiracleFonts.miracle_internal::updateGlyphs(fontName, animation);
+			instance.animation = instance.animation + MiracleFonts.FONT_POSTFIX + _sessionUniqueCounter++;
+			_animations[  mesh + "." + instance.animation ] = instance.miracle_internal::animationInstance;
 			//
+			instance.text = text;
 			return instance;
 		}
 

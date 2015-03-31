@@ -286,9 +286,18 @@ package com.merlinds.miracle.display {
 			return _animationInstance;
 		}
 
+		protected final function set animationInstance(value:AnimationHelper):void
+		{
+			_animationInstance = value;
+		}
+
 		miracle_internal function set animationInstance(value:AnimationHelper):void {
 			_animationInstance = value;
 			this.afterAnimationDemand();
+		}
+
+		miracle_internal function get animationInstance():AnimationHelper{
+			return _animationInstance;
 		}
 
 		miracle_internal function get demandAnimationInstance():Boolean {

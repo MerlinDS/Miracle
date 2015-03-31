@@ -6,7 +6,7 @@
 package com.merlinds.miracle {
 	import com.merlinds.miracle.display.MiracleAnimation;
 	import com.merlinds.miracle.display.MiracleDisplayObject;
-	import com.merlinds.miracle.display.MiracleFont;
+	import com.merlinds.miracle.fonts.MiracleText;
 	import com.merlinds.miracle.display.MiracleImage;
 
 	import flash.geom.Point;
@@ -31,7 +31,7 @@ package com.merlinds.miracle {
 		 */
 		function createAnimation(mesh:String, animation:String, fps:int = 60):MiracleAnimation;
 
-		function createTxt(mesh:String, fontName:String, text:String = null, glyphSize:int = 30):MiracleFont;
+		function createTxt(mesh:String, fontName:String, text:String = null):MiracleText;
 
 		function textureInUse(texture:String):Boolean;
 
