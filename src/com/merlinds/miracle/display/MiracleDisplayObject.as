@@ -39,6 +39,7 @@ package com.merlinds.miracle.display {
 		//Transformations
 		public var transformation:Transformation;
 		public var z:Number;
+		public var mouseEnable:Boolean;
 		//Playback
 		private var _onStage:Boolean;
 		//
@@ -56,7 +57,7 @@ package com.merlinds.miracle.display {
 		//{region							PUBLIC METHODS
 
 		public function hitTest(point:Point):Boolean {
-			//temp
+			if(!mouseEnable)return false;
 			var rect:Rectangle = this.transformation.bounds.clone();
 			rect.offset(this.transformation.matrix.tx, this.transformation.matrix.ty);
 			return rect.containsPoint(point);
