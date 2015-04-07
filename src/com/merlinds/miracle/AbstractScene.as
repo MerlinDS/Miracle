@@ -121,7 +121,7 @@ package com.merlinds.miracle {
 			return _scale;
 		}
 
-		public function set debuggeOn(value:Boolean):void
+		public function set debugOn(value:Boolean):void
 		{
 			this.debuggable = value;
 		}

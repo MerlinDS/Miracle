@@ -175,7 +175,7 @@ package com.merlinds.miracle {
 		//{region							GETTERS/SETTERS
 		public function set scene(value:IRenderer):void{
 			value.initialize(_context, _nativeStage, lostContextCallback);
-			value.debuggeOn = _enableErrorChecking;
+			value.debugOn = _enableErrorChecking;
 			_scene = value;
 		}
 

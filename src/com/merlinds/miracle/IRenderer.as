@@ -19,7 +19,7 @@ package com.merlinds.miracle {
 
 		//==============================================================================
 		//{region							GETTERS/SETTERS
-		function set debuggeOn(value:Boolean):void;
+		function set debugOn(value:Boolean):void;
 		//} endregion GETTERS/SETTERS ==================================================
 	}
 }
