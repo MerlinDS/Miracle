@@ -23,6 +23,7 @@ package com.merlinds.miracle {
 		protected var _animations:Object;/**AnimationHelper**/
 		//
 		protected var _drawableObjects:Vector.<MiracleDisplayObject>;
+		protected var debuggable:Boolean;
 
 		private var _initializationCallback:Function;
 		//
@@ -119,6 +120,12 @@ package com.merlinds.miracle {
 		public function get scale():Number {
 			return _scale;
 		}
+
+		public function set debuggeOn(value:Boolean):void
+		{
+			this.debuggable = value;
+		}
+
 //} endregion GETTERS/SETTERS ==================================================
 	}
 }

@@ -83,7 +83,8 @@ package com.merlinds.miracle {
 		//==============================================================================
 		//{region						PRIVATE\PROTECTED METHODS
 		private function setupContext():void{
-			trace("Miracle: Setup context");
+			if(_enableErrorChecking)
+				trace("Miracle: Setup context");
 			_context.enableErrorChecking = _enableErrorChecking;
 			_context.setBlendFactors(Context3DBlendFactor.SOURCE_ALPHA, Context3DBlendFactor.ONE_MINUS_SOURCE_ALPHA);
 			this.updateViewport();
@@ -97,7 +98,8 @@ package com.merlinds.miracle {
 		}
 
 		private function updateViewport():void {
-			trace("Miracle: Update viewport");
+			if(_enableErrorChecking)
+				trace("Miracle: Update viewport");
 			//TODO update viewport by old one
 			_viewport.width = _nativeStage.stageWidth;
 			_viewport.height = _nativeStage.stageHeight;
@@ -107,7 +109,8 @@ package com.merlinds.miracle {
 		}
 
 		private function updateShader(vs:String, fs:String):void {
-			trace("Miracle: Update shader");
+			if(_enableErrorChecking)
+				trace("Miracle: Update shader");
 			var program:Program3D = _context.createProgram();
 			program.upload(
 					_agal.assemble(Context3DProgramType.VERTEX, vs),
@@ -142,7 +145,8 @@ package com.merlinds.miracle {
 		private function contextCreateHandler(event:Event):void{
 			_stage3D.removeEventListener(event.type, arguments.callee);
 			_context = _stage3D.context3D;
-			trace("Miracle: context3D was obtained", "3D driver:", _context.driverInfo);
+			if(_enableErrorChecking)
+				trace("Miracle: context3D was obtained", "3D driver:", _context.driverInfo);
 			setTimeout(_executeQueue.shift(), 0);
 		}
 
@@ -158,7 +162,8 @@ package com.merlinds.miracle {
 
 		private function enterFrameHandler(event:Event):void {
 			if(_context == null || _context.driverInfo == ContextDisposeState.DISPOSED){
-				trace("Miracle: Context was lost twice");
+				if(_enableErrorChecking)
+					trace("Miracle: Context was lost twice");
 				_nativeStage.removeEventListener(event.type, this.enterFrameHandler);
 				_scene.stopRestoring();
 				this.lostContextCallback();
@@ -170,6 +175,7 @@ package com.merlinds.miracle {
 		//{region							GETTERS/SETTERS
 		public function set scene(value:IRenderer):void{
 			value.initialize(_context, _nativeStage, lostContextCallback);
+			value.debuggeOn = _enableErrorChecking;
 			_scene = value;
 		}
 

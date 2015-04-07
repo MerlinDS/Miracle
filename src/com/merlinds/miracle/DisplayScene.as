@@ -43,6 +43,8 @@ package com.merlinds.miracle {
 			instance.mesh = mesh;
 			instance.animation = animation;
 			instance.currentFrame = frame;
+			if(this.debuggable)
+				trace("Miracle: MiracleImage", instance.mesh, instance.animation, "instance was created.");
 			return instance as MiracleImage;
 		}
 
@@ -52,6 +54,8 @@ package com.merlinds.miracle {
 			instance.animation = animation;
 			instance.currentFrame = 0;
 			instance.fps = fps;
+			if(this.debuggable)
+				trace("Miracle: MiracleAnimation", instance.mesh, instance.animation, "instance was created.");
 			return instance;
 		}
 
@@ -67,6 +71,8 @@ package com.merlinds.miracle {
 			_animations[  mesh + "." + instance.animation ] = instance.miracle_internal::animationInstance;
 			//
 			instance.text = text;
+			if(this.debuggable)
+				trace("Miracle: MiracleText", instance.mesh, instance.animation, "instance was created.");
 			return instance;
 		}
 
@@ -81,7 +87,6 @@ package com.merlinds.miracle {
 				_animations[  instance.mesh + "." + instance.animation ] = animation;
 				instance.miracle_internal::animationInstance = animation;
 			}
-			trace("Miracle:", serializer, "instance was created.");
 			return instance;
 		}
 
@@ -263,7 +268,8 @@ package com.merlinds.miracle {
 		}
 
 		private function textureCallback():void {
-			trace("Miracle: Texture was loaded to GPU");
+			if(this.debuggable)
+				trace("Miracle: Texture was loaded to GPU");
 			_textureLoading = false;
 			setTimeout(this.uploadTextures, 0);
 		}
