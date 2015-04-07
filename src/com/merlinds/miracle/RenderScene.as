@@ -52,7 +52,9 @@ package com.merlinds.miracle {
 		private var _vertexBuffer:VertexBuffer3D;
 		private var _indexBuffer:IndexBuffer3D;
 		private var _verticesData:ByteArray;
+		private var _verticesDataLength:int;
 		private var _indexData:ByteArray;
+		private var _indexDataLength:int;
 		private var _indexStep:Number;
 		//drawing
 		private var _polygon:Polygon2D;
@@ -195,11 +197,11 @@ package com.merlinds.miracle {
 			var n:int;
 			_indexData.position = 0;
 			_verticesData.position = 0;
-			if (_verticesData.length > 0) {
-				n = (_verticesData.length >> 2) / VERTEX_PARAMS_LENGTH;
+			if (_verticesDataLength > 0) {
+				n = (_verticesDataLength >> 2) / VERTEX_PARAMS_LENGTH;
 				_vertexBuffer = _context.createVertexBuffer(n, VERTEX_PARAMS_LENGTH);
 				_vertexBuffer.uploadFromByteArray(_verticesData, 0, 0, n);
-				n = _indexData.length >> 1;
+				n = _indexDataLength >> 1;
 				_indexBuffer = _context.createIndexBuffer(n);
 				_indexBuffer.uploadFromByteArray(_indexData, 0, 0, n);
 				_context.setVertexBufferAt(0, _vertexBuffer, 0, Context3DVertexBufferFormat.FLOAT_2); //x, y
@@ -215,8 +217,8 @@ package com.merlinds.miracle {
 			}
 			_indexStep = 0;
 			//
-			_verticesData.clear();
-			_indexData.clear();
+			_verticesDataLength = 0;
+			_indexDataLength = 0;
 		}
 
 		[Inline]
@@ -231,11 +233,14 @@ package com.merlinds.miracle {
 				/**** ADD TRANSFORM INDEXES DATA *****/
 				_verticesData.writeBytes(_currentMatrix, 0, MATRIX_SIZE);
 			}
+			//add length
+			_verticesDataLength += Polygon2D.BUFFER_SIZE * n + MATRIX_SIZE * n;
 			/**** FILL INDEXES BUFFER *****/
 			n = _polygon.indexes.length;
 			for(i = 0; i < n; i++){
 				_indexData.writeShort( _indexStep + _polygon.indexes[i] );
 			}
+			_indexDataLength += n * 2;
 			_indexStep += _polygon.numVertices;
 		}
 
