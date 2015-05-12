@@ -6,16 +6,13 @@
 package com.merlinds.miracle.fonts
 {
 
-	import com.merlinds.miracle.display.*;
-
 	import com.merlinds.miracle.animations.AnimationHelper;
 	import com.merlinds.miracle.animations.EmptyFrameInfo;
 	import com.merlinds.miracle.animations.FrameInfo;
+	import com.merlinds.miracle.display.*;
 	import com.merlinds.miracle.miracle_internal;
 
 	import flash.geom.Rectangle;
-
-	import flash.utils.ByteArray;
 	import flash.utils.setTimeout;
 
 	public class MiracleText extends MiracleDisplayObject
@@ -25,8 +22,6 @@ package com.merlinds.miracle.fonts
 		private var _biggestLineSize:int;
 
 		private var _glyphs:GlyphsMap;
-		private var _buffer:ByteArray;
-
 		private var _text:String;
 		private var _markForUpdate:Boolean;
 
@@ -39,7 +34,6 @@ package com.merlinds.miracle.fonts
 		public function MiracleText()
 		{
 			super();
-			_buffer = new ByteArray();
 			this.animationInstance = new AnimationHelper(null, 1, 1,
 					new <FrameInfo>[new EmptyFrameInfo()]);
 			this.animationInstance.bounds = new Rectangle(0, 0, 1, 1);
@@ -82,15 +76,13 @@ package com.merlinds.miracle.fonts
 		private final function updateGlyphs():void
 		{
 			if (_text == null || _text.length == 0)return;
-			_buffer.writeUTFBytes(_text);
-			_buffer.position = 0;
 
-			var n:int = _buffer.length;
+			var n:int = _text.length;
 			var index:int = 0;
 			var textLine:TextLine = this.getTextLine(index);
 			for (var i:int = 0; i < n; i++)
 			{
-				var char:uint = _buffer.readByte();
+				var char:uint = _text.charCodeAt(i);
 				var glyph:FrameInfo = _glyphs[char];
 				if (glyph)
 				{
@@ -119,7 +111,7 @@ package com.merlinds.miracle.fonts
 		[Inline]
 		private final function alignText():void
 		{
-			var x:int, y:int;
+			var x:int = 0, y:int = 0;
 			var i:int, j:int, n:int, m:int;
 			var char:uint;
 			var offset:Number;
@@ -162,6 +154,7 @@ package com.merlinds.miracle.fonts
 				//go to next line
 				y += _yInterval;
 			}
+
 		}
 
 		[Inline]
@@ -177,7 +170,6 @@ package com.merlinds.miracle.fonts
 		[Inline]
 		private final function clearOldData():void
 		{
-			_buffer.clear();
 			this.visible = false;
 			this.animationInstance.numLayers = 0;
 			this.animationInstance.frames.length = 0;

@@ -36,7 +36,7 @@ package com.merlinds.miracle.fonts
 				var n:int = animationInstance.frames.length;
 				for(var i:int = 0; i < n; i++){
 					var glyph:FrameInfo = animationInstance.frames[i];
-					var glyphName:String = "0x" + glyph.polygonName.substr(k);
+					var glyphName:String = glyph.polygonName.substr(k);
 					glyphs[uint( glyphName )] = glyph;
 				}
 				_fonts[name] = glyphs;
