@@ -7,14 +7,12 @@ package com.merlinds.miracle {
 
 	import com.adobe.utils.AGALMiniAssembler;
 	import com.merlinds.miracle.utils.ContextDisposeState;
+	import com.merlinds.miracle.utils.ProfileResolver;
 
 	import flash.display.Stage;
-	import flash.display.Stage3D;
 	import flash.display3D.Context3D;
 	import flash.display3D.Context3DBlendFactor;
-	import flash.display3D.Context3DProfile;
 	import flash.display3D.Context3DProgramType;
-	import flash.display3D.Context3DRenderMode;
 	import flash.display3D.Program3D;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
@@ -27,7 +25,6 @@ package com.merlinds.miracle {
 	internal class MiracleInstance extends EventDispatcher{
 		//only for dev stage
 		private var _agal:AGALMiniAssembler;
-		private var _stage3D:Stage3D;
 		private var _nativeStage:Stage;
 		private var _context:Context3D;
 		private var _scene:IRenderer;
@@ -54,9 +51,7 @@ package com.merlinds.miracle {
 			_agal = new AGALMiniAssembler();
 			_executeQueue = new <Function>[this.setupContext, this.updateShader, this.completeMethod];
 			_enableErrorChecking = enableErrorChecking;
-			_stage3D = _nativeStage.stage3Ds[0];
-			_stage3D.addEventListener(Event.CONTEXT3D_CREATE, this.contextCreateHandler);
-			_stage3D.requestContext3D(Context3DRenderMode.AUTO, Context3DProfile.BASELINE_CONSTRAINED);
+			new ProfileResolver(_nativeStage.stage3Ds[0], this.contextCreateHandler).requestContext3D();
 		}
 
 		public function pause():void {
@@ -142,9 +137,8 @@ package com.merlinds.miracle {
 
 		//==============================================================================
 		//{region							EVENTS HANDLERS
-		private function contextCreateHandler(event:Event):void{
-			_stage3D.removeEventListener(event.type, arguments.callee);
-			_context = _stage3D.context3D;
+		private function contextCreateHandler(context:Context3D):void{
+			_context = context;
 			if(_enableErrorChecking)
 				trace("Miracle: context3D was obtained", "3D driver:", _context.driverInfo);
 			setTimeout(_executeQueue.shift(), 0);
