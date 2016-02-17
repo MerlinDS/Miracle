@@ -109,7 +109,8 @@ package com.merlinds.miracle {
 					if(_currentTexture != null)this.drawTriangles();
 					_context.setTextureAt(0, _iTextureHelper.texture);
 					_currentTexture = _iMesh.textureLink;
-				}
+				}else if(_verticesDataLength > 4096)
+					this.drawTriangles();//execute drawTriangles if vertices buffer to large
 				//draw instance
 				var index:int;
 				var canBeDrawn:Boolean;
@@ -146,7 +147,7 @@ package com.merlinds.miracle {
 			}
 		}
 
-		[Inline]
+//		[Inline]
 		private final function collectFrameData(index:int):Boolean {
 			var frame:FrameInfo = _iAnimationHelper.frames[ index ];
 			if(!frame.isEmpty){
@@ -251,7 +252,7 @@ package com.merlinds.miracle {
 		 * @param m0 instance matrix transformation
 		 * @param m1 initial matrix transformation
 		 */
-//		[Inline]
+		[Inline]
 		private final function staticMatrix(m0:TransformMatrix, m1:TransformMatrix):void {
 			/**** CALCULATE FORM TRANSFORMATIONS *****/
 			_currentMatrix.writeFloat( m0.tx + m1.tx * m0.scaleX );//tx
@@ -269,7 +270,7 @@ package com.merlinds.miracle {
 		 * @param c0 instance color transformation
 		 * @param c1 initial color transformation
 		 */
-//		[Inline]
+		[Inline]
 		private final function staticColor(c0:Color, c1:Color):void {
 			/**** CALCULATE COLOR TRANSFORMATIONS *****/
 			var different:uint = c0.type | c1.type ;
@@ -307,7 +308,7 @@ package com.merlinds.miracle {
 		 * @param m2 terminal matrix transformation
 		 * @param t Time delta for formula: matrix = m0 + ( ( 1 - t ) * m1 + t * m2 )
 		 */
-//		[Inline]
+		[Inline]
 		private final function motionMatrix(m0:TransformMatrix, m1:TransformMatrix, m2:TransformMatrix, t:Number):void {
 			var t0:Number = 1 - t;
 			/**** CALCULATE FORM TRANSFORMATIONS *****/
@@ -328,7 +329,7 @@ package com.merlinds.miracle {
 		 * @param c2 terminal color transformation
 		 * @param t Time delta for formula: color = c0 + ( ( 1 - t ) * c1 + t * c2 )
 		 */
-//		[Inline]
+		[Inline]
 		private final function motionColor(c0:Color, c1:Color, c2:Color, t:Number):void {
 			/**** CALCULATE COLOR TRANSFORMATIONS *****/
 			var t0:Number = 1 - t;
