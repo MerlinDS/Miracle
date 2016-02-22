@@ -64,6 +64,19 @@ package com.merlinds.miracle.geom {
 					", scaleX = " + this.scaleX + ", scaleY = " + this.scaleY  +
 					", skewX = " + this.skewX + ", skewY  = " + this.skewY + ")]";
 		}
+
+		public function clear():void
+		{
+			this.offsetX = 0;
+			this.offsetY = 0;
+			this.scaleX = 1;
+			this.scaleY = 1;
+			this.skewX = 0;
+			this.skewY = 0;
+			this.tx = 0;
+			this.ty = 0;
+			this.flipX = 1;
+		}
 		//} endregion PUBLIC METHODS ===================================================
 
 		//==============================================================================

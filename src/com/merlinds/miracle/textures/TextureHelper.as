@@ -35,7 +35,8 @@ package com.merlinds.miracle.textures {
 
 		//==============================================================================
 		//{region							PUBLIC METHODS
-		public function destroy():void{
+		[Inline]
+		public final function destroy():void{
 			_texture.dispose();
 			_texture = null;
 			_bytes.clear();
@@ -54,7 +55,8 @@ package com.merlinds.miracle.textures {
 
 		//==============================================================================
 		//{region							EVENTS HANDLERS
-		private function textureReadyHandler(event:Event):void {
+		[Inline]
+		public final function textureReadyHandler(event:Event):void {
 			_texture.removeEventListener(event.type, this.textureReadyHandler);
 			_uploading = false;
 			inUse = true;
@@ -66,26 +68,31 @@ package com.merlinds.miracle.textures {
 
 		//==============================================================================
 		//{region							GETTERS/SETTERS
-		public function get texture():Texture {
+		[Inline]
+		public final function get texture():Texture {
 			return _texture;
 		}
 
-		public function set texture(value:Texture):void {
+		[Inline]
+		public final function set texture(value:Texture):void {
 			_texture = value;
 			_uploading = true;
 			_texture.addEventListener(Event.TEXTURE_READY, textureReadyHandler);
 			_texture.uploadCompressedTextureFromByteArray(_bytes, 0, true);
 		}
 
-		public function get uploading():Boolean {
+		[Inline]
+		public final function get uploading():Boolean {
 			return _uploading;
 		}
 
-		public function set uploading(value:Boolean):void {
+		[Inline]
+		public final function set uploading(value:Boolean):void {
 			_uploading = value;
 		}
 
-		public function set callback(value:Function):void{
+		[Inline]
+		public final function set callback(value:Function):void{
 			_callback = value;
 		}
 //} endregion GETTERS/SETTERS ==================================================

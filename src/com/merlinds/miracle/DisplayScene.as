@@ -38,7 +38,8 @@ package com.merlinds.miracle {
 			super (scale);
 		}
 
-		public function createImage(mesh:String = null, animation:String = null, frame:uint = 0):MiracleImage {
+		[Inline]
+		public final function createImage(mesh:String = null, animation:String = null, frame:uint = 0):MiracleImage {
 			var instance:MiracleImage = this.createInstance(MiracleImage) as MiracleImage;
 			instance.mesh = mesh;
 			instance.animation = animation;
@@ -48,7 +49,8 @@ package com.merlinds.miracle {
 			return instance as MiracleImage;
 		}
 
-		public function createAnimation(mesh:String, animation:String, fps:int = 60):MiracleAnimation{
+		[Inline]
+		public final function createAnimation(mesh:String, animation:String, fps:int = 60):MiracleAnimation{
 			var instance:MiracleAnimation = this.createInstance(MiracleAnimation) as MiracleAnimation;
 			instance.mesh = mesh;
 			instance.animation = animation;
@@ -59,7 +61,8 @@ package com.merlinds.miracle {
 			return instance;
 		}
 
-		public function createTxt(mesh:String, fontName:String, text:String = null):MiracleText {
+		[Inline]
+		public final function createTxt(mesh:String, fontName:String, text:String = null):MiracleText {
 			var instance:MiracleText = this.createInstance(MiracleText) as MiracleText;
 			instance.mesh = mesh;
 			instance.animation = fontName;
@@ -73,10 +76,12 @@ package com.merlinds.miracle {
 			instance.text = text;
 			if(this.debuggable)
 				trace("Miracle: MiracleText", instance.mesh, instance.animation, "instance was created.");
+			instance.miracle_internal::demandAnimationInstance = true;
 			return instance;
 		}
 
-		public function createInstance(serializer:Class):MiracleDisplayObject {
+		[Inline]
+		public final function createInstance(serializer:Class):MiracleDisplayObject {
 			var instance:MiracleDisplayObject = new serializer();
 			_displayObjects[ _displayObjects.length++ ] = instance;
 			if(instance.miracle_internal::demandAnimationInstance){
@@ -90,20 +95,28 @@ package com.merlinds.miracle {
 			return instance;
 		}
 
-		public function removeInstance(instance:MiracleDisplayObject):void {
+		[Inline]
+		public final function removeInstance(instance:MiracleDisplayObject):void {
 			var index:int = _displayObjects.indexOf(instance);
 			if(index > - 1){
-				//TODO delete demand Animation
 				_displayObjects.splice(index, 1);
+				if(instance.miracle_internal::demandAnimationInstance){
+					var animation:AnimationHelper = _animations[  instance.mesh + "." + instance.animation ];
+					animation.dispose();
+					delete _animations[  instance.mesh + "." + instance.animation ];
+				}
+				instance.miracle_internal::dispose();
 			}
 		}
 
-		public function textureInUse(texture:String):Boolean{
+		[Inline]
+		public final function textureInUse(texture:String):Boolean{
 			var textureHelper:TextureHelper = _textures[texture];
 			return textureHelper.inUse;
 		}
 
-		public function hitTest(point:Point):Object {
+		[Inline]
+		public final function hitTest(point:Point):Object {
 			// if nothing else is hit, the stage returns itself as target
 			var target:MiracleDisplayObject;
 			var i:int = _drawableObjects.length;
@@ -256,7 +269,8 @@ package com.merlinds.miracle {
 		//==============================================================================
 		//{region							EVENTS HANDLERS
 
-		override protected function prepareFrames():void {
+		[Inline]
+		override protected final function prepareFrames():void {
 			//clear previous objects list
 			_drawableObjects.length = 0;
 			//prepare frame data
@@ -267,7 +281,8 @@ package com.merlinds.miracle {
 			if(_errorsQueue.length > 0)throw _errorsQueue.shift();
 		}
 
-		private function textureCallback():void {
+		[Inline]
+		private final function textureCallback():void {
 			if(this.debuggable)
 				trace("Miracle: Texture was loaded to GPU");
 			_textureLoading = false;
@@ -277,7 +292,8 @@ package com.merlinds.miracle {
 
 		//==============================================================================
 		//{region							GETTERS/SETTERS
-		public function get displayObjects():Vector.<MiracleDisplayObject> {
+		[Inline]
+		public final function get displayObjects():Vector.<MiracleDisplayObject> {
 			return _displayObjects;
 		}
 		//} endregion GETTERS/SETTERS ==================================================

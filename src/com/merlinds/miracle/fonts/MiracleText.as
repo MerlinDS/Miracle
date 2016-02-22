@@ -39,9 +39,19 @@ package com.merlinds.miracle.fonts
 			this.animationInstance.bounds = new Rectangle(0, 0, 1, 1);
 			_align = MiracleTextAlign.LEFT;
 			_textLines = new <TextLine>[ ];
+
 		}
 
-		//} endregion PUBLIC METHODS ===================================================
+		override miracle_internal function dispose():void
+		{
+			while (_textLines.length > 0)
+				_textLines.pop().clear();
+			this.animationInstance.dispose();
+			_textLines = null;
+			_glyphs = null;
+		}
+
+//} endregion PUBLIC METHODS ===================================================
 
 		//==============================================================================
 		//{region						PRIVATE\PROTECTED METHODS
@@ -162,8 +172,10 @@ package com.merlinds.miracle.fonts
 		{
 			if (!_markForUpdate && _text != null && _text.length > 0)
 			{
-				setTimeout(this.initializeUpdate, 0);
-				_markForUpdate = true;
+				//TODO remove setTimeout
+//				setTimeout(this.initializeUpdate, 0);
+//				_markForUpdate = true;
+				this.initializeUpdate();
 			}
 		}
 

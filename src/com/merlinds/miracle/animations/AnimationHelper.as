@@ -59,6 +59,17 @@ package com.merlinds.miracle.animations {
 			clone.bounds = this.bounds.clone();
 			return clone;
 		}
+
+		public function dispose():void
+		{
+			if(this.frames != null)
+			{
+				while (this.frames.length > 0)
+					this.frames.pop().dispose();
+			}
+			this.bounds = null;
+			this.frames = null;
+		}
 		//} endregion PUBLIC METHODS ===================================================
 
 		//==============================================================================

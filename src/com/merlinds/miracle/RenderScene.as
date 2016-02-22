@@ -48,6 +48,8 @@ package com.merlinds.miracle {
 		private const ALPHA_OFFSET:int = MULTIPLIER_OFFSET - FLOAT_SIZE;//- Alpha
 		private const ALPHA_MULTIPLIER_OFFSET:int = MATRIX_SIZE -FLOAT_SIZE;//- Alpha multiplier
 
+		//Abstract scene
+
 		//GPU
 		private var _vertexBuffer:VertexBuffer3D;
 		private var _indexBuffer:IndexBuffer3D;
@@ -97,6 +99,9 @@ package com.merlinds.miracle {
 		}
 
 		override protected function drawFrames():void {
+			var frame:FrameInfo;
+			var transform:Transformation;
+			var index:int, m:int, k:int;
 			var n:int = _drawableObjects.length;
 			for(var i:int = 0; i < n; i++){
 				//collect instance data
@@ -112,14 +117,28 @@ package com.merlinds.miracle {
 				}else if(_verticesDataLength > 4096)
 					this.drawTriangles();//execute drawTriangles if vertices buffer to large
 				//draw instance
-				var index:int;
-				var canBeDrawn:Boolean;
-				var m:int = _iAnimationHelper.numLayers;
-				var k:int = _iAnimationHelper.totalFrames;
+				m = _iAnimationHelper.numLayers;
+				k = _iAnimationHelper.totalFrames;
 				for(var j:int = 0; j < m; j++) {
 					index = k * j + _instance.currentFrame;
-					canBeDrawn = this.collectFrameData(index);
-					if(canBeDrawn)this.draw();
+					//collect frame data by index
+					frame = _iAnimationHelper.frames[ index ];
+					if(!frame.isEmpty)
+					{
+						_polygon = _iMesh[ frame.polygonName ];
+						transform = _instance.transformation;
+						this.clearMatrix();
+						//collect data
+						if(!frame.isMotion){
+							this.staticMatrix(transform.matrix, frame.m0.matrix);
+							this.staticColor(transform.color, frame.m0.color);
+						}else{
+							this.motionMatrix(transform.matrix, frame.m0.matrix, frame.m1.matrix, frame.t);
+							this.motionColor(transform.color, frame.m0.color, frame.m1.color, frame.t);
+						}
+						//draw frame
+						this.draw();
+					}
 				}
 
 				if(_instance.isAnimated)//only animation had timeline
@@ -132,6 +151,16 @@ package com.merlinds.miracle {
 
 		//==============================================================================
 		//{region						PRIVATE\PROTECTED METHODS
+		[Inline]
+		private final function clearMatrix():void
+		{
+			//clear matrix
+			_clearMatrix.position = 0;
+			_currentMatrix.position = 0;
+			_currentMatrix.writeBytes(_clearMatrix, 0, _clearMatrix.length);
+			_currentMatrix.position = 0;
+			//collect data
+		}
 		//draw frame methods
 		[Inline]
 		private final function collectInstanceData():void {
@@ -145,29 +174,6 @@ package com.merlinds.miracle {
 			if(!_instance.transformation.bounds.equals(_iAnimationHelper.bounds)){
 				_instance.transformation.bounds = _iAnimationHelper.bounds.clone();
 			}
-		}
-
-//		[Inline]
-		private final function collectFrameData(index:int):Boolean {
-			var frame:FrameInfo = _iAnimationHelper.frames[ index ];
-			if(!frame.isEmpty){
-				_polygon = _iMesh[ frame.polygonName ];
-				var transform:Transformation = _instance.transformation;
-				//clear matrix
-				_clearMatrix.position = 0;
-				_currentMatrix.position = 0;
-				_currentMatrix.writeBytes(_clearMatrix, 0, _clearMatrix.length);
-				_currentMatrix.position = 0;
-				//collect data
-				if(!frame.isMotion){
-					this.staticMatrix(transform.matrix, frame.m0.matrix);
-					this.staticColor(transform.color, frame.m0.color);
-				}else{
-					this.motionMatrix(transform.matrix, frame.m0.matrix, frame.m1.matrix, frame.t);
-					this.motionColor(transform.color, frame.m0.color, frame.m1.color, frame.t);
-				}
-			}
-			return !frame.isEmpty;
 		}
 
 		[Inline]

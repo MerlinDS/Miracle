@@ -4,9 +4,8 @@
  * Time: 17:59
  */
 package com.merlinds.miracle {
-	import com.merlinds.miracle.utils.Asset;
 
-	import flash.display.BitmapData;
+	import com.merlinds.miracle.utils.Asset;
 
 	import flash.display.Stage;
 	import flash.display.StageAlign;

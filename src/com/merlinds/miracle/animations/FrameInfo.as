@@ -65,6 +65,12 @@ package com.merlinds.miracle.animations {
 			clone.isEmpty = this.isEmpty;
 			return clone;
 		}
+
+		public function dispose():void
+		{
+			if(this.m0 != null)this.m0.clear();
+			if(this.m1 != null)this.m1.clear();
+		}
 		//} endregion PUBLIC METHODS ===================================================
 
 		//==============================================================================
