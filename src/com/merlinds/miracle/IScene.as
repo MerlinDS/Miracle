@@ -9,6 +9,8 @@ package com.merlinds.miracle {
 	import com.merlinds.miracle.fonts.MiracleText;
 	import com.merlinds.miracle.display.MiracleImage;
 
+	import flash.display.BitmapData;
+
 	import flash.geom.Point;
 
 	public interface IScene {
@@ -49,6 +51,8 @@ package com.merlinds.miracle {
 		function get scale():Number;
 
 		function get displayObjects():Vector.<MiracleDisplayObject>;
+
+		function getScreenShot(width:int, height:int, callback:Function):void;
 		//} endregion GETTERS/SETTERS ==================================================
 	}
 }

@@ -8,9 +8,12 @@ package com.merlinds.miracle {
 	import com.merlinds.miracle.utils.Asset;
 	import com.merlinds.miracle.utils.ContextDisposeState;
 
+	import flash.display.BitmapData;
+
 	import flash.display3D.Context3D;
 	import flash.events.Event;
 	import flash.events.IEventDispatcher;
+	import flash.geom.Point;
 
 	internal class AbstractScene implements IRenderer{
 
@@ -30,6 +33,10 @@ package com.merlinds.miracle {
 		private var _lastFrameTimestamp:Number;
 		private var _timer:IEventDispatcher;
 		private var _lostContextCallback:Function;
+
+		protected var _drawScreenShot:Boolean;
+		private var _screenShotSize:Point;
+		private var _screenShotCallback:Function;
 
 		public function AbstractScene(scale:Number = 1) {
 			_drawableObjects = new <MiracleDisplayObject>[];
@@ -51,6 +58,13 @@ package com.merlinds.miracle {
 			_lostContextCallback = lostContextCallback;
 			_context = context;
 			_timer = timer;
+		}
+
+		public function getScreenShot(width:int, height:int, callback:Function):void
+		{
+			_screenShotSize = new Point(width, height);
+			_screenShotCallback = callback;
+			_drawScreenShot = true;
 		}
 
 		public function pause():void {
@@ -105,13 +119,25 @@ package com.merlinds.miracle {
 				_context.clear(0.8, 0.8, 0.8, 1);
 				this.prepareFrames();
 				this.drawFrames();
-				this.end();
+				if(_drawScreenShot)this.drawScreenShot();
+				else this.end();
 			}else{
 				_timer.removeEventListener(Event.ENTER_FRAME, this.enterFrameHandler);
 				if(_lostContextCallback is Function){
 					_lostContextCallback.apply(this);
 				}
 			}
+		}
+
+		private function drawScreenShot():void
+		{
+			var bitmapData:BitmapData = new BitmapData(_screenShotSize.x, _screenShotSize.y, false);
+			_context.drawToBitmapData(bitmapData);
+			_screenShotCallback.call(this, bitmapData);
+			_drawScreenShot = false;
+			_screenShotCallback = null;
+			_screenShotSize = null;
+			this.end();
 		}
 		//} endregion EVENTS HANDLERS ==================================================
 
@@ -125,7 +151,6 @@ package com.merlinds.miracle {
 		{
 			this.debuggable = value;
 		}
-
 //} endregion GETTERS/SETTERS ==================================================
 	}
 }

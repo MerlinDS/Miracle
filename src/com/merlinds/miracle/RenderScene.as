@@ -146,6 +146,8 @@ package com.merlinds.miracle {
 				//tell instance that it was drawn on GPU
 				_instance.miracle_internal::drawn();
 			}
+			if(_drawScreenShot)
+				this.drawTriangles();
 		}
 		//} endregion PUBLIC METHODS ===================================================
 
