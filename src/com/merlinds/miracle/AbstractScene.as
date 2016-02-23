@@ -4,11 +4,9 @@
  * Time: 18:42
  */
 package com.merlinds.miracle {
+
 	import com.merlinds.miracle.display.MiracleDisplayObject;
 	import com.merlinds.miracle.utils.Asset;
-	import com.merlinds.miracle.utils.ContextDisposeState;
-
-	import flash.display.BitmapData;
 
 	import flash.display3D.Context3D;
 	import flash.events.Event;
@@ -30,13 +28,13 @@ package com.merlinds.miracle {
 
 		private var _initializationCallback:Function;
 		//
-		private var _lastFrameTimestamp:Number;
-		private var _timer:IEventDispatcher;
-		private var _lostContextCallback:Function;
+		protected var _lastFrameTimestamp:Number;
+		protected var _timer:IEventDispatcher;
+		protected var _lostContextCallback:Function;
 
 		protected var _drawScreenShot:Boolean;
-		private var _screenShotSize:Point;
-		private var _screenShotCallback:Function;
+		protected var _screenShotSize:Point;
+		protected var _screenShotCallback:Function;
 
 		public function AbstractScene(scale:Number = 1) {
 			_drawableObjects = new <MiracleDisplayObject>[];
@@ -111,34 +109,10 @@ package com.merlinds.miracle {
 		}
 
 		protected function enterFrameHandler(event:Event = null):void {
-			if(_context != null && _context.driverInfo != ContextDisposeState.DISPOSED){
-				var now:Number = new Date().time;
-				_passedTime = now - _lastFrameTimestamp;
-				_lastFrameTimestamp = now;
-				//draw frame
-				_context.clear(0.8, 0.8, 0.8, 1);
-				this.prepareFrames();
-				this.drawFrames();
-				if(_drawScreenShot)this.drawScreenShot();
-				else this.end();
-			}else{
-				_timer.removeEventListener(Event.ENTER_FRAME, this.enterFrameHandler);
-				if(_lostContextCallback is Function){
-					_lostContextCallback.apply(this);
-				}
-			}
+
 		}
 
-		private function drawScreenShot():void
-		{
-			var bitmapData:BitmapData = new BitmapData(_screenShotSize.x, _screenShotSize.y, false);
-			_context.drawToBitmapData(bitmapData);
-			_screenShotCallback.call(this, bitmapData);
-			_drawScreenShot = false;
-			_screenShotCallback = null;
-			_screenShotSize = null;
-			this.end();
-		}
+
 		//} endregion EVENTS HANDLERS ==================================================
 
 		//==============================================================================
