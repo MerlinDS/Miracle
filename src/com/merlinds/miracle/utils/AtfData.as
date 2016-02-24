@@ -46,7 +46,7 @@ package com.merlinds.miracle.utils {
 				case 0: case 1: result.format = Context3DTextureFormat.BGRA; break;
 				case 2: case 3: result.format = Context3DTextureFormat.COMPRESSED; break;
 				// explicit string to stay compatible
-				case 4: case 5: result.format = "compressedAlpha"; break;
+				case 4: case 5: result.format = Context3DTextureFormat.COMPRESSED_ALPHA; break;
 				// with older versions
 				default: throw new Error("Invalid ATF format");
 			}
