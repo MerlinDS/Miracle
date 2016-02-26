@@ -16,7 +16,6 @@ package com.merlinds.miracle.display
 
 	import flash.events.EventDispatcher;
 	import flash.geom.Point;
-	import flash.geom.Rectangle;
 	import flash.geom.Vector3D;
 
 	/**
@@ -31,6 +30,7 @@ package com.merlinds.miracle.display
 	[Event(type="com.merlinds.miracle.events.MiracleEvent", name="removedFromStage")]
 	public class MiracleDisplayObject extends EventDispatcher
 	{
+		public static const DELIMITER:String = ".";
 
 		use namespace miracle_internal;
 
@@ -182,7 +182,7 @@ package com.merlinds.miracle.display
 			{
 				_animation = value;
 				_currentFrame = 0;
-				_animationId = _mesh + "." + _animation;
+				_animationId = _mesh + DELIMITER + _animation;
 				this.miracle_internal::remove();
 			}
 		}
@@ -205,7 +205,7 @@ package com.merlinds.miracle.display
 			if (value != _mesh)
 			{
 				_mesh = value;
-				_animationId = _mesh + "." + _animation;
+				_animationId = _mesh + DELIMITER + _animation;
 				this.miracle_internal::remove();
 			}
 		}

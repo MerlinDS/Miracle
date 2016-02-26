@@ -100,6 +100,11 @@ package com.merlinds.miracle
 		override protected function end(present:Boolean = true):void
 		{
 			this.drawTriangles();
+			if(_verticesData.length > 14336)
+			{
+				_verticesData.clear();
+				_indexData.clear();
+			}
 			if (present)
 			{
 				_context.present();

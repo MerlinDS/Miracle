@@ -13,8 +13,6 @@ package com.merlinds.miracle.fonts
 	import com.merlinds.miracle.geom.Bounds;
 	import com.merlinds.miracle.miracle_internal;
 
-	import flash.geom.Rectangle;
-
 	public class MiracleText extends MiracleDisplayObject
 	{
 
