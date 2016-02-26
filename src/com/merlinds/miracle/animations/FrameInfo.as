@@ -65,7 +65,6 @@ package com.merlinds.miracle.animations
 			"m1 = " + this.m1 + ", t = " + this.t + ")]";
 		}
 
-		[Inline]
 		public final function clone(pure:Boolean = false):FrameInfo
 		{
 			var clone:FrameInfo = pure ? FramesPool.getInstance(this.polygonName)
@@ -82,8 +81,8 @@ package com.merlinds.miracle.animations
 			if (this.m1 != null)this.m1.clear();
 			this.polygonName = null;
 			this.isMotion = false;
-			this.isEmpty = false;
-			FramesPool.freeInstance(this);
+			if(!this.isEmpty)
+				FramesPool.freeInstance(this);
 		}
 
 		//} endregion PUBLIC METHODS ===================================================
@@ -111,13 +110,11 @@ class FramesPool
 {
 	private static const _pool:Vector.<FrameInfo> = new <FrameInfo>[];
 
-	[Inline]
 	public static function freeInstance(frame:FrameInfo):void
 	{
 		if(_pool.indexOf(frame) < 0)_pool.push(frame);
 	}
 
-	[Inline]
 	public static function getInstance(polygonName:String, m0:Transformation = null,
 									   m1:Transformation = null, t:Number = 0.0):FrameInfo
 	{

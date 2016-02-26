@@ -16,8 +16,6 @@ package com.merlinds.miracle.utils {
 
 	public class MafReader {
 
-		private static const EMPTY_FRAME:EmptyFrameInfo = new EmptyFrameInfo();
-
 		private var _animations:Vector.<AnimationHelper>;
 		private var _scale:Number;
 		//==============================================================================
@@ -61,7 +59,7 @@ package com.merlinds.miracle.utils {
 			//Fill frames list by emptyFrames
 			var i:int = -1;
 			while(++i < frames.length){
-				frames[i] = EMPTY_FRAME;
+				frames[i] = EmptyFrameInfo.getConst();
 			}
 
 			for(i = 0; i < n; i++){

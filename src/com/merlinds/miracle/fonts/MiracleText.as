@@ -34,7 +34,7 @@ package com.merlinds.miracle.fonts
 		{
 			super();
 			this.animationInstance = new AnimationHelper(null, 1, 1,
-					new <FrameInfo>[new EmptyFrameInfo()]);
+					new <FrameInfo>[EmptyFrameInfo.getConst()]);
 			this.animationInstance.bounds = new Rectangle(0, 0, 1, 1);
 			_align = MiracleTextAlign.LEFT;
 			_textLines = new <TextLine>[ ];

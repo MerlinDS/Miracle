@@ -113,9 +113,8 @@ package com.merlinds.miracle
 				var now:Number = new Date().time;
 				_passedTime = now - _lastFrameTimestamp;
 				_lastFrameTimestamp = now;
-				//draw frame
-				_context.clear(0.8, 0.8, 0.8, 1);
 				this.prepareFrames();
+				_context.clear(0.8, 0.8, 0.8, 1);
 				//DRAW SCENE
 				var frame:FrameInfo;
 				var transform:Transformation;

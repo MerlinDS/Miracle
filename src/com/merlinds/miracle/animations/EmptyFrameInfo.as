@@ -5,12 +5,21 @@
  */
 package com.merlinds.miracle.animations {
 	public class EmptyFrameInfo extends FrameInfo{
+
+		private static const _instance:EmptyFrameInfo = new EmptyFrameInfo();
 		//==============================================================================
 		//{region							PUBLIC METHODS
 		public function EmptyFrameInfo() {
 			this.isEmpty = true;
 			super (null, null);
 		}
+
+		public static function getConst():EmptyFrameInfo
+		{
+			return _instance;
+		}
+
+
 		//} endregion PUBLIC METHODS ===================================================
 
 		//==============================================================================

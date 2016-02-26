@@ -23,7 +23,6 @@ package com.merlinds.miracle {
 
 		private var _displayObjects:Vector.<MiracleDisplayObject>;
 		private var _textureNeedToUpload:Vector.<TextureHelper>;
-		private var _errorsQueue:Vector.<Error>;
 		//loading
 		private var _textureLoading:Boolean;
 		private var _loadingCallback:Function;
@@ -35,7 +34,6 @@ package com.merlinds.miracle {
 		public function DisplayScene(scale:Number = 1) {
 			_displayObjects = new <MiracleDisplayObject>[];
 			_textureNeedToUpload = new <TextureHelper>[];
-			_errorsQueue = new <Error>[];
 			_sessionUniqueCounter = 0;
 			super (scale);
 		}
@@ -46,8 +44,6 @@ package com.merlinds.miracle {
 			instance.mesh = mesh;
 			instance.animation = animation;
 			instance.currentFrame = frame;
-			if(this.debuggable)
-				trace("Miracle: MiracleImage", instance.mesh, instance.animation, "instance was created.");
 			return instance as MiracleImage;
 		}
 
@@ -58,8 +54,6 @@ package com.merlinds.miracle {
 			instance.animation = animation;
 			instance.currentFrame = 0;
 			instance.fps = fps;
-			if(this.debuggable)
-				trace("Miracle: MiracleAnimation", instance.mesh, instance.animation, "instance was created.");
 			return instance;
 		}
 
@@ -76,8 +70,6 @@ package com.merlinds.miracle {
 			_animations[  mesh + "." + instance.animation ] = instance.miracle_internal::animationInstance;
 			//
 			instance.text = text;
-			if(this.debuggable)
-				trace("Miracle: MiracleText", instance.mesh, instance.animation, "instance was created.");
 			instance.miracle_internal::demandAnimationInstance = true;
 			return instance;
 		}
@@ -187,54 +179,36 @@ package com.merlinds.miracle {
 
 		//==============================================================================
 		//{region						PRIVATE\PROTECTED METHODS
-		/**
-		 * Sort display object in display objects list.
-		 * Remove from the list objects that will not be drawn.
-		 */
-		[Inline]
-		private final function prepareDrawObjects():void{
-			var instance:MiracleDisplayObject;
-			var n:int = _displayObjects.length;
-			for(var i:int = 0; i < n; i++){
-				instance = _displayObjects[i];
-				if( this.readyToDraw(instance) ){
-					//add to draw list
-					_drawableObjects.push(instance);
-				}
-			}
-		}
-
 		[Inline]
 		private final function readyToDraw(instance:MiracleDisplayObject):Boolean {
-			var readiness:int = 4;
 			var meshHelper:Mesh2D;
 			var textureHelper:TextureHelper;
 			//check instance for mesh and animation field are filed
-			if(instance.mesh != null && instance.animation != null)readiness--;
-			if(instance.visible)readiness--;
+			if(instance.mesh == null || instance.animation == null)return false;
 			//check for animation
-			if(_animations[ instance.animationId] != null)
-				readiness--;
-			//check for necessary objects for instance
-			meshHelper =  _meshes[ instance.mesh ];
+			if(_animations[ instance.animationId] == null)return false;
+			//check for necessary objects for current instance
+			meshHelper = _meshes[ instance.mesh ];
 
-			if(meshHelper == null){
-				_errorsQueue.push(new ArgumentError("Can not draw display object without mesh"));
-			}else{
-				textureHelper = _textures[ meshHelper.textureLink ];
-				if(textureHelper == null){
-					_errorsQueue.push(new ArgumentError("Can not draw display object without texture"));
+			if(meshHelper == null)
+				throw new ArgumentError("Can not draw display object without mesh");
+
+			textureHelper = _textures[ meshHelper.textureLink ];
+			if(textureHelper == null)
+				throw new ArgumentError("Can not draw display object without texture");
+
+			//Check for texture
+			if(textureHelper.inUse)return true;//CAN BE DRAW Exit point
+			//Uploading block, instance could not be draw
+			//Texture not in used, check for uploading
+			if(!textureHelper.uploading){
+				if(_textureNeedToUpload.indexOf(textureHelper) < 0){
+					_textureNeedToUpload.push(textureHelper);
+					textureHelper.uploading = true;
 				}
-				//check that texture was already uploaded
-				if(textureHelper.inUse)readiness--;
-				else if(!textureHelper.uploading){
-					if(_textureNeedToUpload.indexOf(textureHelper) < 0){
-						_textureNeedToUpload.push(textureHelper);
-						textureHelper.uploading = true;
-					}
-				}
+
 			}
-			return readiness == 0;
+			return false;
 		}
 
 		[Inline]
@@ -271,17 +245,23 @@ package com.merlinds.miracle {
 
 		//==============================================================================
 		//{region							EVENTS HANDLERS
-
-		[Inline]
 		override protected final function prepareFrames():void {
 			//clear previous objects list
 			_drawableObjects.length = 0;
-			//prepare frame data
-			this.prepareDrawObjects();
+			//get all drawable objects
+			var instance:MiracleDisplayObject;
+			var n:int = _displayObjects.length;
+			for(var i:int = 0; i < n; i++){
+				instance = _displayObjects[i];
+				if(!instance.visible)continue;
+				//Only visible instances could be draw
+				//check instance for ready to draw
+				if( this.readyToDraw(instance) )
+					_drawableObjects.push(instance);
+			}
+			//Sort instances by z
 			_drawableObjects.sort(this.sortMethod);
 			this.uploadTextures();
-			//throw all errors that was collected
-			if(_errorsQueue.length > 0)throw _errorsQueue.shift();
 		}
 
 		[Inline]
