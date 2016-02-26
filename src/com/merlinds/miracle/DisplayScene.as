@@ -107,8 +107,9 @@ package com.merlinds.miracle {
 					animation.dispose();
 					delete _animations[  instance.mesh + "." + instance.animation ];
 				}
-				instance.miracle_internal::dispose();
 			}
+			instance.miracle_internal::dispose();
+			instance.miracle_internal::animationInstance = null;
 		}
 
 		[Inline]

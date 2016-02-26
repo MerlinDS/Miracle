@@ -19,9 +19,7 @@ package com.merlinds.miracle
 	import com.merlinds.miracle.utils.ContextDisposeState;
 
 	import flash.display.BitmapData;
-
 	import flash.display3D.Context3DVertexBufferFormat;
-
 	import flash.display3D.IndexBuffer3D;
 	import flash.display3D.VertexBuffer3D;
 	import flash.events.Event;
@@ -72,10 +70,10 @@ package com.merlinds.miracle
 		private var _clearMatrix:ByteArray;
 		//
 		//current instance parameters
-		private var _instance:MiracleDisplayObject;
 		private var _iMesh:Mesh2D;
 		private var _iAnimationHelper:AnimationHelper;
 		private var _iTextureHelper:TextureHelper;
+		private var _instance:MiracleDisplayObject;
 		//
 		use namespace miracle_internal;
 
@@ -128,7 +126,10 @@ package com.merlinds.miracle
 					//collect instance data
 					_instance = _drawableObjects[i];
 					this.collectInstanceData();
-					this.setInstanceBounds();
+					//bounds
+					if (!_instance.transformation.bounds.equals(_iAnimationHelper.bounds))
+						_instance.transformation.bounds = _iAnimationHelper.bounds.clone();
+					//switch textures
 					if (_currentTexture != _iMesh.textureLink)
 					{
 						//Finalize textures
@@ -171,14 +172,17 @@ package com.merlinds.miracle
 					//tell instance that it was drawn on GPU
 					_instance.miracle_internal::drawn();
 				}
+				//END OF SCENE DRAW
 				if (_drawScreenShot)
+				{
 					this.drawTriangles();
-				//END DRAW SCENE
-				if (_drawScreenShot)this.drawScreenShot();
-				else this.end();
+					this.drawScreenShot();
+				}
+				this.end();
 			}
 			else
 			{
+				//stop drawing
 				_timer.removeEventListener(Event.ENTER_FRAME, this.enterFrameHandler);
 				if (_lostContextCallback is Function)
 					_lostContextCallback.apply(this);
@@ -208,15 +212,6 @@ package com.merlinds.miracle
 			_iMesh = _meshes[_instance.mesh];
 			_iTextureHelper = _textures[_iMesh.textureLink];
 			_iAnimationHelper = _animations[_instance.animationId];
-		}
-
-		[Inline]
-		private final function setInstanceBounds():void
-		{
-			if (!_instance.transformation.bounds.equals(_iAnimationHelper.bounds))
-			{
-				_instance.transformation.bounds = _iAnimationHelper.bounds.clone();
-			}
 		}
 
 		[Inline]
@@ -445,7 +440,6 @@ package com.merlinds.miracle
 			_drawScreenShot = false;
 			_screenShotCallback = null;
 			_screenShotSize = null;
-			this.end();
 		}
 
 		//} endregion PRIVATE\PROTECTED METHODS ========================================

@@ -18,13 +18,12 @@ package com.merlinds.miracle.display {
 
 		use namespace miracle_internal;
 
+		private var _loop:Boolean;
+		private var _prevPlaybackDirection:int;
+		private var _fps:int;
+		miracle_internal var playbackDirection:int;
 		miracle_internal var frameDelta:Number;
 		miracle_internal var timePassed:Number;
-		miracle_internal var playbackDirection:int;
-		private var _prevPlaybackDirection:int;
-		//playback
-		private var _fps:int;
-		private var _loop:Boolean;
 		//==============================================================================
 		//{region							PUBLIC METHODS
 		public function MiracleAnimation() {
@@ -74,6 +73,14 @@ package com.merlinds.miracle.display {
 		override protected function afterRemove():void {
 			playbackDirection = 0;
 			 _prevPlaybackDirection = 1;
+		}
+
+		override miracle_internal function dispose():void
+		{
+			_loop = false;
+			frameDelta = timePassed = 0;
+			playbackDirection  = _prevPlaybackDirection =_fps = 0;
+			super.miracle_internal::dispose();
 		}
 
 //} endregion PRIVATE\PROTECTED METHODS ========================================

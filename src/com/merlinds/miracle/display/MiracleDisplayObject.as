@@ -33,21 +33,20 @@ package com.merlinds.miracle.display
 
 		use namespace miracle_internal;
 
-		//description
+		private var _onStage:Boolean;
+		private var _visible:Boolean;
+		internal var _isAnimated:Boolean;
+		private var _mouseEnable:Boolean;
+		private var _demandAnimationInstance:Boolean;
+
+		private var _currentFrame:int;
+		public var z:Number;
+
 		private var _mesh:String;
 		private var _animation:String;
 		private var _animationId:String;
-		private var _currentFrame:int;
-		private var _visible:Boolean;
-		internal var _isAnimated:Boolean;
 		//Transformations
 		public var transformation:Transformation;
-		public var z:Number;
-		public var mouseEnable:Boolean;
-		//Playback
-		private var _onStage:Boolean;
-		//
-		private var _demandAnimationInstance:Boolean;
 		private var _animationInstance:AnimationHelper;
 
 		public function MiracleDisplayObject()
@@ -63,7 +62,7 @@ package com.merlinds.miracle.display
 
 		public function hitTest(point:Point):Boolean
 		{
-			if (!mouseEnable)return false;
+			if (!_mouseEnable)return false;
 			var rect:Rectangle = this.transformation.bounds.clone();
 			rect.offset(this.transformation.matrix.tx, this.transformation.matrix.ty);
 			return rect.containsPoint(point);
@@ -114,7 +113,13 @@ package com.merlinds.miracle.display
 
 		miracle_internal function dispose():void
 		{
-
+			transformation.clear();
+			_onStage = _visible = _isAnimated = _mouseEnable = _demandAnimationInstance = false;
+			_currentFrame = z = 0;
+			_mesh = null;
+			_animation = null;
+			_animationId = null;
+			transformation = null;
 		}
 
 		//} endregion PUBLIC METHODS ===================================================
@@ -408,6 +413,18 @@ package com.merlinds.miracle.display
 		public final function get onStage():Boolean
 		{
 			return _onStage;
+		}
+
+		[Inline]
+		public final function get mouseEnable():Boolean
+		{
+			return _mouseEnable;
+		}
+
+		[Inline]
+		public final function set mouseEnable(value:Boolean):void
+		{
+			_mouseEnable = value;
 		}
 
 //} endregion GETTERS/SETTERS ==================================================

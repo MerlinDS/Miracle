@@ -10,12 +10,12 @@ package com.merlinds.miracle.geom
 
 	public class Transformation
 	{
-
 		public var matrix:TransformMatrix;
 		public var color:Color;
 		public var bounds:Rectangle;
 		//==============================================================================
 		//{region							PUBLIC METHODS
+
 		public function Transformation(matrix:TransformMatrix = null, color:Color = null, bounds:Rectangle = null)
 		{
 			this.matrix = matrix;

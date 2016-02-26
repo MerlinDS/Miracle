@@ -13,7 +13,6 @@ package com.merlinds.miracle.fonts
 	import com.merlinds.miracle.miracle_internal;
 
 	import flash.geom.Rectangle;
-	import flash.utils.setTimeout;
 
 	public class MiracleText extends MiracleDisplayObject
 	{
@@ -49,6 +48,7 @@ package com.merlinds.miracle.fonts
 			this.animationInstance.dispose();
 			_textLines = null;
 			_glyphs = null;
+			super.miracle_internal::dispose();
 		}
 
 //} endregion PUBLIC METHODS ===================================================
@@ -96,7 +96,7 @@ package com.merlinds.miracle.fonts
 				var glyph:FrameInfo = _glyphs[char];
 				if (glyph)
 				{
-					glyph = glyph.clone();//TODO add glyphs pooling
+					glyph = glyph.clone(true);
 					textLine.push(this.animationInstance.frames.length, char);
 					this.animationInstance.frames.push(glyph);
 					this.animationInstance.numLayers++;
