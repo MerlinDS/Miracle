@@ -125,9 +125,7 @@ package com.merlinds.miracle
 					//collect instance data
 					_instance = _drawableObjects[i];
 					this.collectInstanceData();
-					//bounds
-					if (!_instance.transformation.bounds.equals(_iAnimationHelper.bounds))
-						_instance.transformation.bounds = _iAnimationHelper.bounds.clone();
+					_instance.transformation.bounds.updateBy(_iAnimationHelper.bounds);
 					//switch textures
 					if (_currentTexture != _iMesh.textureLink)
 					{

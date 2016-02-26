@@ -8,6 +8,7 @@ package com.merlinds.miracle.display
 
 	import com.merlinds.miracle.animations.AnimationHelper;
 	import com.merlinds.miracle.events.MiracleEvent;
+	import com.merlinds.miracle.geom.Bounds;
 	import com.merlinds.miracle.geom.Color;
 	import com.merlinds.miracle.geom.TransformMatrix;
 	import com.merlinds.miracle.geom.Transformation;
@@ -51,7 +52,8 @@ package com.merlinds.miracle.display
 
 		public function MiracleDisplayObject()
 		{
-			this.transformation = new Transformation(new TransformMatrix(), new Color(), new Rectangle());
+			this.transformation = new Transformation(new TransformMatrix(),
+					new Color(), Bounds.getInstance());
 			_currentFrame = 0;
 			_visible = true;
 			this.z = 0;
@@ -63,9 +65,8 @@ package com.merlinds.miracle.display
 		public function hitTest(point:Point):Boolean
 		{
 			if (!_mouseEnable)return false;
-			var rect:Rectangle = this.transformation.bounds.clone();
-			rect.offset(this.transformation.matrix.tx, this.transformation.matrix.ty);
-			return rect.containsPoint(point);
+			return this.transformation.bounds.containsPoint(point.x, point.y,
+				this.transformation.matrix.tx, this.transformation.matrix.ty);
 		}
 
 		/**
@@ -113,7 +114,7 @@ package com.merlinds.miracle.display
 
 		miracle_internal function dispose():void
 		{
-			transformation.clear();
+			transformation.dispose();
 			_onStage = _visible = _isAnimated = _mouseEnable = _demandAnimationInstance = false;
 			_currentFrame = z = 0;
 			_mesh = null;

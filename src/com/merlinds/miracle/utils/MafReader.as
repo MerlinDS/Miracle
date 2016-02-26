@@ -4,14 +4,15 @@
  * Time: 18:24
  */
 package com.merlinds.miracle.utils {
+
 	import com.merlinds.miracle.animations.AnimationHelper;
 	import com.merlinds.miracle.animations.EmptyFrameInfo;
 	import com.merlinds.miracle.animations.FrameInfo;
+	import com.merlinds.miracle.geom.Bounds;
 	import com.merlinds.miracle.geom.Color;
 	import com.merlinds.miracle.geom.TransformMatrix;
 	import com.merlinds.miracle.geom.Transformation;
 
-	import flash.geom.Rectangle;
 	import flash.utils.ByteArray;
 
 	public class MafReader {
@@ -125,8 +126,8 @@ package com.merlinds.miracle.utils {
 		}
 
 		[Inline]
-		private final function parseBounds(data:Object):Rectangle {
-			return new Rectangle(data.x * _scale, data.y * _scale, data.width * _scale, data.height * _scale);
+		private final function parseBounds(data:Object):Bounds {
+			return new Bounds(data.x * _scale, data.y * _scale, data.width * _scale, data.height * _scale);
 		}
 		//} endregion PRIVATE\PROTECTED METHODS ========================================
 

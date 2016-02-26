@@ -77,8 +77,8 @@ package com.merlinds.miracle.animations
 		[Inline]
 		public final function dispose():void
 		{
-			if (this.m0 != null)this.m0.clear();
-			if (this.m1 != null)this.m1.clear();
+			if (this.m0 != null)this.m0.dispose();
+			if (this.m1 != null)this.m1.dispose();
 			this.polygonName = null;
 			this.isMotion = false;
 			if(!this.isEmpty)

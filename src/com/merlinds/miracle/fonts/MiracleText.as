@@ -10,6 +10,7 @@ package com.merlinds.miracle.fonts
 	import com.merlinds.miracle.animations.EmptyFrameInfo;
 	import com.merlinds.miracle.animations.FrameInfo;
 	import com.merlinds.miracle.display.*;
+	import com.merlinds.miracle.geom.Bounds;
 	import com.merlinds.miracle.miracle_internal;
 
 	import flash.geom.Rectangle;
@@ -35,7 +36,7 @@ package com.merlinds.miracle.fonts
 			super();
 			this.animationInstance = new AnimationHelper(null, 1, 1,
 					new <FrameInfo>[EmptyFrameInfo.getConst()]);
-			this.animationInstance.bounds = new Rectangle(0, 0, 1, 1);
+			this.animationInstance.bounds = Bounds.getInstance();
 			_align = MiracleTextAlign.LEFT;
 			_textLines = new <TextLine>[ ];
 
@@ -45,7 +46,6 @@ package com.merlinds.miracle.fonts
 		{
 			while (_textLines.length > 0)
 				_textLines.pop().clear();
-			this.animationInstance.dispose();
 			_textLines = null;
 			_glyphs = null;
 			super.miracle_internal::dispose();

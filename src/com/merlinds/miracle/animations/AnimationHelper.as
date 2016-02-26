@@ -4,7 +4,8 @@
  * Time: 13:48
  */
 package com.merlinds.miracle.animations {
-	import flash.geom.Rectangle;
+
+	import com.merlinds.miracle.geom.Bounds;
 
 	/**
 	 * Object for animation format.
@@ -22,7 +23,7 @@ package com.merlinds.miracle.animations {
 		public var numLayers:int;
 		/** Frames on the animation. Rectangular array**/
 		public var frames:Vector.<FrameInfo>;
-		public var bounds:Rectangle;
+		public var bounds:Bounds;
 		//==============================================================================
 		//{region							PUBLIC METHODS
 		/**
@@ -67,6 +68,7 @@ package com.merlinds.miracle.animations {
 				while (this.frames.length > 0)
 					this.frames.pop().dispose();
 			}
+			this.bounds.dispose();
 			this.bounds = null;
 			this.frames = null;
 		}
