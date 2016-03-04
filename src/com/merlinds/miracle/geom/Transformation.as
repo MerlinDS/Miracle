@@ -6,7 +6,6 @@
 package com.merlinds.miracle.geom
 {
 
-	import flash.geom.Rectangle;
 
 	public class Transformation
 	{
