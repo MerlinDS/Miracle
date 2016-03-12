@@ -98,7 +98,7 @@ package com.merlinds.miracle {
 			//TODO update viewport by old one
 			_viewport.width = _nativeStage.stageWidth;
 			_viewport.height = _nativeStage.stageHeight;
-			_context.configureBackBuffer(_viewport.width, _viewport.height, 16, false);
+			_context.configureBackBuffer(_viewport.width, _viewport.height, 0, false);
 			_ratioX = 2 / _viewport.width;
 			_ratioY = 2 / _viewport.height;
 		}

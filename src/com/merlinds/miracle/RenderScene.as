@@ -29,31 +29,33 @@ package com.merlinds.miracle
 	internal class RenderScene extends AbstractScene
 	{
 		//
-		private const XY:int = 2;
+		private static  const XY:int = 2;
 		/** [u,v] */
-		private const UV:int = 2;
+		private static  const UV:int = 2;
 		/** [tx, ty] */
-		private const OFFSET:int = 4;
+		private static  const OFFSET:int = 4;
 		/** [scaleX, scaleY, skewX, skewY] */
-		private const TRANSFORM:int = 4;
+		private static  const TRANSFORM:int = 4;
 		/** [r,g,b,a] **/
-		private const COLOR:int = 4;
+		private static  const COLOR:int = 4;
 		/** [multiplierR, multiplierG, multiplierB, multiplierA] **/
-		private const CMULT:int = 4;
+		private static  const CMULT:int = 4;
 
-		private const VERTEX_PARAMS_LENGTH:int = XY + UV + OFFSET + TRANSFORM + COLOR + CMULT;
+		private static  const VERTEX_PARAMS_LENGTH:int = XY + UV + OFFSET + TRANSFORM + COLOR + CMULT;
 
 		/** positions in byte array **/
-		private const FLOAT_SIZE:int = 4;
-		private const TRANSFORM_SIZE:int = (OFFSET + TRANSFORM) * FLOAT_SIZE;
-		private const COLOR_SIZE:int = (COLOR + CMULT) * FLOAT_SIZE;
-		private const MATRIX_SIZE:int = TRANSFORM_SIZE + COLOR_SIZE;
+		private static const FLOAT_SIZE:int = 4;
+		private static  const TRANSFORM_SIZE:int = (OFFSET + TRANSFORM) * FLOAT_SIZE;
+		private static  const COLOR_SIZE:int = (COLOR + CMULT) * FLOAT_SIZE;
+		private static  const MATRIX_SIZE:int = TRANSFORM_SIZE + COLOR_SIZE;
 		/** color offsets **/
-		private const MULTIPLIER_OFFSET:int = TRANSFORM_SIZE + COLOR * FLOAT_SIZE;
-		private const ALPHA_OFFSET:int = MULTIPLIER_OFFSET - FLOAT_SIZE;//- Alpha
-		private const ALPHA_MULTIPLIER_OFFSET:int = MATRIX_SIZE - FLOAT_SIZE;//- Alpha multiplier
+		private static  const MULTIPLIER_OFFSET:int = TRANSFORM_SIZE + COLOR * FLOAT_SIZE;
+		private static  const ALPHA_OFFSET:int = MULTIPLIER_OFFSET - FLOAT_SIZE;//- Alpha
+		private static  const ALPHA_MULTIPLIER_OFFSET:int = MATRIX_SIZE - FLOAT_SIZE;//- Alpha multiplier
 
 		//Abstract scene
+		private static  const DRAW_CUTTER:int = 8192;
+		private static  const DATA_CLEANER:int = DRAW_CUTTER * 2;
 
 		//GPU
 		private var _vertexBuffer:VertexBuffer3D;
@@ -100,11 +102,11 @@ package com.merlinds.miracle
 		override protected function end(present:Boolean = true):void
 		{
 			this.drawTriangles();
-			/*if(_verticesData.length > 14336)
+			if(_verticesData.length > DATA_CLEANER)
 			{
 				_verticesData.clear();
 				_indexData.clear();
-			}*/
+			}
 			if (present)
 			{
 				_context.present();
@@ -139,7 +141,7 @@ package com.merlinds.miracle
 						_context.setTextureAt(0, _iTextureHelper.texture);
 						_currentTexture = _iMesh.textureLink;
 					}
-					else if (_verticesDataLength > 4096)
+					else if (_verticesDataLength > DRAW_CUTTER)
 						this.drawTriangles();//execute drawTriangles if vertices buffer to large
 					//draw instance
 					m = _iAnimationHelper.numLayers;
