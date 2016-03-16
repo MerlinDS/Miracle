@@ -12,16 +12,17 @@ package com.merlinds.miracle {
 	import flash.events.Event;
 	import flash.events.IEventDispatcher;
 	import flash.geom.Point;
+	import flash.utils.Dictionary;
 
 	internal class AbstractScene implements IRenderer{
 
 		protected var _scale:Number;
-		protected var _context:Context3D;
 		protected var _passedTime:Number;
+		protected var _context:Context3D;
 		//maps
-		protected var _meshes:Object;/**Mesh2D**/
-		protected var _textures:Object;/**TextureHelper**/
-		protected var _animations:Object;/**AnimationHelper**/
+		protected var _meshes:Dictionary;/**Mesh2D**/
+		protected var _textures:Dictionary;/**TextureHelper**/
+		protected var _animations:Dictionary;/**AnimationHelper**/
 		//
 		protected var _drawableObjects:Vector.<MiracleDisplayObject>;
 		protected var debuggable:Boolean;
@@ -39,9 +40,9 @@ package com.merlinds.miracle {
 		public function AbstractScene(scale:Number = 1) {
 			_drawableObjects = new <MiracleDisplayObject>[];
 			_scale = scale;
-			_meshes = {};
-			_textures = {};
-			_animations = {};
+			_meshes = new Dictionary();
+			_textures = new Dictionary();
+			_animations = new Dictionary();
 		}
 
 		//==============================================================================
@@ -135,25 +136,25 @@ import com.merlinds.miracle.utils.Asset;
 import com.merlinds.miracle.utils.MafReader;
 import com.merlinds.miracle.utils.MtfReader;
 
+import flash.utils.Dictionary;
+
 import flash.utils.setTimeout;
 
 class AssetsParser{
 
 	private var _assets:Vector.<Asset>;
 	//maps
-	private var _meshes:Object;/**Mesh2D**/
-	private var _textures:Object;/**TextureHelper**/
-	private var _animations:Object;/**AnimationHelper**/
+	private var _meshes:Dictionary;/**Mesh2D**/
+	private var _textures:Dictionary;/**TextureHelper**/
+	private var _animations:Dictionary;/**AnimationHelper**/
 	private var _callback:Function;
 
 	private var _mtfReader:MtfReader;
 	private var _mafReader:MafReader;
 	private var _scale:Number;
 
-	private var _n:int;
-
-	public function AssetsParser(assets:Vector.<Asset>, meshes:Object,
-	                             textures:Object, animations:Object) {
+	public function AssetsParser(assets:Vector.<Asset>, meshes:Dictionary,
+	                             textures:Dictionary, animations:Dictionary) {
 		_assets = assets;
 		_meshes = meshes;
 		_textures = textures;

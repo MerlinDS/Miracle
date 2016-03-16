@@ -23,22 +23,23 @@ package com.merlinds.miracle {
 			 * m2 formula:[scaleX*Math.sin(skewY), scaleY*Math.cos(skewX), 0, ty] //b, d, 0, ty
 			 * view formula m1:[a*ratioX, c*-ratioX, 0, tx*ratioX-1], m2:[b*-ratioY, d*ratioY, 0, ty*-ratioY+1]
 			 */
+			"mul vt0, va3.z, vc125.y", //skewX * -1, get -1 from vc125.y
+			"cos vt3, va3.w", //cos(skewY)
+			"sin vt4, vt0", //sin(-skewX)
+			"sin vt5, va3.w", //sin(skewY)
+			"cos vt0, va3.z", //cos(skewX)
 
-			"mov vt4 va0",
-			"add vt4.xy vt4.xy, va2.zw",//x + offsetX, y + offsetY
-			"mul vt3.x, va3.z, vc125.y", //skewX * -1, get -1 from vc125.y
-			"cos vt0.x, va3.w", //cos(skewY)
-			"sin vt0.y, vt3.x", //sin(-skewX)
-			"sin vt0.z, va3.w", //sin(skewY)
-			"cos vt0.w, va3.z", //cos(skewX)
-
-			"mul vt1.x, va3.x, vt0.x",  //a
-			"mul vt1.y, va3.y, vt0.y",  //c
+			"mul vt3, va3.x, vt3",  //a
+			"mul vt4, va3.y, vt4",  //c
+			"mov vt1.x, vt3", //0
+			"mov vt1.y, vt4", //tx
 			"mov vt1.z, vc127.z", //0
 			"mov vt1.w, va2.x", //tx
 
-			"mul vt2.x, va3.x, vt0.z",  //b
-			"mul vt2.y, va3.y, vt0.w",  //d
+			"mul vt5, va3.x, vt5",  //b
+			"mul vt0, va3.y, vt0",  //d
+			"mov vt2.x, vt5", //0
+			"mov vt2.y, vt0", //0
 			"mov vt2.z, vc127.z", //0
 			"mov vt2.w, va2.y", //ty
 
@@ -48,10 +49,13 @@ package com.merlinds.miracle {
 			"mul vt2, vt2, vc1", //apply view ratio
 			"add vt2.w, vt2.w, vc125.x", //apply view position, ty + 1
 
-			"dp4 op.x, vt4, vt1",
-			"dp4 op.y, vt4, vt2",
-			"dp4 op.z, vt4, vc126",
-			"dp4 op.w, vt4, vc127",
+			"mov vt3, va",
+			"add vt3.xy va0.xy, va2.zw",//x + offsetX, y + offsetY
+
+			"dp4 op.x, vt3, vt1",
+			"dp4 op.y, vt3, vt2",
+			"dp4 op.z, vt3, vc126",
+			"dp4 op.w, vt3, vc127",
 			"mov v0, va1.xy",
 			"mov v1, va4",
 			"mov v2, va5"

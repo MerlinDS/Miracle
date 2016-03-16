@@ -156,7 +156,7 @@ package com.merlinds.miracle
 				{
 					if (!textureHelper.uploading && _textureNeedToUpload.indexOf(textureHelper) < 0)
 					{
-						_textureNeedToUpload.push(textureHelper);
+						_textureNeedToUpload[_textureNeedToUpload.length] = textureHelper;
 						textureHelper.uploading = true;
 					}
 				}
@@ -171,7 +171,7 @@ package com.merlinds.miracle
 						textureHelper = _textures[name];
 						if (!textureHelper.uploading && _textureNeedToUpload.indexOf(textureHelper) < 0)
 						{
-							_textureNeedToUpload.push(textureHelper);
+							_textureNeedToUpload[_textureNeedToUpload.length] = textureHelper;
 							textureHelper.uploading = true;
 						}
 					}
@@ -188,7 +188,7 @@ package com.merlinds.miracle
 				if (textureHelper.inUse)
 				{
 					//reload texture
-					_textureNeedToUpload.push(textureHelper);
+					_textureNeedToUpload[_textureNeedToUpload.length] = textureHelper;
 					textureHelper.uploading = true;
 				}
 			}
@@ -236,7 +236,7 @@ package com.merlinds.miracle
 			{
 				if (_textureNeedToUpload.indexOf(textureHelper) < 0)
 				{
-					_textureNeedToUpload.push(textureHelper);
+					_textureNeedToUpload[_textureNeedToUpload.length] = textureHelper;
 					textureHelper.uploading = true;
 				}
 
@@ -302,7 +302,7 @@ package com.merlinds.miracle
 				//Only visible instances could be draw
 				//check instance for ready to draw
 				if (this.readyToDraw(instance))
-					_drawableObjects.push(instance);
+					_drawableObjects[_drawableObjects.length] = instance;
 			}
 			//Sort instances by z
 			_drawableObjects.sort(this.sortMethod);
