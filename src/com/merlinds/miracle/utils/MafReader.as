@@ -38,7 +38,7 @@ package com.merlinds.miracle.utils {
 						data.layers.length, this.parseLayers( data.layers, data.totalFrames )
 				);
 				animation.bounds = this.parseBounds(data.bounds);
-				_animations.push( animation );
+				_animations[_animations.length]= animation;
 			}
 		}
 		//} endregion PUBLIC METHODS ===================================================
