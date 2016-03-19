@@ -119,6 +119,7 @@ package com.merlinds.miracle
 			{
 				var now:Number = new Date().time;
 				_passedTime = now - _lastFrameTimestamp;
+				_passedTime *= 1.25;
 				_lastFrameTimestamp = now;
 				this.prepareFrames();
 				_context.clear(0.8, 0.8, 0.8, 1);
