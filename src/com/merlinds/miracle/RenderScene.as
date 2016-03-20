@@ -58,13 +58,14 @@ package com.merlinds.miracle
 		private static  const DATA_CLEANER:int = DRAW_CUTTER * 2;
 
 		//GPU
-		private var _vertexBuffer:VertexBuffer3D;
-		private var _indexBuffer:IndexBuffer3D;
-		private var _verticesData:ByteArray;
 		private var _verticesDataLength:int;
 		private var _indexData:ByteArray;
 		private var _indexDataLength:int;
 		private var _indexStep:Number;
+		private var _fixFactor:Number;
+		private var _vertexBuffer:VertexBuffer3D;
+		private var _indexBuffer:IndexBuffer3D;
+		private var _verticesData:ByteArray;
 		//drawing
 		private var _polygon:Polygon2D;
 		private var _currentMatrix:ByteArray;
@@ -92,6 +93,7 @@ package com.merlinds.miracle
 			_indexData = new ByteArray();
 			_indexData.endian = Endian.LITTLE_ENDIAN;
 			_indexStep = 0;
+			_fixFactor = 0.9;
 			super(scale);
 		}
 
@@ -117,9 +119,10 @@ package com.merlinds.miracle
 		{
 			if (_context != null && _context.driverInfo != ContextDisposeState.DISPOSED)
 			{
+				var fixFactor:Number = _timer.frameRate / 60;
 				var now:Number = new Date().time;
 				_passedTime = now - _lastFrameTimestamp;
-//				_passedTime *= 1.25;
+				_passedTime *= (1 - fixFactor) * 0.7 + fixFactor;
 				_lastFrameTimestamp = now;
 				this.prepareFrames();
 				_context.clear(0.8, 0.8, 0.8, 1);

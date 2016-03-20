@@ -8,6 +8,8 @@ package com.merlinds.miracle {
 	import com.merlinds.miracle.display.MiracleDisplayObject;
 	import com.merlinds.miracle.utils.Asset;
 
+	import flash.display.Stage;
+
 	import flash.display3D.Context3D;
 	import flash.events.Event;
 	import flash.events.IEventDispatcher;
@@ -29,8 +31,8 @@ package com.merlinds.miracle {
 
 		private var _initializationCallback:Function;
 		//
+		protected var _timer:Stage;
 		protected var _lastFrameTimestamp:Number;
-		protected var _timer:IEventDispatcher;
 		protected var _lostContextCallback:Function;
 
 		protected var _drawScreenShot:Boolean;
@@ -53,7 +55,7 @@ package com.merlinds.miracle {
 			assetsParser.execute(this.completeInitialization, _scale);
 		}
 
-		public function initialize(context:Context3D, timer:IEventDispatcher, lostContextCallback:Function):void {
+		public function initialize(context:Context3D, timer:Stage, lostContextCallback:Function):void {
 			_lostContextCallback = lostContextCallback;
 			_context = context;
 			_timer = timer;
