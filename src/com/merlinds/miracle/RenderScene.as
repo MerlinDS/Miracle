@@ -119,7 +119,7 @@ package com.merlinds.miracle
 			{
 				var now:Number = new Date().time;
 				_passedTime = now - _lastFrameTimestamp;
-				_passedTime *= 1.25;
+//				_passedTime *= 1.25;
 				_lastFrameTimestamp = now;
 				this.prepareFrames();
 				_context.clear(0.8, 0.8, 0.8, 1);
@@ -223,28 +223,38 @@ package com.merlinds.miracle
 		private final function changeInstanceFrame():void
 		{
 			var instance:MiracleAnimation = _instance as MiracleAnimation;
+			//stop frame changing if playback direction equals 0
+			if (instance.playbackDirection == 0)return;
 			//calculate possibility of frame changing
 			instance.timePassed += _passedTime;
-			if (instance.timePassed >= instance.frameDelta)
+			var count:int = instance.timePassed / instance.frameDelta;
+			while (instance.timePassed > instance.frameDelta)
+				instance.timePassed -= instance.frameDelta;
+			instance.currentFrame += count * instance.playbackDirection;
+			if(instance.playbackDirection > 0 && instance.currentFrame < _iAnimationHelper.totalFrames)return;
+			else if(instance.playbackDirection < 0 && instance.currentFrame >= 0)return;
+			//check end of playback
+			if(instance.playbackDirection > 0)
 			{
-				instance.timePassed = 0;
-				//need to change frame
-				if (instance.playbackDirection != 0)
-				{//stop frame changing if playback direction equals 0
-					instance.currentFrame += instance.playbackDirection;
-					if (instance.currentFrame == _iAnimationHelper.totalFrames || instance.currentFrame < 0)
-					{
-						if (instance.loop)
-						{
-							//switch current frame to start or end
-							instance.currentFrame = instance.playbackDirection > 0 ? 0 : _iAnimationHelper.totalFrames - 1;
-						}
-						else
-						{
-							instance.currentFrame -= instance.playbackDirection;//return to previous frame
-							instance.miracle_internal::stopPlayback();
-						}
-					}
+
+				while(instance.currentFrame >= _iAnimationHelper.totalFrames)
+					instance.currentFrame -= _iAnimationHelper.totalFrames;
+				if(!instance.loop)
+				{
+					instance.currentFrame = _iAnimationHelper.totalFrames - 1;
+					instance.miracle_internal::stopPlayback();
+				}
+			}
+			else if(instance.playbackDirection < 0)
+			{
+				if(instance.loop)
+				{
+					while(instance.currentFrame < 0 )
+						instance.currentFrame = _iAnimationHelper.totalFrames - count;
+				}else
+				{
+					instance.currentFrame = 0;
+					instance.miracle_internal::stopPlayback();
 				}
 			}
 		}
