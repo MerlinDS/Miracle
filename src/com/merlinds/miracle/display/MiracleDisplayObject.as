@@ -80,7 +80,7 @@ package com.merlinds.miracle.display
 		{
 			this.transformation.matrix.tx = x;
 			this.transformation.matrix.ty = y;
-			//TODO MF-41 Add z-index sorting
+			this.z = z;
 			return this;
 		}
 
