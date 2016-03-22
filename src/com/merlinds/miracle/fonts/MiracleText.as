@@ -135,14 +135,13 @@ package com.merlinds.miracle.fonts
 				{
 					offset = -_biggestLineSize >> 1;
 					offset += _biggestLineSize - textLine.size >> 1;
-					x = offset;
+					x = offset + textLine.glyphSize / 2;
 				} else if(_align == MiracleTextAlign.RIGHT)
 				{
 					offset = -_biggestLineSize;
 					offset += _biggestLineSize - textLine.size;
 					x = offset;
 				}
-				//TODO add Right alignment
 				for(j = 0; j < m; ++j)
 				{
 					if(textLine.glyphs[j] > -1)
