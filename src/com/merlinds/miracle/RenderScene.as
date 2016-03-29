@@ -119,10 +119,11 @@ package com.merlinds.miracle
 		{
 			if (_context != null && _context.driverInfo != ContextDisposeState.DISPOSED)
 			{
-				var fixFactor:Number = _timer.frameRate / 60;
 				var now:Number = new Date().time;
-				_passedTime = now - _lastFrameTimestamp;
-				_passedTime *= (1 - fixFactor) * 0.7 + fixFactor;
+//				var fixFactor:Number = _timer.frameRate / 60;
+				/*_passedTime = now - _lastFrameTimestamp;
+				_passedTime *= (1 - fixFactor) * 0.7 + fixFactor;*/
+				_passedTime = 1000 / _timer.frameRate;
 				_lastFrameTimestamp = now;
 				this.prepareFrames();
 				_context.clear(0.8, 0.8, 0.8, 1);
