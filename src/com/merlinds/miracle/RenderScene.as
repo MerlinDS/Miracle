@@ -124,6 +124,8 @@ package com.merlinds.miracle
 				/*_passedTime = now - _lastFrameTimestamp;
 				_passedTime *= (1 - fixFactor) * 0.7 + fixFactor;*/
 				_passedTime = 1000 / _timer.frameRate;
+				var fixFactor:Number = _timer.frameRate / 60;
+				_passedTime *= (1 - fixFactor) * 0.8 + fixFactor;
 				_lastFrameTimestamp = now;
 				this.prepareFrames();
 				_context.clear(0.8, 0.8, 0.8, 1);
