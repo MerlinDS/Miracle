@@ -12,6 +12,7 @@ package com.merlinds.miracle {
 	import flash.display.StageScaleMode;
 	import flash.errors.IllegalOperationError;
 	import flash.events.Event;
+	import flash.utils.setTimeout;
 
 	public final class Miracle {
 
@@ -54,7 +55,7 @@ package com.merlinds.miracle {
 						callback.apply(null);
 					}
 				});
-				instance.start(enableErrorChecking);
+				setTimeout(instance.start, 0, enableErrorChecking);
 			} else {
 				throw new IllegalOperationError("Miracle already happened! " +
 					"Only one miracle per game session could be started.");
