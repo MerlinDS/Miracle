@@ -40,7 +40,7 @@ package com.merlinds.miracle.geom
 			this.height = bounds.height;
 		}
 
-		[Inline]
+//		[Inline]
 		public final function containsPoint(pointX:Number, pointY:Number,
 											offsetX:Number, offsetY:Number):Boolean
 		{

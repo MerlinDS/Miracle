@@ -61,8 +61,8 @@ package com.merlinds.miracle.display
 
 		//==============================================================================
 		//{region							PUBLIC METHODS
-
-		public function hitTest(point:Point):Boolean
+		[Inline]
+		public final function hitTest(point:Point):Boolean
 		{
 			if (!_mouseEnable)return false;
 			return this.transformation.bounds.containsPoint(point.x, point.y,
@@ -137,6 +137,7 @@ package com.merlinds.miracle.display
 
 		}
 
+//		[Inline]
 		protected final function demandAnimationInstance():void
 		{
 			if (_animation != null && _mesh != null)
@@ -166,7 +167,7 @@ package com.merlinds.miracle.display
 		/**
 		 * @private
 		 */
-		[Inline]
+//		[Inline]
 		public final function get animation():String
 		{
 			return _animation;
@@ -175,7 +176,7 @@ package com.merlinds.miracle.display
 		/**
 		 * Name of the animation that will be used for this display object
 		 */
-		[Inline]
+//		[Inline]
 		public final function set animation(value:String):void
 		{
 			if (value != _animation)
@@ -190,7 +191,7 @@ package com.merlinds.miracle.display
 		/**
 		 * @private
 		 */
-		[Inline]
+//		[Inline]
 		public final function get mesh():String
 		{
 			return _mesh;
@@ -199,7 +200,7 @@ package com.merlinds.miracle.display
 		/**
 		 * Name of the mesh that will be used for this display object
 		 */
-		[Inline]
+//		[Inline]
 		public final function set mesh(value:String):void
 		{
 			if (value != _mesh)
@@ -210,7 +211,7 @@ package com.merlinds.miracle.display
 			}
 		}
 
-		[Inline]
+//		[Inline]
 		public final function get animationId():String
 		{
 			return _animationId;
@@ -218,91 +219,91 @@ package com.merlinds.miracle.display
 
 //Transformations
 
-		[Inline]
+//		[Inline]
 		public final function get width():int
 		{
 			return this.transformation.bounds.width;
 		}
 
-		[Inline]
+//		[Inline]
 		public final function get height():int
 		{
 			return this.transformation.bounds.height;
 		}
 
-		[Inline]
+//		[Inline]
 		public final function get x():Number
 		{
 			return this.transformation.matrix.tx;
 		}
 
-		[Inline]
+//		[Inline]
 		public final function set x(value:Number):void
 		{
 			this.transformation.matrix.tx = value;
 		}
 
-		[Inline]
+//		[Inline]
 		public final function get y():Number
 		{
 			return this.transformation.matrix.ty;
 		}
 
-		[Inline]
+//		[Inline]
 		public final function set y(value:Number):void
 		{
 			this.transformation.matrix.ty = value;
 		}
 
-		[Inline]
+//		[Inline]
 		public final function get scaleX():Number
 		{
 			return this.transformation.matrix.scaleX;
 		}
 
-		[Inline]
+//		[Inline]
 		public final function set scaleX(value:Number):void
 		{
 			this.transformation.matrix.scaleX = value;
 		}
 
-		[Inline]
+//		[Inline]
 		public final function get scaleY():Number
 		{
 			return this.transformation.matrix.scaleY;
 		}
 
-		[Inline]
+//		[Inline]
 		public final function set scaleY(value:Number):void
 		{
 			this.transformation.matrix.scaleY = value;
 		}
 
-		[Inline]
+//		[Inline]
 		public final function get skewX():Number
 		{
 			return this.transformation.matrix.skewX;
 		}
 
-		[Inline]
+//		[Inline]
 		public final function set skewX(value:Number):void
 		{
 			this.transformation.matrix.skewX = value;
 		}
 
-		[Inline]
+//		[Inline]
 		public final function get skewY():Number
 		{
 			return this.transformation.matrix.skewY;
 		}
 
-		[Inline]
+//		[Inline]
 		public final function set skewY(value:Number):void
 		{
 			this.transformation.matrix.skewY = value;
 		}
 
-		[Inline]
+//		[Inline]
 		public final function set direction(value:int):void
 		{
 			value = value < 0 ? -1 : 1;
@@ -310,20 +311,21 @@ package com.merlinds.miracle.display
 			this.transformation.matrix.scaleX *= value;
 		}
 
-		[Inline]
+//		[Inline]
 		public final function get direction():int
 		{
 			return this.transformation.matrix.flipX;
 		}
 
-		[Inline]
+//		[Inline]
 		public final function get alpha():Number
 		{
 			//revert alphaMultiplier to alpha value
 			return 1 - this.transformation.color.alphaMultiplier;
 		}
 
-		public function set alpha(value:Number):void
+//		[Inline]
+		public final function set alpha(value:Number):void
 		{
 			//fix value if it not in 0 1 diapason
 			value = value > 1 ? 1 : value < 0 ? 0 : value;
@@ -340,7 +342,7 @@ package com.merlinds.miracle.display
 			}
 		}
 
-		[Inline]
+//		[Inline]
 		public final function get visible():Boolean
 		{
 			return _visible;
@@ -351,14 +353,14 @@ package com.merlinds.miracle.display
 			_visible = value;
 		}
 
-		[Inline]
+//		[Inline]
 		public final function set position(value:Vector3D):void
 		{
 			this.transformation.matrix.tx = value.x;
 			this.transformation.matrix.ty = value.y;
 		}
 
-		[Inline]
+//		[Inline]
 		public final function get isAnimated():Boolean
 		{
 			return _isAnimated;
@@ -366,7 +368,7 @@ package com.merlinds.miracle.display
 
 		//end of transformations
 		//playback
-		[Inline]
+//		[Inline]
 		public final function get currentFrame():int
 		{
 			return _currentFrame;
@@ -377,13 +379,13 @@ package com.merlinds.miracle.display
 			_currentFrame = value;
 		}
 
-		[Inline]
+//		[Inline]
 		protected final function get animationInstance():AnimationHelper
 		{
 			return _animationInstance;
 		}
 
-		[Inline]
+//		[Inline]
 		protected final function set animationInstance(value:AnimationHelper):void
 		{
 			_animationInstance = value;
@@ -410,19 +412,19 @@ package com.merlinds.miracle.display
 			_demandAnimationInstance = value;
 		}
 
-		[Inline]
+//		[Inline]
 		public final function get onStage():Boolean
 		{
 			return _onStage;
 		}
 
-		[Inline]
+//		[Inline]
 		public final function get mouseEnable():Boolean
 		{
 			return _mouseEnable;
 		}
 
-		[Inline]
+//		[Inline]
 		public final function set mouseEnable(value:Boolean):void
 		{
 			_mouseEnable = value;

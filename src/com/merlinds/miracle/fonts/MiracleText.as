@@ -183,7 +183,7 @@ package com.merlinds.miracle.fonts
 			this.animationInstance.numLayers = 0;
 			this.animationInstance.frames.length = 0;
 			if (_glyphs == null)
-				_glyphs = MiracleFonts.miracle_internal::getGlyphs(this.animation);
+				_glyphs = MiracleFonts.miracle_internal::getGlyphs(this.animation, false);
 			//refresh sizes
 			if (_xInterval == 0)_xInterval = _glyphs.width;
 			if (_yInterval == 0)_yInterval = _glyphs.height;

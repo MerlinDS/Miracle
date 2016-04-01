@@ -8,6 +8,8 @@ package com.merlinds.miracle.fonts
 	import com.merlinds.miracle.animations.FrameInfo;
 	import com.merlinds.miracle.miracle_internal;
 
+	import flash.utils.Dictionary;
+
 	use namespace miracle_internal;
 
 	public class MiracleFonts
@@ -19,7 +21,7 @@ package com.merlinds.miracle.fonts
 		//
 		public static const FONT_POSTFIX:String = ".font";
 		//
-		private static const _fonts:Object = {};
+		private static const _fonts:Dictionary = new Dictionary();
 		//======================================================================================================================
 //{region											PUBLIC METHODS
 		public function MiracleFonts()
@@ -43,7 +45,8 @@ package com.merlinds.miracle.fonts
 			}
 		}
 
-		miracle_internal static function getGlyphs(name:String, clearName:Boolean = false):GlyphsMap
+		[Inline]
+		miracle_internal static function getGlyphs(name:String, clearName:Boolean):GlyphsMap
 		{
 			if(!clearName)
 			{
