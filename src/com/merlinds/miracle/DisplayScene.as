@@ -76,7 +76,7 @@ package com.merlinds.miracle
 			//
 			var animation:AnimationHelper = _animations[mesh + DELIMITER + fontName];
 			MiracleFonts.miracle_internal::updateGlyphs(fontName, animation);
-			instance.animation = instance.animation + MiracleFonts.FONT_POSTFIX + _sessionUniqueCounter++;
+			instance.animation = instance.miracle_internal::animation + MiracleFonts.FONT_POSTFIX + _sessionUniqueCounter++;
 			_animations[instance.animationId] = instance.miracle_internal::animationInstance;
 			//
 			instance.text = text;
@@ -94,7 +94,7 @@ package com.merlinds.miracle
 				//create new animation helper and set it to instance
 				var animation:AnimationHelper = _animations[instance.animationId];
 				animation = animation.clone();
-				instance.animation = instance.animation + CLONE + _sessionUniqueCounter++;
+				instance.animation = instance.miracle_internal::animation + CLONE + _sessionUniqueCounter++;
 				_animations[instance.animationId] = animation;
 				instance.miracle_internal::animationInstance = animation;
 			}
@@ -215,11 +215,11 @@ package com.merlinds.miracle
 			var meshHelper:Mesh2D;
 			var textureHelper:TextureHelper;
 			//check instance for mesh and animation field are filed
-			if (instance.mesh == null || instance.animation == null)return false;
+			if (instance.miracle_internal::mesh == null || instance.miracle_internal::animation == null)return false;
 			//check for animation
 			if (_animations[instance.animationId] == null)return false;
 			//check for necessary objects for current instance
-			meshHelper = _meshes[instance.mesh];
+			meshHelper = _meshes[instance.miracle_internal::mesh];
 
 			if (meshHelper == null)
 				throw new ArgumentError("Can not draw display object without mesh");

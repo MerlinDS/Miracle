@@ -220,7 +220,7 @@ package com.merlinds.miracle
 		[Inline]
 		private final function collectInstanceData():void
 		{
-			_iMesh = _meshes[_instance.mesh];
+			_iMesh = _meshes[_instance.miracle_internal::mesh];
 			_iTextureHelper = _textures[_iMesh.textureLink];
 			_iAnimationHelper = _animations[_instance.animationId];
 		}

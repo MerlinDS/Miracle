@@ -173,6 +173,12 @@ package com.merlinds.miracle.display
 			return _animation;
 		}
 
+		[Inline]
+		miracle_internal final function get animation():String
+		{
+			return _animation;
+		}
+
 		/**
 		 * Name of the animation that will be used for this display object
 		 */
@@ -191,8 +197,8 @@ package com.merlinds.miracle.display
 		/**
 		 * @private
 		 */
-//		[Inline]
-		public final function get mesh():String
+		[Inline]
+		miracle_internal final function get mesh():String
 		{
 			return _mesh;
 		}
@@ -211,7 +217,7 @@ package com.merlinds.miracle.display
 			}
 		}
 
-//		[Inline]
+		[Inline]
 		public final function get animationId():String
 		{
 			return _animationId;
