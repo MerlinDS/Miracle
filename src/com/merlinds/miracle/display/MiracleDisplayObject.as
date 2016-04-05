@@ -49,6 +49,7 @@ package com.merlinds.miracle.display
 		//Transformations
 		public var transformation:Transformation;
 		private var _animationInstance:AnimationHelper;
+		private var _disposed:Boolean;
 
 		public function MiracleDisplayObject()
 		{
@@ -121,6 +122,7 @@ package com.merlinds.miracle.display
 			_animation = null;
 			_animationId = null;
 			transformation = null;
+			_disposed = true;
 		}
 
 		//} endregion PUBLIC METHODS ===================================================
@@ -240,78 +242,91 @@ package com.merlinds.miracle.display
 //		[Inline]
 		public final function get x():Number
 		{
+			if(_disposed)return 0;
 			return this.transformation.matrix.tx;
 		}
 
 //		[Inline]
 		public final function set x(value:Number):void
 		{
+			if(_disposed)return;
 			this.transformation.matrix.tx = value;
 		}
 
 //		[Inline]
 		public final function get y():Number
 		{
+			if(_disposed)return 0;
 			return this.transformation.matrix.ty;
 		}
 
 //		[Inline]
 		public final function set y(value:Number):void
 		{
+			if(_disposed)return;
 			this.transformation.matrix.ty = value;
 		}
 
 //		[Inline]
 		public final function get scaleX():Number
 		{
+			if(_disposed)return 0;
 			return this.transformation.matrix.scaleX;
 		}
 
 //		[Inline]
 		public final function set scaleX(value:Number):void
 		{
+			if(_disposed)return;
 			this.transformation.matrix.scaleX = value;
 		}
 
 //		[Inline]
 		public final function get scaleY():Number
 		{
+			if(_disposed)return 0;
 			return this.transformation.matrix.scaleY;
 		}
 
 //		[Inline]
 		public final function set scaleY(value:Number):void
 		{
+			if(_disposed)return;
 			this.transformation.matrix.scaleY = value;
 		}
 
 //		[Inline]
 		public final function get skewX():Number
 		{
+			if(_disposed)return 0;
 			return this.transformation.matrix.skewX;
 		}
 
 //		[Inline]
 		public final function set skewX(value:Number):void
 		{
+			if(_disposed)return;
 			this.transformation.matrix.skewX = value;
 		}
 
 //		[Inline]
 		public final function get skewY():Number
 		{
+			if(_disposed)return 0;
 			return this.transformation.matrix.skewY;
 		}
 
 //		[Inline]
 		public final function set skewY(value:Number):void
 		{
+			if(_disposed)return;
 			this.transformation.matrix.skewY = value;
 		}
 
 //		[Inline]
 		public final function set direction(value:int):void
 		{
+			if(_disposed)return;
 			value = value < 0 ? -1 : 1;
 			this.transformation.matrix.flipX = value;
 			this.transformation.matrix.scaleX *= value;
@@ -320,12 +335,14 @@ package com.merlinds.miracle.display
 //		[Inline]
 		public final function get direction():int
 		{
+			if(_disposed)return 0;
 			return this.transformation.matrix.flipX;
 		}
 
 //		[Inline]
 		public final function get alpha():Number
 		{
+			if(_disposed)return 0;
 			//revert alphaMultiplier to alpha value
 			return 1 - this.transformation.color.alphaMultiplier;
 		}
@@ -333,6 +350,7 @@ package com.merlinds.miracle.display
 //		[Inline]
 		public final function set alpha(value:Number):void
 		{
+			if(_disposed)return;
 			//fix value if it not in 0 1 diapason
 			value = value > 1 ? 1 : value < 0 ? 0 : value;
 			value = 1 - value;//revert value for right alpha transformation
@@ -362,6 +380,7 @@ package com.merlinds.miracle.display
 //		[Inline]
 		public final function set position(value:Vector3D):void
 		{
+			if(_disposed)return;
 			this.transformation.matrix.tx = value.x;
 			this.transformation.matrix.ty = value.y;
 		}
