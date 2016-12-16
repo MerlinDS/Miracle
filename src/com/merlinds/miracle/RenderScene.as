@@ -19,8 +19,11 @@ package com.merlinds.miracle
 	import com.merlinds.miracle.utils.ContextDisposeState;
 
 	import flash.display.BitmapData;
+	import flash.display3D.Context3DCompareMode;
+	import flash.display3D.Context3DTriangleFace;
 	import flash.display3D.Context3DVertexBufferFormat;
 	import flash.display3D.IndexBuffer3D;
+	import flash.display3D.Program3D;
 	import flash.display3D.VertexBuffer3D;
 	import flash.events.Event;
 	import flash.utils.ByteArray;
@@ -112,6 +115,7 @@ package com.merlinds.miracle
 			if (present)
 			{
 				_context.present();
+//				_context.setDepthTest(false, Context3DCompareMode.NEVER);
 			}
 		}
 
@@ -129,6 +133,8 @@ package com.merlinds.miracle
 				_lastFrameTimestamp = now;
 				this.prepareFrames();
 				_context.clear(0.8, 0.8, 0.8, 1);
+				_context.setCulling(Context3DTriangleFace.NONE);
+				_context.setDepthTest(false, Context3DCompareMode.NEVER);
 				//DRAW SCENE
 				var frame:FrameInfo;
 				var transform:Transformation;

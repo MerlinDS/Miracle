@@ -16,8 +16,6 @@ package com.merlinds.miracle
 	import com.merlinds.miracle.textures.TextureHelper;
 	import com.merlinds.miracle.utils.ContextDisposeState;
 
-	import flash.display3D.Context3DTextureFormat;
-
 	import flash.geom.Point;
 	import flash.utils.setTimeout;
 

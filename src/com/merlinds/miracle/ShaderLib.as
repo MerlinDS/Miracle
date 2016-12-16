@@ -63,7 +63,7 @@ package com.merlinds.miracle {
 
 
 		public static const FRAGMENT_SHADER:String = [
-			"tex ft0, v0, fs0 <2d,clamp,linear,mipnone>",
+			"tex ft0, v0, fs0 <2d,clamp,linear,mipnone>",//dxt5
 			"mul ft1 v1 v2",//tint offset * multiplier (offset * multiplier - color * multiplier) + color
 			"mul ft2 ft0 v2",//tint color * multiplier
 			"sub ft1 ft1 ft2",

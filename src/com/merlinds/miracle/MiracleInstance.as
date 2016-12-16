@@ -79,7 +79,8 @@ package com.merlinds.miracle {
 		private function setupContext():void{
 			if(_enableErrorChecking)
 				trace("Miracle: Setup context");
-			_context.enableErrorChecking = _enableErrorChecking;
+//			_context.enableErrorChecking = _enableErrorChecking;
+			_context.enableErrorChecking = false;
 			_context.setBlendFactors(Context3DBlendFactor.SOURCE_ALPHA, Context3DBlendFactor.ONE_MINUS_SOURCE_ALPHA);
 			this.updateViewport();
 			//set vertex buffers
@@ -97,7 +98,7 @@ package com.merlinds.miracle {
 			//TODO update viewport by old one
 			_viewport.width = _nativeStage.stageWidth;
 			_viewport.height = _nativeStage.stageHeight;
-			_context.configureBackBuffer(_viewport.width, _viewport.height, 2, false);
+			_context.configureBackBuffer(_viewport.width, _viewport.height, 0, false);
 			_ratioX = 2 / _viewport.width;
 			_ratioY = 2 / _viewport.height;
 		}
@@ -124,11 +125,13 @@ package com.merlinds.miracle {
 				 * On mobile devices 3DContext can be disposed while textures restoring.
 				 * To handle this issue start check 3DContext by timer
 				 */
-				_nativeStage.addEventListener(Event.ENTER_FRAME, this.enterFrameHandler);
+				_nativeStage.addEventListener(Event.RENDER, this.enterFrameHandler);
+//				_nativeStage.addEventListener(Event.ENTER_FRAME, this.enterFrameHandler, false, int.MAX_VALUE, true);
 				_scene.restore(this.completeMethod);
 				_reloading = false;
 			}else{
-				_nativeStage.removeEventListener(Event.ENTER_FRAME, this.enterFrameHandler);
+				_nativeStage.removeEventListener(Event.RENDER, this.enterFrameHandler);
+//				_nativeStage.removeEventListener(Event.ENTER_FRAME, this.enterFrameHandler, false);
 				this.dispatchEvent( new Event(Event.COMPLETE) );
 			}
 		}
@@ -138,7 +141,7 @@ package com.merlinds.miracle {
 		//{region							EVENTS HANDLERS
 		private function contextCreateHandler(context:Context3D):void{
 			_context = context;
-			if(_enableErrorChecking)
+//			if(_enableErrorChecking)
 				trace("Miracle: context3D was obtained", "3D driver:", _context.driverInfo);
 			setTimeout(_executeQueue.shift(), 0);
 		}
