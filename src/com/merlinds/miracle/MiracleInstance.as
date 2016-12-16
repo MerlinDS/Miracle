@@ -20,7 +20,6 @@ package com.merlinds.miracle {
 	import flash.utils.setTimeout;
 
 	[Event(type="flash.events.Event", name="complete")]
-	[Event(type="flash.events.Event", name="complete")]
 
 	internal class MiracleInstance extends EventDispatcher{
 		//only for dev stage
@@ -98,7 +97,7 @@ package com.merlinds.miracle {
 			//TODO update viewport by old one
 			_viewport.width = _nativeStage.stageWidth;
 			_viewport.height = _nativeStage.stageHeight;
-			_context.configureBackBuffer(_viewport.width, _viewport.height, 0, false);
+			_context.configureBackBuffer(_viewport.width, _viewport.height, 2, false);
 			_ratioX = 2 / _viewport.width;
 			_ratioY = 2 / _viewport.height;
 		}
