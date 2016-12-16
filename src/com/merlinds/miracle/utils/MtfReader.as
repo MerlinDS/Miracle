@@ -17,10 +17,8 @@ package com.merlinds.miracle.utils {
 		public static const MESH_BLOCK_SIZE:int = 512;
 
 		private var _meshes:Object;
-		private var _texture:TextureHelper;
 		private var _callback:Function;
 
-		private var _textureBytes:ByteArray;
 		private var _meshesData:Array;
 		private var _scale:Number;
 		//==============================================================================
@@ -41,17 +39,9 @@ package com.merlinds.miracle.utils {
 		//{region						PRIVATE\PROTECTED METHODS
 		private function readData(bytes:ByteArray):void
 		{
-			//ignore signature
-			bytes.position = 4;
-			//read mesh header length
-			var meshSize:int = bytes.readUnsignedInt() * MESH_BLOCK_SIZE;
-			//read mesh data
+			//ignore signature and read mesh data
 			bytes.position = 8;
 			_meshesData = bytes.readObject();
-			//read texture bytes
-			bytes.position = 8 + meshSize;
-			_textureBytes = new ByteArray();
-			bytes.readBytes(_textureBytes, 0, bytes.length - bytes.position);
 			bytes.clear();
 			setTimeout(parse, 1);
 		}
@@ -72,10 +62,6 @@ package com.merlinds.miracle.utils {
 				}
 				meshes[meshData.name] = mesh;
 			}
-			//parse textures
-			_texture = new TextureHelper( _textureBytes );
-			AtfData.getAtfParameters( _textureBytes, _texture );
-			_textureBytes = null;
 			_meshesData = null;
 			_callback.call();
 		}
@@ -90,10 +76,6 @@ package com.merlinds.miracle.utils {
 
 		public function get meshes():Object {
 			return _meshes;
-		}
-
-		public function get texture():TextureHelper {
-			return _texture;
 		}
 
 //} endregion GETTERS/SETTERS ==================================================

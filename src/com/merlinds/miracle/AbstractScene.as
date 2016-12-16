@@ -156,7 +156,9 @@ package com.merlinds.miracle
 
 import com.merlinds.miracle.animations.AnimationHelper;
 import com.merlinds.miracle.geom.Mesh2D;
+import com.merlinds.miracle.textures.TextureHelper;
 import com.merlinds.miracle.utils.Asset;
+import com.merlinds.miracle.utils.AtfData;
 import com.merlinds.miracle.utils.MafReader;
 import com.merlinds.miracle.utils.MtfReader;
 
@@ -218,6 +220,14 @@ class AssetsParser
 			_currentAsset = _assets.pop();
 			if (_currentAsset.type == Asset.TEXTURE_TYPE)
 				_mtfReader.execute(_currentAsset.output, _scale, parseMTFComplete);
+			else if(_currentAsset.type == Asset.ATF_TYPE)
+			{
+				var  texture:TextureHelper = new TextureHelper( _currentAsset.output );
+				AtfData.getAtfParameters( _currentAsset.output, texture );
+				_textures[_currentAsset.name] = texture;
+				_currentAsset.destroy();
+				setTimeout(this.parseAssets, 0);
+			}
 			else
 				_mafReader.execute(_currentAsset.output, _scale, parseMAFComplete)
 		}
@@ -235,7 +245,6 @@ class AssetsParser
 			mesh2D.textureLink = _currentAsset.name;
 			_meshes[meshName] = mesh2D;
 		}
-		_textures[_currentAsset.name] = _mtfReader.texture;
 		_currentAsset.destroy();
 		setTimeout(this.parseAssets, 0);
 	}

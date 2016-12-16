@@ -13,6 +13,7 @@ package com.merlinds.miracle.utils {
 		/** TimeLine Animation **/
 		public static const TIMELINE_TYPE:String = "MAF";/** Miracle animation format **/
 		public static const TEXTURE_TYPE:String = "MTF";/** Miracle texture format **/
+		public static const ATF_TYPE:String = "ATF";/** Miracle texture format **/
 		/**
 		 * Name of the asset that will be used as id in Miracle
 		 */
@@ -68,6 +69,7 @@ package com.merlinds.miracle.utils {
 				switch (signature){
 					case TEXTURE_TYPE : _type = TEXTURE_TYPE; break;
 					case TIMELINE_TYPE : _type = TIMELINE_TYPE; break;
+					case ATF_TYPE : _type = ATF_TYPE; break;
 					default :{}
 				}
 			}
@@ -75,7 +77,7 @@ package com.merlinds.miracle.utils {
 		}
 
 		public function get output():* {
-			if(this.type != TEXTURE_TYPE && this.type != TIMELINE_TYPE){
+			if(this.type != TEXTURE_TYPE && this.type != TIMELINE_TYPE && this.type != ATF_TYPE){
 				throw new ArgumentError("Unknown asset format. Need to use " + TEXTURE_TYPE + " or " + TIMELINE_TYPE +" formats");
 			}
 			return _bytes;
