@@ -38,6 +38,30 @@ package com.merlinds.miracle.utils.serializers
 	 */
 	internal class MTFSerializerV2 extends MTFSerializer
 	{
+		/**
+		 * Build in indexes of vertices
+		 */
+		private static const _indexes:Vector.<int> = new <int>[0,3,1,2,1,3];
+		/**
+		 * Size of coordinates arrays
+		 */
+		private static const ARRAY_SIZE:int = 8;
+		/**
+		 * Size of <code>char</code> array in bytes.
+		 * Use for save string fields
+		 */
+		private static const CHARS_SIZE:int = 64;
+		/** Size of list of (<code>float32</code>) uv coordinates: 4 * 8  bytes */
+		private static const UV_SIZE:int = 4 * ARRAY_SIZE;
+		/** Size of list of (<code>int32</code>) vertices coordinates: 4 * 8  bytes */
+		private static const VERTICES_SIZE:int = 4 * ARRAY_SIZE;
+		/** Total size of polygon chunk in bytes */
+		private static const CHUNK_SIZE:int = CHARS_SIZE + UV_SIZE + VERTICES_SIZE;
+		/** Size of head chunk in bytes**/
+		private static const HEAD_SIZE:int = CHARS_SIZE + 4 /*count*/ + 4 /*offset*/;
+		/** Standard char set for char bytes */
+		private static const CHAR_SET:String = 'us-ascii';
+		
 		public function MTFSerializerV2()
 		{
 			super( MTFSerializer.V2, Endian.LITTLE_ENDIAN );
@@ -47,6 +71,7 @@ package com.merlinds.miracle.utils.serializers
 		/**
 		 * Concrete serialization method realization
 		 * @param data Data object than need to be serialized.
+		 * Indexes will be ignored for this version of protocol.
 		 * @example
 		 * //Data object structure
 		 *
@@ -67,7 +92,80 @@ package com.merlinds.miracle.utils.serializers
 		 */
 		override protected function executeSerialization(data:Object, output:ByteArray):void
 		{
-			
+			var polygons:Array;
+			var position:int, i:int, n:int;
+			n = data.length;
+			var offset:int = n * HEAD_SIZE;//Set to end of header
+			//write meshes data to header, names and size of chunks list
+			for(i = 0; i < n; ++i)
+			{
+				var name:String = data[i].name;
+				if(name == null)
+					throw new ArgumentError("Mesh has no name field!");
+				polygons = data[i].mesh;
+				if(polygons == null)
+					throw new ArgumentError("Mesh has no polygons field!");
+				//write name and go to size data position
+				position = output.position;
+				output.writeMultiByte(name, CHAR_SET);
+				output.position = position + CHARS_SIZE;
+				//write size data
+				output.writeInt(polygons.length);//count of polygons
+				output.writeInt(offset);//polygons starting offset
+				offset += polygons.length * CHUNK_SIZE;//update offset for next mesh
+			}
+			//write polygons
+			for(i = 0; i < n; ++i)
+			{
+				polygons = data[i].mesh;
+				for each (var polygon:Object in polygons)
+					writePolygon(polygon, output);
+			}
+			trace(output);
+		}
+		
+		/**
+		 * Write mesh polygon to output:
+		 * Each of polygon in mesh is a chunk that has structure:
+		 * <ul>
+		 * 	<li>name</li>
+		 * 	<li>uv</li>
+		 * 	<li>vertices</li>
+		 *	</ul>
+		 * @param data Mesh data
+		 * @param output Output bytes
+		 *
+		 * @see MTFSerializerV2.CHUNK_SIZE Total size of chunk
+		 * @see MTFSerializerV2.CHARS_SIZE Size of the name filed
+		 * @see MTFSerializerV2.UV_SIZE Size of uv array
+		 * @see MTFSerializerV2.VERTICES_SIZE Size of vertices array
+		 */
+		[Inline]
+		private final function writePolygon(data:Object, output:ByteArray):void
+		{
+			/*
+			 	Can be modified in future versions of protocol.
+			 	But for V2 indexes of vertices is built in
+				var indexes:Array = data.indexes;
+			 */
+			if(data.name == null)
+				throw new ArgumentError("Polygon hasn't name field");
+			if(data.uv == null || data.uv.length != ARRAY_SIZE)
+				throw new ArgumentError("Polygon field uv is invalid or null!");
+			if(data.vertices == null || data.vertices.length != ARRAY_SIZE)
+				throw new ArgumentError("Polygon field vertices is invalid or null!");
+			//write chunk to output
+			var start:int = output.position;
+			//write name of polygon
+			output.writeMultiByte(data.name, CHAR_SET);
+			output.position = start + CHARS_SIZE;
+			//write uv array
+			var i:int;
+			for(i = 0; i < ARRAY_SIZE; ++i)
+				output.writeFloat(data.uv[i]);
+			//write vertices array
+			for(i = 0; i < ARRAY_SIZE; ++i)
+				output.writeInt(data.vertices[i]);
 		}
 	}
 }
