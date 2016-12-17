@@ -48,6 +48,7 @@ package com.merlinds.miracle.utils.serializers
 		 * Miracle texture format signature
 		 */
 		public static const SIGNATURE:String = "MTF";
+		
 		/**
 		 * Instantiate new serializer
 		 * @param version Version of serialize protocol
@@ -57,19 +58,22 @@ package com.merlinds.miracle.utils.serializers
 		public static function createSerializer(version:uint):MTFSerializer
 		{
 			var serializerClass:Class;
-			switch(version)
+			switch ( version )
 			{
-				case V2: serializerClass = MTFSerializerV2; break;
-				/*
-				 Add new version here, in new case body:
-				 case [Version number]: serializerClass = [serializer class]; break;
-				 */
+				case V2:
+					serializerClass = MTFSerializerV2;
+					break;
+					/*
+					 Add new version here, in new case body:
+					 case [Version number]: serializerClass = [serializer class]; break;
+					 */
 				default:
-					throw new ArgumentError("Unknown version for serializer");
+					throw new ArgumentError( "Unknown version for serializer" );
 			}
 			//No needs for instantiation error checking
 			return new serializerClass();
 		}
+		
 		//region Properties
 		private var _version:int;
 		private var _callback:Function;
@@ -89,8 +93,8 @@ package com.merlinds.miracle.utils.serializers
 			//Create signature and version header
 			_signatureBytes = new ByteArray();
 			_signatureBytes.endian = _endian;
-			_signatureBytes.writeUTFBytes(SIGNATURE);
-			_signatureBytes.writeUnsignedInt(_version);
+			_signatureBytes.writeUTFBytes( SIGNATURE );
+			_signatureBytes.writeUnsignedInt( _version );
 		}
 		
 		//region Public
@@ -104,14 +108,14 @@ package com.merlinds.miracle.utils.serializers
 			//Create output byteArray and fill it with signature
 			var output:ByteArray = new ByteArray();
 			output.endian = _endian;
-			output.writeBytes(_signatureBytes);
+			output.writeBytes( _signatureBytes );
 			//provide little offset
-			output.writeByte(0);
+			output.writeByte( 0 );
 			//Send data and output to serialization
-			executeSerialization(data, output);
+			executeSerialization( data, output );
 			//Verify and return output
-			if(output.length < 4)
-				throw new RangeError("Output length less than 4 bytes. Byte array is corrupted!");
+			if ( output.length < 4 )
+				throw new RangeError( "Output length less than 4 bytes. Byte array is corrupted!" );
 			return output;
 		}
 		
@@ -119,24 +123,26 @@ package com.merlinds.miracle.utils.serializers
 		 * Deserialize <code>ByteArray</code> with MTF to Miracle texture data
 		 * @param bytes Bytes for deserialization
 		 * @param output Output dictionary
+		 * @param scale Global scene scale (need for Polygon building)
 		 * @param callback Deserialization complete callback method
 		 */
-		public final function deserialize(bytes:ByteArray, output:Dictionary, callback:Function):void
+		public final function deserialize(bytes:ByteArray, output:Dictionary,
+										  scale:Number, callback:Function):void
 		{
 			_callback = callback;
 			//Check signature
 			bytes.position = 0;
 			var signature:String = String.fromCharCode( bytes[ 0 ], bytes[ 1 ], bytes[ 2 ] );
-			if(signature != SIGNATURE)
-				throw new IOError("Bad format signature");
+			if ( signature != SIGNATURE )
+				throw new IOError( "Bad format signature" );
 			bytes.position = 3;
 			var version:uint = bytes.readUnsignedInt();
-			if(version != _version)
-				throw new IOError("Bad format version");
+			if ( version != _version )
+				throw new IOError( "Bad format version" );
 			//signature verified
 			//provide little offset
 			bytes.position += 1;
-			executeDeserialization(bytes, output);
+			executeDeserialization( bytes, output, scale );
 		}
 		
 		/**
@@ -146,6 +152,7 @@ package com.merlinds.miracle.utils.serializers
 		{
 			return "MTFSerializer{Protocol version=" + _version + "}";
 		}
+		
 		//endregion
 		
 		//region Protected methods
@@ -159,7 +166,7 @@ package com.merlinds.miracle.utils.serializers
 		[Abstract]
 		protected function executeSerialization(data:Object, output:ByteArray):void
 		{
-			throw new IllegalOperationError("Must be overridden as abstract method!");
+			throw new IllegalOperationError( "Must be overridden as abstract method!" );
 		}
 		
 		/**
@@ -167,12 +174,13 @@ package com.merlinds.miracle.utils.serializers
 		 * @param bytes Bytes for deserialization
 		 *
 		 * @param output Output dictionary
+		 * @param scale Global scene scale (need for Polygon building)
 		 * @throws IllegalOperationError Must be overridden as abstract method!
 		 */
 		[Abstract]
-		protected function executeDeserialization(bytes:ByteArray, output:Dictionary):void
+		protected function executeDeserialization(bytes:ByteArray, output:Dictionary, scale:Number):void
 		{
-			throw new IllegalOperationError("Must be overridden as abstract method!");
+			throw new IllegalOperationError( "Must be overridden as abstract method!" );
 		}
 		
 		/**
@@ -180,12 +188,13 @@ package com.merlinds.miracle.utils.serializers
 		 */
 		protected final function deserializationComplete(/*TODO: Add output data fields*/):void
 		{
-			if(_callback is Function)
+			if ( _callback is Function )
 			{
-				_callback.call(this/*TODO: Send data*/);
+				_callback.call( this/*TODO: Send data*/ );
 			}
 			_callback = null;
 		}
+		
 		//endregion
 		
 		//region Getters|Setters
@@ -206,6 +215,7 @@ package com.merlinds.miracle.utils.serializers
 		{
 			return _endian;
 		}
+		
 		//endregion
 	}
 }

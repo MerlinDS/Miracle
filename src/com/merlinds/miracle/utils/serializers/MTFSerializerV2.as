@@ -180,8 +180,9 @@ package com.merlinds.miracle.utils.serializers
 		 * Read meshes from bytes and save them to output
 		 * @param bytes MTF bytes
 		 * @param output output dictionary
+		 * @param scale Global scene scale (need for Polygon building)
 		 */
-		override protected function executeDeserialization(bytes:ByteArray, output:Dictionary):void
+		override protected function executeDeserialization(bytes:ByteArray, output:Dictionary, scale:Number):void
 		{
 			var i:int, n:int = bytes.readInt();
 			var start:int = bytes.position;
@@ -192,7 +193,7 @@ package com.merlinds.miracle.utils.serializers
 				var name:String = bytes.readMultiByte(CHARS_SIZE, CHAR_SET);
 				var count:int = bytes.readInt();
 				var offset:int = bytes.readInt();
-				var mesh:Mesh2D = new Mesh2D();
+				var mesh:Mesh2D = new Mesh2D(scale);
 				if(output.name != null)
 					trace("WARNING: mesh with name" + name + "will be overridden");
 				output[name] = mesh;
@@ -219,7 +220,7 @@ package com.merlinds.miracle.utils.serializers
 				for(j = 0; j < ARRAY_SIZE; ++j)
 					data.vertexes[j] = bytes.readInt();
 				data.indexes = _indexes.concat();
-				var polygon:Polygon2D = new Polygon2D(data, 1);
+				var polygon:Polygon2D = new Polygon2D(data, mesh.scale);
 				mesh[name] = polygon;
 			}
 		}
