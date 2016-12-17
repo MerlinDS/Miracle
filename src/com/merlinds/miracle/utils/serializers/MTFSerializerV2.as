@@ -29,6 +29,7 @@ package com.merlinds.miracle.utils.serializers
 {
 	import flash.utils.ByteArray;
 	import flash.utils.Endian;
+	import flash.utils.setTimeout;
 	
 	/**
 	 * MTF (Miracle texture format) serializer.
@@ -38,6 +39,7 @@ package com.merlinds.miracle.utils.serializers
 	 */
 	internal class MTFSerializerV2 extends MTFSerializer
 	{
+		//region Constants
 		/**
 		 * Build in indexes of vertices
 		 */
@@ -61,6 +63,7 @@ package com.merlinds.miracle.utils.serializers
 		private static const HEAD_SIZE:int = CHARS_SIZE + 4 /*count*/ + 4 /*offset*/;
 		/** Standard char set for char bytes */
 		private static const CHAR_SET:String = 'us-ascii';
+		//endregion
 		
 		public function MTFSerializerV2()
 		{
@@ -68,6 +71,7 @@ package com.merlinds.miracle.utils.serializers
 		}
 		
 		
+		//region Serialization
 		/**
 		 * Concrete serialization method realization
 		 * @param data Data object than need to be serialized.
@@ -121,7 +125,6 @@ package com.merlinds.miracle.utils.serializers
 				for each (var polygon:Object in polygons)
 					writePolygon(polygon, output);
 			}
-			trace(output);
 		}
 		
 		/**
@@ -167,5 +170,18 @@ package com.merlinds.miracle.utils.serializers
 			for(i = 0; i < ARRAY_SIZE; ++i)
 				output.writeInt(data.vertices[i]);
 		}
+		//endregion
+		
+		
+		//region Deserialization
+		/**
+		 *
+		 * @param bytes
+		 */
+		override protected function executeDeserialization(bytes:ByteArray):void
+		{
+			setTimeout(deserializationComplete, 0);//wait for next frame
+		}
+		//endregion
 	}
 }

@@ -29,15 +29,21 @@ package tests.com.merlinds.miracle.utils.serializers
 {
 	import com.merlinds.miracle.utils.serializers.MTFSerializer;
 	
+	import flash.events.Event;
+	
+	import flash.events.EventDispatcher;
+	
 	import flash.utils.ByteArray;
 	import flash.utils.Dictionary;
 	
 	import flexunit.framework.Assert;
 	
+	import org.flexunit.async.Async;
+	
 	/**
 	 * Test case for MTF serializer.
 	 */
-	public class MTFSerializerTest
+	public class MTFSerializerTest extends EventDispatcher
 	{
 		private static const SIGNATURE:String = "MTF";
 		
@@ -46,6 +52,7 @@ package tests.com.merlinds.miracle.utils.serializers
 		
 		private var _dataProvider:Dictionary;
 		private var _serializer:MTFSerializer;
+		private var _passThroughData:Object;
 		
 		[Before]
 		public function setUp():void
@@ -58,6 +65,16 @@ package tests.com.merlinds.miracle.utils.serializers
 			{
 				Assert.fail("Error occurs while data provider initialization: " + error.message);
 			}
+			_serializer = MTFSerializer.createSerializer(MTFSerializer.V2);
+		}
+		
+		
+		[After]
+		public function tearDown():void
+		{
+			_dataProvider = null;
+			_serializer = null;
+			_passThroughData = null;
 		}
 		
 		[Test(expects="ArgumentError", description="MTF serialization instantiation errror of protocol versio")]
@@ -70,7 +87,6 @@ package tests.com.merlinds.miracle.utils.serializers
 		[Test(description="MTF object serialization test")]
 		public function serializeTest():void
 		{
-			_serializer = MTFSerializer.createSerializer(MTFSerializer.V2);
 			var holder:TestDataHolder = _dataProvider[MTFSerializer.V2];
 			var bytes:ByteArray = _serializer.serialize(holder.data);
 			Assert.assertNotNull("Serialization failed: bytes", bytes);
@@ -88,6 +104,33 @@ package tests.com.merlinds.miracle.utils.serializers
 		{
 			var signature:String = String.fromCharCode(bytes[0], bytes[1], bytes[2]);
 			Assert.assertEquals(message, SIGNATURE, signature);
+		}
+		
+		
+		[Test(async, description="MTF object deserialization test")]
+		public function deserializeTest():void
+		{
+			_passThroughData = {};
+			var holder:TestDataHolder = _dataProvider[MTFSerializer.V2];
+			var bytes:ByteArray = _serializer.serialize(holder.data);
+			this.addEventListener("callback",
+					Async.asyncHandler( this, handleVerifyProperty, 100, _passThroughData),
+					false, 0, true);
+			_serializer.deserialize(bytes, asyncCallbackHelper);
+		}
+		
+		//
+		private function asyncCallbackHelper():void
+		{
+			//TODO: Add value to _passThroughData for verification
+			_passThroughData.test = 1;
+			//execute async complete
+			this.dispatchEvent(new Event('callback'));
+		}
+		
+		protected function handleVerifyProperty( event:Event, passThroughData:Object ):void
+		{
+			Assert.assertEquals(1, passThroughData.test);
 		}
 	}
 }
