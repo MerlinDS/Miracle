@@ -39,7 +39,7 @@ package tests.com.merlinds.miracle.utils.serializers
 	 */
 	public class MTFSerializerTest
 	{
-		private static const PROTOCOL_V2:uint = 0x0002;
+		private static const SIGNATURE:String = "MTF";
 		
 		[Embed(source="MTFObjectV2.json", mimeType='application/octet-stream')]
 		private static const MFTObjectV2_JSON:Class;
@@ -53,20 +53,35 @@ package tests.com.merlinds.miracle.utils.serializers
 			_dataProvider = new Dictionary();
 			try{
 				var jsonHolder:Object = JSON.parse(new MFTObjectV2_JSON());
-				_dataProvider[PROTOCOL_V2] = jsonHolder.data;
+				_dataProvider[MTFSerializer.V2] = jsonHolder.data;
 			}catch (error:Error)
 			{
 				Assert.fail("Error occurs while data provider initialization: " + error.message);
 			}
 		}
 		
-		[Test(description="MTF object serialization test, protcol version 2.0")]
-		public function serializeV2Test():void
+		[Test(expects="ArgumentError", description="MTF serialization instantiation errror of protocol versio")]
+		public function instantiationErrorTest():void
 		{
-			_serializer = new MTFSerializer(PROTOCOL_V2);
-			var bytes:ByteArray = _serializer.serialize(_dataProvider[PROTOCOL_V2]);
+			//Try to instantiate wrong version
+			MTFSerializer.createSerializer(0x0000);
+		}
+		
+		[Test(description="MTF object serialization test")]
+		public function serializeTest():void
+		{
+			_serializer = MTFSerializer.createSerializer(MTFSerializer.V2);
+			var bytes:ByteArray = _serializer.serialize(_dataProvider[MTFSerializer.V2]);
 			Assert.assertNotNull("Serialization failed: bytes", bytes);
+			Assert.assertTrue("Serialization failed: bytes array empty", bytes.length > 4);
+			signatureAssert("Serialization failed: signature failed", bytes);
 			
+		}
+		
+		private final function signatureAssert(message:String, bytes:ByteArray):void
+		{
+			var signature:String = String.fromCharCode(bytes[0], bytes[1], bytes[2]);
+			Assert.assertEquals(message, SIGNATURE, signature);
 		}
 	}
 }

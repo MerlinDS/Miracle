@@ -23,13 +23,47 @@
  */
 package com.merlinds.miracle.utils.serializers
 {
+	import flash.errors.IllegalOperationError;
 	import flash.utils.ByteArray;
 	
 	/**
-	 * MTF (Miracle texture format) serializer
+	 * MTF (Miracle texture format) serializer.
+	 * This is the abstract class for provide public API of MTFSerializer.
+	 * Do not use constructor of this class to instantiate serializer!
+	 * Use factory method <code>createSerializer</code> instead.
+	 *
+	 * @see MTFSerializer.createSerializer Use for serializer instantiation
 	 */
 	public class MTFSerializer
 	{
+		/**
+		 * Available protocol version 2.0
+		 * Serializer for MTF v 1.0 does not exist, it was JSON, that why versions began from 2.0
+		 */
+		public static const V2:uint = 0x0002;
+		
+		/**
+		 * Instantiate new serializer
+		 * @param version Version of serialize protocol
+		 * @return Instance of new serializer
+		 * @throws ArgumentError Version is unknown. Use List of available protocols
+		 */
+		public static function createSerializer(version:uint):MTFSerializer
+		{
+			var serializerClass:Class;
+			switch(version)
+			{
+				case V2: serializerClass = MTFSerializerV2; break;
+				/*
+				 Add new version here, in new case body:
+				 case [Version number]: serializerClass = [serializer class]; break;
+				 */
+				default:
+					throw new ArgumentError("Unknown version for serializer");
+			}
+			//No needs for instantiation error checking
+			return new serializerClass();
+		}
 		//region Properties
 		private var _version:int;
 		private var _callback:Function;
@@ -49,9 +83,9 @@ package com.merlinds.miracle.utils.serializers
 		 * @param data Data object than need to be serialized
 		 * @return <code>ByteArray</code> of MTF file
 		 */
-		public function serialize(data:Object):ByteArray
+		public final function serialize(data:Object):ByteArray
 		{
-			return null;
+			return executeSerialization(data);
 		}
 		
 		/**
@@ -59,21 +93,58 @@ package com.merlinds.miracle.utils.serializers
 		 * @param bytes Bytes for deserialization
 		 * @param callback Deserialization complete callback method
 		 */
-		public function deserialize(bytes:ByteArray, callback:Function):void
+		public final function deserialize(bytes:ByteArray, callback:Function):void
 		{
 			_callback = callback;
+			executeDeserialization(bytes);
 		}
 		
 		/**
 		 * @inheritDoc
 		 */
-		public function toString():String
+		public final function toString():String
 		{
 			return "MTFSerializer{Protocol version=" + _version + "}";
 		}
-		
 		//endregion
 		
+		//region Protected methods
+		/**
+		 * Abstract method serialization.
+		 * @param data Data object than need to be serialized
+		 * @return <code>ByteArray</code> of MTF file
+		 *
+		 * @throws IllegalOperationError Must be overridden as abstract method!
+		 */
+		[Abstract]
+		protected function executeSerialization(data:Object):ByteArray
+		{
+			throw new IllegalOperationError("Must be overridden as abstract method!");
+		}
 		
+		/**
+		 * Abstract method of deserialization
+		 * @param bytes Bytes for deserialization
+		 *
+		 * @throws IllegalOperationError Must be overridden as abstract method!
+		 */
+		[Abstract]
+		protected function executeDeserialization(bytes:ByteArray):void
+		{
+			throw new IllegalOperationError("Must be overridden as abstract method!");
+		}
+		
+		/**
+		 * Must be executed after deserialization complete
+		 */
+		protected final function deserializationComplete(/*TODO: Add output data fields*/):void
+		{
+			if(_callback is Function)
+			{
+				_callback.call(this/*TODO: Send data*/);
+			}
+			_callback = null;
+		}
+		//endregion
 	}
 }
