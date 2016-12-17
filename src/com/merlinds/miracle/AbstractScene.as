@@ -10,10 +10,8 @@ package com.merlinds.miracle
 	import com.merlinds.miracle.utils.Asset;
 
 	import flash.display.Stage;
-
 	import flash.display3D.Context3D;
 	import flash.events.Event;
-	import flash.events.IEventDispatcher;
 	import flash.geom.Point;
 	import flash.utils.Dictionary;
 
@@ -155,15 +153,13 @@ package com.merlinds.miracle
 }
 
 import com.merlinds.miracle.animations.AnimationHelper;
-import com.merlinds.miracle.geom.Mesh2D;
 import com.merlinds.miracle.textures.TextureHelper;
 import com.merlinds.miracle.utils.Asset;
 import com.merlinds.miracle.utils.AtfData;
 import com.merlinds.miracle.utils.MafReader;
-import com.merlinds.miracle.utils.MtfReader;
+import com.merlinds.miracle.utils.serializers.MTFSerializer;
 
 import flash.utils.Dictionary;
-
 import flash.utils.setTimeout;
 
 class AssetsParser
@@ -179,7 +175,7 @@ class AssetsParser
 	/**AnimationHelper**/
 	private var _callback:Function;
 
-	private var _mtfReader:MtfReader;
+	private var _mftSerializer:MTFSerializer;
 	private var _mafReader:MafReader;
 	private var _scale:Number;
 
@@ -209,7 +205,7 @@ class AssetsParser
 		_callback = callback;
 		_scale = scale;
 		_mafReader = new MafReader();
-		_mtfReader = new MtfReader();
+		_mftSerializer = MTFSerializer.createSerializer(MTFSerializer.V2);
 		this.parseAssets();
 	}
 
@@ -219,7 +215,9 @@ class AssetsParser
 		{
 			_currentAsset = _assets.pop();
 			if (_currentAsset.type == Asset.TEXTURE_TYPE)
-				_mtfReader.execute(_currentAsset.output, _scale, parseMTFComplete);
+				_mftSerializer.deserialize(_currentAsset.output,
+						_meshes, _scale, _currentAsset.name,
+						parseMTFComplete);
 			else if(_currentAsset.type == Asset.ATF_TYPE)
 			{
 				var  texture:TextureHelper = new TextureHelper( _currentAsset.output );
@@ -239,12 +237,6 @@ class AssetsParser
 
 	private function parseMTFComplete():void
 	{
-		for (var meshName:String in _mtfReader.meshes)
-		{
-			var mesh2D:Mesh2D = _mtfReader.meshes[meshName];
-			mesh2D.textureLink = _currentAsset.name;
-			_meshes[meshName] = mesh2D;
-		}
 		_currentAsset.destroy();
 		setTimeout(this.parseAssets, 0);
 	}

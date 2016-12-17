@@ -6,11 +6,12 @@
 package com.merlinds.miracle.geom {
 	public dynamic class Mesh2D extends Object{
 
-		public var scale:Number;
-
+		public var textureLink:String;
+		public var scale:Number = 1;
 		//==============================================================================
 		//{region							PUBLIC METHODS
-		public function Mesh2D(scale:Number = 1) {
+		public function Mesh2D(textureLink:String = null, scale:Number = 1) {
+			this.textureLink = textureLink;
 			this.scale = scale;
 		}
 		//} endregion PUBLIC METHODS ===================================================

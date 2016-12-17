@@ -119,7 +119,7 @@ package tests.com.merlinds.miracle.utils.serializers
 			this.addEventListener( "callback",
 					Async.asyncHandler( this, handleVerifyProperty, 100, passThroughData ),
 					false, 0, true );
-			_serializer.deserialize( bytes, passThroughData.output, 1, function ():void
+			_serializer.deserialize( bytes, passThroughData.output, 1, "aliasName", function ():void
 			{
 				dispatchEvent( new Event( 'callback' ) );
 			} );

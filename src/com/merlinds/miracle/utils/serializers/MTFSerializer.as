@@ -28,7 +28,7 @@ package com.merlinds.miracle.utils.serializers
 	import flash.utils.ByteArray;
 	import flash.utils.Dictionary;
 	import flash.utils.Endian;
-	
+
 	/**
 	 * MTF (Miracle texture format) serializer.
 	 * This is the abstract class for provide public API of MTFSerializer.
@@ -124,14 +124,17 @@ package com.merlinds.miracle.utils.serializers
 		 * @param bytes Bytes for deserialization
 		 * @param output Output dictionary
 		 * @param scale Global scene scale (need for Polygon building)
+		 * @param alias Texture alias for meshes
 		 * @param callback Deserialization complete callback method
 		 */
 		public final function deserialize(bytes:ByteArray, output:Dictionary,
-										  scale:Number, callback:Function):void
+										  scale:Number, alias:String,
+										  callback:Function):void
 		{
 			_callback = callback;
 			//Check signature
 			bytes.position = 0;
+			bytes.endian = _endian;
 			var signature:String = String.fromCharCode( bytes[ 0 ], bytes[ 1 ], bytes[ 2 ] );
 			if ( signature != SIGNATURE )
 				throw new IOError( "Bad format signature" );
@@ -142,7 +145,7 @@ package com.merlinds.miracle.utils.serializers
 			//signature verified
 			//provide little offset
 			bytes.position += 1;
-			executeDeserialization( bytes, output, scale );
+			executeDeserialization( bytes, output, scale, alias );
 		}
 		
 		/**
@@ -175,10 +178,11 @@ package com.merlinds.miracle.utils.serializers
 		 *
 		 * @param output Output dictionary
 		 * @param scale Global scene scale (need for Polygon building)
+		 * @param alias Texture alias for meshes
 		 * @throws IllegalOperationError Must be overridden as abstract method!
 		 */
 		[Abstract]
-		protected function executeDeserialization(bytes:ByteArray, output:Dictionary, scale:Number):void
+		protected function executeDeserialization(bytes:ByteArray, output:Dictionary, scale:Number, alias:String):void
 		{
 			throw new IllegalOperationError( "Must be overridden as abstract method!" );
 		}

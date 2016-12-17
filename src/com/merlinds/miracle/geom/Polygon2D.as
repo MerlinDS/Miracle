@@ -16,26 +16,10 @@ package com.merlinds.miracle.geom {
 		public var buffer:ByteArray;
 		public var numVertices:Number;
 
-		//TODO DO not create buffer used precreated instead
-		public function Polygon2D(data:Object, scale:Number = 1) {
-			this.numVertices = data.vertexes.length >> 1;
-			this.indexes = new Vector.<int>( data.indexes.length );
+		public function Polygon2D(indexes:Vector.<int>, numVertices:Number) {
+			this.indexes = indexes;
+			this.numVertices = numVertices;
 			this.buffer = new ByteArray();
-			this.buffer.endian = Endian.LITTLE_ENDIAN;
-
-			var i:uint;
-			var n:int = this.numVertices;
-			for(i = 0; i < n; i++){
-				this.buffer.writeFloat(data.vertexes[ i * 2 ] * scale);
-				this.buffer.writeFloat(data.vertexes[ i * 2 + 1 ] * scale);
-				this.buffer.writeFloat(data.uv[ i * 2 ]);
-				this.buffer.writeFloat(data.uv[ i * 2 + 1 ]);
-			}
-
-			n = data.indexes.length;
-			for(i = 0; i < n; i++){
-				indexes[i] = data.indexes[i];
-			}
 		}
 
 		//==============================================================================

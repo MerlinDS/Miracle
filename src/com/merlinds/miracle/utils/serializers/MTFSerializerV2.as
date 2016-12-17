@@ -181,8 +181,9 @@ package com.merlinds.miracle.utils.serializers
 		 * @param bytes MTF bytes
 		 * @param output output dictionary
 		 * @param scale Global scene scale (need for Polygon building)
+		 * @param alias Texture alias for meshes
 		 */
-		override protected function executeDeserialization(bytes:ByteArray, output:Dictionary, scale:Number):void
+		override protected function executeDeserialization(bytes:ByteArray, output:Dictionary, scale:Number, alias:String):void
 		{
 			var i:int, n:int = bytes.readInt();
 			var start:int = bytes.position;
@@ -193,7 +194,7 @@ package com.merlinds.miracle.utils.serializers
 				var name:String = bytes.readMultiByte(CHARS_SIZE, CHAR_SET);
 				var count:int = bytes.readInt();
 				var offset:int = bytes.readInt();
-				var mesh:Mesh2D = new Mesh2D(scale);
+				var mesh:Mesh2D = new Mesh2D(alias, scale);
 				if(output.name != null)
 					trace("WARNING: mesh with name" + name + "will be overridden");
 				output[name] = mesh;
@@ -208,19 +209,28 @@ package com.merlinds.miracle.utils.serializers
 		private final function deserializePolygons(bytes:ByteArray, count:int, mesh:Mesh2D):void
 		{
 			var i:int, j:int;
+			var uv:Vector.<Number> = new <Number>[];
+			var vertices:Vector.<Number> = new <Number>[];
+			uv.length = vertices.length = ARRAY_SIZE;
 			for(i = 0; i < count; ++i)
 			{
 				//TODO: change after refactoring
 				var name:String = bytes.readMultiByte(CHARS_SIZE, CHAR_SET);
-				var data:Object = {};
-				data.uv = [];
+				var polygon:Polygon2D = new Polygon2D(_indexes.concat(), 4);
+				polygon.buffer.endian = endian;
 				for(j = 0; j < ARRAY_SIZE; ++j)
-					data.uv[j] = bytes.readFloat();
-				data.vertexes = [];
+					uv[j] = bytes.readFloat();
 				for(j = 0; j < ARRAY_SIZE; ++j)
-					data.vertexes[j] = bytes.readInt();
-				data.indexes = _indexes.concat();
-				var polygon:Polygon2D = new Polygon2D(data, mesh.scale);
+					vertices[j] = bytes.readInt();
+				//write polygon buffer
+				for(j = 0; j < polygon.numVertices; ++j)
+				{
+					polygon.buffer.writeFloat(vertices[ j * 2 ] * mesh.scale);
+					polygon.buffer.writeFloat(vertices[ j * 2 + 1 ] * mesh.scale);
+					polygon.buffer.writeFloat(uv[ j * 2 ]);
+					polygon.buffer.writeFloat(uv[ j * 2 + 1 ]);
+				}
+//				data, mesh.scale
 				mesh[name] = polygon;
 			}
 		}
