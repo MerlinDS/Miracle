@@ -16,6 +16,7 @@ package com.merlinds.miracle.geom {
 		public var buffer:ByteArray;
 		public var numVertices:Number;
 
+		//TODO DO not create buffer used precreated instead
 		public function Polygon2D(data:Object, scale:Number = 1) {
 			this.numVertices = data.vertexes.length >> 1;
 			this.indexes = new Vector.<int>( data.indexes.length );

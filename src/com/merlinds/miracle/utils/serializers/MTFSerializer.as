@@ -23,8 +23,10 @@
  */
 package com.merlinds.miracle.utils.serializers
 {
+	import flash.errors.IOError;
 	import flash.errors.IllegalOperationError;
 	import flash.utils.ByteArray;
+	import flash.utils.Dictionary;
 	import flash.utils.Endian;
 	
 	/**
@@ -114,12 +116,23 @@ package com.merlinds.miracle.utils.serializers
 		/**
 		 * Deserialize <code>ByteArray</code> with MTF to Miracle texture data
 		 * @param bytes Bytes for deserialization
+		 * @param output Output dictionary
 		 * @param callback Deserialization complete callback method
 		 */
-		public final function deserialize(bytes:ByteArray, callback:Function):void
+		public final function deserialize(bytes:ByteArray, output:Dictionary, callback:Function):void
 		{
 			_callback = callback;
-			executeDeserialization(bytes);
+			//Check signature
+			bytes.position = 0;
+			var signature:String = String.fromCharCode( bytes[ 0 ], bytes[ 1 ], bytes[ 2 ] );
+			if(signature != SIGNATURE)
+				throw new IOError("Bad format signature");
+			bytes.position = 3;
+			var version:uint = bytes.readUnsignedInt();
+			if(version != _version)
+				throw new IOError("Bad format version");
+			//signature verified
+			executeDeserialization(bytes, output);
 		}
 		
 		/**
@@ -149,10 +162,11 @@ package com.merlinds.miracle.utils.serializers
 		 * Abstract method of deserialization
 		 * @param bytes Bytes for deserialization
 		 *
+		 * @param output Output dictionary
 		 * @throws IllegalOperationError Must be overridden as abstract method!
 		 */
 		[Abstract]
-		protected function executeDeserialization(bytes:ByteArray):void
+		protected function executeDeserialization(bytes:ByteArray, output:Dictionary):void
 		{
 			throw new IllegalOperationError("Must be overridden as abstract method!");
 		}

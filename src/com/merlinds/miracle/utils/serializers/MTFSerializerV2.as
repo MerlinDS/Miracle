@@ -27,7 +27,11 @@
  */
 package com.merlinds.miracle.utils.serializers
 {
+	import com.merlinds.miracle.geom.Mesh2D;
+	import com.merlinds.miracle.geom.Polygon2D;
+	
 	import flash.utils.ByteArray;
+	import flash.utils.Dictionary;
 	import flash.utils.Endian;
 	import flash.utils.setTimeout;
 	
@@ -100,6 +104,7 @@ package com.merlinds.miracle.utils.serializers
 			var position:int, i:int, n:int;
 			n = data.length;
 			var offset:int = n * HEAD_SIZE;//Set to end of header
+			output.writeInt(n);//Save count of meshes
 			//write meshes data to header, names and size of chunks list
 			for(i = 0; i < n; ++i)
 			{
@@ -175,12 +180,51 @@ package com.merlinds.miracle.utils.serializers
 		
 		//region Deserialization
 		/**
-		 *
-		 * @param bytes
+		 * Read meshes from bytes and save them to output
+		 * @param bytes MTF bytes
+		 * @param output output dictionary
 		 */
-		override protected function executeDeserialization(bytes:ByteArray):void
+		override protected function executeDeserialization(bytes:ByteArray, output:Dictionary):void
 		{
+			var i:int, n:int = bytes.readInt();
+			var start:int = bytes.position;
+			for(i = 0; i < n; ++i)
+			{
+				//read meshes
+				bytes.position = start + HEAD_SIZE * i;
+				var name:String = bytes.readMultiByte(CHARS_SIZE, CHAR_SET);
+				var count:int = bytes.readInt();
+				var offset:int = bytes.readInt();
+				var mesh:Mesh2D = new Mesh2D();
+				if(output.name != null)
+					trace("WARNING: mesh with name" + name + "will be overridden");
+				output[name] = mesh;
+				//read polygons
+				bytes.position = start + offset;
+				deserializePolygons(bytes, count, mesh);
+			}
 			setTimeout(deserializationComplete, 0);//wait for next frame
+		}
+		
+		[Inline]
+		private final function deserializePolygons(bytes:ByteArray, count:int, mesh:Mesh2D):void
+		{
+			var i:int, j:int;
+			for(i = 0; i < count; ++i)
+			{
+				//TODO: change after refactoring
+				var name:String = bytes.readMultiByte(CHARS_SIZE, CHAR_SET);
+				var data:Object = {};
+				data.uv = [];
+				for(j = 0; j < ARRAY_SIZE; ++j)
+					data.uv[j] = bytes.readFloat();
+				data.vertexes = [];
+				for(j = 0; j < ARRAY_SIZE; ++j)
+					data.vertexes[j] = bytes.readInt();
+				data.indexes = _indexes.concat();
+				var polygon:Polygon2D = new Polygon2D(data, 1);
+				mesh[name] = polygon;
+			}
 		}
 		//endregion
 	}

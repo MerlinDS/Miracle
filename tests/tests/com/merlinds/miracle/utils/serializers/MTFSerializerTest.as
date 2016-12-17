@@ -22,11 +22,10 @@
  * SOFTWARE.
  */
 
-/**
- * Created by merli on 17.12.2016.
- */
 package tests.com.merlinds.miracle.utils.serializers
 {
+	import com.merlinds.miracle.geom.Mesh2D;
+	import com.merlinds.miracle.geom.Polygon2D;
 	import com.merlinds.miracle.utils.serializers.MTFSerializer;
 	
 	import flash.events.Event;
@@ -52,20 +51,20 @@ package tests.com.merlinds.miracle.utils.serializers
 		
 		private var _dataProvider:Dictionary;
 		private var _serializer:MTFSerializer;
-		private var _passThroughData:Object;
 		
 		[Before]
 		public function setUp():void
 		{
 			_dataProvider = new Dictionary();
-			try{
-				var jsonHolder:Object = JSON.parse(new MFTObjectV2_JSON());
-				_dataProvider[MTFSerializer.V2] = new TestDataHolder(jsonHolder.data);
-			}catch (error:Error)
+			try
 			{
-				Assert.fail("Error occurs while data provider initialization: " + error.message);
+				var jsonHolder:Object = JSON.parse( new MFTObjectV2_JSON() );
+				_dataProvider[ MTFSerializer.V2 ] = new TestDataHolder( jsonHolder.data );
+			} catch ( error:Error )
+			{
+				Assert.fail( "Error occurs while data provider initialization: " + error.message );
 			}
-			_serializer = MTFSerializer.createSerializer(MTFSerializer.V2);
+			_serializer = MTFSerializer.createSerializer( MTFSerializer.V2 );
 		}
 		
 		
@@ -74,63 +73,84 @@ package tests.com.merlinds.miracle.utils.serializers
 		{
 			_dataProvider = null;
 			_serializer = null;
-			_passThroughData = null;
 		}
 		
 		[Test(expects="ArgumentError", description="MTF serialization instantiation errror of protocol versio")]
 		public function instantiationErrorTest():void
 		{
 			//Try to instantiate wrong version
-			MTFSerializer.createSerializer(0x0000);
+			MTFSerializer.createSerializer( 0x0000 );
 		}
 		
 		[Test(description="MTF object serialization test")]
 		public function serializeTest():void
 		{
-			var holder:TestDataHolder = _dataProvider[MTFSerializer.V2];
-			var bytes:ByteArray = _serializer.serialize(holder.data);
-			Assert.assertNotNull("Serialization failed: bytes", bytes);
-			Assert.assertTrue("Serialization failed: bytes array empty", bytes.length > 4);
-			signatureAssert("Serialization failed: signature failed", bytes);
+			var holder:TestDataHolder = _dataProvider[ MTFSerializer.V2 ];
+			var bytes:ByteArray = _serializer.serialize( holder.data );
+			Assert.assertNotNull( "Serialization failed: bytes", bytes );
+			Assert.assertTrue( "Serialization failed: bytes array empty", bytes.length > 4 );
+			signatureAssert( "Serialization failed: signature failed", bytes );
 			//test by indirect signs
-			var totalSize:int = _serializer.signatureBytes.length +
-							holder.meshesCount * 72 +// header size
-							holder.polygonsCount * 128;//polygons list size
-			Assert.assertEquals("Serialization failed: bytes length", totalSize, bytes.length);
+			var totalSize:int = _serializer.signatureBytes.length + 4 +
+					holder.meshesCount * 72 +// header size
+					holder.polygonsCount * 128;//polygons list size
+			Assert.assertEquals( "Serialization failed: bytes length", totalSize, bytes.length );
+			bytes.position = _serializer.signatureBytes.length;
+			Assert.assertEquals( "Serialization failed: meshes count", holder.meshesCount, bytes.readInt() );
 		}
 		
 		[Inline]
 		private final function signatureAssert(message:String, bytes:ByteArray):void
 		{
-			var signature:String = String.fromCharCode(bytes[0], bytes[1], bytes[2]);
-			Assert.assertEquals(message, SIGNATURE, signature);
+			var signature:String = String.fromCharCode( bytes[ 0 ], bytes[ 1 ], bytes[ 2 ] );
+			Assert.assertEquals( message, SIGNATURE, signature );
 		}
 		
 		
 		[Test(async, description="MTF object deserialization test")]
 		public function deserializeTest():void
 		{
-			_passThroughData = {};
-			var holder:TestDataHolder = _dataProvider[MTFSerializer.V2];
-			var bytes:ByteArray = _serializer.serialize(holder.data);
-			this.addEventListener("callback",
-					Async.asyncHandler( this, handleVerifyProperty, 100, _passThroughData),
-					false, 0, true);
-			_serializer.deserialize(bytes, asyncCallbackHelper);
+			var holder:TestDataHolder = _dataProvider[ MTFSerializer.V2 ];
+			var passThroughData:Object = {
+				holder:holder,
+				output:new Dictionary()
+			};
+			var bytes:ByteArray = _serializer.serialize( holder.data );
+			this.addEventListener( "callback",
+					Async.asyncHandler( this, handleVerifyProperty, 100, passThroughData ),
+					false, 0, true );
+			_serializer.deserialize( bytes, passThroughData.output, function ():void
+			{
+				dispatchEvent( new Event( 'callback' ) );
+			} );
 		}
 		
-		//
-		private function asyncCallbackHelper():void
+		protected function handleVerifyProperty(event:Event, passThroughData:Object):void
 		{
-			//TODO: Add value to _passThroughData for verification
-			_passThroughData.test = 1;
-			//execute async complete
-			this.dispatchEvent(new Event('callback'));
-		}
-		
-		protected function handleVerifyProperty( event:Event, passThroughData:Object ):void
-		{
-			Assert.assertEquals(1, passThroughData.test);
+			//Dict of Mesh2D that contains Polygon2D
+			var holder:TestDataHolder = passThroughData.holder;
+			var output:Dictionary = passThroughData.output;
+			Assert.assertNotNull("Deserialization failed: output", output);
+			var meshesCount:int = 0, polygonsCount:int = 0;
+			for(var name:String in output)
+			{
+				var mesh:Mesh2D = output[name];
+				Assert.assertNotNull("Deserialization failed: mesh", mesh);
+				for(var pName:String in mesh)
+				{
+					var polygon:Polygon2D = mesh[pName];
+					Assert.assertNotNull("Deserialization failed: polygon", polygon);
+					Assert.assertNotNull("Deserialization failed: indexes", polygon.indexes);
+					Assert.assertEquals("Deserialization failed: indexes", 6, polygon.indexes.length);
+					Assert.assertEquals("Deserialization failed: vertices", 4, polygon.numVertices);
+					Assert.assertNotNull("Deserialization failed: buffer", polygon.buffer);
+					Assert.assertEquals("Deserialization failed: buffer", 64, polygon.buffer.length);
+					polygonsCount++;
+				}
+				meshesCount++;
+			}
+			Assert.assertEquals( "Deserialization failed: meshes", holder.meshesCount, meshesCount );
+			Assert.assertEquals( "Deserialization failed: polygons", holder.polygonsCount, polygonsCount );
 		}
 	}
 }
@@ -145,7 +165,7 @@ class TestDataHolder
 	{
 		this.data = data;
 		meshesCount = data.length;
-		for each(var mesh:Object in data)
+		for each( var mesh:Object in data )
 			polygonsCount += mesh.mesh.length;
 	}
 }
