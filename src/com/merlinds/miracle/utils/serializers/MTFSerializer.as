@@ -105,6 +105,8 @@ package com.merlinds.miracle.utils.serializers
 			var output:ByteArray = new ByteArray();
 			output.endian = _endian;
 			output.writeBytes(_signatureBytes);
+			//provide little offset
+			output.writeByte(0);
 			//Send data and output to serialization
 			executeSerialization(data, output);
 			//Verify and return output
@@ -132,6 +134,8 @@ package com.merlinds.miracle.utils.serializers
 			if(version != _version)
 				throw new IOError("Bad format version");
 			//signature verified
+			//provide little offset
+			bytes.position += 1;
 			executeDeserialization(bytes, output);
 		}
 		

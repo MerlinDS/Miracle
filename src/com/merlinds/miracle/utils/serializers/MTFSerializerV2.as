@@ -22,9 +22,6 @@
  * SOFTWARE.
  */
 
-/**
- * Created by merli on 17.12.2016.
- */
 package com.merlinds.miracle.utils.serializers
 {
 	import com.merlinds.miracle.geom.Mesh2D;

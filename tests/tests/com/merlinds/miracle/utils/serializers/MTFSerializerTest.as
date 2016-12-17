@@ -91,11 +91,11 @@ package tests.com.merlinds.miracle.utils.serializers
 			Assert.assertTrue( "Serialization failed: bytes array empty", bytes.length > 4 );
 			signatureAssert( "Serialization failed: signature failed", bytes );
 			//test by indirect signs
-			var totalSize:int = _serializer.signatureBytes.length + 4 +
+			var totalSize:int = _serializer.signatureBytes.length + 1 + 4 +
 					holder.meshesCount * 72 +// header size
 					holder.polygonsCount * 128;//polygons list size
 			Assert.assertEquals( "Serialization failed: bytes length", totalSize, bytes.length );
-			bytes.position = _serializer.signatureBytes.length;
+			bytes.position = _serializer.signatureBytes.length + 1;
 			Assert.assertEquals( "Serialization failed: meshes count", holder.meshesCount, bytes.readInt() );
 		}
 		
