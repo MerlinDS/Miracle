@@ -25,6 +25,7 @@ package com.merlinds.miracle.utils.serializers
 {
 	import flash.errors.IllegalOperationError;
 	import flash.utils.ByteArray;
+	import flash.utils.Endian;
 	
 	/**
 	 * MTF (Miracle texture format) serializer.
@@ -41,7 +42,10 @@ package com.merlinds.miracle.utils.serializers
 		 * Serializer for MTF v 1.0 does not exist, it was JSON, that why versions began from 2.0
 		 */
 		public static const V2:uint = 0x0002;
-		
+		/**
+		 * Miracle texture format signature
+		 */
+		public static const SIGNATURE:String = "MTF";
 		/**
 		 * Instantiate new serializer
 		 * @param version Version of serialize protocol
@@ -67,14 +71,24 @@ package com.merlinds.miracle.utils.serializers
 		//region Properties
 		private var _version:int;
 		private var _callback:Function;
+		
+		private var _endian:String;
+		private var _signatureBytes:ByteArray;
 		//endregion
 		/**
 		 * Constructor
 		 * @param version of serialization protocol
+		 * @param endian Bytes endian
 		 */
-		public function MTFSerializer(version:uint)
+		public function MTFSerializer(version:uint, endian:String = Endian.LITTLE_ENDIAN)
 		{
 			_version = version;
+			_endian = endian;
+			//Create signature and version header
+			_signatureBytes = new ByteArray();
+			_signatureBytes.endian = _endian;
+			_signatureBytes.writeUTFBytes(SIGNATURE);
+			_signatureBytes.writeUnsignedInt(_version);
 		}
 		
 		//region Public
@@ -85,7 +99,16 @@ package com.merlinds.miracle.utils.serializers
 		 */
 		public final function serialize(data:Object):ByteArray
 		{
-			return executeSerialization(data);
+			//Create output byteArray and fill it with signature
+			var output:ByteArray = new ByteArray();
+			output.endian = _endian;
+			output.writeBytes(_signatureBytes);
+			//Send data and output to serialization
+			executeSerialization(data, output);
+			//Verify and return output
+			if(output.length < 4)
+				throw new RangeError("Output length less than 4 bytes. Byte array is corrupted!");
+			return output;
 		}
 		
 		/**
@@ -112,12 +135,12 @@ package com.merlinds.miracle.utils.serializers
 		/**
 		 * Abstract method serialization.
 		 * @param data Data object than need to be serialized
-		 * @return <code>ByteArray</code> of MTF file
+		 * @param output Output <code>ByteArray</code> of MTF file
 		 *
 		 * @throws IllegalOperationError Must be overridden as abstract method!
 		 */
 		[Abstract]
-		protected function executeSerialization(data:Object):ByteArray
+		protected function executeSerialization(data:Object, output:ByteArray):void
 		{
 			throw new IllegalOperationError("Must be overridden as abstract method!");
 		}
@@ -144,6 +167,26 @@ package com.merlinds.miracle.utils.serializers
 				_callback.call(this/*TODO: Send data*/);
 			}
 			_callback = null;
+		}
+		//endregion
+		
+		//region Getters|Setters
+		/**
+		 * Signature bytes
+		 */
+		[Inline]
+		public final function get signatureBytes():ByteArray
+		{
+			return _signatureBytes;
+		}
+		
+		/**
+		 * Bytes endian
+		 */
+		[Inline]
+		public final function get endian():String
+		{
+			return _endian;
 		}
 		//endregion
 	}

@@ -27,6 +27,9 @@
  */
 package com.merlinds.miracle.utils.serializers
 {
+	import flash.utils.ByteArray;
+	import flash.utils.Endian;
+	
 	/**
 	 * MTF (Miracle texture format) serializer.
 	 * Protocol version 2.0
@@ -37,7 +40,34 @@ package com.merlinds.miracle.utils.serializers
 	{
 		public function MTFSerializerV2()
 		{
-			super( MTFSerializer.V2 );
+			super( MTFSerializer.V2, Endian.LITTLE_ENDIAN );
+		}
+		
+		
+		/**
+		 * Concrete serialization method realization
+		 * @param data Data object than need to be serialized.
+		 * @example
+		 * //Data object structure
+		 *
+		 * [{
+		 * 	mesh:[
+		 * 		//list of parts
+		 * 		{
+		 * 			name:[name of the polygon],
+		 * 			indexes:[0,3,1,2,1,3],
+		 * 			uv:[8 values of UV coordinates ],
+		 *			vertices:[8 values of vertices coordinates]
+		 * 		}]
+		 * 	},
+		 * 	...
+		 * ]
+		 *
+		 * @param output <code>ByteArray</code> of serialized MTF
+		 */
+		override protected function executeSerialization(data:Object, output:ByteArray):void
+		{
+			
 		}
 	}
 }
