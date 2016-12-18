@@ -32,15 +32,28 @@ package com.merlinds.miracle.utils.serializers
 	 */
 	public class DictionarySerializer
 	{
+		//region Properties
 		private var _endian:String;
 		private var _charSet:String;
+		//endregion
 		
+		/**
+		 * Constructor
+		 * @param charSet Characters set
+		 * @param endian Endian of bytes
+		 */
 		public function DictionarySerializer(charSet:String, endian:String = Endian.LITTLE_ENDIAN)
 		{
 			_charSet = charSet;
 			_endian = endian;
 		}
 		
+		//region Public
+		/**
+		 * Serialize aliases to bytes dictionary
+		 * @param aliases List of aliases
+		 * @return <code>ByteArray</code> of dict
+		 */
 		public function serialize(aliases:Vector.<String>):ByteArray
 		{
 			if(aliases == null)
@@ -58,6 +71,11 @@ package com.merlinds.miracle.utils.serializers
 			return output;
 		}
 		
+		/**
+		 * Deserialize aliases from bytes dict
+		 * @param bytes <code>ByteArray</code> of dict
+		 * @return List of aliases
+		 */
 		public function deserialize(bytes:ByteArray):Vector.<String>
 		{
 			if(bytes == null || bytes.length == 0)
@@ -71,8 +89,8 @@ package com.merlinds.miracle.utils.serializers
 					bytes.readMultiByte(length, _charSet)
 				);
 			}
-			
 			return output;
 		}
+		//endregion
 	}
 }
