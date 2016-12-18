@@ -24,8 +24,13 @@
 
 package tests.com.merlinds.miracle.utils.serializers.MAF
 {
+	import com.merlinds.miracle.animations.AnimationHelper;
 	import com.merlinds.miracle.utils.serializers.MAF.MAFSerializer;
 	import com.merlinds.miracle.utils.serializers.MSVersions;
+	
+	import flash.events.Event;
+	
+	import flash.events.EventDispatcher;
 	
 	import flash.utils.ByteArray;
 	
@@ -33,7 +38,9 @@ package tests.com.merlinds.miracle.utils.serializers.MAF
 	
 	import flexunit.framework.Assert;
 	
-	public class MAFSerializerV2Test
+	import org.flexunit.async.Async;
+	
+	public class MAFSerializerV2Test extends EventDispatcher
 	{
 		private static const SIGNATURE:String = "MAF";
 		
@@ -70,7 +77,7 @@ package tests.com.merlinds.miracle.utils.serializers.MAF
 		public function testSerialize():void
 		{
 			var holder:TestDataHolder = _dataProvider[ MSVersions.MAF2 ];
-			var bytes:ByteArray = _serializer.serialize(holder.data, MSVersions.MAF2);
+			var bytes:ByteArray = _serializer.serialize( holder.data, MSVersions.MAF2 );
 			Assert.assertNotNull( "Serialization failed: bytes", bytes );
 			Assert.assertTrue( "Serialization failed: bytes array empty", bytes.length > 4 );
 			signatureAssert( "Serialization failed: signature failed", bytes );
@@ -87,10 +94,56 @@ package tests.com.merlinds.miracle.utils.serializers.MAF
 			var signature:String = String.fromCharCode( bytes[ 0 ], bytes[ 1 ], bytes[ 2 ] );
 			Assert.assertEquals( message, SIGNATURE, signature );
 		}
+		
+		[Test(async, description="MTF object deserialization test")]
+		public function deserializeTest():void
+		{
+			var holder:TestDataHolder = _dataProvider[ MSVersions.MAF2 ];
+			var passThroughData:Object = {
+				holder: holder,
+				output: new Dictionary()
+			};
+			var bytes:ByteArray = _serializer.serialize( holder.dataClone, MSVersions.MAF2 );
+			this.addEventListener( "callback",
+					Async.asyncHandler( this, handleVerifyProperty, 100, passThroughData ),
+					false, 0, true );
+			_serializer.deserialize( bytes, passThroughData.output, 1, "aliasName", function ():void
+			{
+				dispatchEvent( new Event( 'callback' ) );
+			} );
+		}
+		
+		protected function handleVerifyProperty(event:Event, passThroughData:Object):void
+		{
+			var holder:TestDataHolder = passThroughData.holder;
+			var output:Dictionary = passThroughData.output;
+			Assert.assertNotNull( "Deserialization failed: output", output );
+			var animCount:int;
+			for ( var name:String in output )
+			{
+				var animation:AnimationHelper = output[ name ];
+				Assert.assertNotNull( "Deserialization failed: animation", animation );
+				var animationData:Object = holder.getAnimation( animation.name );
+				Assert.assertNotNull( "Deserialization failed: holder", animationData );
+				Assert.assertEquals( "Deserialization failed: totalFrames", animationData.totalFrames, animation.totalFrames );
+				//Assert bounds
+				Assert.assertEquals( "Deserialization failed: bounds.x", Math.round( animationData.bounds.x ), Math.round( animation.bounds.x ) );
+				Assert.assertEquals( "Deserialization failed: bounds.y", Math.round( animationData.bounds.y ), Math.round( animation.bounds.y ) );
+				Assert.assertEquals( "Deserialization failed: bounds.width", Math.round( animationData.bounds.width ), Math.round( animation.bounds.width ) );
+				Assert.assertEquals( "Deserialization failed: bounds.height", Math.round( animationData.bounds.height ), Math.round( animation.bounds.height ) );
+				//Assert frames
+
+//				animation.frames
+				animCount++;
+			}
+			Assert.assertEquals( "Deserialization failed: animations", holder.animationsCount, animCount );
+		}
 	}
 }
 
 import com.merlinds.miracle.utils.serializers.DictionarySerializer;
+
+import flash.utils.ByteArray;
 
 import flash.utils.Endian;
 
@@ -98,13 +151,32 @@ class TestDataHolder
 {
 	public var data:Object;
 	public var dictSize:int;
+	public var animationsCount:int;
 	
 	
 	public function TestDataHolder(data:Object)
 	{
 		this.data = data;
-		
-		dictSize = new DictionarySerializer('us-ascii', Endian.LITTLE_ENDIAN)
-				.serializeFromObject(data, false).length;
+		this.animationsCount = data.length;
+		dictSize = new DictionarySerializer( 'us-ascii', Endian.LITTLE_ENDIAN )
+				.serializeFromObject( data, false ).length;
+	}
+	
+	public function getAnimation(name:String)
+	{
+		for each ( var animation:Object in data )
+		{
+			if ( animation.name == name )
+				return animation;
+		}
+		return null;
+	}
+	
+	public function get dataClone():Object
+	{
+		var byteArray:ByteArray = new ByteArray();
+		byteArray.writeObject( data );
+		byteArray.position = 0;
+		return byteArray.readObject();
 	}
 }
