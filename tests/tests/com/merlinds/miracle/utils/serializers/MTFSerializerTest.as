@@ -92,10 +92,11 @@ package tests.com.merlinds.miracle.utils.serializers
 			signatureAssert( "Serialization failed: signature failed", bytes );
 			//test by indirect signs
 			var totalSize:int = _serializer.signatureBytes.length + 1 + 4 +
-					holder.meshesCount * 72 +// header size
-					holder.polygonsCount * 128;//polygons list size
+					holder.dictSize +
+					holder.meshesCount * 12 +// header size
+					holder.polygonsCount * 68;//polygons list size
 			Assert.assertEquals( "Serialization failed: bytes length", totalSize, bytes.length );
-			bytes.position = _serializer.signatureBytes.length + 1;
+			bytes.position = _serializer.signatureBytes.length + 1 + holder.dictSize;
 			Assert.assertEquals( "Serialization failed: meshes count", holder.meshesCount, bytes.readInt() );
 		}
 		
@@ -154,11 +155,17 @@ package tests.com.merlinds.miracle.utils.serializers
 		}
 	}
 }
+
+import com.merlinds.miracle.utils.serializers.DictionarySerializer;
+
+import flash.utils.Endian;
+
 class TestDataHolder
 {
 	public var data:Object;
 	public var meshesCount:int;
 	public var polygonsCount:int;
+	public var dictSize:int;
 	
 	
 	public function TestDataHolder(data:Object)
@@ -167,5 +174,8 @@ class TestDataHolder
 		meshesCount = data.length;
 		for each( var mesh:Object in data )
 			polygonsCount += mesh.mesh.length;
+		
+		dictSize = new DictionarySerializer('us-ascii', Endian.LITTLE_ENDIAN)
+				.serializeFromObject(data, false).length;
 	}
 }

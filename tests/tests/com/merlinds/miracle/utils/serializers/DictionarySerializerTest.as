@@ -80,6 +80,23 @@ package tests.com.merlinds.miracle.utils.serializers
 			Assert.assertEquals("Serialization: bytes", _bytesLength, bytes.length);
 		}
 		
+		[Test(description="Serialization of object to bytes array")]
+		public function testObjectSerialization():void
+		{
+			var data:Object = {};
+			for(var i:int = 0; i < _aliases.length; ++i)
+			{
+				data[ "field" + i ] = _aliases[i];
+			}
+			var bytes:ByteArray = _serializer.serializeFromObject(data);
+			Assert.assertNotNull("Serialization: bytes", bytes);
+			Assert.assertEquals("Serialization: bytes", _bytesLength, bytes.length);
+			for(i = 0; i < _aliases.length; ++i)
+			{
+				Assert.assertTrue("Serialization: object", data["field" + i] is int);
+			}
+		}
+		
 		
 		[Test(description="Deserialization of aliases from bytes array")]
 		public function testDeserialization():void

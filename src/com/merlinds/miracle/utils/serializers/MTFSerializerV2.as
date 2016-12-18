@@ -49,11 +49,8 @@ package com.merlinds.miracle.utils.serializers
 		 * Size of coordinates arrays
 		 */
 		private static const ARRAY_SIZE:int = 8;
-		/**
-		 * Size of <code>char</code> array in bytes.
-		 * Use for save string fields
-		 */
-		private static const CHARS_SIZE:int = 64;
+		/** Size of alias index in bytes */
+		private static const CHARS_SIZE:int = 4;
 		/** Size of list of (<code>float32</code>) uv coordinates: 4 * 8  bytes */
 		private static const UV_SIZE:int = 4 * ARRAY_SIZE;
 		/** Size of list of (<code>int32</code>) vertices coordinates: 4 * 8  bytes */
@@ -62,13 +59,16 @@ package com.merlinds.miracle.utils.serializers
 		private static const CHUNK_SIZE:int = CHARS_SIZE + UV_SIZE + VERTICES_SIZE;
 		/** Size of head chunk in bytes**/
 		private static const HEAD_SIZE:int = CHARS_SIZE + 4 /*count*/ + 4 /*offset*/;
-		/** Standard char set for char bytes */
-		private static const CHAR_SET:String = 'us-ascii';
+		//endregion
+		
+		//region Properties
+		private var _dictSerializer:DictionarySerializer;
 		//endregion
 		
 		public function MTFSerializerV2()
 		{
 			super( MTFSerializer.V2, Endian.LITTLE_ENDIAN );
+			_dictSerializer = new DictionarySerializer('us-ascii', endian);
 		}
 		
 		
@@ -100,20 +100,22 @@ package com.merlinds.miracle.utils.serializers
 			var polygons:Array;
 			var position:int, i:int, n:int;
 			n = data.length;
+			//write aliases dict
+			var aliases:ByteArray = _dictSerializer.serializeFromObject(data);
+			output.writeBytes(aliases, 0, aliases.length);
+			//write header
 			var offset:int = n * HEAD_SIZE;//Set to end of header
 			output.writeInt(n);//Save count of meshes
 			//write meshes data to header, names and size of chunks list
 			for(i = 0; i < n; ++i)
 			{
-				var name:String = data[i].name;
-				if(name == null)
-					throw new ArgumentError("Mesh has no name field!");
+				var name:int = data[i].name;
 				polygons = data[i].mesh;
 				if(polygons == null)
 					throw new ArgumentError("Mesh has no polygons field!");
 				//write name and go to size data position
 				position = output.position;
-				output.writeMultiByte(name, CHAR_SET);
+				output.writeInt(name);
 				output.position = position + CHARS_SIZE;
 				//write size data
 				output.writeInt(polygons.length);//count of polygons
@@ -162,7 +164,7 @@ package com.merlinds.miracle.utils.serializers
 			//write chunk to output
 			var start:int = output.position;
 			//write name of polygon
-			output.writeMultiByte(data.name, CHAR_SET);
+			output.writeInt(data.name);
 			output.position = start + CHARS_SIZE;
 			//write uv array
 			var i:int;
@@ -174,7 +176,6 @@ package com.merlinds.miracle.utils.serializers
 		}
 		//endregion
 		
-		
 		//region Deserialization
 		/**
 		 * Read meshes from bytes and save them to output
@@ -185,13 +186,14 @@ package com.merlinds.miracle.utils.serializers
 		 */
 		override protected function executeDeserialization(bytes:ByteArray, output:Dictionary, scale:Number, alias:String):void
 		{
+			var aliases:Vector.<String> = _dictSerializer.deserialize(bytes);
 			var i:int, n:int = bytes.readInt();
 			var start:int = bytes.position;
 			for(i = 0; i < n; ++i)
 			{
 				//read meshes
 				bytes.position = start + HEAD_SIZE * i;
-				var name:String = bytes.readMultiByte(CHARS_SIZE, CHAR_SET);
+				var name:String = aliases[ bytes.readInt() ];
 				var count:int = bytes.readInt();
 				var offset:int = bytes.readInt();
 				var mesh:Mesh2D = new Mesh2D(alias, scale);
@@ -200,13 +202,14 @@ package com.merlinds.miracle.utils.serializers
 				output[name] = mesh;
 				//read polygons
 				bytes.position = start + offset;
-				deserializePolygons(bytes, count, mesh);
+				deserializePolygons(bytes, aliases, count, mesh);
 			}
 			setTimeout(deserializationComplete, 0);//wait for next frame
 		}
 		
 		[Inline]
-		private final function deserializePolygons(bytes:ByteArray, count:int, mesh:Mesh2D):void
+		private final function deserializePolygons(bytes:ByteArray, aliases:Vector.<String>,
+												   count:int, mesh:Mesh2D):void
 		{
 			var i:int, j:int;
 			var uv:Vector.<Number> = new <Number>[];
@@ -214,8 +217,7 @@ package com.merlinds.miracle.utils.serializers
 			uv.length = vertices.length = ARRAY_SIZE;
 			for(i = 0; i < count; ++i)
 			{
-				//TODO: change after refactoring
-				var name:String = bytes.readMultiByte(CHARS_SIZE, CHAR_SET);
+				var name:String = aliases[ bytes.readInt() ];
 				var polygon:Polygon2D = new Polygon2D(_indexes.concat(), 4);
 				polygon.buffer.endian = endian;
 				for(j = 0; j < ARRAY_SIZE; ++j)

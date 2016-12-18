@@ -1,7 +1,7 @@
 {
   "description":"File with testing data for MTF protocol version 2.0",
   "version":2,
-  "simple_data":[
+  "data":[
     {
       "name":"test_mesh",
       "mesh":[
@@ -14,7 +14,7 @@
       ]
     }
   ],
-  "data":
+  "simple_data":
   [
     {
       "mesh": [

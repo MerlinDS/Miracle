@@ -50,6 +50,40 @@ package com.merlinds.miracle.utils.serializers
 		
 		//region Public
 		/**
+		 * Serialize aliases to bytes dictionary from object.
+		 * @param data Object
+		 * @param replace If true all fields with string will be replaced by indexes from aliases dict
+		 * @return <code>ByteArray</code> of dict
+		 */
+		public function serializeFromObject(data:Object, replace:Boolean = true):ByteArray
+		{
+			var aliases:Vector.<String> = new <String>[];
+			//collect all words and add them to aliases list
+			var stack:Array = [data];
+			while(stack.length > 0)
+			{
+				data = stack.shift();
+				for(var p:String in data)
+				{
+					if(data[p] is String)
+					{
+						var word:String = data[p];
+						var index:int = aliases.indexOf(word);
+						if(index < 0)
+						{
+							index = aliases.length;
+							aliases.push(word);
+						}
+						if(replace)
+							data[p] = index;
+					}
+					else if(data[p] is Array || data[p] is Object)
+						stack.push(data[p]);
+				}
+			}
+			return serialize(aliases);
+		}
+		/**
 		 * Serialize aliases to bytes dictionary
 		 * @param aliases List of aliases
 		 * @return <code>ByteArray</code> of dict
@@ -68,6 +102,7 @@ package com.merlinds.miracle.utils.serializers
 				output.writeMultiByte(word, _charSet);
 			}
 			output.writeInt(0);//End of dict
+			output.position = 0;
 			return output;
 		}
 		
