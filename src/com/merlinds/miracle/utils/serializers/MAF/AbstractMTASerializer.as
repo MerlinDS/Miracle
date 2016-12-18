@@ -58,7 +58,7 @@ package com.merlinds.miracle.utils.serializers.MAF
 		/**
 		 * @inheritDoc
 		 */
-		public function serialize(data:Object, version:uint):ByteArray
+		public final function serialize(data:Object, version:uint):ByteArray
 		{
 			var output:ByteArray = createByteArray(version);
 			//Send data and output to serialization
@@ -72,7 +72,8 @@ package com.merlinds.miracle.utils.serializers.MAF
 		/**
 		 * @inheritDoc
 		 */
-		public function deserialize(bytes:ByteArray, output:Dictionary, scale:Number, alias:String, callback:Function):void
+		public final function deserialize(bytes:ByteArray, output:Dictionary,
+										  scale:Number, alias:String, callback:Function):void
 		{
 			_callback = callback;
 			validateSignature(bytes);
