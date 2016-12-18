@@ -27,11 +27,22 @@ package com.merlinds.miracle.utils.serializers.MAF
 	import com.merlinds.miracle.utils.serializers.*;
 	import flash.utils.Endian;
 	
+	/**
+	 * MAF (Miracle animation format) serializer.
+	 * Protocol version 2.0
+	 *
+	 * @inheritDoc
+	 */
 	internal class MAFSerializerV2 extends AbstractMTASerializer
 	{
+		//region Properties
+		private var _dictSerializer:DictionarySerializer;
+		//endregion
+		
 		public function MAFSerializerV2()
 		{
 			super( MSVersions.MAF2, Endian.LITTLE_ENDIAN );
+			_dictSerializer = new DictionarySerializer( 'us-ascii', endian );
 		}
 	}
 }

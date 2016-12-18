@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package tests.com.merlinds.miracle.utils.serializers
+package tests.com.merlinds.miracle.utils.serializers.MTF
 {
 	import com.merlinds.miracle.geom.Mesh2D;
 	import com.merlinds.miracle.geom.Polygon2D;
