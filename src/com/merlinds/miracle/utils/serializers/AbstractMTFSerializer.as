@@ -23,14 +23,10 @@
  */
 package com.merlinds.miracle.utils.serializers
 {
-	import flash.errors.IOError;
 	import flash.errors.IllegalOperationError;
-	import flash.utils.ByteArray;
 	import flash.utils.ByteArray;
 	import flash.utils.Dictionary;
 	import flash.utils.Endian;
-	
-	import org.hamcrest.core.throws;
 	
 	/**
 	 * MTF (Miracle texture format) serializer.
@@ -40,7 +36,7 @@ package com.merlinds.miracle.utils.serializers
 	 *
 	 * @see AbstractMTFSerializer.createSerializer Use for serializer instantiation
 	 */
-	internal class AbstractMTFSerializer implements IMTFSerializer
+	internal class AbstractMTFSerializer extends AbstractSerializer implements IMTFSerializer
 	{
 		/**
 		 * Miracle texture format signature
@@ -48,11 +44,7 @@ package com.merlinds.miracle.utils.serializers
 		public static const SIGNATURE:String = "MTF";
 		
 		//region Properties
-		private var _version:int;
 		private var _callback:Function;
-		
-		private var _endian:String;
-		private var _signatureBytes:ByteArray;
 		//endregion
 		/**
 		 * Constructor
@@ -61,13 +53,7 @@ package com.merlinds.miracle.utils.serializers
 		 */
 		public function AbstractMTFSerializer(version:uint, endian:String = Endian.LITTLE_ENDIAN)
 		{
-			_version = version;
-			_endian = endian;
-			//Create signature and version header
-			_signatureBytes = new ByteArray();
-			_signatureBytes.endian = _endian;
-			_signatureBytes.writeUTFBytes( SIGNATURE );
-			_signatureBytes.writeUnsignedInt( _version );
+			super(SIGNATURE, version, endian);
 		}
 		
 		//region Public
@@ -76,14 +62,7 @@ package com.merlinds.miracle.utils.serializers
 		 */
 		public final function serialize(data:Object, version:uint):ByteArray
 		{
-			if ( version != _version )
-				throw new ArgumentError( "Version does not equals!" );
-			//Create output byteArray and fill it with signature
-			var output:ByteArray = new ByteArray();
-			output.endian = _endian;
-			output.writeBytes( _signatureBytes );
-			//provide little offset
-			output.writeByte( 0 );
+			var output:ByteArray = createByteArray(version);
 			//Send data and output to serialization
 			executeSerialization( data, output );
 			//Verify and return output
@@ -100,19 +79,7 @@ package com.merlinds.miracle.utils.serializers
 										  callback:Function):void
 		{
 			_callback = callback;
-			//Check signature
-			bytes.position = 0;
-			bytes.endian = _endian;
-			var signature:String = String.fromCharCode( bytes[ 0 ], bytes[ 1 ], bytes[ 2 ] );
-			if ( signature != SIGNATURE )
-				throw new IOError( "Bad format signature" );
-			bytes.position = 3;
-			var version:uint = bytes.readUnsignedInt();
-			if ( version != _version )
-				throw new IOError( "Bad format version" );
-			//signature verified
-			//provide little offset
-			bytes.position += 1;
+			validateSignature(bytes);
 			executeDeserialization( bytes, output, scale, alias );
 		}
 		
@@ -121,7 +88,7 @@ package com.merlinds.miracle.utils.serializers
 		 */
 		public final function toString():String
 		{
-			return "AbstractMTFSerializer{Protocol version=" + _version + "}";
+			return "AbstractMTFSerializer{Protocol version=" + version + "}";
 		}
 		
 		//endregion
@@ -165,27 +132,6 @@ package com.merlinds.miracle.utils.serializers
 				_callback.call( this/*TODO: Send data*/ );
 			}
 			_callback = null;
-		}
-		
-		//endregion
-		
-		//region Getters|Setters
-		/**
-		 * Signature bytes
-		 */
-		[Inline]
-		public final function get signatureBytes():ByteArray
-		{
-			return _signatureBytes;
-		}
-		
-		/**
-		 * Bytes endian that using for serialization
-		 */
-		[Inline]
-		public final function get endian():String
-		{
-			return _endian;
 		}
 		
 		//endregion
