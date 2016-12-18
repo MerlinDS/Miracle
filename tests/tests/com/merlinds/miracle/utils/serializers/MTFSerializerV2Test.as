@@ -27,6 +27,7 @@ package tests.com.merlinds.miracle.utils.serializers
 	import com.merlinds.miracle.geom.Mesh2D;
 	import com.merlinds.miracle.geom.Polygon2D;
 	import com.merlinds.miracle.utils.serializers.MTFSerializer;
+	import com.merlinds.miracle.utils.serializers.MTFVersions;
 	
 	import flash.events.Event;
 	
@@ -42,7 +43,7 @@ package tests.com.merlinds.miracle.utils.serializers
 	/**
 	 * Test case for MTF serializer.
 	 */
-	public class MTFSerializerTest extends EventDispatcher
+	public class MTFSerializerV2Test extends EventDispatcher
 	{
 		private static const SIGNATURE:String = "MTF";
 		
@@ -59,12 +60,12 @@ package tests.com.merlinds.miracle.utils.serializers
 			try
 			{
 				var jsonHolder:Object = JSON.parse( new MFTObjectV2_JSON() );
-				_dataProvider[ MTFSerializer.V2 ] = new TestDataHolder( jsonHolder.data );
+				_dataProvider[ MTFVersions.V2 ] = new TestDataHolder( jsonHolder.data );
 			} catch ( error:Error )
 			{
 				Assert.fail( "Error occurs while data provider initialization: " + error.message );
 			}
-			_serializer = MTFSerializer.createSerializer( MTFSerializer.V2 );
+			_serializer = new MTFSerializer();
 		}
 		
 		
@@ -75,28 +76,22 @@ package tests.com.merlinds.miracle.utils.serializers
 			_serializer = null;
 		}
 		
-		[Test(expects="ArgumentError", description="MTF serialization instantiation errror of protocol versio")]
-		public function instantiationErrorTest():void
-		{
-			//Try to instantiate wrong version
-			MTFSerializer.createSerializer( 0x0000 );
-		}
 		
 		[Test(description="MTF object serialization test")]
 		public function serializeTest():void
 		{
-			var holder:TestDataHolder = _dataProvider[ MTFSerializer.V2 ];
-			var bytes:ByteArray = _serializer.serialize( holder.data );
+			var holder:TestDataHolder = _dataProvider[ MTFVersions.V2 ];
+			var bytes:ByteArray = _serializer.serialize( holder.data, MTFVersions.V2 );
 			Assert.assertNotNull( "Serialization failed: bytes", bytes );
 			Assert.assertTrue( "Serialization failed: bytes array empty", bytes.length > 4 );
 			signatureAssert( "Serialization failed: signature failed", bytes );
 			//test by indirect signs
-			var totalSize:int = _serializer.signatureBytes.length + 1 + 4 +
+			var totalSize:int = 8 + 4 + //Signature size + length
 					holder.dictSize +
 					holder.meshesCount * 12 +// header size
 					holder.polygonsCount * 68;//polygons list size
 			Assert.assertEquals( "Serialization failed: bytes length", totalSize, bytes.length );
-			bytes.position = _serializer.signatureBytes.length + 1 + holder.dictSize;
+			bytes.position = 8 + holder.dictSize;
 			Assert.assertEquals( "Serialization failed: meshes count", holder.meshesCount, bytes.readInt() );
 		}
 		
@@ -111,12 +106,12 @@ package tests.com.merlinds.miracle.utils.serializers
 		[Test(async, description="MTF object deserialization test")]
 		public function deserializeTest():void
 		{
-			var holder:TestDataHolder = _dataProvider[ MTFSerializer.V2 ];
+			var holder:TestDataHolder = _dataProvider[ MTFVersions.V2 ];
 			var passThroughData:Object = {
 				holder:holder,
 				output:new Dictionary()
 			};
-			var bytes:ByteArray = _serializer.serialize( holder.data );
+			var bytes:ByteArray = _serializer.serialize( holder.data, MTFVersions.V2 );
 			this.addEventListener( "callback",
 					Async.asyncHandler( this, handleVerifyProperty, 100, passThroughData ),
 					false, 0, true );

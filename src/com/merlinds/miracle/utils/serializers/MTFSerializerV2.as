@@ -38,13 +38,13 @@ package com.merlinds.miracle.utils.serializers
 	 *
 	 * @inheritDoc
 	 */
-	internal class MTFSerializerV2 extends MTFSerializer
+	internal class MTFSerializerV2 extends AbstractMTFSerializer
 	{
 		//region Constants
 		/**
 		 * Build in indexes of vertices
 		 */
-		private static const _indexes:Vector.<int> = new <int>[0,3,1,2,1,3];
+		private static const _indexes:Vector.<int> = new <int>[ 0, 3, 1, 2, 1, 3 ];
 		/**
 		 * Size of coordinates arrays
 		 */
@@ -67,8 +67,8 @@ package com.merlinds.miracle.utils.serializers
 		
 		public function MTFSerializerV2()
 		{
-			super( MTFSerializer.V2, Endian.LITTLE_ENDIAN );
-			_dictSerializer = new DictionarySerializer('us-ascii', endian);
+			super( MTFVersions.V2, Endian.LITTLE_ENDIAN );
+			_dictSerializer = new DictionarySerializer( 'us-ascii', endian );
 		}
 		
 		
@@ -90,7 +90,7 @@ package com.merlinds.miracle.utils.serializers
 		 *			vertices:[8 values of vertices coordinates]
 		 * 		}]
 		 * 	},
-		 * 	...
+		 *    ...
 		 * ]
 		 *
 		 * @param output <code>ByteArray</code> of serialized MTF
@@ -101,33 +101,33 @@ package com.merlinds.miracle.utils.serializers
 			var position:int, i:int, n:int;
 			n = data.length;
 			//write aliases dict
-			var aliases:ByteArray = _dictSerializer.serializeFromObject(data);
-			output.writeBytes(aliases, 0, aliases.length);
+			var aliases:ByteArray = _dictSerializer.serializeFromObject( data );
+			output.writeBytes( aliases, 0, aliases.length );
 			//write header
 			var offset:int = n * HEAD_SIZE;//Set to end of header
-			output.writeInt(n);//Save count of meshes
+			output.writeInt( n );//Save count of meshes
 			//write meshes data to header, names and size of chunks list
-			for(i = 0; i < n; ++i)
+			for ( i = 0; i < n; ++i )
 			{
-				var name:int = data[i].name;
-				polygons = data[i].mesh;
-				if(polygons == null)
-					throw new ArgumentError("Mesh has no polygons field!");
+				var name:int = data[ i ].name;
+				polygons = data[ i ].mesh;
+				if ( polygons == null )
+					throw new ArgumentError( "Mesh has no polygons field!" );
 				//write name and go to size data position
 				position = output.position;
-				output.writeInt(name);
+				output.writeInt( name );
 				output.position = position + CHARS_SIZE;
 				//write size data
-				output.writeInt(polygons.length);//count of polygons
-				output.writeInt(offset);//polygons starting offset
+				output.writeInt( polygons.length );//count of polygons
+				output.writeInt( offset );//polygons starting offset
 				offset += polygons.length * CHUNK_SIZE;//update offset for next mesh
 			}
 			//write polygons
-			for(i = 0; i < n; ++i)
+			for ( i = 0; i < n; ++i )
 			{
-				polygons = data[i].mesh;
-				for each (var polygon:Object in polygons)
-					writePolygon(polygon, output);
+				polygons = data[ i ].mesh;
+				for each ( var polygon:Object in polygons )
+					writePolygon( polygon, output );
 			}
 		}
 		
@@ -135,10 +135,10 @@ package com.merlinds.miracle.utils.serializers
 		 * Write mesh polygon to output:
 		 * Each of polygon in mesh is a chunk that has structure:
 		 * <ul>
-		 * 	<li>name</li>
-		 * 	<li>uv</li>
-		 * 	<li>vertices</li>
-		 *	</ul>
+		 *    <li>name</li>
+		 *    <li>uv</li>
+		 *    <li>vertices</li>
+		 *    </ul>
 		 * @param data Mesh data
 		 * @param output Output bytes
 		 *
@@ -151,29 +151,30 @@ package com.merlinds.miracle.utils.serializers
 		private final function writePolygon(data:Object, output:ByteArray):void
 		{
 			/*
-			 	Can be modified in future versions of protocol.
-			 	But for V2 indexes of vertices is built in
-				var indexes:Array = data.indexes;
+			 Can be modified in future versions of protocol.
+			 But for V2 indexes of vertices is built in
+			 var indexes:Array = data.indexes;
 			 */
-			if(data.name == null)
-				throw new ArgumentError("Polygon hasn't name field");
-			if(data.uv == null || data.uv.length != ARRAY_SIZE)
-				throw new ArgumentError("Polygon field uv is invalid or null!");
-			if(data.vertices == null || data.vertices.length != ARRAY_SIZE)
-				throw new ArgumentError("Polygon field vertices is invalid or null!");
+			if ( data.name == null )
+				throw new ArgumentError( "Polygon hasn't name field" );
+			if ( data.uv == null || data.uv.length != ARRAY_SIZE )
+				throw new ArgumentError( "Polygon field uv is invalid or null!" );
+			if ( data.vertices == null || data.vertices.length != ARRAY_SIZE )
+				throw new ArgumentError( "Polygon field vertices is invalid or null!" );
 			//write chunk to output
 			var start:int = output.position;
 			//write name of polygon
-			output.writeInt(data.name);
+			output.writeInt( data.name );
 			output.position = start + CHARS_SIZE;
 			//write uv array
 			var i:int;
-			for(i = 0; i < ARRAY_SIZE; ++i)
-				output.writeFloat(data.uv[i]);
+			for ( i = 0; i < ARRAY_SIZE; ++i )
+				output.writeFloat( data.uv[ i ] );
 			//write vertices array
-			for(i = 0; i < ARRAY_SIZE; ++i)
-				output.writeInt(data.vertices[i]);
+			for ( i = 0; i < ARRAY_SIZE; ++i )
+				output.writeInt( data.vertices[ i ] );
 		}
+		
 		//endregion
 		
 		//region Deserialization
@@ -186,25 +187,25 @@ package com.merlinds.miracle.utils.serializers
 		 */
 		override protected function executeDeserialization(bytes:ByteArray, output:Dictionary, scale:Number, alias:String):void
 		{
-			var aliases:Vector.<String> = _dictSerializer.deserialize(bytes);
+			var aliases:Vector.<String> = _dictSerializer.deserialize( bytes );
 			var i:int, n:int = bytes.readInt();
 			var start:int = bytes.position;
-			for(i = 0; i < n; ++i)
+			for ( i = 0; i < n; ++i )
 			{
 				//read meshes
 				bytes.position = start + HEAD_SIZE * i;
 				var name:String = aliases[ bytes.readInt() ];
 				var count:int = bytes.readInt();
 				var offset:int = bytes.readInt();
-				var mesh:Mesh2D = new Mesh2D(alias, scale);
-				if(output.name != null)
-					trace("WARNING: mesh with name" + name + "will be overridden");
-				output[name] = mesh;
+				var mesh:Mesh2D = new Mesh2D( alias, scale );
+				if ( output.name != null )
+					trace( "WARNING: mesh with name" + name + "will be overridden" );
+				output[ name ] = mesh;
 				//read polygons
 				bytes.position = start + offset;
-				deserializePolygons(bytes, aliases, count, mesh);
+				deserializePolygons( bytes, aliases, count, mesh );
 			}
-			setTimeout(deserializationComplete, 0);//wait for next frame
+			setTimeout( deserializationComplete, 0 );//wait for next frame
 		}
 		
 		[Inline]
@@ -215,27 +216,28 @@ package com.merlinds.miracle.utils.serializers
 			var uv:Vector.<Number> = new <Number>[];
 			var vertices:Vector.<Number> = new <Number>[];
 			uv.length = vertices.length = ARRAY_SIZE;
-			for(i = 0; i < count; ++i)
+			for ( i = 0; i < count; ++i )
 			{
 				var name:String = aliases[ bytes.readInt() ];
-				var polygon:Polygon2D = new Polygon2D(_indexes.concat(), 4);
+				var polygon:Polygon2D = new Polygon2D( _indexes.concat(), 4 );
 				polygon.buffer.endian = endian;
-				for(j = 0; j < ARRAY_SIZE; ++j)
-					uv[j] = bytes.readFloat();
-				for(j = 0; j < ARRAY_SIZE; ++j)
-					vertices[j] = bytes.readInt();
+				for ( j = 0; j < ARRAY_SIZE; ++j )
+					uv[ j ] = bytes.readFloat();
+				for ( j = 0; j < ARRAY_SIZE; ++j )
+					vertices[ j ] = bytes.readInt();
 				//write polygon buffer
-				for(j = 0; j < polygon.numVertices; ++j)
+				for ( j = 0; j < polygon.numVertices; ++j )
 				{
-					polygon.buffer.writeFloat(vertices[ j * 2 ] * mesh.scale);
-					polygon.buffer.writeFloat(vertices[ j * 2 + 1 ] * mesh.scale);
-					polygon.buffer.writeFloat(uv[ j * 2 ]);
-					polygon.buffer.writeFloat(uv[ j * 2 + 1 ]);
+					polygon.buffer.writeFloat( vertices[ j * 2 ] * mesh.scale );
+					polygon.buffer.writeFloat( vertices[ j * 2 + 1 ] * mesh.scale );
+					polygon.buffer.writeFloat( uv[ j * 2 ] );
+					polygon.buffer.writeFloat( uv[ j * 2 + 1 ] );
 				}
 //				data, mesh.scale
-				mesh[name] = polygon;
+				mesh[ name ] = polygon;
 			}
 		}
+		
 		//endregion
 	}
 }

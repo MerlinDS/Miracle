@@ -205,7 +205,7 @@ class AssetsParser
 		_callback = callback;
 		_scale = scale;
 		_mafReader = new MafReader();
-		_mftSerializer = MTFSerializer.createSerializer(MTFSerializer.V2);
+		_mftSerializer = new MTFSerializer(true);
 		this.parseAssets();
 	}
 
