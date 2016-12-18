@@ -21,46 +21,44 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.merlinds.miracle.utils.serializers
+
+package com.merlinds.miracle.utils.serializers.MAF
 {
+	import com.merlinds.miracle.utils.serializers.*;
 	import flash.errors.IllegalOperationError;
 	import flash.utils.ByteArray;
 	import flash.utils.Dictionary;
 	import flash.utils.Endian;
 	
 	/**
-	 * MTF (Miracle texture format) serializer.
-	 * This is the abstract class for MTFSerializer.
-	 * Do not use constructor of this class to instantiate serializer!
-	 * Use factory method <code>createSerializer</code> instead.
-	 *
-	 * @see AbstractMTFSerializer.createSerializer Use for serializer instantiation
+	 * MAF (Miracle animation format) serializer.
+	 * Abstract class for MAFSerializer
 	 */
-	internal class AbstractMTFSerializer extends AbstractSerializer implements IMTFSerializer
+	internal class AbstractMTASerializer extends AbstractSerializer implements IMAFSerialize
 	{
 		/**
 		 * Miracle texture format signature
 		 */
-		public static const SIGNATURE:String = "MTF";
+		public static const SIGNATURE:String = "MAF";
 		
 		//region Properties
 		private var _callback:Function;
 		//endregion
+		
 		/**
 		 * Constructor
 		 * @param version of serialization protocol
-		 * @param endian Bytes endian
+		 * @param endian Bytes endian that will be using
 		 */
-		public function AbstractMTFSerializer(version:uint, endian:String = Endian.LITTLE_ENDIAN)
+		public function AbstractMTASerializer(version:uint, endian:String = Endian.LITTLE_ENDIAN)
 		{
-			super(SIGNATURE, version, endian);
+			super (SIGNATURE, version, endian);
 		}
 		
-		//region Public
 		/**
 		 * @inheritDoc
 		 */
-		public final function serialize(data:Object, version:uint):ByteArray
+		public function serialize(data:Object, version:uint):ByteArray
 		{
 			var output:ByteArray = createByteArray(version);
 			//Send data and output to serialization
@@ -74,30 +72,18 @@ package com.merlinds.miracle.utils.serializers
 		/**
 		 * @inheritDoc
 		 */
-		public final function deserialize(bytes:ByteArray, output:Dictionary,
-										  scale:Number, alias:String,
-										  callback:Function):void
+		public function deserialize(bytes:ByteArray, output:Dictionary, scale:Number, alias:String, callback:Function):void
 		{
 			_callback = callback;
 			validateSignature(bytes);
 			executeDeserialization( bytes, output, scale, alias );
 		}
 		
-		/**
-		 * @inheritDoc
-		 */
-		public final function toString():String
-		{
-			return "AbstractMTFSerializer{Protocol version=" + version + "}";
-		}
-		
-		//endregion
-		
 		//region Protected methods
 		/**
 		 * Abstract method serialization.
 		 * @param data Data object than need to be serialized
-		 * @param output Output <code>ByteArray</code> of MTF file
+		 * @param output Output <code>ByteArray</code> of MAF file
 		 *
 		 * @throws IllegalOperationError Must be overridden as abstract method!
 		 */
@@ -112,7 +98,7 @@ package com.merlinds.miracle.utils.serializers
 		 * @param bytes Bytes for deserialization
 		 *
 		 * @param output Output dictionary
-		 * @param scale Global scene scale (need for Polygon building)
+		 * @param scale Global scene scale
 		 * @param alias Texture alias for meshes
 		 * @throws IllegalOperationError Must be overridden as abstract method!
 		 */

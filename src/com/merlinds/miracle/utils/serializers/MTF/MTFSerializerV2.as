@@ -22,8 +22,9 @@
  * SOFTWARE.
  */
 
-package com.merlinds.miracle.utils.serializers
+package com.merlinds.miracle.utils.serializers.MTF
 {
+	import com.merlinds.miracle.utils.serializers.*;
 	import com.merlinds.miracle.geom.Mesh2D;
 	import com.merlinds.miracle.geom.Polygon2D;
 	
@@ -67,7 +68,7 @@ package com.merlinds.miracle.utils.serializers
 		
 		public function MTFSerializerV2()
 		{
-			super( MTFVersions.V2, Endian.LITTLE_ENDIAN );
+			super( MSVersions.MTF2, Endian.LITTLE_ENDIAN );
 			_dictSerializer = new DictionarySerializer( 'us-ascii', endian );
 		}
 		
@@ -142,17 +143,17 @@ package com.merlinds.miracle.utils.serializers
 		 * @param data Mesh data
 		 * @param output Output bytes
 		 *
-		 * @see MTFSerializerV2.CHUNK_SIZE Total size of chunk
-		 * @see MTFSerializerV2.CHARS_SIZE Size of the name filed
-		 * @see MTFSerializerV2.UV_SIZE Size of uv array
-		 * @see MTFSerializerV2.VERTICES_SIZE Size of vertices array
+		 * @see com.merlinds.miracle.utils.serializers.MTF.MTFSerializerV2.CHUNK_SIZE Total size of chunk
+		 * @see com.merlinds.miracle.utils.serializers.MTF.MTFSerializerV2.CHARS_SIZE Size of the name filed
+		 * @see com.merlinds.miracle.utils.serializers.MTF.MTFSerializerV2.UV_SIZE Size of uv array
+		 * @see com.merlinds.miracle.utils.serializers.MTF.MTFSerializerV2.VERTICES_SIZE Size of vertices array
 		 */
 		[Inline]
 		private final function writePolygon(data:Object, output:ByteArray):void
 		{
 			/*
 			 Can be modified in future versions of protocol.
-			 But for V2 indexes of vertices is built in
+			 But for MTF2 indexes of vertices is built in
 			 var indexes:Array = data.indexes;
 			 */
 			if ( data.name == null )

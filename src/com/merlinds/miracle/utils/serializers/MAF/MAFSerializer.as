@@ -22,34 +22,47 @@
  * SOFTWARE.
  */
 
-package com.merlinds.miracle.utils.serializers
+package com.merlinds.miracle.utils.serializers.MAF
 {
+	import com.merlinds.miracle.utils.serializers.*;
 	import flash.utils.ByteArray;
 	import flash.utils.Dictionary;
 	
 	/**
-	 * Public interface for MTF serializers
+	 * his is the factory class for provide public API of MTFSerializer.
 	 */
-	internal interface IMTFSerializer
+	public class MAFSerializer extends SerializerWrapper implements IMAFSerialize
 	{
 		/**
-		 * * Serialize data to MTF (Miracle texture format) <code>ByteArray</code>
-		 * @param data Data object than need to be serialized
-		 * @param version Version Protocol for serialization
-		 * @return <code>ByteArray</code> of MTF file
+		 * Constructor
+		 * @param useDefault If true, will be used default serializer instead of throwing error.
 		 */
-		function serialize(data:Object, version:uint):ByteArray;
+		public function MAFSerializer(useDefault:Boolean = false)
+		{
+			var dictionary:Dictionary = new Dictionary();
+			dictionary[ MSVersions.MAF2 ] = MAFSerializerV2;
+			super (dictionary, useDefault, MSVersions.MAF2);
+		}
 		
 		/**
-		 * Deserialize <code>ByteArray</code> with MTF to Miracle texture data
-		 * @param bytes Bytes for deserialization
-		 * @param output Output dictionary
-		 * @param scale Global scene scale (need for Polygon building)
-		 * @param alias Texture alias for meshes
-		 * @param callback Deserialization complete callback method
+		 * @inheritDoc
 		 */
-		function deserialize(bytes:ByteArray, output:Dictionary,
-							 scale:Number, alias:String,
-							 callback:Function):void
+		public function serialize(data:Object, version:uint):ByteArray
+		{
+			var serialize:IMAFSerialize = getSerializerByVersion(version) as IMAFSerialize;
+			return serialize.serialize( data, version );
+		}
+		
+		/**
+		 * Version will be detected automatically
+		 * @inheritDoc
+		 */
+		public function deserialize(bytes:ByteArray, output:Dictionary,
+									scale:Number, alias:String, callback:Function):void
+		{
+			var serialize:IMAFSerialize = getSerializerBySignature(bytes) as IMAFSerialize;
+			serialize.deserialize( bytes, output, scale, alias, callback );
+		}
+		
 	}
 }

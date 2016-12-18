@@ -26,8 +26,8 @@ package tests.com.merlinds.miracle.utils.serializers
 {
 	import com.merlinds.miracle.geom.Mesh2D;
 	import com.merlinds.miracle.geom.Polygon2D;
-	import com.merlinds.miracle.utils.serializers.MTFSerializer;
-	import com.merlinds.miracle.utils.serializers.MTFVersions;
+	import com.merlinds.miracle.utils.serializers.MTF.MTFSerializer;
+	import com.merlinds.miracle.utils.serializers.MSVersions;
 	
 	import flash.events.Event;
 	
@@ -60,7 +60,7 @@ package tests.com.merlinds.miracle.utils.serializers
 			try
 			{
 				var jsonHolder:Object = JSON.parse( new MFTObjectV2_JSON() );
-				_dataProvider[ MTFVersions.V2 ] = new TestDataHolder( jsonHolder.data );
+				_dataProvider[ MSVersions.MTF2 ] = new TestDataHolder( jsonHolder.data );
 			} catch ( error:Error )
 			{
 				Assert.fail( "Error occurs while data provider initialization: " + error.message );
@@ -80,8 +80,8 @@ package tests.com.merlinds.miracle.utils.serializers
 		[Test(description="MTF object serialization test")]
 		public function serializeTest():void
 		{
-			var holder:TestDataHolder = _dataProvider[ MTFVersions.V2 ];
-			var bytes:ByteArray = _serializer.serialize( holder.data, MTFVersions.V2 );
+			var holder:TestDataHolder = _dataProvider[ MSVersions.MTF2 ];
+			var bytes:ByteArray = _serializer.serialize( holder.data, MSVersions.MTF2 );
 			Assert.assertNotNull( "Serialization failed: bytes", bytes );
 			Assert.assertTrue( "Serialization failed: bytes array empty", bytes.length > 4 );
 			signatureAssert( "Serialization failed: signature failed", bytes );
@@ -106,12 +106,12 @@ package tests.com.merlinds.miracle.utils.serializers
 		[Test(async, description="MTF object deserialization test")]
 		public function deserializeTest():void
 		{
-			var holder:TestDataHolder = _dataProvider[ MTFVersions.V2 ];
+			var holder:TestDataHolder = _dataProvider[ MSVersions.MTF2 ];
 			var passThroughData:Object = {
 				holder:holder,
 				output:new Dictionary()
 			};
-			var bytes:ByteArray = _serializer.serialize( holder.data, MTFVersions.V2 );
+			var bytes:ByteArray = _serializer.serialize( holder.data, MSVersions.MTF2 );
 			this.addEventListener( "callback",
 					Async.asyncHandler( this, handleVerifyProperty, 100, passThroughData ),
 					false, 0, true );

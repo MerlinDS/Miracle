@@ -22,20 +22,17 @@
  * SOFTWARE.
  */
 
-package com.merlinds.miracle.utils.serializers
+package com.merlinds.miracle.utils.serializers.MTF
 {
+	import com.merlinds.miracle.utils.serializers.*;
 	import flash.utils.ByteArray;
 	import flash.utils.Dictionary;
-	import flash.utils.Endian;
 	
 	/**
 	 * his is the factory class for provide public API of MTFSerializer.
 	 */
-	public class MTFSerializer implements IMTFSerializer
+	public class MTFSerializer extends SerializerWrapper implements IMTFSerializer
 	{
-		private var _availableSerializers:Dictionary;
-		private var _useDefault:Boolean;
-		private var _default:uint;
 		
 		/**
 		 * Constructor
@@ -43,10 +40,9 @@ package com.merlinds.miracle.utils.serializers
 		 */
 		public function MTFSerializer(useDefault:Boolean = false)
 		{
-			_useDefault = useDefault;
-			_default = MTFVersions.V2;
-			_availableSerializers = new Dictionary();
-			_availableSerializers[ MTFVersions.V2 ] = MTFSerializerV2;
+			var dictionary:Dictionary = new Dictionary();
+			dictionary[ MSVersions.MTF2 ] = MTFSerializerV2;
+			super (dictionary, useDefault, MSVersions.MTF2);
 		}
 		
 		/**
@@ -54,13 +50,7 @@ package com.merlinds.miracle.utils.serializers
 		 */
 		public function serialize(data:Object, version:uint):ByteArray
 		{
-			var serialize:IMTFSerializer = getSerializer( version );
-			if ( serialize == null )
-			{
-				if ( !_useDefault )
-					throw new ArgumentError( "Unknown version for serializer" );
-				serialize = _availableSerializers[ _default ];
-			}
+			var serialize:IMTFSerializer = getSerializerByVersion(version) as IMTFSerializer;
 			return serialize.serialize( data, version );
 		}
 		
@@ -71,34 +61,8 @@ package com.merlinds.miracle.utils.serializers
 		public function deserialize(bytes:ByteArray, output:Dictionary,
 									scale:Number, alias:String, callback:Function):void
 		{
-			//Get version from signature
-			bytes.position = 3;
-			bytes.endian = Endian.LITTLE_ENDIAN;
-			var version:uint = bytes.readUnsignedInt();
-			var serialize:IMTFSerializer = getSerializer( version );
-			//try to change endian and search again
-			if ( serialize == null )
-			{
-				bytes.endian = Endian.BIG_ENDIAN;
-				version = bytes.readUnsignedInt();
-				serialize = getSerializer( version );
-			}
-			//not found yet
-			if ( serialize == null )
-			{
-				if ( !_useDefault )
-					throw new ArgumentError( "Unknown version for serializer" );
-				serialize = _availableSerializers[ _default ];
-			}
-			//execute serialization
+			var serialize:IMTFSerializer = getSerializerBySignature(bytes) as IMTFSerializer;
 			serialize.deserialize( bytes, output, scale, alias, callback );
-		}
-		
-		private function getSerializer(version:uint):IMTFSerializer
-		{
-			var serializerClass:Class = _availableSerializers[ version ];
-			if ( serializerClass == null )return null;
-			return new serializerClass();
 		}
 	}
 }

@@ -157,7 +157,7 @@ import com.merlinds.miracle.textures.TextureHelper;
 import com.merlinds.miracle.utils.Asset;
 import com.merlinds.miracle.utils.AtfData;
 import com.merlinds.miracle.utils.MafReader;
-import com.merlinds.miracle.utils.serializers.MTFSerializer;
+import com.merlinds.miracle.utils.serializers.MTF.MTFSerializer;
 
 import flash.utils.Dictionary;
 import flash.utils.setTimeout;

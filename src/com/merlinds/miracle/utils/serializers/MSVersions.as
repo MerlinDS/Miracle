@@ -27,17 +27,23 @@ package com.merlinds.miracle.utils.serializers
 	import flash.errors.IllegalOperationError;
 	
 	/**
-	 * Enum of MTFVersions
+	 * Enum of Miracle formats versions
 	 */
-	public class MTFVersions
+	public class MSVersions
 	{
 		/**
-		 * Available protocol version 2.0
+		 * MTF protocol version 2.0
 		 * Serializer for MTF v 1.0 does not exist, it was JSON, that why versions began from 2.0
 		 */
-		public static const V2:uint = 0x0002;
+		public static const MTF2:uint = 0x0002;
 		
-		public function MTFVersions()
+		/**
+		 * MAF protocol version 2.0
+		 * Serializer for MAF v 1.0 does not exist, it was JSON, that why versions began from 2.0
+		 */
+		public static const MAF2:uint = 0x0002;
+		
+		public function MSVersions()
 		{
 			throw new IllegalOperationError( "Enum could not be instantiated." );
 		}
