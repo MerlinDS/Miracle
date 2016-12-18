@@ -64,7 +64,7 @@ package com.merlinds.miracle.utils
 			{
 				var data:Object = _animationList[_i++];
 				//create animation holder
-				var animation:AnimationHelper = new AnimationHelper(data.name, data.totalFrames,
+				var animation:AnimationHelper = new AnimationHelper(/*data.name,*/ data.totalFrames,
 						data.layers.length, this.parseLayers(data.layers, data.totalFrames)
 				);
 				animation.bounds = this.parseBounds(data.bounds);

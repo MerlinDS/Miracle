@@ -37,6 +37,7 @@ package com.merlinds.miracle.utils.serializers.MAF
 	import flash.utils.ByteArray;
 	import flash.utils.Dictionary;
 	import flash.utils.Endian;
+	import flash.utils.getTimer;
 	import flash.utils.setTimeout;
 	
 	/**
@@ -48,7 +49,7 @@ package com.merlinds.miracle.utils.serializers.MAF
 	internal class MAFSerializerV2 extends AbstractMTASerializer
 	{
 		private static const BOUNDS_SIZE:int = 16;
-		private static const MATRIX_SIZE:int = 72;
+		private static const MATRIX_SIZE:int = 68;
 		private static const FRAME_SIZE:int = 14;
 		//region Properties
 		private var _dictSerializer:DictionarySerializer;
@@ -57,6 +58,7 @@ package com.merlinds.miracle.utils.serializers.MAF
 		private var _bytes:ByteArray;
 		private var _aliases:Vector.<String>;
 		private var _offsets:Vector.<int>;
+		private var _time:Number = 0;
 		private var _scale:Number;
 		//endregion
 		
@@ -89,11 +91,11 @@ package com.merlinds.miracle.utils.serializers.MAF
 			}
 			//write offsets to header
 			output.position = position;
+			position = position + n * 4;
 			for ( i = 0; i < n; i++ )
 			{
-				var offset:int = position + n * 4;
-				if(i > 0 )offset += sizes[i - 1];
-				output.writeInt( offset );
+				output.writeInt( position );
+				position += sizes[i];
 			}
 				
 		}
@@ -120,7 +122,7 @@ package com.merlinds.miracle.utils.serializers.MAF
 				output.writeInt( matrices.length );//length of the matrices list
 				serializeMatrices( matrices, output );
 				output.writeInt( frames.length );//length of the frames list
-				serializeFrames( frames, output );
+				serializeFrames( frames, matrices.length, output );
 			}
 			return output;
 		}
@@ -195,9 +197,8 @@ package com.merlinds.miracle.utils.serializers.MAF
 				output.writeFloat( matrix.ty );
 				output.writeFloat( matrix.scaleX );
 				output.writeFloat( matrix.scaleY );
+				output.writeFloat( matrix.skewX );
 				output.writeFloat( matrix.skewY );
-				output.writeFloat( matrix.skewY );
-				output.writeInt( matrix.flipX );
 				//color
 				output.writeFloat( color.redMultiplier );
 				output.writeFloat( color.greenMultiplier );
@@ -224,10 +225,11 @@ package com.merlinds.miracle.utils.serializers.MAF
          *     "polygonName": "leg_1"
          *   }
 		 *
+		 * @param matricesLength
 		 * @param output
 		 */
 		[Inline]
-		private final function serializeFrames(data:Array, output:ByteArray):void
+		private final function serializeFrames(data:Array, matricesLength:int, output:ByteArray):void
 		{
 			for ( var i:int = 0; i < data.length; i++ )
 			{
@@ -240,12 +242,23 @@ package com.merlinds.miracle.utils.serializers.MAF
 					continue;
 				}
 				
+				if(frame.polygonName is String)
+					throw new ArgumentError("Aliases broken!");
+				
+				if(frame.motion && frame.index + 1 >= matricesLength)
+				{
+					trace("WARNING: invalid motion flag!");
+					frame.motion = false;
+//					throw new ArgumentError("Index of frame is out of bounds!");
+				}
+				
 				output.writeInt( frame.index );//4
 				output.writeBoolean( frame.motion );//1
-				output.writeInt( frame.name );//4
+				output.writeInt( frame.polygonName );//4
 				output.writeFloat( frame.t );//4
 			}
 		}
+
 		/**
 		 *
 		 * @param bytes
@@ -265,13 +278,8 @@ package com.merlinds.miracle.utils.serializers.MAF
 			_offsets = new <int>[];
 			for ( i = 0; i < n; ++i )_offsets[ i ] = bytes.readInt();
 			deserializeAnimation();
-			/*
-			 var animationHelper:AnimationHelper = new AnimationHelper('test', 0, 0, new <FrameInfo>[]);
-			 output[]
-			 * */
-			//
 		}
-		
+				
 		private function deserializeAnimation():void
 		{
 			if(_offsets.length == 0)
@@ -281,6 +289,7 @@ package com.merlinds.miracle.utils.serializers.MAF
 				return;
 			}
 			
+			if(_time == 0)_time = getTimer();
 			_bytes.position = _offsets.shift();
 			var name:String = _aliases[_bytes.readInt()];
 			var totalFrames:int = _bytes.readInt();
@@ -290,11 +299,18 @@ package com.merlinds.miracle.utils.serializers.MAF
 			var frames:Vector.<FrameInfo> =
 					deserializeFrames(_bytes, numLayers, totalFrames, _scale, _aliases);
 			var animationHelper:AnimationHelper =
-					new AnimationHelper(name, totalFrames, numLayers, frames);
+					new AnimationHelper(totalFrames, numLayers, frames);
 			animationHelper.bounds = bounds;
 			_output[name] = animationHelper;
 			//execute next animation deserialization
-			setTimeout(deserializeAnimation, 0);
+			if(getTimer() - _time > 10)
+			{
+				_time = 0;
+				setTimeout(deserializeAnimation, 0);
+				return;
+			}
+			deserializeAnimation();
+				
 		}
 		
 		
@@ -342,7 +358,6 @@ package com.merlinds.miracle.utils.serializers.MAF
 						bytes.readFloat() * scale, bytes.readFloat() * scale,
 						bytes.readFloat(), bytes.readFloat(), bytes.readFloat(), bytes.readFloat()
 					);
-					matrix.flipX = bytes.readInt();
 					var color:Color = new Color(
 						bytes.readFloat(), bytes.readFloat(), bytes.readFloat(), bytes.readFloat(),
 						bytes.readFloat(), bytes.readFloat(), bytes.readFloat(), bytes.readFloat()
@@ -385,6 +400,7 @@ package com.merlinds.miracle.utils.serializers.MAF
 			_bytes = null;
 			_aliases = null;
 			_offsets = null;
+			_time = 0;
 			_scale = 1;
 		}
 	}

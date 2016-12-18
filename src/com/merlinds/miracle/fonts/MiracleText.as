@@ -32,7 +32,7 @@ package com.merlinds.miracle.fonts
 		public function MiracleText()
 		{
 			super();
-			this.animationInstance = new AnimationHelper(null, 1, 1,
+			this.animationInstance = new AnimationHelper(1, 1,
 					new <FrameInfo>[EmptyFrameInfo.getConst()]);
 			this.animationInstance.bounds = Bounds.getInstance();
 			_align = MiracleTextAlign.LEFT;

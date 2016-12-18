@@ -166,15 +166,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 0,
-                "offsetY": 0,
-                "scaleY": 1,
-                "offsetX": -0.2,
                 "ty": -3.05,
+                "offsetY": 0,
+                "flipX": 1,
+                "offsetX": -0.2,
+                "skewX": 0,
                 "scaleX": 1.28933715820313,
                 "tx": 0.6078674316406261,
-                "flipX": 1,
-                "skewX": 0
+                "skewY": 0,
+                "scaleY": 1
               },
               "bounds": null
             },
@@ -191,15 +191,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 0,
-                "offsetY": 0,
-                "scaleY": 1,
-                "offsetX": -0.2,
                 "ty": -3.05,
+                "offsetY": 0,
+                "flipX": 1,
+                "offsetX": -0.2,
+                "skewX": 0,
                 "scaleX": 1.12330627441406,
                 "tx": 0.6246612548828121,
-                "flipX": 1,
-                "skewX": 0
+                "skewY": 0,
+                "scaleY": 1
               },
               "bounds": null
             },
@@ -216,15 +216,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 0,
-                "offsetY": 0,
-                "scaleY": 1,
-                "offsetX": -0.2,
                 "ty": -3.05,
+                "offsetY": 0,
+                "flipX": 1,
+                "offsetX": -0.2,
+                "skewX": 0,
                 "scaleX": 1.03036499023438,
                 "tx": 0.6060729980468761,
-                "flipX": 1,
-                "skewX": 0
+                "skewY": 0,
+                "scaleY": 1
               },
               "bounds": null
             },
@@ -241,15 +241,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 0,
-                "offsetY": 0,
-                "scaleY": 1,
-                "offsetX": -0.2,
                 "ty": -3.05,
+                "offsetY": 0,
+                "flipX": 1,
+                "offsetX": -0.2,
+                "skewX": 0,
                 "scaleX": 0.841522216796875,
                 "tx": 0.568304443359375,
-                "flipX": 1,
-                "skewX": 0
+                "skewY": 0,
+                "scaleY": 1
               },
               "bounds": null
             },
@@ -266,15 +266,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 0,
-                "offsetY": 0,
-                "scaleY": 1,
-                "offsetX": -0.15,
                 "ty": -3.05,
+                "offsetY": 0,
+                "flipX": 1,
+                "offsetX": -0.15,
+                "skewX": 0,
                 "scaleX": 1.47506713867188,
                 "tx": 0.521260070800782,
-                "flipX": 1,
-                "skewX": 0
+                "skewY": 0,
+                "scaleY": 1
               },
               "bounds": null
             },
@@ -291,15 +291,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 0,
-                "offsetY": 0,
-                "scaleY": 1,
-                "offsetX": -0.1,
                 "ty": -3.05,
+                "offsetY": 0,
+                "flipX": 1,
+                "offsetX": -0.1,
+                "skewX": 0,
                 "scaleX": 1.06553649902344,
                 "tx": 0.456553649902344,
-                "flipX": 1,
-                "skewX": 0
+                "skewY": 0,
+                "scaleY": 1
               },
               "bounds": null
             },
@@ -316,15 +316,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 0,
-                "offsetY": 0,
-                "scaleY": 1,
-                "offsetX": -0.1,
                 "ty": -3.05,
+                "offsetY": 0,
+                "flipX": 1,
+                "offsetX": -0.1,
+                "skewX": 0,
                 "scaleX": 0.8372802734375,
                 "tx": 0.43372802734375,
-                "flipX": 1,
-                "skewX": 0
+                "skewY": 0,
+                "scaleY": 1
               },
               "bounds": null
             },
@@ -341,15 +341,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 0,
-                "offsetY": 0,
-                "scaleY": 1,
-                "offsetX": -0.05,
                 "ty": -3.05,
+                "offsetY": 0,
+                "flipX": 1,
+                "offsetX": -0.05,
+                "skewX": 0,
                 "scaleX": 0.671218872070313,
                 "tx": 0.43356094360351566,
-                "flipX": 1,
-                "skewX": 0
+                "skewY": 0,
+                "scaleY": 1
               },
               "bounds": null
             },
@@ -366,15 +366,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 0,
-                "offsetY": 0,
-                "scaleY": 1,
-                "offsetX": -0.05,
                 "ty": -3.05,
+                "offsetY": 0,
+                "flipX": 1,
+                "offsetX": -0.05,
+                "skewX": 0,
                 "scaleX": 1.4346923828125,
                 "tx": 0.421734619140625,
-                "flipX": 1,
-                "skewX": 0
+                "skewY": 0,
+                "scaleY": 1
               },
               "bounds": null
             }
@@ -541,15 +541,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 0,
-                "offsetY": 4.5,
-                "scaleY": 1,
-                "offsetX": -38.45,
                 "ty": -31.549999999999997,
+                "offsetY": 4.5,
+                "flipX": 1,
+                "offsetX": -38.45,
+                "skewX": 0,
                 "scaleX": 1,
                 "tx": -40.45,
-                "flipX": 1,
-                "skewX": 0
+                "skewY": 0,
+                "scaleY": 1
               },
               "bounds": null
             },
@@ -566,15 +566,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": -0.562324238068571,
-                "offsetY": 4.5,
-                "scaleY": 1.0000063108546835,
-                "offsetX": -38.35,
                 "ty": -44.93947830200197,
+                "offsetY": 4.5,
+                "flipX": 1,
+                "offsetX": -38.35,
+                "skewX": -0.562324238068571,
                 "scaleX": 1.0000063108546835,
                 "tx": 3.844211578369162,
-                "flipX": 1,
-                "skewX": -0.562324238068571
+                "skewY": -0.562324238068571,
+                "scaleY": 1.0000063108546835
               },
               "bounds": null
             },
@@ -591,15 +591,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": -0.2745521130938784,
-                "offsetY": 4.5,
-                "scaleY": 1.0000085276187942,
-                "offsetX": -38.35,
                 "ty": -31.715884399414062,
+                "offsetY": 4.5,
+                "flipX": 1,
+                "offsetX": -38.35,
+                "skewX": -0.2745521130938784,
                 "scaleX": 1.0000085276187942,
                 "tx": 43.23401336669922,
-                "flipX": 1,
-                "skewX": -0.2745521130938784
+                "skewY": -0.2745521130938784,
+                "scaleY": 1.0000085276187942
               },
               "bounds": null
             },
@@ -616,15 +616,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": -0.9765429846872031,
-                "offsetY": 4.5,
-                "scaleY": 1.0000008794009552,
-                "offsetX": -38.4,
                 "ty": -69.59748382568361,
+                "offsetY": 4.5,
+                "flipX": 1,
+                "offsetX": -38.4,
+                "skewX": -0.9765429846872031,
                 "scaleX": 1.0000008794009552,
                 "tx": 42.87835845947268,
-                "flipX": 1,
-                "skewX": -0.9765429846872031
+                "skewY": -0.9765429846872031,
+                "scaleY": 1.0000008794009552
               },
               "bounds": null
             },
@@ -641,15 +641,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": -2.240300465112069,
-                "offsetY": 4.6,
-                "scaleY": 0.9983904941296129,
-                "offsetX": -38.4,
                 "ty": -63.912261962890625,
+                "offsetY": 4.6,
+                "flipX": 1,
+                "offsetX": -38.4,
+                "skewX": -2.240300465112069,
                 "scaleX": 0.9983904941296129,
                 "tx": 29.058612060546878,
-                "flipX": 1,
-                "skewX": -2.240300465112069
+                "skewY": -2.240300465112069,
+                "scaleY": 0.9983904941296129
               },
               "bounds": null
             },
@@ -666,15 +666,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": -2.428372794112661,
-                "offsetY": 4.65,
-                "scaleY": 0.9983818576582257,
-                "offsetX": -38.45,
                 "ty": -56.90514450073244,
+                "offsetY": 4.65,
+                "flipX": 1,
+                "offsetX": -38.45,
+                "skewX": 0.7132198594771322,
                 "scaleX": 0.9983818576582257,
                 "tx": 43.03144607543944,
-                "flipX": 1,
-                "skewX": 0.7132198594771322
+                "skewY": -2.428372794112661,
+                "scaleY": 0.9983818576582257
               },
               "bounds": null
             },
@@ -691,15 +691,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": -2.898489632321022,
-                "offsetY": 4.65,
-                "scaleY": 0.9983813598756095,
-                "offsetX": -38.45,
                 "ty": -43.83456726074219,
+                "offsetY": 4.65,
+                "flipX": 1,
+                "offsetX": -38.45,
+                "skewX": 0.2431030212687716,
                 "scaleX": 0.9983813598756095,
                 "tx": 53.073486328125,
-                "flipX": 1,
-                "skewX": 0.2431030212687716
+                "skewY": -2.898489632321022,
+                "scaleY": 0.9983813598756095
               },
               "bounds": null
             },
@@ -716,15 +716,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": -2.45428455092122,
-                "offsetY": 4.6,
-                "scaleY": 0.998391301255219,
-                "offsetX": -38.45,
                 "ty": -43.355814361572286,
+                "offsetY": 4.6,
+                "flipX": 1,
+                "offsetX": -38.45,
+                "skewX": 0.6873081026685733,
                 "scaleX": 0.998391301255219,
                 "tx": -5.886190032959011,
-                "flipX": 1,
-                "skewX": 0.6873081026685733
+                "skewY": -2.45428455092122,
+                "scaleY": 0.998391301255219
               },
               "bounds": null
             },
@@ -741,15 +741,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": -2.2543998812919335,
-                "offsetY": 4.65,
-                "scaleY": 0.9983826510315517,
-                "offsetX": -38.45,
                 "ty": -58.2299919128418,
+                "offsetY": 4.65,
+                "flipX": 1,
+                "offsetX": -38.45,
+                "skewX": 0.8871927722978598,
                 "scaleX": 0.9983826510315517,
                 "tx": -19.34471817016604,
-                "flipX": 1,
-                "skewX": 0.8871927722978598
+                "skewY": -2.2543998812919335,
+                "scaleY": 0.9983826510315517
               },
               "bounds": null
             },
@@ -766,15 +766,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": -1.7708475805651382,
-                "offsetY": 4.7,
-                "scaleY": 0.9983656000126394,
-                "offsetX": -38.4,
                 "ty": -83.99020080566407,
+                "offsetY": 4.7,
+                "flipX": 1,
+                "offsetX": -38.4,
+                "skewX": 1.370745073024655,
                 "scaleX": 0.9983656000126394,
                 "tx": -45.467095947265626,
-                "flipX": 1,
-                "skewX": 1.370745073024655
+                "skewY": -1.7708475805651382,
+                "scaleY": 0.9983656000126394
               },
               "bounds": null
             },
@@ -791,15 +791,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": -0.7950274873876056,
-                "offsetY": 4.75,
-                "scaleY": 0.9983749779983041,
-                "offsetX": -38.45,
                 "ty": -58.77504501342776,
+                "offsetY": 4.75,
+                "flipX": 1,
+                "offsetX": -38.45,
+                "skewX": 2.3465651662021876,
                 "scaleX": 0.9983749779983041,
                 "tx": -58.00399246215821,
-                "flipX": 1,
-                "skewX": 2.3465651662021876
+                "skewY": -0.7950274873876056,
+                "scaleY": 0.9983749779983041
               },
               "bounds": null
             },
@@ -816,15 +816,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": -0.48252038676839343,
-                "offsetY": 4.7,
-                "scaleY": 0.9983697862723693,
-                "offsetX": -38.45,
                 "ty": -53.155619812011714,
+                "offsetY": 4.7,
+                "flipX": 1,
+                "offsetX": -38.45,
+                "skewX": -0.48252038676839343,
                 "scaleX": 0.9983697862723693,
                 "tx": -57.018122100830055,
-                "flipX": 1,
-                "skewX": -0.48252038676839343
+                "skewY": -0.48252038676839343,
+                "scaleY": 0.9983697862723693
               },
               "bounds": null
             }
@@ -991,15 +991,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 0,
-                "offsetY": -17.5,
-                "scaleY": 1,
-                "offsetX": -28.5,
                 "ty": -59.25,
+                "offsetY": -17.5,
+                "flipX": 1,
+                "offsetX": -28.5,
+                "skewX": 0,
                 "scaleX": 1,
                 "tx": -6.950000000000003,
-                "flipX": 1,
-                "skewX": 0
+                "skewY": 0,
+                "scaleY": 1
               },
               "bounds": null
             },
@@ -1016,15 +1016,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": -0.7242042854175428,
-                "offsetY": -17.55,
-                "scaleY": 0.9999954420969326,
-                "offsetX": -28.55,
                 "ty": -74.76078186035156,
+                "offsetY": -17.55,
+                "flipX": 1,
+                "offsetX": -28.55,
+                "skewX": -0.7242042854175428,
                 "scaleX": 0.9999954420969326,
                 "tx": 1.0571014404296903,
-                "flipX": 1,
-                "skewX": -0.7242042854175428
+                "skewY": -0.7242042854175428,
+                "scaleY": 0.9999954420969326
               },
               "bounds": null
             },
@@ -1041,15 +1041,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": -1.9107584500543917,
-                "offsetY": -17.55,
-                "scaleY": 0.9999968029973222,
-                "offsetX": -28.5,
                 "ty": -74.76672897338868,
+                "offsetY": -17.55,
+                "flipX": 1,
+                "offsetX": -28.5,
+                "skewX": -1.9107584500543917,
                 "scaleX": 0.9999968029973222,
                 "tx": 1.0511528015136484,
-                "flipX": 1,
-                "skewX": -1.9107584500543917
+                "skewY": -1.9107584500543917,
+                "scaleY": 0.9999968029973222
               },
               "bounds": null
             },
@@ -1066,15 +1066,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": -1.64438029526308,
-                "offsetY": -17.55,
-                "scaleY": 0.9999899873008732,
-                "offsetX": -28.45,
                 "ty": -100.33250732421875,
+                "offsetY": -17.55,
+                "flipX": 1,
+                "offsetX": -28.45,
+                "skewX": -1.64438029526308,
                 "scaleX": 0.9999899873008732,
                 "tx": 21.20611267089843,
-                "flipX": 1,
-                "skewX": -1.64438029526308
+                "skewY": -1.64438029526308,
+                "scaleY": 0.9999899873008732
               },
               "bounds": null
             },
@@ -1091,15 +1091,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": -2.1080938711809902,
-                "offsetY": -17.5,
-                "scaleY": 0.9999884828494745,
-                "offsetX": -28.55,
                 "ty": -60.2701988220215,
+                "offsetY": -17.5,
+                "flipX": 1,
+                "offsetX": -28.55,
+                "skewX": -2.1080938711809902,
                 "scaleX": 0.9999884828494745,
                 "tx": 21.203826904296868,
-                "flipX": 1,
-                "skewX": -2.1080938711809902
+                "skewY": -2.1080938711809902,
+                "scaleY": 0.9999884828494745
               },
               "bounds": null
             },
@@ -1116,15 +1116,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": -1.287856115892674,
-                "offsetY": -17.55,
-                "scaleY": 0.9999808333141493,
-                "offsetX": -28.55,
                 "ty": -60.413808441162125,
+                "offsetY": -17.55,
+                "flipX": 1,
+                "offsetX": -28.55,
+                "skewX": -1.287856115892674,
                 "scaleX": 0.9999808333141493,
                 "tx": 2.1685737609863196,
-                "flipX": 1,
-                "skewX": -1.287856115892674
+                "skewY": -1.287856115892674,
+                "scaleY": 0.9999808333141493
               },
               "bounds": null
             },
@@ -1141,15 +1141,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": -0.747656815467721,
-                "offsetY": -17.6,
-                "scaleY": 0.9999686946150403,
-                "offsetX": -28.55,
                 "ty": -68.8665725708008,
+                "offsetY": -17.6,
+                "flipX": 1,
+                "offsetX": -28.55,
+                "skewX": -0.747656815467721,
                 "scaleX": 0.9999686946150403,
                 "tx": 7.168344879150408,
-                "flipX": 1,
-                "skewX": -0.747656815467721
+                "skewY": -0.747656815467721,
+                "scaleY": 0.9999686946150403
               },
               "bounds": null
             },
@@ -1166,15 +1166,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": -0.4038318512398991,
-                "offsetY": -17.55,
-                "scaleY": 0.9999598765379711,
-                "offsetX": -28.55,
                 "ty": -125.8057914733887,
+                "offsetY": -17.55,
+                "flipX": 1,
+                "offsetX": -28.55,
+                "skewX": -0.4038318512398991,
                 "scaleX": 0.9999598765379711,
                 "tx": -39.19346237182617,
-                "flipX": 1,
-                "skewX": -0.4038318512398991
+                "skewY": -0.4038318512398991,
+                "scaleY": 0.9999598765379711
               },
               "bounds": null
             },
@@ -1191,15 +1191,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": -0.13187968599032193,
-                "offsetY": -17.6,
-                "scaleY": 0.9995549085013696,
-                "offsetX": -28.55,
                 "ty": -81.4919937133789,
+                "offsetY": -17.6,
+                "flipX": 1,
+                "offsetX": -28.55,
+                "skewX": -0.13187968599032193,
                 "scaleX": 0.9995549085013696,
                 "tx": -17.72384185791016,
-                "flipX": 1,
-                "skewX": -0.13187968599032193
+                "skewY": -0.13187968599032193,
+                "scaleY": 0.9995549085013696
               },
               "bounds": null
             }
@@ -1341,15 +1341,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": -0.017685791248570622,
-                "offsetY": 0,
-                "scaleY": 1.0000038022335977,
-                "offsetX": 0,
                 "ty": -82.5,
+                "offsetY": 0,
+                "flipX": 1,
+                "offsetX": 0,
+                "skewX": -0.017685791248570622,
                 "scaleX": 1.0000038022335977,
                 "tx": -73.75,
-                "flipX": 1,
-                "skewX": -0.017685791248570622
+                "skewY": -0.017685791248570622,
+                "scaleY": 1.0000038022335977
               },
               "bounds": null
             },
@@ -1366,15 +1366,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 0.48789558084481416,
-                "offsetY": 0,
-                "scaleY": 0.9999940472012165,
-                "offsetX": 0,
                 "ty": -169.95,
+                "offsetY": 0,
+                "flipX": 1,
+                "offsetX": 0,
+                "skewX": 0.48789558084481416,
                 "scaleX": 0.9999940472012165,
                 "tx": -100.05,
-                "flipX": 1,
-                "skewX": 0.48789558084481416
+                "skewY": 0.48789558084481416,
+                "scaleY": 0.9999940472012165
               },
               "bounds": null
             },
@@ -1391,15 +1391,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 0.7598778069501558,
-                "offsetY": 0,
-                "scaleY": 0.9999922254053406,
-                "offsetX": 0,
                 "ty": -130.2,
+                "offsetY": 0,
+                "flipX": 1,
+                "offsetX": 0,
+                "skewX": 0.7598778069501558,
                 "scaleX": 0.9999922254053406,
                 "tx": -111.75,
-                "flipX": 1,
-                "skewX": 0.7598778069501558
+                "skewY": 0.7598778069501558,
+                "scaleY": 0.9999922254053406
               },
               "bounds": null
             },
@@ -1416,15 +1416,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 0.19329579947975736,
-                "offsetY": 0,
-                "scaleY": 0.9999924155130214,
-                "offsetX": 0,
                 "ty": -95.65,
+                "offsetY": 0,
+                "flipX": 1,
+                "offsetX": 0,
+                "skewX": 0.19329579947975736,
                 "scaleX": 0.9999924155130214,
                 "tx": -86.8,
-                "flipX": 1,
-                "skewX": 0.19329579947975736
+                "skewY": 0.19329579947975736,
+                "scaleY": 0.9999924155130214
               },
               "bounds": null
             },
@@ -1441,15 +1441,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": -0.06813839087385015,
-                "offsetY": 0,
-                "scaleY": 0.9999858946708818,
-                "offsetX": 0,
                 "ty": -89.85,
+                "offsetY": 0,
+                "flipX": 1,
+                "offsetX": 0,
+                "skewX": -0.06813839087385015,
                 "scaleX": 0.9999858946708818,
                 "tx": -65.8,
-                "flipX": 1,
-                "skewX": -0.06813839087385015
+                "skewY": -0.06813839087385015,
+                "scaleY": 0.9999858946708818
               },
               "bounds": null
             },
@@ -1466,15 +1466,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": -0.5169960602120902,
-                "offsetY": 0,
-                "scaleY": 0.9999831508356942,
-                "offsetX": 0,
                 "ty": -152.6,
+                "offsetY": 0,
+                "flipX": 1,
+                "offsetX": 0,
+                "skewX": -0.5169960602120902,
                 "scaleX": 0.9999831508356942,
                 "tx": -65.8,
-                "flipX": 1,
-                "skewX": -0.5169960602120902
+                "skewY": -0.5169960602120902,
+                "scaleY": 0.9999831508356942
               },
               "bounds": null
             }
@@ -1641,15 +1641,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 0,
-                "offsetY": -0.05,
-                "scaleY": 1,
-                "offsetX": 0,
                 "ty": -142.05,
+                "offsetY": -0.05,
+                "flipX": 1,
+                "offsetX": 0,
+                "skewX": 0,
                 "scaleX": 1,
                 "tx": -4,
-                "flipX": 1,
-                "skewX": 0
+                "skewY": 0,
+                "scaleY": 1
               },
               "bounds": null
             },
@@ -1666,15 +1666,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 0,
-                "offsetY": -0.1,
-                "scaleY": 0.939163208007813,
-                "offsetX": 0,
                 "ty": -121.59391632080079,
+                "offsetY": -0.1,
+                "flipX": 1,
+                "offsetX": 0,
+                "skewX": 0,
                 "scaleX": 1,
                 "tx": -2.5,
-                "flipX": 1,
-                "skewX": 0
+                "skewY": 0,
+                "scaleY": 0.939163208007813
               },
               "bounds": null
             },
@@ -1691,15 +1691,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 0,
-                "offsetY": -0.05,
-                "scaleY": 1,
-                "offsetX": 0,
                 "ty": -142.05,
+                "offsetY": -0.05,
+                "flipX": 1,
+                "offsetX": 0,
+                "skewX": 0,
                 "scaleX": 1,
                 "tx": -4,
-                "flipX": 1,
-                "skewX": 0
+                "skewY": 0,
+                "scaleY": 1
               },
               "bounds": null
             },
@@ -1716,40 +1716,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 0,
-                "offsetY": -0.05,
-                "scaleY": 1.02836608886719,
-                "offsetX": 0,
                 "ty": -189.80141830444336,
-                "scaleX": 1,
-                "tx": -4,
-                "flipX": 1,
-                "skewX": 0
-              },
-              "bounds": null
-            },
-            {
-              "color": {
-                "blueOffset": 0,
-                "blueMultiplier": 0,
-                "greenMultiplier": 0,
-                "redMultiplier": 0,
-                "alphaMultiplier": 0,
-                "alphaOffset": 0,
-                "type": 0,
-                "redOffset": 0,
-                "greenOffset": 0
-              },
-              "matrix": {
-                "skewY": 0,
                 "offsetY": -0.05,
-                "scaleY": 1,
+                "flipX": 1,
                 "offsetX": 0,
-                "ty": -142.05,
+                "skewX": 0,
                 "scaleX": 1,
                 "tx": -4,
-                "flipX": 1,
-                "skewX": 0
+                "skewY": 0,
+                "scaleY": 1.02836608886719
               },
               "bounds": null
             },
@@ -1766,15 +1741,40 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 0,
-                "offsetY": -0.1,
-                "scaleY": 0.939163208007813,
+                "ty": -142.05,
+                "offsetY": -0.05,
+                "flipX": 1,
                 "offsetX": 0,
+                "skewX": 0,
+                "scaleX": 1,
+                "tx": -4,
+                "skewY": 0,
+                "scaleY": 1
+              },
+              "bounds": null
+            },
+            {
+              "color": {
+                "blueOffset": 0,
+                "blueMultiplier": 0,
+                "greenMultiplier": 0,
+                "redMultiplier": 0,
+                "alphaMultiplier": 0,
+                "alphaOffset": 0,
+                "type": 0,
+                "redOffset": 0,
+                "greenOffset": 0
+              },
+              "matrix": {
                 "ty": -121.59391632080079,
+                "offsetY": -0.1,
+                "flipX": 1,
+                "offsetX": 0,
+                "skewX": 0,
                 "scaleX": 1,
                 "tx": -2.5,
-                "flipX": 1,
-                "skewX": 0
+                "skewY": 0,
+                "scaleY": 0.939163208007813
               },
               "bounds": null
             },
@@ -1791,15 +1791,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 0,
-                "offsetY": -0.05,
-                "scaleY": 1,
-                "offsetX": 0,
                 "ty": -142.05,
+                "offsetY": -0.05,
+                "flipX": 1,
+                "offsetX": 0,
+                "skewX": 0,
                 "scaleX": 1,
                 "tx": -4,
-                "flipX": 1,
-                "skewX": 0
+                "skewY": 0,
+                "scaleY": 1
               },
               "bounds": null
             },
@@ -1816,15 +1816,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 0,
-                "offsetY": -0.05,
-                "scaleY": 1.02836608886719,
-                "offsetX": 0,
                 "ty": -189.80141830444336,
+                "offsetY": -0.05,
+                "flipX": 1,
+                "offsetX": 0,
+                "skewX": 0,
                 "scaleX": 1,
                 "tx": -4,
-                "flipX": 1,
-                "skewX": 0
+                "skewY": 0,
+                "scaleY": 1.02836608886719
               },
               "bounds": null
             },
@@ -1841,15 +1841,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 0,
-                "offsetY": -0.05,
-                "scaleY": 1.00946044921875,
-                "offsetX": 0,
                 "ty": -157.95047302246095,
+                "offsetY": -0.05,
+                "flipX": 1,
+                "offsetX": 0,
+                "skewX": 0,
                 "scaleX": 1,
                 "tx": -4,
-                "flipX": 1,
-                "skewX": 0
+                "skewY": 0,
+                "scaleY": 1.00946044921875
               },
               "bounds": null
             }
@@ -2016,15 +2016,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 3.141592653589793,
-                "offsetY": 4.5,
-                "scaleY": 1,
-                "offsetX": -38.45,
                 "ty": -23.05,
+                "offsetY": 4.5,
+                "flipX": 1,
+                "offsetX": -38.45,
+                "skewX": 0,
                 "scaleX": 1,
                 "tx": 57,
-                "flipX": 1,
-                "skewX": 0
+                "skewY": 3.141592653589793,
+                "scaleY": 1
               },
               "bounds": null
             },
@@ -2041,15 +2041,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 3.585913458440275,
-                "offsetY": 4.5,
-                "scaleY": 0.9999891952027787,
-                "offsetX": -38.4,
                 "ty": -36.542840576171876,
+                "offsetY": 4.5,
+                "flipX": 1,
+                "offsetX": -38.4,
+                "skewX": 0.4443208048504821,
                 "scaleX": 0.9999891952027787,
                 "tx": 19.49462585449219,
-                "flipX": 1,
-                "skewX": 0.4443208048504821
+                "skewY": 3.585913458440275,
+                "scaleY": 0.9999891952027787
               },
               "bounds": null
             },
@@ -2066,15 +2066,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 3.450435250775733,
-                "offsetY": 4.55,
-                "scaleY": 0.999996313003546,
-                "offsetX": -38.45,
                 "ty": -25.702367401123045,
+                "offsetY": 4.55,
+                "flipX": 1,
+                "offsetX": -38.45,
+                "skewX": 0.3088425971859403,
                 "scaleX": 0.999996313003546,
                 "tx": 10.536362457275366,
-                "flipX": 1,
-                "skewX": 0.3088425971859403
+                "skewY": 3.450435250775733,
+                "scaleY": 0.999996313003546
               },
               "bounds": null
             },
@@ -2091,15 +2091,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 4.483372511397716,
-                "offsetY": 4.6,
-                "scaleY": 1.0000021202700091,
-                "offsetX": -38.45,
                 "ty": -81.0518623352051,
+                "offsetY": 4.6,
+                "flipX": 1,
+                "offsetX": -38.45,
+                "skewX": 1.3417798578079234,
                 "scaleX": 1.0000021202700091,
                 "tx": -45.60883331298828,
-                "flipX": 1,
-                "skewX": 1.3417798578079234
+                "skewY": 4.483372511397716,
+                "scaleY": 1.0000021202700091
               },
               "bounds": null
             },
@@ -2116,15 +2116,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 5.511231493873671,
-                "offsetY": 4.6,
-                "scaleY": 0.9983865510749464,
-                "offsetX": -38.45,
                 "ty": -50.767816162109376,
+                "offsetY": 4.6,
+                "flipX": 1,
+                "offsetX": -38.45,
+                "skewX": 2.369638840283878,
                 "scaleX": 0.9983865510749464,
                 "tx": -66.1466278076172,
-                "flipX": 1,
-                "skewX": 2.369638840283878
+                "skewY": 5.511231493873671,
+                "scaleY": 0.9983865510749464
               },
               "bounds": null
             },
@@ -2141,15 +2141,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": -6.209175140386256,
-                "offsetY": 4.6,
-                "scaleY": 0.9983690240224893,
-                "offsetX": -38.4,
                 "ty": -62.88530883789062,
+                "offsetY": 4.6,
+                "flipX": 1,
+                "offsetX": -38.4,
+                "skewX": 0.07401016679333042,
                 "scaleX": 0.9983690240224893,
                 "tx": -73.20715942382812,
-                "flipX": 1,
-                "skewX": 0.07401016679333042
+                "skewY": -6.209175140386256,
+                "scaleY": 0.9983690240224893
               },
               "bounds": null
             },
@@ -2166,15 +2166,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 6.274870888599346,
-                "offsetY": 4.6,
-                "scaleY": 0.9983713002759113,
-                "offsetX": -38.35,
                 "ty": -31.375985717773435,
+                "offsetY": 4.6,
+                "flipX": 1,
+                "offsetX": -38.35,
+                "skewX": -0.008314418580239765,
                 "scaleX": 0.9983713002759113,
                 "tx": -40.725600433349584,
-                "flipX": 1,
-                "skewX": -0.008314418580239765
+                "skewY": 6.274870888599346,
+                "scaleY": 0.9983713002759113
               },
               "bounds": null
             },
@@ -2191,15 +2191,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 5.660658090788531,
-                "offsetY": 4.6,
-                "scaleY": 0.9983671678943743,
-                "offsetX": -38.3,
                 "ty": -42.86491546630861,
+                "offsetY": 4.6,
+                "flipX": 1,
+                "offsetX": -38.3,
+                "skewX": -0.6225272163910549,
                 "scaleX": 0.9983671678943743,
                 "tx": -2.7577651977538835,
-                "flipX": 1,
-                "skewX": -0.6225272163910549
+                "skewY": 5.660658090788531,
+                "scaleY": 0.9983671678943743
               },
               "bounds": null
             },
@@ -2216,15 +2216,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 5.557425102689221,
-                "offsetY": 4.55,
-                "scaleY": 0.9983556703876318,
-                "offsetX": -38.25,
                 "ty": -45.397162628173845,
+                "offsetY": 4.55,
+                "flipX": 1,
+                "offsetX": -38.25,
+                "skewX": -0.7257602044903656,
                 "scaleX": 0.9983556703876318,
                 "tx": 19.078655242919925,
-                "flipX": 1,
-                "skewX": -0.7257602044903656
+                "skewY": 5.557425102689221,
+                "scaleY": 0.9983556703876318
               },
               "bounds": null
             },
@@ -2241,15 +2241,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 4.946843706361941,
-                "offsetY": 4.6,
-                "scaleY": 0.9983682750650658,
-                "offsetX": -38.25,
                 "ty": -69.57592391967776,
+                "offsetY": 4.6,
+                "flipX": 1,
+                "offsetX": -38.25,
+                "skewX": -1.3363416008176452,
                 "scaleX": 0.9983682750650658,
                 "tx": 29.188308715820313,
-                "flipX": 1,
-                "skewX": -1.3363416008176452
+                "skewY": 4.946843706361941,
+                "scaleY": 0.9983682750650658
               },
               "bounds": null
             },
@@ -2266,15 +2266,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 3.962057325969216,
-                "offsetY": 4.6,
-                "scaleY": 0.9983490161834473,
-                "offsetX": -38.3,
                 "ty": -51.05024719238281,
+                "offsetY": 4.6,
+                "flipX": 1,
+                "offsetX": -38.3,
+                "skewX": -2.3211279812103705,
                 "scaleX": 0.9983490161834473,
                 "tx": 50.88623352050781,
-                "flipX": 1,
-                "skewX": -2.3211279812103705
+                "skewY": 3.962057325969216,
+                "scaleY": 0.9983490161834473
               },
               "bounds": null
             },
@@ -2291,15 +2291,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 4.085801885165321,
-                "offsetY": 4.5,
-                "scaleY": 0.9983544730655987,
-                "offsetX": -38.25,
                 "ty": -51.94841232299807,
+                "offsetY": 4.5,
+                "flipX": 1,
+                "offsetX": -38.25,
+                "skewX": -5.338976075604058,
                 "scaleX": 0.9983544730655987,
                 "tx": 53.918582153320315,
-                "flipX": 1,
-                "skewX": -5.338976075604058
+                "skewY": 4.085801885165321,
+                "scaleY": 0.9983544730655987
               },
               "bounds": null
             }
@@ -2466,15 +2466,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 3.141592653589793,
-                "offsetY": -17.5,
-                "scaleY": 1,
-                "offsetX": -28.5,
                 "ty": -47,
+                "offsetY": -17.5,
+                "flipX": 1,
+                "offsetX": -28.5,
+                "skewX": 0,
                 "scaleX": 1,
                 "tx": 25.5,
-                "flipX": 1,
-                "skewX": 0
+                "skewY": 3.141592653589793,
+                "scaleY": 1
               },
               "bounds": null
             },
@@ -2491,15 +2491,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 3.922459125954389,
-                "offsetY": -17.5,
-                "scaleY": 0.9999897675065207,
-                "offsetX": -28.5,
                 "ty": -69.04099731445312,
+                "offsetY": -17.5,
+                "flipX": 1,
+                "offsetX": -28.5,
+                "skewX": 0.7808664723645959,
                 "scaleX": 0.9999897675065207,
                 "tx": 14.474584960937499,
-                "flipX": 1,
-                "skewX": 0.7808664723645959
+                "skewY": 3.922459125954389,
+                "scaleY": 0.9999897675065207
               },
               "bounds": null
             },
@@ -2516,15 +2516,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 4.305547691358976,
-                "offsetY": -17.55,
-                "scaleY": 0.999989265169141,
-                "offsetX": -28.55,
                 "ty": -59.513977813720714,
+                "offsetY": -17.55,
+                "flipX": 1,
+                "offsetX": -28.55,
+                "skewX": 1.163955037769183,
                 "scaleX": 0.999989265169141,
                 "tx": 21.01990280151366,
-                "flipX": 1,
-                "skewX": 1.163955037769183
+                "skewY": 4.305547691358976,
+                "scaleY": 0.999989265169141
               },
               "bounds": null
             },
@@ -2541,15 +2541,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 5.072809861327448,
-                "offsetY": -17.55,
-                "scaleY": 0.9999802352769994,
-                "offsetX": -28.6,
                 "ty": -122.52267456054688,
+                "offsetY": -17.55,
+                "flipX": 1,
+                "offsetX": -28.6,
+                "skewX": 1.9312172077376548,
                 "scaleX": 0.9999802352769994,
                 "tx": -22.99183044433594,
-                "flipX": 1,
-                "skewX": 1.9312172077376548
+                "skewY": 5.072809861327448,
+                "scaleY": 0.9999802352769994
               },
               "bounds": null
             },
@@ -2566,15 +2566,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 5.371253398480595,
-                "offsetY": -17.45,
-                "scaleY": 0.9999898382877582,
-                "offsetX": -28.5,
                 "ty": -52.001258850097656,
+                "offsetY": -17.45,
+                "flipX": 1,
+                "offsetX": -28.5,
+                "skewX": 2.229660744890802,
                 "scaleX": 0.9999898382877582,
                 "tx": -10.404560852050778,
-                "flipX": 1,
-                "skewX": 2.229660744890802
+                "skewY": 5.371253398480595,
+                "scaleY": 0.9999898382877582
               },
               "bounds": null
             },
@@ -2591,15 +2591,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 4.6207675762724145,
-                "offsetY": -17.5,
-                "scaleY": 0.9999828076374839,
-                "offsetX": -28.5,
                 "ty": -68.9310791015625,
+                "offsetY": -17.5,
+                "flipX": 1,
+                "offsetX": -28.5,
+                "skewX": 1.4791749226826214,
                 "scaleX": 0.9999828076374839,
                 "tx": 4.66878662109375,
-                "flipX": 1,
-                "skewX": 1.4791749226826214
+                "skewY": 4.6207675762724145,
+                "scaleY": 0.9999828076374839
               },
               "bounds": null
             },
@@ -2616,15 +2616,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 3.9667400808380995,
-                "offsetY": -17.5,
-                "scaleY": 0.9999817427676609,
-                "offsetX": -28.55,
                 "ty": -68.89644699096681,
+                "offsetY": -17.5,
+                "flipX": 1,
+                "offsetX": -28.55,
+                "skewX": 0.8251474272483064,
                 "scaleX": 0.9999817427676609,
                 "tx": 4.58674621582032,
-                "flipX": 1,
-                "skewX": 0.8251474272483064
+                "skewY": 3.9667400808380995,
+                "scaleY": 0.9999817427676609
               },
               "bounds": null
             },
@@ -2641,15 +2641,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 3.709702859398137,
-                "offsetY": -17.55,
-                "scaleY": 0.9999718159190758,
-                "offsetX": -28.55,
                 "ty": -114.85342712402344,
+                "offsetY": -17.55,
+                "flipX": 1,
+                "offsetX": -28.55,
+                "skewX": 0.5681102058083443,
                 "scaleX": 0.9999718159190758,
                 "tx": 30.177670288085935,
-                "flipX": 1,
-                "skewX": 0.5681102058083443
+                "skewY": 3.709702859398137,
+                "scaleY": 0.9999718159190758
               },
               "bounds": null
             },
@@ -2666,15 +2666,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 3.3297863039403177,
-                "offsetY": -17.55,
-                "scaleY": 0.9993649806194121,
-                "offsetX": -28.55,
                 "ty": -69.61706314086916,
+                "offsetY": -17.55,
+                "flipX": 1,
+                "offsetX": -28.55,
+                "skewX": 0.18819365035052485,
                 "scaleX": 0.9993649806194121,
                 "tx": 27.10314712524415,
-                "flipX": 1,
-                "skewX": 0.18819365035052485
+                "skewY": 3.3297863039403177,
+                "scaleY": 0.9993649806194121
               },
               "bounds": null
             }
@@ -2841,15 +2841,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 0.4834588229202094,
-                "offsetY": -22.55,
-                "scaleY": 0.9999986757748379,
-                "offsetX": -1.15,
                 "ty": -132.48100204467775,
+                "offsetY": -22.55,
+                "flipX": 1,
+                "offsetX": -1.15,
+                "skewX": 0.4834588229202094,
                 "scaleX": 0.9999986757748379,
                 "tx": -9.999573516845702,
-                "flipX": 1,
-                "skewX": 0.4834588229202094
+                "skewY": 0.4834588229202094,
+                "scaleY": 0.9999986757748379
               },
               "bounds": null
             },
@@ -2866,15 +2866,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": -0.17504256379621908,
-                "offsetY": -22.55,
-                "scaleY": 0.9999914351716799,
-                "offsetX": -1.15,
                 "ty": -111.40549697875977,
+                "offsetY": -22.55,
+                "flipX": 1,
+                "offsetX": -1.15,
+                "skewX": -0.17504256379621908,
                 "scaleX": 0.9999914351716799,
                 "tx": -5.194632720947277,
-                "flipX": 1,
-                "skewX": -0.17504256379621908
+                "skewY": -0.17504256379621908,
+                "scaleY": 0.9999914351716799
               },
               "bounds": null
             },
@@ -2891,15 +2891,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": -0.47584936609274797,
-                "offsetY": -22.55,
-                "scaleY": 0.9999792383923988,
-                "offsetX": -1.15,
                 "ty": -123.32116470336913,
+                "offsetY": -22.55,
+                "flipX": 1,
+                "offsetX": -1.15,
+                "skewX": -0.47584936609274797,
                 "scaleX": 0.9999792383923988,
                 "tx": 20.7924217224121,
-                "flipX": 1,
-                "skewX": -0.47584936609274797
+                "skewY": -0.47584936609274797,
+                "scaleY": 0.9999792383923988
               },
               "bounds": null
             },
@@ -2916,15 +2916,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": -0.6895569855352347,
-                "offsetY": -22.5,
-                "scaleY": 0.9999830960031525,
-                "offsetX": -1.15,
                 "ty": -179.59069747924804,
+                "offsetY": -22.5,
+                "flipX": 1,
+                "offsetX": -1.15,
+                "skewX": -0.6895569855352347,
                 "scaleX": 0.9999830960031525,
                 "tx": 36.82308654785155,
-                "flipX": 1,
-                "skewX": -0.6895569855352347
+                "skewY": -0.6895569855352347,
+                "scaleY": 0.9999830960031525
               },
               "bounds": null
             },
@@ -2941,15 +2941,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": -0.5898520315859611,
-                "offsetY": -22.55,
-                "scaleY": 0.9999830537436759,
-                "offsetX": -1.15,
                 "ty": -130.47891387939453,
+                "offsetY": -22.55,
+                "flipX": 1,
+                "offsetX": -1.15,
+                "skewX": -0.5898520315859611,
                 "scaleX": 0.9999830537436759,
                 "tx": 51.31270446777342,
-                "flipX": 1,
-                "skewX": -0.5898520315859611
+                "skewY": -0.5898520315859611,
+                "scaleY": 0.9999830537436759
               },
               "bounds": null
             },
@@ -2966,15 +2966,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": -0.24978610488459782,
-                "offsetY": -22.6,
-                "scaleY": 0.9999825032061377,
-                "offsetX": -1.2,
                 "ty": -114.54486389160158,
+                "offsetY": -22.6,
+                "flipX": 1,
+                "offsetX": -1.2,
+                "skewX": -0.24978610488459782,
                 "scaleX": 0.9999825032061377,
                 "tx": 37.32619018554688,
-                "flipX": 1,
-                "skewX": -0.24978610488459782
+                "skewY": -0.24978610488459782,
+                "scaleY": 0.9999825032061377
               },
               "bounds": null
             },
@@ -2991,15 +2991,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 0.07727278886453913,
-                "offsetY": -22.6,
-                "scaleY": 0.9999780096024106,
-                "offsetX": -1.15,
                 "ty": -122.49329147338868,
+                "offsetY": -22.6,
+                "flipX": 1,
+                "offsetX": -1.15,
+                "skewX": 0.07727278886453913,
                 "scaleX": 0.9999780096024106,
                 "tx": 4.2911323547363285,
-                "flipX": 1,
-                "skewX": 0.07727278886453913
+                "skewY": 0.07727278886453913,
+                "scaleY": 0.9999780096024106
               },
               "bounds": null
             },
@@ -3016,15 +3016,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 0.21636342580384788,
-                "offsetY": -22.65,
-                "scaleY": 0.9999843436464687,
-                "offsetX": -1.15,
                 "ty": -167.5746826171875,
+                "offsetY": -22.65,
+                "flipX": 1,
+                "offsetX": -1.15,
+                "skewX": 0.21636342580384788,
                 "scaleX": 0.9999843436464687,
                 "tx": -2.1144210815429565,
-                "flipX": 1,
-                "skewX": 0.21636342580384788
+                "skewY": 0.21636342580384788,
+                "scaleY": 0.9999843436464687
               },
               "bounds": null
             },
@@ -3041,15 +3041,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 0.39363246017452164,
-                "offsetY": -22.6,
-                "scaleY": 0.9988445237605286,
-                "offsetX": -1.2,
                 "ty": -144.18775634765626,
+                "offsetY": -22.6,
+                "flipX": 1,
+                "offsetX": -1.2,
+                "skewX": 0.39363246017452164,
                 "scaleX": 0.9988445237605286,
                 "tx": -7.3349395751953015,
-                "flipX": 1,
-                "skewX": 0.39363246017452164
+                "skewY": 0.39363246017452164,
+                "scaleY": 0.9988445237605286
               },
               "bounds": null
             }
@@ -3216,15 +3216,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 0.0868401222005821,
-                "offsetY": -43.05,
-                "scaleY": 0.9999993109374733,
-                "offsetX": -79,
                 "ty": -242.18600234985354,
+                "offsetY": -43.05,
+                "flipX": 1,
+                "offsetX": -79,
+                "skewX": 0.0868401222005821,
                 "scaleX": 0.9999993109374733,
                 "tx": -6.0639770507812045,
-                "flipX": 1,
-                "skewX": 0.0868401222005821
+                "skewY": 0.0868401222005821,
+                "scaleY": 0.9999993109374733
               },
               "bounds": null
             },
@@ -3241,15 +3241,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 0.025820801000128336,
-                "offsetY": -43.05,
-                "scaleY": 0.9999976442167726,
-                "offsetX": -79,
                 "ty": -222.19593658447263,
+                "offsetY": -43.05,
+                "flipX": 1,
+                "offsetX": -79,
+                "skewX": 0.025820801000128336,
                 "scaleX": 0.9999976442167726,
                 "tx": -4.865060424804696,
-                "flipX": 1,
-                "skewX": 0.025820801000128336
+                "skewY": 0.025820801000128336,
+                "scaleY": 0.9999976442167726
               },
               "bounds": null
             },
@@ -3266,40 +3266,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": -0.00018310546670363698,
-                "offsetY": -43.1,
-                "scaleY": 1.0000000167638061,
-                "offsetX": -78.95,
                 "ty": -242.2144561767578,
-                "scaleX": 1.0000000167638061,
-                "tx": -6.057891845703125,
-                "flipX": 1,
-                "skewX": -0.00018310546670363698
-              },
-              "bounds": null
-            },
-            {
-              "color": {
-                "blueOffset": 0,
-                "blueMultiplier": 0,
-                "greenMultiplier": 0,
-                "redMultiplier": 0,
-                "alphaMultiplier": 0,
-                "alphaOffset": 0,
-                "type": 0,
-                "redOffset": 0,
-                "greenOffset": 0
-              },
-              "matrix": {
-                "skewY": -0.00018310546670363698,
                 "offsetY": -43.1,
-                "scaleY": 1.0000000167638061,
+                "flipX": 1,
                 "offsetX": -78.95,
-                "ty": -293.2644561767578,
+                "skewX": -0.00018310546670363698,
                 "scaleX": 1.0000000167638061,
                 "tx": -6.057891845703125,
-                "flipX": 1,
-                "skewX": -0.00018310546670363698
+                "skewY": -0.00018310546670363698,
+                "scaleY": 1.0000000167638061
               },
               "bounds": null
             },
@@ -3316,15 +3291,40 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 0.0868401222005821,
-                "offsetY": -43.05,
-                "scaleY": 0.9999993109374733,
-                "offsetX": -79,
+                "ty": -293.2644561767578,
+                "offsetY": -43.1,
+                "flipX": 1,
+                "offsetX": -78.95,
+                "skewX": -0.00018310546670363698,
+                "scaleX": 1.0000000167638061,
+                "tx": -6.057891845703125,
+                "skewY": -0.00018310546670363698,
+                "scaleY": 1.0000000167638061
+              },
+              "bounds": null
+            },
+            {
+              "color": {
+                "blueOffset": 0,
+                "blueMultiplier": 0,
+                "greenMultiplier": 0,
+                "redMultiplier": 0,
+                "alphaMultiplier": 0,
+                "alphaOffset": 0,
+                "type": 0,
+                "redOffset": 0,
+                "greenOffset": 0
+              },
+              "matrix": {
                 "ty": -242.18600234985354,
+                "offsetY": -43.05,
+                "flipX": 1,
+                "offsetX": -79,
+                "skewX": 0.0868401222005821,
                 "scaleX": 0.9999993109374733,
                 "tx": -6.0639770507812045,
-                "flipX": 1,
-                "skewX": 0.0868401222005821
+                "skewY": 0.0868401222005821,
+                "scaleY": 0.9999993109374733
               },
               "bounds": null
             },
@@ -3341,15 +3341,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 0.025820801000128336,
-                "offsetY": -43.05,
-                "scaleY": 0.9999976442167726,
-                "offsetX": -79,
                 "ty": -222.19593658447263,
+                "offsetY": -43.05,
+                "flipX": 1,
+                "offsetX": -79,
+                "skewX": 0.025820801000128336,
                 "scaleX": 0.9999976442167726,
                 "tx": -4.865060424804696,
-                "flipX": 1,
-                "skewX": 0.025820801000128336
+                "skewY": 0.025820801000128336,
+                "scaleY": 0.9999976442167726
               },
               "bounds": null
             },
@@ -3366,40 +3366,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": -0.00018310546670363698,
-                "offsetY": -43.1,
-                "scaleY": 1.0000000167638061,
-                "offsetX": -78.95,
                 "ty": -242.2144561767578,
+                "offsetY": -43.1,
+                "flipX": 1,
+                "offsetX": -78.95,
+                "skewX": -0.00018310546670363698,
                 "scaleX": 1.0000000167638061,
                 "tx": -6.057891845703125,
-                "flipX": 1,
-                "skewX": -0.00018310546670363698
-              },
-              "bounds": null
-            },
-            {
-              "color": {
-                "blueOffset": 0,
-                "blueMultiplier": 0,
-                "greenMultiplier": 0,
-                "redMultiplier": 0,
-                "alphaMultiplier": 0,
-                "alphaOffset": 0,
-                "type": 0,
-                "redOffset": 0,
-                "greenOffset": 0
-              },
-              "matrix": {
                 "skewY": -0.00018310546670363698,
-                "offsetY": -43.1,
-                "scaleY": 1.0000000167638061,
-                "offsetX": -78.95,
-                "ty": -293.2644561767578,
-                "scaleX": 1.0000000167638061,
-                "tx": -6.057891845703125,
-                "flipX": 1,
-                "skewX": -0.00018310546670363698
+                "scaleY": 1.0000000167638061
               },
               "bounds": null
             },
@@ -3416,15 +3391,40 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 0.05701809365989089,
+                "ty": -293.2644561767578,
                 "offsetY": -43.1,
-                "scaleY": 0.9998089848424346,
+                "flipX": 1,
                 "offsetX": -78.95,
+                "skewX": -0.00018310546670363698,
+                "scaleX": 1.0000000167638061,
+                "tx": -6.057891845703125,
+                "skewY": -0.00018310546670363698,
+                "scaleY": 1.0000000167638061
+              },
+              "bounds": null
+            },
+            {
+              "color": {
+                "blueOffset": 0,
+                "blueMultiplier": 0,
+                "greenMultiplier": 0,
+                "redMultiplier": 0,
+                "alphaMultiplier": 0,
+                "alphaOffset": 0,
+                "type": 0,
+                "redOffset": 0,
+                "greenOffset": 0
+              },
+              "matrix": {
                 "ty": -259.2234588623047,
+                "offsetY": -43.1,
+                "flipX": 1,
+                "offsetX": -78.95,
+                "skewX": 0.05701809365989089,
                 "scaleX": 0.9998089848424346,
                 "tx": -6.037677764892521,
-                "flipX": 1,
-                "skewX": 0.05701809365989089
+                "skewY": 0.05701809365989089,
+                "scaleY": 0.9998089848424346
               },
               "bounds": null
             }
@@ -3591,15 +3591,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 0.043134739853534644,
-                "offsetY": -37,
-                "scaleY": 0.9999993719391421,
-                "offsetX": -16,
                 "ty": -296.77561950683594,
+                "offsetY": -37,
+                "flipX": 1,
+                "offsetX": -16,
+                "skewX": 0.043134739853534644,
                 "scaleX": 0.9999993719391421,
                 "tx": 12.980596923828132,
-                "flipX": 1,
-                "skewX": 0.043134739853534644
+                "skewY": 0.043134739853534644,
+                "scaleY": 0.9999993719391421
               },
               "bounds": null
             },
@@ -3616,15 +3616,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 0.1038914837763057,
-                "offsetY": -36.95,
-                "scaleY": 0.9999912731201507,
-                "offsetX": -16.05,
                 "ty": -256.4062469482422,
+                "offsetY": -36.95,
+                "flipX": 1,
+                "offsetX": -16.05,
+                "skewX": 0.10390173992624079,
                 "scaleX": 1.0779250666192246,
                 "tx": 19.189646148681742,
-                "flipX": 1,
-                "skewX": 0.10390173992624079
+                "skewY": 0.1038914837763057,
+                "scaleY": 0.9999912731201507
               },
               "bounds": null
             },
@@ -3641,40 +3641,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": -0.025675671521301135,
-                "offsetY": -37,
-                "scaleY": 0.9999784625842865,
-                "offsetX": -15.95,
                 "ty": -264.6569488525391,
-                "scaleX": 0.9034197171391951,
-                "tx": 11.955179595947273,
-                "flipX": 1,
-                "skewX": -0.025668654645851618
-              },
-              "bounds": null
-            },
-            {
-              "color": {
-                "blueOffset": 0,
-                "blueMultiplier": 0,
-                "greenMultiplier": 0,
-                "redMultiplier": 0,
-                "alphaMultiplier": 0,
-                "alphaOffset": 0,
-                "type": 0,
-                "redOffset": 0,
-                "greenOffset": 0
-              },
-              "matrix": {
-                "skewY": -0.025675671521301135,
                 "offsetY": -37,
-                "scaleY": 0.9999784625842865,
+                "flipX": 1,
                 "offsetX": -15.95,
-                "ty": -315.7069488525391,
+                "skewX": -0.025668654645851618,
                 "scaleX": 0.9034197171391951,
                 "tx": 11.955179595947273,
-                "flipX": 1,
-                "skewX": -0.025668654645851618
+                "skewY": -0.025675671521301135,
+                "scaleY": 0.9999784625842865
               },
               "bounds": null
             },
@@ -3691,15 +3666,40 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 0.043134739853534644,
+                "ty": -315.7069488525391,
                 "offsetY": -37,
-                "scaleY": 0.9999993719391421,
-                "offsetX": -16,
+                "flipX": 1,
+                "offsetX": -15.95,
+                "skewX": -0.025668654645851618,
+                "scaleX": 0.9034197171391951,
+                "tx": 11.955179595947273,
+                "skewY": -0.025675671521301135,
+                "scaleY": 0.9999784625842865
+              },
+              "bounds": null
+            },
+            {
+              "color": {
+                "blueOffset": 0,
+                "blueMultiplier": 0,
+                "greenMultiplier": 0,
+                "redMultiplier": 0,
+                "alphaMultiplier": 0,
+                "alphaOffset": 0,
+                "type": 0,
+                "redOffset": 0,
+                "greenOffset": 0
+              },
+              "matrix": {
                 "ty": -296.77561950683594,
+                "offsetY": -37,
+                "flipX": 1,
+                "offsetX": -16,
+                "skewX": 0.043134739853534644,
                 "scaleX": 0.9999993719391421,
                 "tx": 12.980596923828132,
-                "flipX": 1,
-                "skewX": 0.043134739853534644
+                "skewY": 0.043134739853534644,
+                "scaleY": 0.9999993719391421
               },
               "bounds": null
             },
@@ -3716,15 +3716,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 0.1038914837763057,
-                "offsetY": -36.95,
-                "scaleY": 0.9999912731201507,
-                "offsetX": -16.05,
                 "ty": -256.4062469482422,
+                "offsetY": -36.95,
+                "flipX": 1,
+                "offsetX": -16.05,
+                "skewX": 0.10390173992624079,
                 "scaleX": 1.0779250666192246,
                 "tx": 19.189646148681742,
-                "flipX": 1,
-                "skewX": 0.10390173992624079
+                "skewY": 0.1038914837763057,
+                "scaleY": 0.9999912731201507
               },
               "bounds": null
             },
@@ -3741,40 +3741,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": -0.025675671521301135,
-                "offsetY": -37,
-                "scaleY": 0.9999784625842865,
-                "offsetX": -15.95,
                 "ty": -264.6569488525391,
+                "offsetY": -37,
+                "flipX": 1,
+                "offsetX": -15.95,
+                "skewX": -0.025668654645851618,
                 "scaleX": 0.9034197171391951,
                 "tx": 11.955179595947273,
-                "flipX": 1,
-                "skewX": -0.025668654645851618
-              },
-              "bounds": null
-            },
-            {
-              "color": {
-                "blueOffset": 0,
-                "blueMultiplier": 0,
-                "greenMultiplier": 0,
-                "redMultiplier": 0,
-                "alphaMultiplier": 0,
-                "alphaOffset": 0,
-                "type": 0,
-                "redOffset": 0,
-                "greenOffset": 0
-              },
-              "matrix": {
                 "skewY": -0.025675671521301135,
-                "offsetY": -37,
-                "scaleY": 0.9999784625842865,
-                "offsetX": -15.95,
-                "ty": -315.7069488525391,
-                "scaleX": 0.9034197171391951,
-                "tx": 11.955179595947273,
-                "flipX": 1,
-                "skewX": -0.025668654645851618
+                "scaleY": 0.9999784625842865
               },
               "bounds": null
             },
@@ -3791,15 +3766,40 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 0.018149431750106915,
+                "ty": -315.7069488525391,
                 "offsetY": -37,
-                "scaleY": 0.999935721076809,
+                "flipX": 1,
                 "offsetX": -15.95,
+                "skewX": -0.025668654645851618,
+                "scaleX": 0.9034197171391951,
+                "tx": 11.955179595947273,
+                "skewY": -0.025675671521301135,
+                "scaleY": 0.9999784625842865
+              },
+              "bounds": null
+            },
+            {
+              "color": {
+                "blueOffset": 0,
+                "blueMultiplier": 0,
+                "greenMultiplier": 0,
+                "redMultiplier": 0,
+                "alphaMultiplier": 0,
+                "alphaOffset": 0,
+                "type": 0,
+                "redOffset": 0,
+                "greenOffset": 0
+              },
+              "matrix": {
                 "ty": -303.0614036560059,
+                "offsetY": -37,
+                "flipX": 1,
+                "offsetX": -15.95,
+                "skewX": 0.01814486210415391,
                 "scaleX": 0.9677344556380996,
                 "tx": 12.704102325439463,
-                "flipX": 1,
-                "skewX": 0.01814486210415391
+                "skewY": 0.018149431750106915,
+                "scaleY": 0.999935721076809
               },
               "bounds": null
             }
@@ -3943,15 +3943,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 0,
-                "offsetY": 0,
-                "scaleY": 1,
-                "offsetX": 0,
                 "ty": -8.05,
+                "offsetY": 0,
+                "flipX": 1,
+                "offsetX": 0,
+                "skewX": 0,
                 "scaleX": 1.51132202148438,
                 "tx": 2,
-                "flipX": 1,
-                "skewX": 0
+                "skewY": 0,
+                "scaleY": 1
               },
               "bounds": null
             },
@@ -3968,15 +3968,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 0,
-                "offsetY": 0,
-                "scaleY": 1,
-                "offsetX": 0,
                 "ty": -12.05,
+                "offsetY": 0,
+                "flipX": 1,
+                "offsetX": 0,
+                "skewX": 0,
                 "scaleX": 1.73918151855469,
                 "tx": 1,
-                "flipX": 1,
-                "skewX": 0
+                "skewY": 0,
+                "scaleY": 1
               },
               "bounds": null
             },
@@ -3993,15 +3993,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 0,
-                "offsetY": 0,
-                "scaleY": 1,
-                "offsetX": 0,
                 "ty": -23.85,
+                "offsetY": 0,
+                "flipX": 1,
+                "offsetX": 0,
+                "skewX": 0,
                 "scaleX": 2.03910827636719,
                 "tx": -13,
-                "flipX": 1,
-                "skewX": 0
+                "skewY": 0,
+                "scaleY": 1
               },
               "bounds": null
             },
@@ -4018,15 +4018,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 0,
-                "offsetY": 0,
-                "scaleY": 1,
-                "offsetX": 0,
                 "ty": -19.3,
+                "offsetY": 0,
+                "flipX": 1,
+                "offsetX": 0,
+                "skewX": 0,
                 "scaleX": 1.38616943359375,
                 "tx": -10,
-                "flipX": 1,
-                "skewX": 0
+                "skewY": 0,
+                "scaleY": 1
               },
               "bounds": null
             },
@@ -4043,15 +4043,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 0,
-                "offsetY": 0,
-                "scaleY": 1,
-                "offsetX": 0,
                 "ty": -18.95,
+                "offsetY": 0,
+                "flipX": 1,
+                "offsetX": 0,
+                "skewX": 0,
                 "scaleX": 1.38616943359375,
                 "tx": -8,
-                "flipX": 1,
-                "skewX": 0
+                "skewY": 0,
+                "scaleY": 1
               },
               "bounds": null
             },
@@ -4068,15 +4068,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 0,
-                "offsetY": 0,
-                "scaleY": 1,
-                "offsetX": 0,
                 "ty": -18.95,
+                "offsetY": 0,
+                "flipX": 1,
+                "offsetX": 0,
+                "skewX": 0,
                 "scaleX": 1.38616943359375,
                 "tx": -8,
-                "flipX": 1,
-                "skewX": 0
+                "skewY": 0,
+                "scaleY": 1
               },
               "bounds": null
             }
@@ -4189,15 +4189,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 0,
-                "offsetY": 4.5,
-                "scaleY": 1,
-                "offsetX": -38.45,
                 "ty": -31.549999999999997,
+                "offsetY": 4.5,
+                "flipX": 1,
+                "offsetX": -38.45,
+                "skewX": 0,
                 "scaleX": 1,
                 "tx": -40.45,
-                "flipX": 1,
-                "skewX": 0
+                "skewY": 0,
+                "scaleY": 1
               },
               "bounds": null
             },
@@ -4214,15 +4214,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 0.17696421799442175,
-                "offsetY": 4.55,
-                "scaleY": 0.9999922254053404,
-                "offsetX": -38.35,
                 "ty": -55.91993484497069,
+                "offsetY": 4.55,
+                "flipX": 1,
+                "offsetX": -38.35,
+                "skewX": 0.17696421799442175,
                 "scaleX": 0.9999922254053404,
                 "tx": -120.50020370483398,
-                "flipX": 1,
-                "skewX": 0.17696421799442175
+                "skewY": 0.17696421799442175,
+                "scaleY": 0.9999922254053404
               },
               "bounds": null
             },
@@ -4239,15 +4239,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 0.3915432688752042,
-                "offsetY": 4.7,
-                "scaleY": 0.9999782778291746,
-                "offsetX": -38.2,
                 "ty": -68.17839508056637,
+                "offsetY": 4.7,
+                "flipX": 1,
+                "offsetX": -38.2,
+                "skewX": 0.3915432688752042,
                 "scaleX": 0.9999782778291746,
                 "tx": -62.13524932861327,
-                "flipX": 1,
-                "skewX": 0.3915432688752042
+                "skewY": 0.3915432688752042,
+                "scaleY": 0.9999782778291746
               },
               "bounds": null
             },
@@ -4264,15 +4264,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 0.980449141041324,
-                "offsetY": 4.65,
-                "scaleY": 0.9999840920689876,
-                "offsetX": -38.2,
                 "ty": -68.22757263183591,
+                "offsetY": 4.65,
+                "flipX": 1,
+                "offsetX": -38.2,
+                "skewX": 0.980449141041324,
                 "scaleX": 0.9999840920689876,
                 "tx": -62.09924240112305,
-                "flipX": 1,
-                "skewX": 0.980449141041324
+                "skewY": 0.980449141041324,
+                "scaleY": 0.9999840920689876
               },
               "bounds": null
             },
@@ -4289,15 +4289,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 0.980449141041324,
-                "offsetY": 4.65,
-                "scaleY": 0.9999840920689876,
-                "offsetX": -38.2,
                 "ty": -68.22757263183591,
+                "offsetY": 4.65,
+                "flipX": 1,
+                "offsetX": -38.2,
+                "skewX": 0.980449141041324,
                 "scaleX": 0.9999840920689876,
                 "tx": -62.09924240112305,
-                "flipX": 1,
-                "skewX": 0.980449141041324
+                "skewY": 0.980449141041324,
+                "scaleY": 0.9999840920689876
               },
               "bounds": null
             }
@@ -4365,15 +4365,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 0.29728064526535714,
-                "offsetY": -36.95,
-                "scaleY": 0.5587292157651603,
-                "offsetX": -16.05,
                 "ty": -48.550457763671844,
+                "offsetY": -36.95,
+                "flipX": 1,
+                "offsetX": -16.05,
+                "skewX": -2.8443365859355922,
                 "scaleX": 0.6933937470553233,
                 "tx": -2.506071472167977,
-                "flipX": 1,
-                "skewX": -2.8443365859355922
+                "skewY": 0.29728064526535714,
+                "scaleY": 0.5587292157651603
               },
               "bounds": null
             },
@@ -4390,15 +4390,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 0.3483447166655308,
-                "offsetY": -37,
-                "scaleY": 0.961660871368726,
-                "offsetX": -16.1,
                 "ty": -57.15200653076171,
+                "offsetY": -37,
+                "flipX": 1,
+                "offsetX": -16.1,
+                "skewX": -2.7932405364753463,
                 "scaleX": 0.8104079026845555,
                 "tx": -13.031788635253914,
-                "flipX": 1,
-                "skewX": -2.7932405364753463
+                "skewY": 0.3483447166655308,
+                "scaleY": 0.961660871368726
               },
               "bounds": null
             },
@@ -4415,15 +4415,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 0.3483447166655308,
-                "offsetY": -37,
-                "scaleY": 0.961660871368726,
-                "offsetX": -16.1,
                 "ty": -57.15200653076171,
+                "offsetY": -37,
+                "flipX": 1,
+                "offsetX": -16.1,
+                "skewX": -2.7932405364753463,
                 "scaleX": 0.8104079026845555,
                 "tx": -13.031788635253914,
-                "flipX": 1,
-                "skewX": -2.7932405364753463
+                "skewY": 0.3483447166655308,
+                "scaleY": 0.961660871368726
               },
               "bounds": null
             }
@@ -4536,15 +4536,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 0,
-                "offsetY": -17.5,
-                "scaleY": 1,
-                "offsetX": -28.5,
                 "ty": -59.25,
+                "offsetY": -17.5,
+                "flipX": 1,
+                "offsetX": -28.5,
+                "skewX": 0,
                 "scaleX": 1,
                 "tx": -6.950000000000003,
-                "flipX": 1,
-                "skewX": 0
+                "skewY": 0,
+                "scaleY": 1
               },
               "bounds": null
             },
@@ -4561,15 +4561,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 0.47084020762260936,
-                "offsetY": -17.55,
-                "scaleY": 0.9999852571713839,
-                "offsetX": -28.5,
                 "ty": -55.1616958618164,
+                "offsetY": -17.55,
+                "flipX": 1,
+                "offsetX": -28.5,
+                "skewX": 0.47084020762260936,
                 "scaleX": 0.9999852571713839,
                 "tx": -51.440351104736315,
-                "flipX": 1,
-                "skewX": 0.47084020762260936
+                "skewY": 0.47084020762260936,
+                "scaleY": 0.9999852571713839
               },
               "bounds": null
             },
@@ -4586,15 +4586,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 0.8630224212267744,
-                "offsetY": -17.35,
-                "scaleY": 0.9999803941870422,
-                "offsetX": -28.4,
                 "ty": -50.05156631469728,
+                "offsetY": -17.35,
+                "flipX": 1,
+                "offsetX": -28.4,
+                "skewX": 0.8630224212267744,
                 "scaleX": 0.9999803941870422,
                 "tx": -29.45381011962889,
-                "flipX": 1,
-                "skewX": 0.8630224212267744
+                "skewY": 0.8630224212267744,
+                "scaleY": 0.9999803941870422
               },
               "bounds": null
             },
@@ -4611,15 +4611,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 0.8623258868512796,
-                "offsetY": -17.35,
-                "scaleY": 0.9983465106276567,
-                "offsetX": -28.4,
                 "ty": -50.04040222167967,
+                "offsetY": -17.35,
+                "flipX": 1,
+                "offsetX": -28.4,
+                "skewX": 0.8623258868512796,
                 "scaleX": 0.9983465106276567,
                 "tx": -29.448363494873032,
-                "flipX": 1,
-                "skewX": 0.8623258868512796
+                "skewY": 0.8623258868512796,
+                "scaleY": 0.9983465106276567
               },
               "bounds": null
             },
@@ -4636,15 +4636,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 0.8630224212267744,
-                "offsetY": -17.35,
-                "scaleY": 0.9999803941870422,
-                "offsetX": -28.4,
                 "ty": -50.05156631469728,
+                "offsetY": -17.35,
+                "flipX": 1,
+                "offsetX": -28.4,
+                "skewX": 0.8630224212267744,
                 "scaleX": 0.9999803941870422,
                 "tx": -29.45381011962889,
-                "flipX": 1,
-                "skewX": 0.8630224212267744
+                "skewY": 0.8630224212267744,
+                "scaleY": 0.9999803941870422
               },
               "bounds": null
             }
@@ -4728,15 +4728,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 0,
-                "offsetY": -0.05,
-                "scaleY": 1,
-                "offsetX": 0,
                 "ty": -142.05,
+                "offsetY": -0.05,
+                "flipX": 1,
+                "offsetX": 0,
+                "skewX": 0,
                 "scaleX": 1,
                 "tx": -4,
-                "flipX": 1,
-                "skewX": 0
+                "skewY": 0,
+                "scaleY": 1
               },
               "bounds": null
             },
@@ -4753,40 +4753,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 0,
-                "offsetY": -0.05,
-                "scaleY": 1.13423156738281,
-                "offsetX": 0,
                 "ty": -157.55671157836915,
-                "scaleX": 1,
-                "tx": -4,
-                "flipX": 1,
-                "skewX": 0
-              },
-              "bounds": null
-            },
-            {
-              "color": {
-                "blueOffset": 0,
-                "blueMultiplier": 0,
-                "greenMultiplier": 0,
-                "redMultiplier": 0,
-                "alphaMultiplier": 0,
-                "alphaOffset": 0,
-                "type": 0,
-                "redOffset": 0,
-                "greenOffset": 0
-              },
-              "matrix": {
-                "skewY": 0,
                 "offsetY": -0.05,
-                "scaleY": 0.753128051757813,
+                "flipX": 1,
                 "offsetX": 0,
-                "ty": -113.53765640258788,
+                "skewX": 0,
                 "scaleX": 1,
                 "tx": -4,
-                "flipX": 1,
-                "skewX": 0
+                "skewY": 0,
+                "scaleY": 1.13423156738281
               },
               "bounds": null
             },
@@ -4803,15 +4778,40 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 0,
-                "offsetY": -0.15,
-                "scaleY": 0.34625244140625,
+                "ty": -113.53765640258788,
+                "offsetY": -0.05,
+                "flipX": 1,
                 "offsetX": 0,
+                "skewX": 0,
+                "scaleX": 1,
+                "tx": -4,
+                "skewY": 0,
+                "scaleY": 0.753128051757813
+              },
+              "bounds": null
+            },
+            {
+              "color": {
+                "blueOffset": 0,
+                "blueMultiplier": 0,
+                "greenMultiplier": 0,
+                "redMultiplier": 0,
+                "alphaMultiplier": 0,
+                "alphaOffset": 0,
+                "type": 0,
+                "redOffset": 0,
+                "greenOffset": 0
+              },
+              "matrix": {
                 "ty": -55.60193786621093,
+                "offsetY": -0.15,
+                "flipX": 1,
+                "offsetX": 0,
+                "skewX": 0,
                 "scaleX": 0.701171875,
                 "tx": -3,
-                "flipX": 1,
-                "skewX": 0
+                "skewY": 0,
+                "scaleY": 0.34625244140625
               },
               "bounds": null
             }
@@ -4924,15 +4924,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 3.141592653589793,
-                "offsetY": 4.5,
-                "scaleY": 1,
-                "offsetX": -38.45,
                 "ty": -23.05,
+                "offsetY": 4.5,
+                "flipX": 1,
+                "offsetX": -38.45,
+                "skewX": 0,
                 "scaleX": 1,
                 "tx": 57,
-                "flipX": 1,
-                "skewX": 0
+                "skewY": 3.141592653589793,
+                "scaleY": 1
               },
               "bounds": null
             },
@@ -4949,15 +4949,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 2.933453571896602,
-                "offsetY": 4.55,
-                "scaleY": 0.9999758863708258,
-                "offsetX": -38.35,
                 "ty": -47.2738754272461,
+                "offsetY": 4.55,
+                "flipX": 1,
+                "offsetX": -38.35,
+                "skewX": -0.2081390816931912,
                 "scaleX": 0.9999758863708258,
                 "tx": 70.51879425048827,
-                "flipX": 1,
-                "skewX": -0.2081390816931912
+                "skewY": 2.933453571896602,
+                "scaleY": 0.9999758863708258
               },
               "bounds": null
             },
@@ -4974,15 +4974,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 2.4933642340391553,
-                "offsetY": 4.55,
-                "scaleY": 0.9999745523345951,
-                "offsetX": -38.4,
                 "ty": -74.58866348266602,
+                "offsetY": 4.55,
+                "flipX": 1,
+                "offsetX": -38.4,
+                "skewX": -0.648228419550638,
                 "scaleX": 0.9999745523345951,
                 "tx": 45.037145996093734,
-                "flipX": 1,
-                "skewX": -0.648228419550638
+                "skewY": 2.4933642340391553,
+                "scaleY": 0.9999745523345951
               },
               "bounds": null
             },
@@ -4999,15 +4999,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 2.554372999358722,
-                "offsetY": 4.6,
-                "scaleY": 0.9999689539964637,
-                "offsetX": -38.3,
                 "ty": -74.60128936767578,
+                "offsetY": 4.6,
+                "flipX": 1,
+                "offsetX": -38.3,
+                "skewX": -0.5872196542310714,
                 "scaleX": 0.9999689539964637,
                 "tx": 45.16538391113282,
-                "flipX": 1,
-                "skewX": -0.5872196542310714
+                "skewY": 2.554372999358722,
+                "scaleY": 0.9999689539964637
               },
               "bounds": null
             },
@@ -5024,15 +5024,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 2.554372999358722,
-                "offsetY": 4.6,
-                "scaleY": 0.9999689539964637,
-                "offsetX": -38.3,
                 "ty": -74.60128936767578,
+                "offsetY": 4.6,
+                "flipX": 1,
+                "offsetX": -38.3,
+                "skewX": -0.5872196542310714,
                 "scaleX": 0.9999689539964637,
                 "tx": 45.16538391113282,
-                "flipX": 1,
-                "skewX": -0.5872196542310714
+                "skewY": 2.554372999358722,
+                "scaleY": 0.9999689539964637
               },
               "bounds": null
             }
@@ -5145,15 +5145,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 3.141592653589793,
-                "offsetY": -17.5,
-                "scaleY": 1,
-                "offsetX": -28.5,
                 "ty": -47,
+                "offsetY": -17.5,
+                "flipX": 1,
+                "offsetX": -28.5,
+                "skewX": 0,
                 "scaleX": 1,
                 "tx": 25.5,
-                "flipX": 1,
-                "skewX": 0
+                "skewY": 3.141592653589793,
+                "scaleY": 1
               },
               "bounds": null
             },
@@ -5170,15 +5170,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 2.7629167124065073,
-                "offsetY": -17.45,
-                "scaleY": 0.9999983861330918,
-                "offsetX": -28.55,
                 "ty": -50.95907974243165,
+                "offsetY": -17.45,
+                "flipX": 1,
+                "offsetX": -28.55,
+                "skewX": -0.37867594118328585,
                 "scaleX": 0.9999983861330918,
                 "tx": 40.071579742431624,
-                "flipX": 1,
-                "skewX": -0.37867594118328585
+                "skewY": 2.7629167124065073,
+                "scaleY": 0.9999983861330918
               },
               "bounds": null
             },
@@ -5195,15 +5195,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 2.558994464892159,
-                "offsetY": -17.5,
-                "scaleY": 0.9999832510709704,
-                "offsetX": -28.45,
                 "ty": -53.760088348388656,
+                "offsetY": -17.5,
+                "flipX": 1,
+                "offsetX": -28.45,
+                "skewX": -0.5825981886976338,
                 "scaleX": 0.9999832510709704,
                 "tx": 4.015367126464831,
-                "flipX": 1,
-                "skewX": -0.5825981886976338
+                "skewY": 2.558994464892159,
+                "scaleY": 0.9999832510709704
               },
               "bounds": null
             },
@@ -5220,15 +5220,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 2.558994464892159,
-                "offsetY": -17.5,
-                "scaleY": 0.9999832510709704,
-                "offsetX": -28.45,
                 "ty": -53.760088348388656,
+                "offsetY": -17.5,
+                "flipX": 1,
+                "offsetX": -28.45,
+                "skewX": -0.5825981886976338,
                 "scaleX": 0.9999832510709704,
                 "tx": 4.015367126464831,
-                "flipX": 1,
-                "skewX": -0.5825981886976338
+                "skewY": 2.558994464892159,
+                "scaleY": 0.9999832510709704
               },
               "bounds": null
             },
@@ -5245,15 +5245,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 2.558994464892159,
-                "offsetY": -17.5,
-                "scaleY": 0.9999832510709704,
-                "offsetX": -28.45,
                 "ty": -53.760088348388656,
+                "offsetY": -17.5,
+                "flipX": 1,
+                "offsetX": -28.45,
+                "skewX": -0.5825981886976338,
                 "scaleX": 0.9999832510709704,
                 "tx": 4.015367126464831,
-                "flipX": 1,
-                "skewX": -0.5825981886976338
+                "skewY": 2.558994464892159,
+                "scaleY": 0.9999832510709704
               },
               "bounds": null
             }
@@ -5331,15 +5331,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 0.4834588229202094,
-                "offsetY": -22.55,
-                "scaleY": 0.9999986757748379,
-                "offsetX": -1.15,
                 "ty": -132.48100204467775,
+                "offsetY": -22.55,
+                "flipX": 1,
+                "offsetX": -1.15,
+                "skewX": 0.4834588229202094,
                 "scaleX": 0.9999986757748379,
                 "tx": -9.999573516845702,
-                "flipX": 1,
-                "skewX": 0.4834588229202094
+                "skewY": 0.4834588229202094,
+                "scaleY": 0.9999986757748379
               },
               "bounds": null
             },
@@ -5356,15 +5356,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 0.04328784521461477,
-                "offsetY": -22.55,
-                "scaleY": 0.9999907188618129,
-                "offsetX": -1.1,
                 "ty": -153.48106536865234,
+                "offsetY": -22.55,
+                "flipX": 1,
+                "offsetX": -1.1,
+                "skewX": 0.04328784521461477,
                 "scaleX": 0.9999907188618129,
                 "tx": -10.025213623046874,
-                "flipX": 1,
-                "skewX": 0.04328784521461477
+                "skewY": 0.04328784521461477,
+                "scaleY": 0.9999907188618129
               },
               "bounds": null
             },
@@ -5381,15 +5381,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": -0.6282903248623275,
-                "offsetY": -22.5,
-                "scaleY": 0.9999844543591667,
-                "offsetX": -1.1,
                 "ty": -110.44950103759766,
+                "offsetY": -22.5,
+                "flipX": 1,
+                "offsetX": -1.1,
+                "skewX": -0.6282903248623275,
                 "scaleX": 0.9999844543591667,
                 "tx": 6.115473937988268,
-                "flipX": 1,
-                "skewX": -0.6282903248623275
+                "skewY": -0.6282903248623275,
+                "scaleY": 0.9999844543591667
               },
               "bounds": null
             },
@@ -5406,15 +5406,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": -0.6282903248623275,
-                "offsetY": -22.5,
-                "scaleY": 0.9999844543591667,
-                "offsetX": -1.1,
                 "ty": -78.44950103759766,
+                "offsetY": -22.5,
+                "flipX": 1,
+                "offsetX": -1.1,
+                "skewX": -0.6282903248623275,
                 "scaleX": 0.9999844543591667,
                 "tx": -1.884526062011732,
-                "flipX": 1,
-                "skewX": -0.6282903248623275
+                "skewY": -0.6282903248623275,
+                "scaleY": 0.9999844543591667
               },
               "bounds": null
             }
@@ -5515,15 +5515,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 0.0868401222005821,
-                "offsetY": -43.05,
-                "scaleY": 0.9999993109374733,
-                "offsetX": -79,
                 "ty": -242.18600234985354,
+                "offsetY": -43.05,
+                "flipX": 1,
+                "offsetX": -79,
+                "skewX": 0.0868401222005821,
                 "scaleX": 0.9999993109374733,
                 "tx": -6.0639770507812045,
-                "flipX": 1,
-                "skewX": 0.0868401222005821
+                "skewY": 0.0868401222005821,
+                "scaleY": 0.9999993109374733
               },
               "bounds": null
             },
@@ -5540,15 +5540,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 0.3608405541225717,
-                "offsetY": -43.05,
-                "scaleY": 0.9999917313347517,
-                "offsetX": -79.05,
                 "ty": -268.1680397033692,
+                "offsetY": -43.05,
+                "flipX": 1,
+                "offsetX": -79.05,
+                "skewX": 0.3608405541225717,
                 "scaleX": 0.9999917313347517,
                 "tx": 4.657740020751987,
-                "flipX": 1,
-                "skewX": 0.3608405541225717
+                "skewY": 0.3608405541225717,
+                "scaleY": 0.9999917313347517
               },
               "bounds": null
             },
@@ -5565,15 +5565,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": -0.3629943874071515,
-                "offsetY": -43.05,
-                "scaleY": 0.9999913653218865,
-                "offsetX": -79,
                 "ty": -205.09510879516606,
+                "offsetY": -43.05,
+                "flipX": 1,
+                "offsetX": -79,
+                "skewX": -0.3629943874071515,
                 "scaleX": 0.9999913653218865,
                 "tx": -23.48430328369136,
-                "flipX": 1,
-                "skewX": -0.3629943874071515
+                "skewY": -0.3629943874071515,
+                "scaleY": 0.9999913653218865
               },
               "bounds": null
             },
@@ -5590,15 +5590,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 0.1513662396613266,
-                "offsetY": -43.1,
-                "scaleY": 0.9999898047598043,
-                "offsetX": -78.95,
                 "ty": -76.7020980834961,
+                "offsetY": -43.1,
+                "flipX": 1,
+                "offsetX": -78.95,
+                "skewX": 0.1513662396613266,
                 "scaleX": 0.9999898047598043,
                 "tx": 20.195423889160168,
-                "flipX": 1,
-                "skewX": 0.1513662396613266
+                "skewY": 0.1513662396613266,
+                "scaleY": 0.9999898047598043
               },
               "bounds": null
             },
@@ -5615,15 +5615,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 0.1513662396613266,
-                "offsetY": -43.1,
-                "scaleY": 0.9999898047598043,
-                "offsetX": -78.95,
                 "ty": -76.7020980834961,
+                "offsetY": -43.1,
+                "flipX": 1,
+                "offsetX": -78.95,
+                "skewX": 0.1513662396613266,
                 "scaleX": 0.9999898047598043,
                 "tx": 20.195423889160168,
-                "flipX": 1,
-                "skewX": 0.1513662396613266
+                "skewY": 0.1513662396613266,
+                "scaleY": 0.9999898047598043
               },
               "bounds": null
             }
@@ -5736,15 +5736,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": 0.043134739853534644,
-                "offsetY": -37,
-                "scaleY": 0.9999993719391421,
-                "offsetX": -16,
                 "ty": -296.77561950683594,
+                "offsetY": -37,
+                "flipX": 1,
+                "offsetX": -16,
+                "skewX": 0.043134739853534644,
                 "scaleX": 0.9999993719391421,
                 "tx": 12.980596923828132,
-                "flipX": 1,
-                "skewX": 0.043134739853534644
+                "skewY": 0.043134739853534644,
+                "scaleY": 0.9999993719391421
               },
               "bounds": null
             },
@@ -5761,15 +5761,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": -0.0043955760862798106,
-                "offsetY": -37.05,
-                "scaleY": 0.9999943303249244,
-                "offsetX": -16.1,
                 "ty": -328.83885726928713,
+                "offsetY": -37.05,
+                "flipX": 1,
+                "offsetX": -16.1,
+                "skewX": -0.004379311288123549,
                 "scaleX": 1.2635925292379167,
                 "tx": 16.031391143798913,
-                "flipX": 1,
-                "skewX": -0.004379311288123549
+                "skewY": -0.0043955760862798106,
+                "scaleY": 0.9999943303249244
               },
               "bounds": null
             },
@@ -5786,15 +5786,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": -0.0043955760862798106,
-                "offsetY": -37.05,
-                "scaleY": 0.9999943303249244,
-                "offsetX": -16.1,
                 "ty": -216.18885726928713,
+                "offsetY": -37.05,
+                "flipX": 1,
+                "offsetX": -16.1,
+                "skewX": -0.004379311288123549,
                 "scaleX": 1.2635925292379167,
                 "tx": 5.431391143798912,
-                "flipX": 1,
-                "skewX": -0.004379311288123549
+                "skewY": -0.0043955760862798106,
+                "scaleY": 0.9999943303249244
               },
               "bounds": null
             },
@@ -5811,15 +5811,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": -0.3707022367633811,
-                "offsetY": -37.15,
-                "scaleY": 0.9999910174698404,
-                "offsetX": -16.1,
                 "ty": -85.30316925048828,
+                "offsetY": -37.15,
+                "flipX": 1,
+                "offsetX": -16.1,
+                "skewX": -0.37069376949981764,
                 "scaleX": 0.9904501285391965,
                 "tx": -9.54484939575196,
-                "flipX": 1,
-                "skewX": -0.37069376949981764
+                "skewY": -0.3707022367633811,
+                "scaleY": 0.9999910174698404
               },
               "bounds": null
             },
@@ -5836,15 +5836,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": -0.25356183353740624,
-                "offsetY": -37.2,
-                "scaleY": 0.9003162726994304,
-                "offsetX": -16.1,
                 "ty": -75.32208709716798,
+                "offsetY": -37.2,
+                "flipX": 1,
+                "offsetX": -16.1,
+                "skewX": -0.4634202243077156,
                 "scaleX": 1.1792626312533558,
                 "tx": -5.842112731933652,
-                "flipX": 1,
-                "skewX": -0.4634202243077156
+                "skewY": -0.25356183353740624,
+                "scaleY": 0.9003162726994304
               },
               "bounds": null
             },
@@ -5861,15 +5861,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": -0.19591933658306718,
-                "offsetY": -37.05,
-                "scaleY": 0.8522809842111141,
-                "offsetX": -16.25,
                 "ty": -70.1931579589844,
+                "offsetY": -37.05,
+                "flipX": 1,
+                "offsetX": -16.25,
+                "skewX": -0.5099347176404714,
                 "scaleX": 1.2750644946886123,
                 "tx": -3.989968872070312,
-                "flipX": 1,
-                "skewX": -0.5099347176404714
+                "skewY": -0.19591933658306718,
+                "scaleY": 0.8522809842111141
               },
               "bounds": null
             },
@@ -5886,15 +5886,15 @@
                 "greenOffset": 0
               },
               "matrix": {
-                "skewY": -0.19591933658306718,
-                "offsetY": -37.05,
-                "scaleY": 0.8522809842111141,
-                "offsetX": -16.25,
                 "ty": -70.1931579589844,
+                "offsetY": -37.05,
+                "flipX": 1,
+                "offsetX": -16.25,
+                "skewX": -0.5099347176404714,
                 "scaleX": 1.2750644946886123,
                 "tx": -3.989968872070312,
-                "flipX": 1,
-                "skewX": -0.5099347176404714
+                "skewY": -0.19591933658306718,
+                "scaleY": 0.8522809842111141
               },
               "bounds": null
             }
@@ -5927,6 +5927,74 @@
         }
       },
       "totalFrames": 15
+    },
+    {
+      "name": "test.test_anim",
+      "layers": [
+        {
+          "framesList": [
+            {
+              "motion": false,
+              "t": 0,
+              "index": 0,
+              "polygonName": "test_symbol"
+            }
+          ],
+          "matrixList": [
+            {
+              "color": {
+                "blueOffset": 0,
+                "blueMultiplier": 0,
+                "greenMultiplier": 0,
+                "redMultiplier": 0,
+                "alphaMultiplier": 0,
+                "alphaOffset": 0,
+                "type": 0,
+                "redOffset": 0,
+                "greenOffset": 0
+              },
+              "matrix": {
+                "ty": 0,
+                "offsetY": 0,
+                "flipX": 1,
+                "offsetX": 0,
+                "skewX": 0,
+                "scaleX": 1,
+                "tx": 0,
+                "skewY": 0,
+                "scaleY": 1
+              },
+              "bounds": null
+            }
+          ]
+        }
+      ],
+      "bounds": {
+        "width": 83.15,
+        "height": 83.15,
+        "x": -41.55,
+        "y": -41.55,
+        "bottom": 41.60000000000001,
+        "left": -41.55,
+        "right": 41.60000000000001,
+        "topLeft": {
+          "y": -41.55,
+          "x": -41.55,
+          "length": 58.76057351660209
+        },
+        "top": -41.55,
+        "bottomRight": {
+          "y": 41.60000000000001,
+          "x": 41.60000000000001,
+          "length": 58.831284194720766
+        },
+        "size": {
+          "y": 83.15,
+          "x": 83.15,
+          "length": 117.59185771132286
+        }
+      },
+      "totalFrames": 1
     }
   ]
 }

@@ -62,12 +62,13 @@ package com.merlinds.miracle.utils.serializers
 			var stack:Array = [data];
 			while(stack.length > 0)
 			{
-				data = stack.shift();
-				for(var p:String in data)
+				var part:Object = stack.shift();
+				for(var p:String in part)
 				{
-					if(data[p] is String)
+					var t:* = part[p];
+					if(t is String)
 					{
-						var word:String = data[p];
+						var word:String = t;
 						var index:int = aliases.indexOf(word);
 						if(index < 0)
 						{
@@ -75,10 +76,12 @@ package com.merlinds.miracle.utils.serializers
 							aliases.push(word);
 						}
 						if(replace)
-							data[p] = index;
+							part[p] = index;
 					}
-					else if(data[p] is Array || data[p] is Object)
-						stack.push(data[p]);
+					else if(t is Number || t is Boolean || t == null)
+					{}
+					else
+						stack.push(t);
 				}
 			}
 			return serialize(aliases);

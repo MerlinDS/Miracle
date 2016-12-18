@@ -16,7 +16,7 @@ package com.merlinds.miracle.animations {
 		 * Name of the animation.
 		 * WARNING: Can be removed
 		 */
-		public var name:String;
+//		public var name:String;
 		/** Total count of frames in animation **/
 		public var totalFrames:int;
 		/** Number of layers **/
@@ -37,14 +37,14 @@ package com.merlinds.miracle.animations {
 		 * @throws ArgumentError if Total count of frames will be less than one
 		 * @throws ArgumentError if Total count of frames will be bigger than frames list length
 		 */
-		public function AnimationHelper(name:String, totalFrames:int, numLayers:int, frames:Vector.<FrameInfo> = null) {
+		public function AnimationHelper(totalFrames:int, numLayers:int, frames:Vector.<FrameInfo> = null) {
 			if(frames.length < totalFrames){
 				throw new ArgumentError("Length of frames can not be less than totalFrames count!");
 			}
 			if(totalFrames < 1){
 				throw new ArgumentError("Must be at least one frame for animation!");
 			}
-			this.name = name;
+//			this.name = name;
 			this.frames = frames;
 			this.numLayers = numLayers;
 			this.totalFrames = totalFrames;
@@ -56,7 +56,7 @@ package com.merlinds.miracle.animations {
 			for(var i:int = 0; i < n; i++){
 				frames[i] = this.frames[i].clone();
 			}
-			var clone:AnimationHelper = new AnimationHelper(this.name, this.totalFrames, this.numLayers, frames);
+			var clone:AnimationHelper = new AnimationHelper(this.totalFrames, this.numLayers, frames);
 			clone.bounds = this.bounds.clone();
 			return clone;
 		}

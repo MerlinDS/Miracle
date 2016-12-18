@@ -45,7 +45,7 @@ package tests.com.merlinds.miracle.utils.serializers.MAF
 		private static const SIGNATURE:String = "MAF";
 		
 		[Embed(source="MAFObjectV2.json", mimeType='application/octet-stream')]
-		private static const MFTObjectV2_JSON:Class;
+		private static const MATObjectV2_JSON:Class;
 		
 		private var _dataProvider:Dictionary;
 		private var _serializer:MAFSerializer;
@@ -56,7 +56,7 @@ package tests.com.merlinds.miracle.utils.serializers.MAF
 			_dataProvider = new Dictionary();
 			try
 			{
-				var jsonHolder:Object = JSON.parse( new MFTObjectV2_JSON() );
+				var jsonHolder:Object = JSON.parse( new MATObjectV2_JSON() );
 				_dataProvider[ MSVersions.MAF2 ] = new TestDataHolder( jsonHolder.data );
 			} catch ( error:Error )
 			{
@@ -123,7 +123,7 @@ package tests.com.merlinds.miracle.utils.serializers.MAF
 			{
 				var animation:AnimationHelper = output[ name ];
 				Assert.assertNotNull( "Deserialization failed: animation", animation );
-				var animationData:Object = holder.getAnimation( animation.name );
+				var animationData:Object = holder.getAnimation( name );
 				Assert.assertNotNull( "Deserialization failed: holder", animationData );
 				Assert.assertEquals( "Deserialization failed: totalFrames", animationData.totalFrames, animation.totalFrames );
 				//Assert bounds
