@@ -333,7 +333,6 @@ package com.merlinds.miracle.utils.serializers.MAF
 		{
 			var i:int, j:int, n:int, m:int;
 			var index:int, motion:Boolean, t:Number, name:String;
-			var m0:Transformation, m1:Transformation;
 			var matrices:Vector.<Transformation>;
 			
 			n = numLayers;
@@ -366,7 +365,6 @@ package com.merlinds.miracle.utils.serializers.MAF
 				m = bytes.readInt();
 				for(j = 0; j < m; ++j)
 				{
-					m0 = m1 = null;
 					motion = false;
 					if(!bytes.readBoolean())//frame is null
 					{
@@ -381,9 +379,8 @@ package com.merlinds.miracle.utils.serializers.MAF
 					name = aliases[bytes.readInt()];
 					t = bytes.readFloat();
 					//save
-					m0 = matrices[index];
-					if(motion)m1 = matrices[index + 1];
-					frames[totalFrames * i + j] = new FrameInfo(name, m0, m1, t);
+					frames[totalFrames * i + j] = new FrameInfo(name, matrices[index],
+							motion ? matrices[index + 1] : null, t);
 				}
 				//fill empty frames
 				j = totalFrames - (totalFrames - m);//calculate delta
