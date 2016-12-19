@@ -270,14 +270,16 @@ package com.merlinds.miracle.utils.serializers.MAF
 		{
 			clearTempData();
 			_scale = scale;
-			_aliases = _dictSerializer.deserialize( bytes );
 			_output = output;
 			_bytes = bytes;
-			
-			var i:int, n:int = bytes.readInt();
-			_offsets = new <int>[];
-			for ( i = 0; i < n; ++i )_offsets[ i ] = bytes.readInt();
-			deserializeAnimation();
+			_aliases = new <String>[];
+			//deserialize aliases first
+			_dictSerializer.deserialize( _bytes, _aliases, function():void{
+				var i:int, n:int = _bytes.readInt();
+				_offsets = new <int>[];
+				for ( i = 0; i < n; ++i )_offsets[ i ] = _bytes.readInt();
+				deserializeAnimation();
+			} );
 		}
 				
 		private function deserializeAnimation():void

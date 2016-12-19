@@ -26,13 +26,19 @@ package tests.com.merlinds.miracle.utils.serializers
 {
 	import com.merlinds.miracle.utils.serializers.DictionarySerializer;
 	
+	import flash.events.Event;
+	
+	import flash.events.EventDispatcher;
+	
 	import flash.utils.ByteArray;
 	
 	import flash.utils.Endian;
 	
 	import flexunit.framework.Assert;
 	
-	public class DictionarySerializerTest
+	import org.flexunit.async.Async;
+	
+	public class DictionarySerializerTest extends EventDispatcher
 	{
 		private var _serializer:DictionarySerializer;
 		private var _aliases:Vector.<String>;
@@ -63,13 +69,13 @@ package tests.com.merlinds.miracle.utils.serializers
 		[Test(expects="ArgumentError", description="Null bytes for deserialization")]
 		public function testDeserializationError():void
 		{
-			_serializer.deserialize(null);
+			_serializer.deserialize(null, null, null);
 		}
 		
 		[Test(expects="ArgumentError", description="bytes length for deserialization")]
 		public function testDeserializationLengthError():void
 		{
-			_serializer.deserialize(new ByteArray());
+			_serializer.deserialize(new ByteArray(), null, null);
 		}
 		
 		[Test(description="Serialization of aliases to bytes array")]
@@ -98,12 +104,29 @@ package tests.com.merlinds.miracle.utils.serializers
 		}
 		
 		
-		[Test(description="Deserialization of aliases from bytes array")]
+		[Test(async, description="Deserialization of aliases from bytes array")]
 		public function testDeserialization():void
 		{
 			var bytes:ByteArray = _serializer.serialize(_aliases);
 			bytes.position = 0;
-			var aliases:Vector.<String> = _serializer.deserialize(bytes);
+			
+			var passThroughData:Object = {};
+			passThroughData.output = new Vector.<String>();
+			
+			this.addEventListener( "callback",
+					Async.asyncHandler( this, handleVerifyProperty, 100, passThroughData ),
+					false, 0, true );
+			_serializer.deserialize(bytes, passThroughData.output as Vector.<String>, function ():void
+			{
+				dispatchEvent( new Event( 'callback' ) );
+			} );
+			
+			
+		}
+		
+		protected function handleVerifyProperty(event:Event, passThroughData:Object):void
+		{
+			var aliases:Vector.<String> = passThroughData.output as Vector.<String>;
 			Assert.assertNotNull("Deserialization: aliases", aliases);
 			Assert.assertEquals("Deserialization: aliases", _aliases.length, aliases.length);
 			for(var i:int = 0; i < _aliases.length; ++i)

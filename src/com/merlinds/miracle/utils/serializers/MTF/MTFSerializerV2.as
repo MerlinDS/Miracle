@@ -188,25 +188,28 @@ package com.merlinds.miracle.utils.serializers.MTF
 		 */
 		override protected function executeDeserialization(bytes:ByteArray, output:Dictionary, scale:Number, alias:String):void
 		{
-			var aliases:Vector.<String> = _dictSerializer.deserialize( bytes );
-			var i:int, n:int = bytes.readInt();
-			var start:int = bytes.position;
-			for ( i = 0; i < n; ++i )
-			{
-				//read meshes
-				bytes.position = start + HEAD_SIZE * i;
-				var name:String = aliases[ bytes.readInt() ];
-				var count:int = bytes.readInt();
-				var offset:int = bytes.readInt();
-				var mesh:Mesh2D = new Mesh2D( alias, scale );
-				if ( output.name != null )
-					trace( "WARNING: mesh with name" + name + "will be overridden" );
-				output[ name ] = mesh;
-				//read polygons
-				bytes.position = start + offset;
-				deserializePolygons( bytes, aliases, count, mesh );
-			}
-			setTimeout( deserializationComplete, 0 );//wait for next frame
+			var aliases:Vector.<String> = new <String>[];
+			 _dictSerializer.deserialize( bytes, aliases, function ():void
+			 {
+				var i:int, n:int = bytes.readInt();
+				var start:int = bytes.position;
+				for ( i = 0; i < n; ++i )
+				{
+					//read meshes
+					bytes.position = start + HEAD_SIZE * i;
+					var name:String = aliases[ bytes.readInt() ];
+					var count:int = bytes.readInt();
+					var offset:int = bytes.readInt();
+					var mesh:Mesh2D = new Mesh2D( alias, scale );
+					if ( output.name != null )
+						trace( "WARNING: mesh with name" + name + "will be overridden" );
+					output[ name ] = mesh;
+					//read polygons
+					bytes.position = start + offset;
+					deserializePolygons( bytes, aliases, count, mesh );
+				}
+				setTimeout( deserializationComplete, 0 );//wait for next frame
+			 } );
 		}
 		
 		[Inline]

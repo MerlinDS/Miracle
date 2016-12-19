@@ -26,6 +26,8 @@ package com.merlinds.miracle.utils.serializers
 {
 	import flash.utils.ByteArray;
 	import flash.utils.Endian;
+	import flash.utils.getTimer;
+	import flash.utils.setTimeout;
 	
 	/**
 	 * Serializer for dictionary of aliases.
@@ -109,26 +111,45 @@ package com.merlinds.miracle.utils.serializers
 			return output;
 		}
 		
+		private var _time:Number;
 		/**
 		 * Deserialize aliases from bytes dict
 		 * @param bytes <code>ByteArray</code> of dict
-		 * @return List of aliases
+		 * @param output Deserialization output, vector of aliases
+		 * @param callback Deserialization callback
 		 */
-		public function deserialize(bytes:ByteArray):Vector.<String>
+		public function deserialize(bytes:ByteArray, output:Vector.<String>, callback:Function):void
 		{
 			if(bytes == null || bytes.length == 0)
 				throw new ArgumentError("BytesArray null or has 0 length");
-			var output:Vector.<String> = new <String>[];
-			bytes.endian = _endian;
+			if(bytes.position == 0)//first step
+			{
+				bytes.endian = _endian;
+				_time = 0;
+			}
+			
+			if(_time == 0)
+				_time = getTimer();
+			
 			var length:int;
 			while (length = bytes.readInt())
 			{
 				output.push(
 					bytes.readMultiByte(length, _charSet)
 				);
+				
+				if(getTimer() - _time > 16)
+				{
+					_time = 0;
+					setTimeout(deserialize, 0, bytes, output, callback);
+					return;//wait till next frame
+				}
 			}
-			return output;
+			//all was serialized
+			callback.call();
 		}
+		
 		//endregion
+		
 	}
 }
