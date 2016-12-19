@@ -4,7 +4,6 @@
  * Time: 21:07
  */
 package com.merlinds.miracle.geom {
-	//TODO MF-34 Add commentaries to geom folder
 	/**
 	 * Helper for drawing and animation calculation
 	**/
@@ -29,8 +28,6 @@ package com.merlinds.miracle.geom {
 		public var offsetY:Number;
 
 		public var flipX:int;
-		/** Color transformation object**/
-		//TODO: MF-36 Add type bynary mask to MeshMatrix
 		//==============================================================================
 		//{region							PUBLIC METHODS
 		/**
@@ -49,12 +46,12 @@ package com.merlinds.miracle.geom {
 		                              ) {
 			this.offsetX = offsetX;
 			this.offsetY = offsetY;
+			this.tx = tx;
+			this.ty = ty;
 			this.scaleX = scaleX;
 			this.scaleY = scaleY;
 			this.skewX = skewX;
 			this.skewY = skewY;
-			this.tx = tx;
-			this.ty = ty;
 			this.flipX = 1;
 		}
 

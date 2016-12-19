@@ -345,8 +345,8 @@ package com.merlinds.miracle
 			_currentMatrix.writeFloat(m1.offsetY);//offsetY
 			_currentMatrix.writeFloat(m0.scaleX * m1.scaleX);//scaleX
 			_currentMatrix.writeFloat(m0.scaleY * m1.scaleY);//scaleY
-			_currentMatrix.writeFloat(m0.skewX + m1.skewX);//skewX
-			_currentMatrix.writeFloat(m0.skewY + m1.skewY);//skewY
+			_currentMatrix.writeFloat(m0.skewX + m1.skewX * m0.flipX);//skewX
+			_currentMatrix.writeFloat(m0.skewY + m1.skewY * m0.flipX);//skewY
 		}
 
 		/**

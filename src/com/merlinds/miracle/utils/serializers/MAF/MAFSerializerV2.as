@@ -340,12 +340,6 @@ package com.merlinds.miracle.utils.serializers.MAF
 			var frames:Vector.<FrameInfo> = new <FrameInfo>[];
 			frames.length = n * totalFrames;
 			frames.fixed = true;
-			
-			//Fill frames list by emptyFrames
-			i = -1;
-			while (++i < frames.length)
-				frames[i] = EmptyFrameInfo.getConst();
-			
 			//read data
 			for (i = 0; i < n; i++)
 			{
@@ -356,9 +350,10 @@ package com.merlinds.miracle.utils.serializers.MAF
 				for(j = 0; j < m; ++j)
 				{
 					var matrix:TransformMatrix = new TransformMatrix(
-						bytes.readFloat() * scale, bytes.readFloat() * scale,
-						bytes.readFloat() * scale, bytes.readFloat() * scale,
-						bytes.readFloat(), bytes.readFloat(), bytes.readFloat(), bytes.readFloat()
+						bytes.readFloat() * scale, bytes.readFloat() * scale,//offset
+						bytes.readFloat() * scale, bytes.readFloat() * scale,//tx
+						bytes.readFloat(), bytes.readFloat(),//scale
+						bytes.readFloat(), bytes.readFloat()//skew
 					);
 					var color:Color = new Color(
 						bytes.readFloat(), bytes.readFloat(), bytes.readFloat(), bytes.readFloat(),
@@ -371,13 +366,15 @@ package com.merlinds.miracle.utils.serializers.MAF
 				m = bytes.readInt();
 				for(j = 0; j < m; ++j)
 				{
+					m0 = m1 = null;
+					motion = false;
 					if(!bytes.readBoolean())//frame is null
 					{
 						bytes.position--;
 						bytes.position += FRAME_SIZE;//offset for next frame
+						frames[totalFrames * i + j] = EmptyFrameInfo.getConst();
 						continue;
 					}
-					 
 					//read
 					index = bytes.readInt();
 					motion = bytes.readBoolean();
@@ -388,10 +385,16 @@ package com.merlinds.miracle.utils.serializers.MAF
 					if(motion)m1 = matrices[index + 1];
 					frames[totalFrames * i + j] = new FrameInfo(name, m0, m1, t);
 				}
+				//fill empty frames
+				j = totalFrames - (totalFrames - m);//calculate delta
+				for(; j < totalFrames; ++j)
+				{
+					if(frames[totalFrames * i + j] == null)
+						frames[totalFrames * i + j] = EmptyFrameInfo.getConst();
+				}
 				//clear temp data
 				matrices.length = 0;
-				m0 = m1 = null;
-				motion = false;
+				
 			}
 			return frames;
 		}
